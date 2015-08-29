@@ -678,7 +678,7 @@ add r30,r31</code>
 	get the value 90 stored in register r18, we use the
 	instruction:
  
-	<pre>ldi r18,90</pre>
+	<code>ldi r18,90</code>
  
 	(Read as 'load into register r18 the value 90')</p>
  
@@ -687,16 +687,16 @@ add r30,r31</code>
 	(perspicuously enough) add.  So, to add r19 to r18, we can
 	just do
 	
-	<pre>add r18,r19</pre>
+	<code>add r18,r19</code>
  
 	(Read as 'add to register r18 the value in register r19')</p>
 	
 	<p>You should now be able to follow our previous example of ISA
 	operations to compute 7+2:
 	
-	<pre>ldi r30,2 
+	<code>ldi r30,2 
 ldi r31,7 
-add r30,r31</pre>
+add r30,r31</code>
 	
 	Of course, there are many arbitrary-looking features of this
 	description: Why 32 registers?  Why can they only store

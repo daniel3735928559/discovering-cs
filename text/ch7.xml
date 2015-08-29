@@ -574,31 +574,31 @@ memory, so we need to store it somewhere.  We will have an auxiliary
 register, then, for this purpose, called INST.  Thus the only
 operation in fetch is: 
 
-<pre>INST = PM[PC]</pre></p>
+<code>INST = PM[PC]</code></p>
 
 <p><b>Decode: </b>Having got the instruction, which we are supposing for the moment is an ldi, we need to deduce from it what value will need to be written to which register.  This is certainly possible by looking at the value of INST, so we read from INST the register to store to and the value to store and we store these in REG and VAL, respectively.  Thus: 
 
-<pre>REG = the bits of INST that say which register to write to</pre>
+<code>REG = the bits of INST that say which register to write to</code>
 
 followed by:
 
-<pre>VAL = the bits of INST that say which value to write</pre>
+<code>VAL = the bits of INST that say which value to write</code>
 
 As a bit of notation, we know from the previous chapter which bits these are, namely REG = a 1 followed by bits 7, 6, 5, 4 of INST.  We will denote this like 
 
-<pre>1,INST[7:4]</pre>
+<code>1,INST[7:4]</code>
 
 Further, VAL is bits 11-8 followed by bits 3-0 of INST, which we will denote like: 
 
-<pre>INST[11:8],INST[3:0]</pre>
+<code>INST[11:8],INST[3:0]</code>
 
 So in this shorthand, the two operations we perform, in order, are: 
 
-<pre>REG = 1,INST[7:4]</pre>
+<code>REG = 1,INST[7:4]</code>
 
 and then 
 
-<pre>VAL = INST[11:8],INST[3:0]</pre>
+<code>VAL = INST[11:8],INST[3:0]</code>
 
 We'll say in the next section how one actually goes about doing these
 with real circuitry, but for the moment let us leave it like this and
@@ -615,11 +615,11 @@ SREG does not need updating, PC needs to be incremented, and the
 register file needs to be written to.  Specifically, the register at
 address REG needs to get value VAL.  Thus:
 
-<pre>RF[REG] = VAL</pre>
+<code>RF[REG] = VAL</code>
 
 and then:
 
-<pre>PC = PC + 1</pre>
+<code>PC = PC + 1</code>
 
 In summary: </p>
 
@@ -647,18 +647,18 @@ off it are the register number to write to, which we store in REG, and
 the address to read in data memory, which we store in a new auxiliary
 memory called ADDR:
 
-<pre>REG = bits of INST saying which register to write to
-ADDR = bits of INST saying which address in data memory to read</pre></p>
+<code>REG = bits of INST saying which register to write to
+ADDR = bits of INST saying which address in data memory to read</code></p>
 
 <p><b>Execute: </b>Once again, no arithmetic is happening yet, so there is no need to do anything here</p>
 
 <p><b>Memory: </b>Now we need to do something memory-related for ld instructions, namely, we read from memory.  Having acquired the address to read from in ADDR, we can now read the value from data memory at address ADDR.  This we need to store somewhere--VAL will do.  Thus: 
 
-<pre>VAL = data_memory[ADDR]</pre></p>
+<code>VAL = data_memory[ADDR]</code></p>
 
 <p><b>Writeback: </b>This actually need not change, since for ldi, we would do 
 
-<pre>RF[REG] = VAL</pre>
+<code>RF[REG] = VAL</code>
 
 But if instead we were doing ld, VAL still contains by this point the value we want to write (it was read from data memory in the previous stage) and REG still contains the address we wish to write to.  Thus this will be the operation performed on either an ld or an ldi.  </p>
 
@@ -672,13 +672,13 @@ But if instead we were doing ld, VAL still contains by this point the value we w
 
 <p><b>Decode: </b>In the decode stage, we can get the address to write to and the register to read from in exactly the same way, so we actually leave this state intact, and will end up in this state in case of either an ld or an st instruction.  However, whereas a ld instruction then just needs to read memory address ADDR and store the value in the register file, st needs to do more: It needs to read out the value from register number REG and store that in memory.  So the state branches into the memory read state for ld, and into 
 
-<pre>VAL = RF[REG]</pre>
+<code>VAL = RF[REG]</code>
 
 for st.</p>
 
 <p><b>Memory: </b>Now that we have VAL as the value from the register and ADDR as the address to write this to, we can happily send this data off to the data memory, as in the operation: 
 
-<pre>RAM[ADDR] = VAL</pre></p>
+<code>RAM[ADDR] = VAL</code></p>
 
 <p><b>Writeback: </b>For a st instruction, we do nothing in the writeback phase except increment PC.</p>
 
@@ -706,49 +706,49 @@ where the S bits represent reg2 and the R bits reg1.  </p>
 
 <p><b>Decode: </b>For an add instruction, we will need to pull off which two registers we are adding, and then read out the values stored in those registers.  The registers we are adding can be read off of the instruction as: 
 
-<pre>REG = INST[8:4]
-REG2 = INST[9],INST[3:0]</pre>
+<code>REG = INST[8:4]
+REG2 = INST[9],INST[3:0]</code>
 
 Note that since we are now using two register addresses, we have added a new auxiliary register REG2 to store the second address, since REG is being used to store the first.  </p>
 
 <p>So after these two operations, REG and REG2 will contain the numbers of the registers to add (e.g. r5 and r17).  Next we need to read the values stored in those registers, now using new auxiliary registers VAL1 and VAL2 (VAL will be used to store the sum): 
 
-<pre>VAL1 = RF[REG]
-VAL2 = RF[REG2]</pre>
+<code>VAL1 = RF[REG]
+VAL2 = RF[REG2]</code>
 
 However note that these two sets of operations have data dependencies: In order to get the correct result from VAL = RF[REG] we need first to have run REG = INST[8:4].  So these operations need to come in separate states.  Further, the register file only allows reading of one register at a time, so the two reads VAL = RF[REG] and VAL2 = RF[REG2] cannot happen in the same state.  So the decode stage for add instructions will consist of three states: 
 
-<pre>REG = INST[8:4]
-REG2 = INST[9],INST[3:0]</pre>
+<code>REG = INST[8:4]
+REG2 = INST[9],INST[3:0]</code>
 
 followed by 
 
-<pre>VAL1 = RF[REG]</pre>
+<code>VAL1 = RF[REG]</code>
 
 and finally: 
 
-<pre>VAL2 = RF[REG2]</pre></p>
+<code>VAL2 = RF[REG2]</code></p>
 
 <p><b>Execute: </b>
 
 For add instructions, we finally have some computation to do, namely, having read out the values in the two registers REG and REG2 into auxiliary registers VAL1 and VA2 respectively, we now need to add them and store the result somewhere, so we do the operation: 
 
-<pre>VAL = VAL1 + VAL2</pre>
+<code>VAL = VAL1 + VAL2</code>
 
 We also need to update the SREG flags accordingly, so we next perform
 the operation:
 
-<pre>Update SREG</pre></p>
+<code>Update SREG</code></p>
 
 <p><b>Memory: </b>An add instruction doesn't touch memory, so this stage is unaffected.</p>
 
 <p><b>Writeback: </b>Now, exactly as in ldi, we want to write some value to a register, and we have the value stored in VAL and the register number in REG, so we can proceed to the same state as we had before: 
 
-<pre>RF[REG] = VAL</pre>
+<code>RF[REG] = VAL</code>
 
 Note that almost the exact same flow will execute sub instructions except we need in the execute stage to change the operation to subtraction: 
 
-<pre>VAL = VAL1 - VAL2</pre>
+<code>VAL = VAL1 - VAL2</code>
 </p>
 
 <p>Allowing for execution of further computational instructions that operate on two registers, such as and, or, eor, etc. is very similar.  One other sort of instruction that is similar is cp, which recall does exactly the same thing as sub except it doesn't save anything to the register file.  Thus only one new state transition is needed to add cp capabilities to our state machine: </p>
@@ -760,11 +760,11 @@ Note that almost the exact same flow will execute sub instructions except we nee
 
 <p>We now turn to the cpi and subi instructions, which have formats
 
-<pre>0011IIIIRRRRIIII</pre>
+<code>0011IIIIRRRRIIII</code>
 
 and 
 
-<pre>0101IIIIRRRRIIII</pre>
+<code>0101IIIIRRRRIIII</code>
 
 respectively.  Both of these instructions take the register number
 1RRRR and subtract from it the immediate value given by the I bits.
@@ -790,7 +790,7 @@ and go straight to PC = PC + 1</p>
 
 <p>rjmp instructions, we recall, are formatted as: 
 
-<pre>1100IIIIIIIIIIII</pre>
+<code>1100IIIIIIIIIIII</code>
 
 and have the effect PC = PC + immediate value (encoded as the I bits of the instruction).</p>
 
@@ -798,8 +798,8 @@ and have the effect PC = PC + immediate value (encoded as the I bits of the inst
 
 So since we already have a state that performs addition, namely VAL = VAL1 + VAL2, we'll simply reuse this to perform the addition.  This means that in the decode stage we need to do VAL1 = PC and VAL2 = the immediate, which we can read off from the instruction as INST[11:0].  So our decode state for rjmp is: 
 
-<pre>VAL1 = PC
-VAL2 = INST[11:0]</pre></p>
+<code>VAL1 = PC
+VAL2 = INST[11:0]</code></p>
 
 <p><b>Writeback: </b>
 
@@ -812,7 +812,7 @@ But now in the writeback stage, instead of the usual PC incrementing, we just wa
 
 <p>breq is the final instruction whose implementation we will discuss separately.  Its format is: 
 
-<pre>111100IIIIIII001</pre>
+<code>111100IIIIIII001</code>
 
 It is meant to execute PC = PC + immediate value in case the Z flag is
 1, and PC = PC + 1 otherwise.  </p>
@@ -826,7 +826,7 @@ machine doesn't have SREG as an input at the moment--only INST.  There
 are two solutions: We can change the second operation to something
 like:
 
-<pre>VAL2 = (ZZZZZZZ &amp; INST[9:3]) | ~Z</pre>
+<code>VAL2 = (ZZZZZZZ &amp; INST[9:3]) | ~Z</code>
 
 or we can allow SREG to be an input into the state machine, in which
 case we can branch in decode based on the Z flag.
@@ -1796,7 +1796,10 @@ Taking this approach, we get the state diagram: </p>
     </text>
   </section>
 </section>
-
+  <section>
+    <title>Exercises</title>
+    <exercises />
+  </section>
 
 </section>
 

@@ -8,6 +8,11 @@ div.definition {
     display:inline;
 }
 
+div.icode {
+    display:inline;
+    font-face: monospace;
+}
+
 div.caption {
     background: #fff;
     border-top: 1px solid #ccc;
@@ -230,7 +235,7 @@ div.index_link {
 }
 
 div.text {
-    font: 11pt "Sans serif";
+    font: 12pt "Sans serif";
     padding:0 0 20px 10px;
     margin-left: 45px;
     width:800px;
@@ -315,6 +320,7 @@ div.aside {
 }
 
 div.figure {
+    width:100%;
     border: 1px solid #aaf;
     padding: 10px;
     display:inline-block;

@@ -5,6 +5,8 @@ var bodyParser = require('body-parser')
 var SubsProvider = require('./subs_provider').SubsProvider;
 var subs_provider = new SubsProvider();
 
+var args = process.argv.slice(2);
+
 var app = express();
 
 //app.use(BodyParser.json());
@@ -87,5 +89,5 @@ var get_user_data = function(req){
 	    'username':"test_user"};
 }
 
-server = http.createServer(app).listen(61453);
-console.log("Server running at http://127.0.0.1:61453/");
+server = http.createServer(app).listen(61453, args[0]);
+console.log("Server running!");

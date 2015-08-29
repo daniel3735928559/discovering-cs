@@ -121,6 +121,10 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="icode">
+    <div class="icode"><xsl:apply-templates /></div>
+  </xsl:template>
+
   <xsl:template match="python">
     <div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}">
     </div>
@@ -163,7 +167,7 @@
   </xsl:template>
 
   <xsl:template match="def">
-    <div id="def_{@term}"> </div>
+    <div id="def_{@term}" class="definition"> </div>
     <xsl:apply-templates select="*|text()" />
   </xsl:template>
 

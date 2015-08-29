@@ -140,7 +140,7 @@ the scores</caption></code>
 	<p>When you sit down to write an algorithm, you should have
 	some understanding of what you can and cannot expect of the
 	inputs.  For instance, try to follow through the above
-	algorithm if <pre>score1 = 10, score2 = 10, score3 = 7</pre>.
+	algorithm if <code>score1 = 10, score2 = 10, score3 = 7</code>
 	It doesn't print anything at all!  <def term='edge-case'>Such
 	inputs are sometimes called <b>corner-cases</b> or
 	<b>edge-cases</b>.  They are not generally what your algorithm
@@ -740,7 +740,7 @@ And so on.
 	assignment line, since that seems the thing for the job.  It
 	says that an assignment line looks like: 
 
-	<pre><i>variable name</i> = <i>expression</i></pre>
+	<code><i>variable name</i> = <i>expression</i></code>
 
 	We haven't said what variable names or expressions are, but
 	they are also described in the table!</p>
@@ -749,7 +749,7 @@ And so on.
 	variable name can be anything with letters, numbers, and
 	underscores, but not starting with a number, and not a Python
 	keyword.  So we can decide to call our variable, say, 
-	<pre>H3LL0_th3re_</pre>.  </p>
+	<code>H3LL0_th3re_</code>.  </p>
 
 	<p>But what about the expression bit?  Expressions are defined
 	in the table as any valid combination of numbers, strings, and
@@ -757,7 +757,7 @@ And so on.
 	grouping.  So if we want to store the value 89*90, we can do
 	this like: 
 
-	<pre>H3LL0_th3re_ = 89*90</pre>
+	<code>H3LL0_th3re_ = 89*90</code>
 
 	And the fact that we have followed the table tells us that
 	this is a valid assignment line which will store the value of
@@ -889,7 +889,7 @@ expression.  So indeed, this is a valid assignment line.</p>
 
 <code>while(<i>test</i>): </code>
 
-<p>So we need to check that <pre>x != 1</pre> is a valid test.  A test
+<p>So we need to check that <code>x != 1</code> is a valid test.  A test
 has to look like:</p>
 
 <code><i>expression</i> <i>comparison</i> <i>expression</i></code>
@@ -1146,7 +1146,7 @@ variable during an assignment.  For example,
 
 <code>x = 2 * 3</code>
 
-stores 6 into x because the value of the expression <pre>2 * 3</pre>
+stores 6 into x because the value of the expression <code>2 * 3</code>
 is 6.  The process of determining the value of an expression is called
 <b>evaluation</b>, and happens as follows: 
 
@@ -1279,7 +1279,7 @@ inside quotation-marks.  It is a type of expression whose value is the
 text inside the quotes.  But what if we change that text to itself
 contain a quote?  For instance, </p>
 
-<pre>print(&quot;hi&quot;)</pre>
+<code>print(&quot;hi&quot;)</code>
 
 <p>prints: </p>
 
@@ -1308,7 +1308,7 @@ has some special meaning.  The usual meaning of ' is 'this is the
 boundary of a string', but if we precede it with a backslash, then its
 meaning just becomes just 'the single-quote character'.  So </p>
 
-<pre>print(&quot;\&quot;hi\&quot;, he said&quot;)</pre>
+<code>print(&quot;\&quot;hi\&quot;, he said&quot;)</code>
 
 <p>accomplishes the desired result.  Similarly, if we want to store a
 string that contains multiple lines, like the string</p>
@@ -2164,7 +2164,7 @@ counter = 4</td>
 
 <p>So something went slightly wrong!  That is, a runtime error has occurred!  </p>
 
-<p>We wanted the last step to be <pre>answer = answer * 4</pre>.  But
+<p>We wanted the last step to be <code>answer = answer * 4</code>.  But
 counter was set to 4 at the end of the loop body, and then because
 counter &lt; input was false (4 is not less than 4), the next iteration
 of the loop, which would have done the multiplication by 4, did not
@@ -2246,7 +2246,7 @@ print(answer)</code>
 	  capable of doing so.  Specifically, the program shall start
 	  with a line like 
 
-	  <pre>n = 101231</pre>
+	  <code>n = 101231</code>
 
 	  and shall, at the end, print either &quot;n is prime&quot; or &quot;n is
 	  not prime&quot; depending on the result of its test. </p>
@@ -2415,9 +2415,9 @@ if(is_prime == "penguin goes shopping"):
 
 	  <p>To accomplish this programmatically, we will need two
 	  variables--one to store the number that we will repeatedly
-	  divide--say this is called <pre>n</pre>, and another to
+	  divide--say this is called <icode>n</icode>, and another to
 	  store how many times we've divided so far--say this one is
-	  called <pre>digit_count</pre>.  Then we can write the
+	  called <icode>digit_count</icode>.  Then we can write the
 	  algorithm more precisely as: </p>
 
 <code>Step 1: n = 1238129 (or whatever)
@@ -2443,16 +2443,16 @@ few different inputs as examples.  Convince yourself that we are OK.
 </p>
 
 <p>There is also a tricky edge-case that may have slipped your notice,
-however: Consider what happens when we start with <pre>n = 1</pre>:
-First <pre>digit_count</pre> will be set to 0, and then we'll run the
-while loop as long as <pre>n > 1</pre>.  But even at the start, this
-test fails, as <pre>n = 1</pre>, so <pre>n</pre> is not greater than
+however: Consider what happens when we start with <icode>n = 1</icode>:
+First <icode>digit_count</icode> will be set to 0, and then we'll run the
+while loop as long as <icode>n > 1</icode>.  But even at the start, this
+test fails, as <icode>n = 1</icode>, so <icode>n</icode> is not greater than
 1!  So the stuff inside the while loop gets skipped entirely, and the
-value of <pre>digit_count</pre>--namely 0--gets printed.  And this is
+value of <icode>digit_count</icode>--namely 0--gets printed.  And this is
 definitely the wrong answer--the number '1' has 1 digit!  </p>
 
 <p>In fact, this isn't the only issue--this problem shows up whenever
-<pre>n</pre> gets set to 1 during execution, for example if it started
+<icode>n</icode> gets set to 1 during execution, for example if it started
 at 1000, we would get the wrong answer of 3.  </p>
 
 <p>To fix this, we simply need to realize that we wrote our algorithm

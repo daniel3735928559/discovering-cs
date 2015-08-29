@@ -197,8 +197,8 @@
       meaning it can only store words (numbers 0-65535).  Somehow, we
       can store some numbers in this memory to cause the program
 
-<pre>ldi r30,89
-andi r30,6</pre>
+<code>ldi r30,89
+andi r30,6</code>
 
       to be executed.</p>
 
@@ -219,12 +219,12 @@ andi r30,6</pre>
 	finite list.  For instance, all the possible incarnations of
 	ldi instructions are:
 
-<pre>ldi r16,0
+<code>ldi r16,0
 ldi r16,1
 ...
 ldi r16,255
 ...
-ldi r31,255</pre>
+ldi r31,255</code>
 
         There are 256 instructions of the form ldi r16,[something],
         and 16 different registers we can load a value into (recall
@@ -237,14 +237,14 @@ ldi r31,255</pre>
 
 	<p>Then we have the andi instructions
 
-<pre>andi r0,0
+<code>andi r0,0
 ...
 andi r0,255
 andi r1,0
 ...
 andi r1,255
 ......
-andi r31,255</pre>
+andi r31,255</code>
 
         This is another 8192 instructions.  We've already assigned
         the numbers 0-4095 to correspond to the ldi instructions, so
@@ -258,8 +258,8 @@ andi r31,255</pre>
 	would be stored as the two numbers 3673 and 11783.  Or, in
 	binary:
 
-<pre>0000111001011001
-0010111000000111</pre>
+<code>0000111001011001
+0010111000000111</code>
 
 as 3673 is the encoded version of ldi r30,89 and 11783 is the encoding
 of andi r30,6.  </p>
@@ -300,23 +300,23 @@ into some register, I take 60 as an 8-bit binary number: 00111100, and
 place that into the lower 8 bits of the instruction.  Observe that ldi
 r16,60 was
 
-<pre>00000000<b>00111100</b></pre>
+<code>00000000<b>00111100</b></code>
 
 whereas ldi r31,60 was
 
-<pre>00001111<b>00111100</b></pre>
+<code>00001111<b>00111100</b></code>
 
 Then the next-lowest 4 bits tell us which register we're loading from: To store the value 145 (binary 10010001) into register 16, we do
 
-<pre>0000<b>0000</b>10010001</pre>
+<code>0000<b>0000</b>10010001</code>
 
 whereas to store 145 into r26, we do
 
-<pre>0000<b>1010</b>10010001</pre>
+<code>0000<b>1010</b>10010001</code>
 
 and into r31 would be
 
-<pre>0000<b>1111</b>10010001</pre>
+<code>0000<b>1111</b>10010001</code>
 
 Observe that these four bits aren't literally the binary
 representation of the register number to be loaded:</p>
@@ -341,7 +341,7 @@ the lowest 8 bits for the immediate value and the next 4 bits for the
 register select.  We shall denote this encoding in the following
 concise notation:
 
-<pre>ldi: 0000RRRRIIIIIIII loads binary value IIIIIIII into register 1RRRR</pre>
+<code>ldi: 0000RRRRIIIIIIII loads binary value IIIIIIII into register 1RRRR</code>
 
 What this means is that the bits labeled I comprise the binary value
 to be loaded, and the bits labeled R comprise the last four bits of
@@ -2241,5 +2241,9 @@ else:
       </p>
     </text>
     </section>
+  </section>
+  <section>
+    <title>Exercises</title>
+    <exercises />
   </section>
 </section>

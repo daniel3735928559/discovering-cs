@@ -106,7 +106,7 @@ one memory and adds it to the value stored in another memory.</li>
 instructions using a human-readable notation.  For instance, the add
 instruction applied to certain memory slots could be written
 
-<pre>add r13,r18</pre>
+<code>add r13,r18</code>
 
 <def term='mnemonic'>Such a representation is called the
 <b>mnemonic</b> for the add instruction.</def> However, when a
