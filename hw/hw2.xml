@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><quest name="HW 2" id="1">
+  <q type="python" id="Basics2">
+<program>x = 2
+y = 4</program>
+<text>What is 1*8?
+</text>
+</q>
+
+<q type="python" id="Variables">
+  <program>x = 3/2
+y = 1+x*(-1)
+hello = (x+2*y)/y
+x = x + 1
+y = y - x</program>
+  <text>What is 1/2?</text>
+</q>
+</quest>

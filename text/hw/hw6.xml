@@ -1,0 +1,100 @@
+<homework>
+<hw>
+<q>What is encoding? </q>
+<q>We create binary ______ to begin to encode AVR ISA instructions. 
+<ol>
+<li>functions</li>
+<li>representations</li>
+<li>methods</li>
+<li>casings</li></ol></q>
+<q>What are the five groups of information required used to differentiate different instructions?</q>
+<q>What is an opcode in AVR ISA instructions?</q>
+<q>The “C” bits of an AVR instruction represent its ____, which specifies _____.
+<ol>
+<li>operand; the source/destination registers or immediate value</li>
+<li>opcode; the source/destination registers or immediate value</li>
+<li>operand; which instruction is to be performed</li>
+<li>opcode; which instruction is to be performed</li></ol></q>
+<q>What differentiates the encodings for dec, com, and inc (e.g. how can you distinguish a 16-bit dec instruction from com, inc)? What do they have in common?</q>
+<q>Now provide an example of your answer by writing out the encodings for dec r1, com r1, and inc r1.</q>
+<q>What type of instructions follow the CCCCCCIIIIIIICCC format? What do the “I” bits represent?</q>
+<q>What is ASCII? How is it used to encode?</q>
+<q>What is UTF-8? How is it used to encode?</q>
+<q>What benefits are there of using UTF-8 over ASCII?</q>
+<q>Briefly explain why UTF-8 allows for many more characters than ASCII in terms of how many bytes they each allow for their encodings.</q>
+<q>What is the significance of a UTF-8 encoding that starts with a 0? Give an example to explain your answer.</q>
+<q>If a UTF-8 encoding starts with “11110”, what does this signify about the following 3 bytes?</q>
+<q>Just as letters are encoded in text, _____ are encoded in games.</q>
+<q>What is a pixel?</q>
+<q>How many bytes are used to represent colors which represent light for a computer?</q>
+<q>Fill in the red, green, and blue values for the following colors (refer to the table in 6.4.1) in their HEXADECIMAL representation. Fill the rightmost column in with their full RBG encoding.
+<table>
+<tr>
+<th>Color</th>
+<th>Red</th>
+<th>Blue</th>
+<th>Green</th>
+<th>RGB</th>
+</tr>
+<tr>
+<td>White</td>
+<td>0xFF</td>
+<td>0xFF</td>
+<td>0xFF</td>
+<td>0xFFFFFF</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>0xFF</td>
+<td>0x00</td>
+<td>0x00</td>
+<td>0xFF0000</td>
+</tr>
+<tr>
+<td>Green</td>
+<td>0x00</td>
+<td>0xFF</td>
+<td>0x00</td>
+<td>0x00FF00</td>
+</tr>
+<tr>
+<td>Blue</td>
+<td>0x00</td>
+<td>0x00</td>
+<td>0xFF</td>
+<td>0x0000FF</td>
+</tr>
+<tr>
+<td>Grey</td>
+<td>0xCC</td>
+<td>0xCC</td>
+<td>0xCC</td>
+<td>0xCCCCCC</td>
+</tr>
+<tr>
+<td>Magenta</td>
+<td>0xFF</td>
+<td>0x00</td>
+<td>0xFF</td>
+<td>0xFF00FF</td>
+</tr>
+<tr>
+<td>Puce</td>
+<td>0x72</td>
+<td>0x2F</td>
+<td>0x37</td>
+<td>0x722F37</td>
+</tr>
+<tr>
+<td>Black</td>
+<td>0x00</td>
+<td>0x00</td>
+<td>0x00</td>
+<td>0x000000</td>
+</tr>
+</table>
+</q>
+<q>What is error-correcting code and error-detecting encoding, and how
+are they similar and different?</q>
+</hw>
+</homework>

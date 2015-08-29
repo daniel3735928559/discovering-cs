@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="../box.xsl" type="text/xsl"?><section number='About the Authors'>
+  <title></title>
+  <text>
+    <p><b>Daniel Ross: </b> Daniel Ross is a graduate student in the
+    mathematics department at the University of Wisconsin--Madison,
+    where he spends his time thinking and writing about numbers.  He
+    is an occasional software developer, having written over 17 lines
+    of code in his life (it might be more, but he doesn't usually
+    think about numbers that large).  He is also, apparently, an
+    author.</p>
+
+    <p><b>Karu Sankaralingam: </b> Karu is an associate professor in
+    the computer sciences department at the University of
+    Wisconsin--Madison, where he also leads the Vertical Research
+    Group. His research interests include microarchitecture,
+    architecture, and software issues for massively parallel
+    computation systems. He is a recipient of the IEEE TCCA Young
+    Computer Architecture Award in 2012, an NSF CAREER award in 2009,
+    the Emil H Steiger Distinguished Teaching award in 2014, and the
+    Letters and Science Philip R. Certain - Gary Sandefur
+    Distinguished Faculty Award in 2013 which recognizes outstanding
+    teaching by a member of the College of The Letters and Science. He
+    earned a PhD from The University of Texas at Austin in December
+    2006, and was the lead student architect of the TRIPS chip, a 170
+    million transistor chip.</p>
+    
+    <p><b>Raghuraman Balasubramanian: </b> Bio coming soon.</p>
+  </text>
+</section>

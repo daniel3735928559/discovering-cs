@@ -1,0 +1,39 @@
+.homework_button{
+    display:inline-block;
+    padding:8px;
+    background-color:#66a;
+    border-radius:5px;
+    height:22px;;
+    color:white;
+    margin:5px;
+    cursor:pointer;
+}
+
+
+div.lightbox_background {
+    height:100%;
+    width:100%;
+    background-color:#000;
+    /* opacity:0.8; */
+    /* -moz-opacity:0.8; */
+    /* filter:alpha(opacity=.80); */
+    z-index: 1001;
+    position:fixed;
+    top:0;
+    left:0;
+}
+
+div.lightbox_foreground {
+    padding:10px;
+    font: 10pt "Sans serif";
+    width:70%;
+    display: inline-block;
+    height:100%;
+    left:15%;
+    top:0;
+    margin:auto;
+    z-index: 1002;
+    background: #9cc;
+    position:fixed;
+    overflow-y:scroll;
+}

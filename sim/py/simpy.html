@@ -1,0 +1,52 @@
+<div class="pysim" ng-controller="PySimController">
+  <div class="pysim_programming">
+    <div class="pysim_controls">
+      <div ng-class="'pysim_button ' + (running == true ? 'pysim_disabled_button' : 'pysim_enabled_button')" ng-click="run()">run</div>
+      <div ng-class="'pysim_button ' + (running == true ? 'pysim_disabled_button' : 'pysim_enabled_button')" ng-click="set_original()"  ng-if="simid != 'big'">reset</div>
+      <div class="pysim_button pysim_enabled_button" ng-click="ref()">ref</div>
+      <div class="pysim_button pysim_enabled_button" ng-click="toggle_lightboard()" ng-if="simid == 'big'">lb</div>
+      <!-- <div class="pysim_button" ng-click="submit()">[submit]</div> -->
+    </div><br />
+    <div class="pysim_main">
+      <form><textarea ng-attr-id="pysim{{simid}}_program_area">{{program}}</textarea></form>
+    </div>
+    <br />
+  </div>
+  <div class="pysim_simulator">
+    <div class="pysim_controls" style="width:26.5em">
+      <div ng-class="'pysim_button ' + (running == false ? 'pysim_disabled_button' : 'pysim_enabled_button')" ng-click="reset()">end</div>
+      <div ng-class="'pysim_button ' + (running == false ? 'pysim_disabled_button' : 'pysim_enabled_button')"  ng-click="step()">step</div>
+      <input class="pysim_input" ng-model="steps.count" ng-if="running == true"></input>
+      <div class="pysim_status">Status: {{status}}</div>
+    </div><br />
+    <div class="pysim_vars">
+      <div class="pysim_title">Variables</div><br />
+      <span ng-repeat="(name,val) in variables">
+	<div ng-class="'pysim_reg '+ (is_updated(name) ? 'updated' : 'normal')"><pre>{{name}} = {{val}}</pre></div><br />
+      </span><br />
+    </div>
+    <div class="pysim_outputs">
+      <div class="pysim_title">Output</div><br />
+      <span ng-repeat="output in outputs track by $index">
+	<div ng-class="'pysim_output'"><pre>{{output}}</pre></div>
+      </span><br />
+    </div>
+    <!-- <div ng-attr-id="pysim{{simid}}_exec_flow"> -->
+    <!--   <div class="pysim_title">Execution flow</div><br /> -->
+    <!--   <span ng-repeat="reason in reasons"> -->
+    <!-- 	<div ng-class="'pysim_output'">{{reason}}</div><br /> -->
+    <!--   </span><br /> -->
+    <!-- </div> -->
+    <div id="pysim_grid" ng-if="lightboard_on == true" >
+      <div class="pysim_title">Lightboard</div><br />
+      <div class="title"></div><br />
+      <span ng-repeat="button in buttons track by
+      $index"><div ng-click="button_click($index)" ng-style="button.style">{{button.content}}</div><br ng-if="($index
+      + 1) % grid_cols == 0" /></span><br />
+    </div>
+  </div>
+
+  <div ng-include="'/sim/py/py_ref.html'" class="pysim_ref" ng-if="show_ref == true" ng-click="ref()">
+  </div>
+</div>
+

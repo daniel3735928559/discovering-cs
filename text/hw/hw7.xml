@@ -1,0 +1,74 @@
+<homework>
+  <hw>
+<q>What does the microarchitecture provide?</q>
+<q>A microarchitecture is a(n) _______ of the ________.
+<ol>
+<li>outline, computer’s high-level programming</li>
+<li>processor mainly used in mobile devices, current generation of mobile devices</li>
+<li>implementation, ISA’s interface</li></ol></q>
+<q>As described in the text, the implementation of a microarchitecture happens in which two steps?
+<ol>
+<li>coding in high-level language, translating (compiling) to assembly language</li>
+<li>describe using a state machine, create using circuit components</li>
+<li>gathering physical components, soldering them together on a circuit board</li>
+<li>assembling the ISA instructions, creating logic circuits from transistors</li></ol></q>
+<q>What three main parts are there to a state machine?</q>
+<q>List the five stages of execution among all states and briefly explain what they do.</q>
+<q>Circuits are fundamentally ______ connecting ______.
+<ol>
+<li>components, loops</li>
+<li>wires, components</li>
+<li>transistors, logic gates</li></ol></q>
+<q>What four components do we use in our state diagram discussed in 7.2.2?</q>
+<q>For this question, refer to the last state machine example from this section (the one with the lock that affects only whether you can turn the knob). The following flow-chart specifies a start state and a series of inputs. Your job is to fill in the transition and state info for each of these consecutive inputs.
+<p>
+<pre>State (start): OPEN, UNLOCKED
+Input: close
+Transition: move to ___?___ state
+    ||
+    \/
+State: ___?___
+Input: lock
+Transition: ___?___
+    ||
+    \/
+State: ___?___
+Input: unlock
+Transition: ___?___
+    ||
+    \/
+State: ___?___
+Input: open
+Transition: ___?___
+    ||
+    \/
+State: ___?___
+Input: lock
+Transition: ___?___
+    ||
+    \/
+State: ___?___
+Input: close
+Transition: ___?___
+    ||
+    \/
+State (end): ___?___</pre>
+</p></q>
+<q>Name the 5 stages of execution.</q>
+<q>Which of these stages would take an instruction in the form 1100IIIIIIIIIIII and determine that this is an rjmp instruction and store the immediate value “IIIIIIIIIIII” in an auxiliary register for later use?</q>
+<q>Which of these stages would then use the “IIIIIIIIIIII” value that was stored to update the PC?</q>
+<q>What is the difference between analog and digital circuits?</q>
+<q>If the input values range from 0-7, how many input wires (i.e. what input “width”) does the circuit component require to handle this range? What range of inputs can be used on a circuit component with input width of 5?</q>
+<q>What is the “we” input in the figures from this section? How does this input affect the circuit component when it is high vs. when it is low?</q>
+<q>Both the “carry” input and the “C” output of the ALU signify operations that result in a carry. The “carry” input is high if the ____ operation resulted in a carry. The “C” output is high if the ____ operation resulted in a carry.
+<ol>
+<li>previous; current</li>
+<li>current; previous</li></ol></q>
+<q>What is the purpose of the state diagram of Section 7.3 with respect to translating ISA instructions?</q>
+<q>Briefly give a walkthrough of the subi instruction and how it can be given as a state machine representation.</q>
+<q>Describe what happens during each of the 5 stages of execution for the following instruction: 0000111100111100.</q>
+<q>What kinds of memory and registers (including auxiliary registers) do we need to implement our state machine into a physical circuit?</q>
+<q>What are the write-enables and multiplexer we’ve discussed, and
+what component controls them in a physical circuit?</q>
+  </hw>
+</homework>

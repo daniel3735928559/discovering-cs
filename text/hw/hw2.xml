@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<homework>
+  <hw>
+<q><p>What does programming express to the computer?
+</p>
+<ol>
+<li> A real world problem in terms that the computer can understand.</li>
+<li>A high-level, more human-friendly way to tell the computer what operations to do.</li>
+<li> A sequence of steps for it to perform--also known as the program, specified in a way that the computer understands--also known as a programming language. </li>
+<li>Both b and c</li>
+<li>All of the above</li>
+<li> None of the above</li></ol>
+</q>
+<q>Explain what programmers fundamentally do by coding programs.</q>
+<q>What acts as an intermediary between the programming language and the hardware?</q>
+<q><p>In the classic parable mentioned in the chapter, what exactly caused the trouble?</p>
+<p>What does a computer programming language and algorithm need to ensure to avoid such a situation?</p></q>
+<q>According to the text, what specific method to solve problems do computers need that humans may not necessarily need?</q>
+<q>What are edge-cases?</q>
+<q>How do efficiency and scalability affect an algorithm?</q>
+<q><p> Define efficiency and scalability. How are they related?</p>
+<p>Under what circumstances will you not bother making your program more efficient?</p></q>
+<q>What three line structures are there in Python?</q>
+<q>How does indentation play a role in flow-control lines?</q>
+<q><p>Label each line of the example python program from section 2.3.2  as an 'assignment line', 'print line', or a 'flow-control' line.</p>
+<pre>x = 27
+while(x != 1):
+   y = x % 2	
+   if(y == 0):     	
+      x = x / 2       
+   else:      	
+      x = 3*x+1     	
+   print(x)   
+print("Done!")</pre> 
+</q>
+<q><p> If a computer executed the instruction "a=2" on line number 21, what would be the line number of the next instruction executed?</p>
+<p> What type of instruction would have to be on line 21 to move to an instruction that is not on the following line?</p></q>
+<q><p>Using the definition of an assignment, assignments assign a(n) ___ to a(n) ___?</p>
+<ol>
+<li> variable name, expression</li>
+<li> expression, test</li>
+<li> expression, comparison</li>
+<li>  variable name, comparison</li>
+</ol></q>
+<q>What is camel-casing?</q>
+<q><p>What is the arithmetic operation permitted on Strings and what is it specifically called? </p>
+<p>Give an example of this principle.</p></q>
+<q>How does the backslash character (\) play a role in Python syntax?</q>
+<q>How do you comment in Python?</q>
+<q><p>Which of the following are valid Python variable names?:</p>
+<ol>
+<li><pre>_num_items</pre></li>
+<li><pre>item_#6</pre></li>
+<li><pre>numItems</pre></li>
+<li><pre>num_items6</pre></li>
+<li><pre>2015sales</pre></li>
+<li><pre>_2015_sales</pre></li>
+<li><pre>item 6</pre></li>
+<li><pre>sixth-item</pre></li>
+<li><pre>global</pre></li>
+</ol></q>
+<q><p>In this example program from section 2.4.2.2,</p>
+<pre>x = 4
+y = x + 1 		
+x = 2
+x = 5*x + 2*(3 - y)</pre>
+<p>we know that 6 is the value stored in x after the code has finished executing. What is the final value stored in y? Explain.
+</p></q>
+<q><p>Copy the following program into the python simulator and run it. Why does this program yield an incorrect result? </p>
+<p> What should be changed in order for this program to work as desired?</p>
+<pre># you have $30 and the taxi will cost $20. Do you have enough money to cover the ride? 
+cashAmount = 30
+if (CashAmount > 20):
+   print("you have enough cash for the taxi")
+else
+   print("you do NOT have enough cash for the taxi")</pre>
+</q>
+<q>Consider the following Python program:
+<pre>name = "John Smith"
+age = "twenty"
+print("Name:")
+print(name)
+print("Age:")
+print(age)</pre>
+<p>the output for this program looks like:</p>
+<pre>Name:
+John Smith
+Age:
+twenty</pre>
+<p>How can you condense the code to use only one print statement
+without changing how the output looks? <br />
+(Hint: how can you concatenate each of the strings to create a single print statement)</p></q>
+<q><p><b>Part A</b>: Translate the following python program into an english sentence</p>
+<pre>if (days_until_birthday == 0)
+   print("happy birthday!")
+else
+   print(days_until_birthday + " more days until your birthday!")
+</pre>
+<p><b>Part B</b>: Translate the following english sentence into a python program:</p>
+<p>"If the person’s birthday is less than or equal to 7 days away, print "your birthday is this week", otherwise, print "your birthday is ___ weeks away" (note: divide days_until_birthday by 7 to get weeks_until_birthday)
+</p></q>
+<q><p><b>Part A</b>: Write an algorithm (i.e. steps written in human-friendly language) to find the volume of a sphere (A = 4/3?? r^3), given the diameter. Round ?? up to 3.1416 and use only the mathematical operations we have learned thus far (+, -, *, /, %). </p>
+<p>Remember that your algorithm must abide by Order of Operations rules (otherwise known as PEMDAS).
+</p>
+<p><b>Part B</b>: Now turn your algorithm into a program in
+Python. End your program by printing, "the volume of the sphere is
+____". Where the "____" is the value of your volume variable.
+</p>
+<p>#Assume the value of the sphere’s diameter has already been put into a
+#variable called "diameter" and use that variable for your calculations
+</p>
+<p><b>Part C</b>: Test your program in the python simulator. In order to do this, you
+ must precede your program with a line that creates the "diameter" variable and 
+sets it equal to some value of your choice. You can check that your volume
+ algorithm is correct by searching "volume of a sphere with diameter
+ [your diameter value]" at http://www.wolframalpha.com. <br />
+(Note: Answers may be slightly off since we rounded ??)</p>
+</q>
+<q>Give 5 words in Python which cannot be used as variable names.
+</q>
+<q>What is camel casing? Give examples.
+</q>
+<q>Why is commenting important while programming?
+</q>
+<q><p>Assuming there is no code before these lines, which lines of code would produce errors? Explain.
+</p>
+<ol>
+<li><pre>"word" + 2</pre></li>
+<li><pre>"word" + "word"</pre></li>
+<li><pre>x = word</pre></li>
+<li><pre>"word"/"word"</pre></li>
+<li><pre>x = 4
+y = x
+z = x*x + y*x +z</pre></li>
+<li><pre>x = "word"
+y = x</pre></li>
+<li><pre>x = "wprd"
+y = x*2</pre></li>
+</ol></q>
+<q><p>What is the value stored in x after each of the following sequence of statements are executed. In cases you expect a syntax error, mention the same, and the reason for it.
+</p>
+<ol>
+<li><pre>x = 5 + 6</pre></li>
+<li><pre>x = ‘5’ + ‘6’</pre></li>
+<li><pre>x = ‘5’ + 6</pre></li>
+<li><pre>b = 20
+if = 10
+x = if + b</pre></li> 
+<li><pre>a = 10
+2b = 20 
+x = a + 2b</pre></li>
+<li><pre>a = 10
+_b = 20 
+x = a + _b</pre></li>
+<li><pre>b = 20
+if_ = 10
+x = if_ % b </pre></li>
+<li><pre>a = 10
+_2b = 20 
+x =  _2b / a</pre></li></ol>
+</q>
+<q><p> How many times will the "hello" be printed by each of the following sequence of statements? What is the value of i at the end in each case?
+</p>
+<ol>
+<li><pre>i = 0
+while (i &lt; 10):
+    print("hello")
+i=i+1</pre></li>
+<li><pre>i = 0
+while (i &lt;= 10):
+    print("hello")
+i=i+1</pre></li>
+<li><pre>i = 2
+while (i &lt;= 20):
+    print("hello")
+i=i+1</pre></li>
+<li><pre>i = 0
+    while (i &lt; 10):
+        print("hello")
+    i=i+1</pre></li>
+</ol></q>
+<q> What would be the output of following Python programs:
+<ol>
+<li><pre>a = 10
+b = 20
+if (a == b):
+   b=a
+else:
+   if(a 
+      a = b
+   else:
+      b = a
+print(a)
+print(b)</pre></li>
+<li><pre>#sneaky indentations
+a = 10
+b = 20
+if (a == b):
+   b=a
+else:
+   if(a>b):
+      a = b
+else:
+   b = a
+print(a)
+print(b)</pre>
+</li>
+<li>
+<pre>n = 5
+i=1
+# if(n == 5):
+# print "hi5"
+while(n >= 0):
+   print(n*i)
+   print(i)
+   n = n - 1
+   i = i * -1
+print(n)
+print(i)</pre></li>
+</ol>
+</q>
+<q><p> Write a program to print the following series:
+</p>
+<ol>
+<li>1 3 5 7 9 ... till n terms. (Initialize n as 10)</li>
+<li>1 2 4 8 16 32 ... till n terms. (Initialize n as 10)</li>
+<li>1 4 13 40... just before a term exceeds 10,000. 
+(The series is actually 1 1+3 1+3+9 1+3+9+27..)</li>
+</ol></q>
+<q><p> Write a program to print the first n Fibonacci numbers. (Initialize n as 15). Start with 0 and 1 as the first two numbers. The next number is created by adding the previous two numbers. Thus, the series would go like this: 0 1 1 2 3 5 8 ... 
+</p></q>
+<q>Write a program to swap(exchange) the values of two variables a and b.
+</q>
+<q>Write the output for the following:
+<ol>
+<li><pre>print("\n\n\n\\")</pre></li>
+<li>
+<pre>x = 10
+y = 3
+while(y>0):	
+   while(x>0):
+      x = x -1
+      print("*")
+   print("#")
+   y = y-1</pre>
+</li>
+<li><pre>y  = "write this"
+x = 3
+z = 3*3*x-8
+print(z+"cs 252")
+print(y)</pre></li>
+
+<li>
+
+  <pre>d =  75
+n = 75
+while(d=!n):
+   print(d)
+print(d/n)</pre>
+</li>
+
+<li>
+<pre>x = 2
+y = 4
+while(x>=0):   	
+   while(y>0):
+   print("^") 
+   if(y%2 == 0):
+   print("$")
+   y = y-1
+   x = x -1
+   print(x)</pre>
+</li>
+</ol></q>
+<q>What is an off-by-one error and give an example from the text.
+</q>
+
+</hw>
+</homework>

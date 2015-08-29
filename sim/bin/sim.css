@@ -1,0 +1,48 @@
+.binsim{
+    display:inline-block;
+    width:100%;
+    padding: 5px;
+}
+
+
+
+td {
+    width:100px;
+    height:70px;
+    border:1px solid black;
+    padding:5px;
+}
+
+td.desc {
+    width:500px;
+    text-align:right;
+}
+
+.binsim_big_input{
+    height:35px;
+    width:300px;
+    margin-top:10px;
+}
+
+.binsim_input{
+    height:35px;
+    width:50px;
+    margin-top:10px;
+}
+
+.binsim_button{
+    display:inline-block;
+    padding:8px;
+    background-color:#66a;
+    border-radius:5px;
+    height:25px;;
+    color:white;
+    margin:5px;
+    cursor:pointer;
+}
+
+.binsim_button:hover{
+    display:inline-block;
+    cursor:pointer;
+    color:#f33;
+}

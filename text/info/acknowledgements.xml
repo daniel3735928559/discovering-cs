@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="../box.xsl" type="text/xsl"?><section number='Acknowledgements'>
+  <title></title>
+  <text>
+    <h3>Illustrators:</h3>
+
+    <p>Many thanks to <b>Kanjana Namvech</b> for the many conceptual
+    illustrations, block diagrams, and importantly, drawings of cats
+    that appear throughout the book, and to <b>Jay Ludden</b> for the
+    multitude of technical diagrams without which large swathes of
+    this text would not make the slighest amount of sense.</p>
+
+    <h3>Contributors:</h3>
+
+    <p>The assistance of several people has been invaluable in getting
+    this project to its current state.  The authors would particularly
+    like to thank: 
+
+    <ul>
+	<li><b>Raghuraman Balasubramanian</b> for the initial impetus
+	for this project and early exploration of its
+	feasibility and possible design, as well as specific
+	contributions to the final product.</li>
+	<li><b>Zach York</b> for a detailed review of an early draft
+	and several long and helpful discussions about the direction
+	of the project as a whole.</li>
+	<li><b>Aaron Levin</b>, <b>Abhinav Mehra</b>, <b>Alex
+	Coad</b>, <b>Kristina Fischer</b>, and <b>Matthew Henricks</b>
+	for extensive feedback on and suggestions for a late draft of
+	the text which greatly improved the style, pedagogy, and
+	organization of this text.</li>
+    </ul>
+    </p>
+    <h3>Others:</h3>
+    
+    <p>Additional thanks for various discussions, exploratory
+    sub-projects, user-testing, suggestions, and corrections to:
+      
+      <ul>
+	<li>Alejandro Puente</li>
+	<li>Aritra Biswas</li>
+	<li>Daniel Petranek</li>
+	<li>Daniel Wortmann</li>
+	<li>Jay Ludden</li>
+	<li>Jinsey Cox</li>
+	<li>Kanjana Namvech</li>
+	<li>Matt Doran</li>
+	<li>Ming-Yee Tsang</li>
+	<li>Peter Procek</li>
+	<li>Timur Girgin</li>
+	<li>Yashovian Bidasaria</li>
+      </ul>  
+    </p>
+  </text>
+</section>

@@ -1,0 +1,202 @@
+.pysim{
+    display:inline-block;
+    width:100%;
+    padding: 5px;
+}
+
+.CodeMirror{
+    height:auto;
+    /* background-color:#eee !important; */
+}
+
+.pysim_vars{
+    float:left;
+    width:13em;
+    margin-bottom:5px;
+    border:1px solid #aaa;
+    text-align:center;
+    margin-right:5px;
+}
+
+.pysim_outputs{
+    float:left;
+    width:13em;
+    margin-bottom:5px;
+    border:1px solid #aaa;
+    text-align:center;
+    margin-right:5px;
+}
+
+#pysim_grid{
+    display:inline-block;
+    float:left;
+    width:26.5em;
+    border:1px solid #aaa;
+    text-align:center;
+    margin-right:5px;
+}
+
+.pysim_exec_flow{
+    float:left;
+    width:10em;
+    border:1px solid #aaa;
+    text-align:center;
+}
+
+.pysim_title{
+    width:100%;
+    text-align:center;
+    display:inline-block;
+    font-size:12pt;
+    margin:auto;
+    padding-bottom:5px;
+}
+
+.pysim_status{
+    display:inline-block;
+    padding:5px;
+    border-left:1px solid #aaa;
+    /* border-radius:5px; */
+    margin:5px;
+    width:45%;
+    font-size:9pt;
+    float:right;    
+}
+
+.pysim_label{
+    font-size:10pt;
+    color:#333;
+    display:inline-block;
+    width:2em;
+}
+
+.pysim_reg{
+    text-align:left;
+    display:inline-block;
+    padding:4px;
+    white-space:pre;
+    /*margin:0 2px 2px 0;*/
+    width:7em;
+}
+
+.pysim_reg > pre{
+    margin:0;
+}
+
+.pysim_output > pre{
+    margin:0;
+}
+
+.pysim_output{
+    text-align:left;
+    display:inline-block;
+    padding:4px;
+    /*margin:0 2px 2px 0;*/
+    width:7em;
+}
+
+.pysim_controls{
+    text-align:left;
+    display:inline-block;
+    width:90%;
+    min-height:50px;
+    border: 1px solid #ccc;
+    margin:auto;
+    margin-bottom:5px;
+}
+
+.pysim_main{
+    display:inline-block;
+    width:90%;
+    border: 1px solid #ccc;
+    margin:auto;
+}
+
+.pysim_programming{
+    display:inline-block;
+    float:left;
+    width:35%;
+}
+
+.pysim_simulator{
+    display:inline-block;
+    float:left;
+    width:55%;
+}
+
+.pysim_program{
+}
+
+.normal{
+    background-color:#c66;
+}
+
+.updated{
+    background-color:#6c6;
+}
+
+.active{
+    background-color:#cc6;
+}
+
+.pysim_display_button{
+    display:inline-block;
+    padding:2px;
+}
+
+.pysim_display_button:hover{
+    display:inline-block;
+    cursor:pointer;
+    color:#f33;
+}
+.pysim_input{
+    width:60px;
+    margin-top:10px;
+}
+
+.pysim_button{
+    display:inline-block;
+    padding:8px;
+    /* background-color:#66a; */
+    border-radius:5px;
+    height:22px;;
+    color:white;
+    margin:5px;
+}
+
+.pysim_enabled_button{
+    background-color:#66a;
+}
+
+.pysim_disabled_button{
+    background-color:#aaa;
+}
+
+.pysim_enabled_button:hover{
+    display:inline-block;
+    cursor:pointer;
+    color:#f33;
+}
+
+.active_line{
+    background-color:#f66;
+}
+
+
+.pysim_ref{
+    display:inline-block;
+    padding:10px;
+    position:absolute;
+    top:0;
+    left:0;
+    background-color:#cc6;
+    border:1px solid black;
+    z-index:9999;
+    cursor:pointer;
+    width:30%;
+}
+
+.icode{
+    display:inline-block;
+    font-family:monospace;
+}

@@ -1,0 +1,176 @@
+<table class="python_ref">
+  <colgroup>
+    <col class="pyref_element" />
+    <col class="pyref_syntax" />
+    <col class="pyref_semantics" />
+    <col class="pyref_example" />
+  </colgroup>
+	  <tr>
+	    <td>Language element</td>
+	    <td>Syntax</td>
+	    <td>Semantics</td>
+	    <td>Examples</td>
+	  </tr>
+	  
+	  <tr>
+	    <td>Line</td>
+	    <td>Either an <i>assignment line</i>, a <i>print line</i>,
+	    or a <i>flow-control line</i>.</td>
+	    <td>A line is the basic unit of Python code and specifies
+	    a single command to be run.  Each line in a Python program
+	    is run in sequence.</td>
+	    <td>
+<pre>x = 2</pre>
+<pre>print('hello')</pre>
+<pre>while(x == 2):</pre>
+</td>
+	  </tr>
+	  <tr>
+	    <td>Assignment line</td>
+	    <td><pre><i>variable name</i> = <i>expression</i></pre></td>
+	    <td>Stores the value of the expression into a variable
+	    named by the given variable name</td>
+	    <td>
+	      <pre>x = 2</pre>
+	      <pre>AbC_de5 = 'hi you!'</pre>
+	      <pre>blah = 6*(2-1728)</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Print line</td>
+	    <td><pre>print(<i>expression</i>)</pre></td>
+	    <td>Prints the value of the expression to the console</td>
+	    <td>
+	      <pre>print('hi world!')</pre>
+	      <pre>print(2-2*7)</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Flow-control line</td>
+	    <td>Either an if, an if/else, or a while</td>
+	    <td>Decides what line to execute next according to
+	    certain conditions</td>
+	    <td>
+	      <pre>if(x == 'no'):</pre>
+	      <pre>while(y/2 >= x+1):</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Variable name</td>
+	    <td>Any combination of letters, numbers, and underscores,
+	    except that a variable name cannot begin with a number or
+	    be a name that Python already treats as special (e.g. if,
+	    while, else--for a complete list, see the next section)</td>
+	    <td>Specifies the name of a variable.</td>
+	    <td><pre>helo
+abc1DEF0__0GHIJ</pre><br />
+
+Non-examples: 
+
+<pre>2hello
+7
+true
+my name</pre></td>
+	  </tr>
+	  <tr>
+	    <td>Expression</td>
+	    <td>A number, string, variable name, or any valid combination of these using +, -, *, /, or %.</td>
+	    <td>Indicates a computation to do.  <def term='value'>The
+	    <b>value</b> of the expression is the result of the
+	    indicated computation</def>.  This value can either be a
+	    number or a string (but be aware that of course most
+	    operations do not make sense on strings--for example,
+	    'hello'+3 is not allowed).</td>
+	    <td>
+	      <pre>'hello'</pre>
+	      <pre>2*x+7</pre>
+<pre>x/y</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>String</td>
+	    <td>Any sequence of characters (except a quote)
+	    enclosed in quotation marks.</td>
+	    <td>Strings provide a method to store and manipulate
+	    text.  </td>
+	    <td>
+<pre>"Hello world!"
+"\"Hmm\", he said"</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>if</td>
+	    <td>
+<pre>if(<i>test</i>): 
+   <i>indented lines</i></pre>
+	    </td>
+	    <td>Executes the indented lines if the test evaluates to
+	    true, and skips them if not</td>
+	    <td></td>
+	  </tr>
+	  <tr>
+	    <td>if/else</td>
+	    <td>
+<pre>if(<i>test</i>): 
+   <i>indented lines</i>
+else:
+   <i>indented lines</i></pre>
+</td>
+	    <td>Runs the first set of indented lines (after the 'if')
+	    and skips the second set (following the 'else') if the
+	    test evaluates to true.  Otherwise, skips the first set
+	    and runs the second.</td>
+	    <td></td>
+	  </tr>
+	  <tr>
+	    <td>while</td>
+	    <td>
+<pre>while(<i>test</i>): 
+   <i>indented lines</i></pre>
+</td>
+	    <td>If the test evaluates to true, runs the indented
+	    lines.  If when it gets to the end of the indented lines,
+	    the test still evaluates to true, starts over at the
+	    beginning of the indented lines.  </td>
+	    <td></td>
+	  </tr>
+	  <tr>
+	    <td>Indented line</td>
+	    <td>A line can be <b>indented</b> from the previous line
+	    by putting three more spaces at the beginning of the line
+	    than were at the beginning of the previous line.  </td>
+	    <td>A set of lines that are indented is a set of lines
+	    that go together--e.g. the indented lines following an if
+	    will all be skipped or will all be run, depending on the
+	    result of the test.
+	    </td>
+	    <td></td>
+	  </tr>
+	  <tr>
+	    <td>Test</td>
+	    <td><pre><i>expr</i> <i>comparison</i> <i>expr</i></pre></td>
+	    <td>A test is a way of comparing two expressions.  If the
+	    comparison is correct, we say the test <b>evaluates to
+	    true</b>, otherwise, we say it <b>evaluates to
+	    false</b>.</td>
+	    <td>
+<pre>2*4 > x+1
+y*y != x*x*x+2*x</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Comparison</td>
+	    <td>Any of <pre>==, !=, >, &lt;, >=, &lt;=</pre></td>
+	    <td>
+<pre>
+==: Is equal to
+!=: Is not equal to
+>: Greater than
+&lt;: Less than
+>=: Greater than or equal
+&lt;=: Less than or equal
+</pre>
+	    </td>
+	    <td></td>
+	  </tr>
+	</table>

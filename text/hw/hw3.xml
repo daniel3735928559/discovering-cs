@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<homework>
+  <hw>
+<q>Explain maintainability and readability.</q>
+<q>Say you wanted to change the following code to test when each individual variable is not equal and print if they are not equal to the user. 
+ With respect to this, would you say the following code is well maintainable and why or why not?
+<pre>a = 4
+b = a + (b % 4)
+c = 6 * a
+d = a + b * c
+if (a == b):
+    print("a and b are equal")
+   if(a==c):
+      print("a, b and c are equal")
+      if(a==d):
+         print("a, b, c, and d are equal")
+      else:
+         print("a, b, c, and d are not equal)
+   else:
+      print("a, b, c, and d are not equal)
+else
+   print("a, b, c, and d are not
+equal)</pre>
+</q>
+<q>Write the output of the following:
+<ol>
+<li><pre>a = 3
+array = ["a", "b", "c", "d"]
+while(a>=0):
+   print(array[a])
+print(array)</pre>
+</li>
+<li><pre>d = 5
+array = ["d", d, "2*d", d*3]
+print(array)</pre>
+</li>
+<li><pre>a= "Computer Science"
+i = 15
+d = 0
+while(a>=0):
+   if(a[i]=="e"):
+      d = d + 1
+print(d)</pre>
+    </li>
+<li><pre>a = [["ad", "df", "rt"], ["a", "b"], [12, 23, 3]]
+print(a)
+print(a[2][2])</pre></li>
+</ol>
+</q>
+<q>What does myArray look like after the following code executes?
+<pre>myArray = [1, 2, 3]
+temp1 = myArray[0]
+temp2 = myArray[2]
+myArray[0] = temp2
+myArray[2] = temp1</pre>
+</q>
+<q><p>Combine your knowledge of while-loops and arrays to answer the following questions about this 
+code:
+</p>
+<pre>littleArray = [0] #initialize single-element array with the value zero
+counter = 0
+while (counter &lt; 100):
+   littleArray[0] = counter
+   counter = counter + 1
+print littleArray[0]</pre>
+<ol>
+<li>What is the final value stored in littleArray[0]?</li>
+<li>How many times is the value in littleArray[0] changed (excluding its initialization)?</li>
+<li>What is the final value stored in counter?</li>
+<li>What would be the output of this program if the print statement were indented?</li>
+</ol></q>
+<q>In this section, we created the following tic-tac-toe board using a 2D array:
+<pre>XO_
+_XO
+___</pre>
+What is the line of python code that would cause player X to win the game?
+(Recall that each of these slots can be accessed and changed just like any other variable)</q>
+<q>Using rectangles for indices, give a general pictorial representation showing how a two dimensional 
+array is structured.
+</q>
+<q>What can arrays contain?</q>
+<q>Write the correct statement to assign the letter "a" 
+from the String "Calculus" in the following array to a new variable named math:
+Array_Example = ["Combinatorics", "Algebra", "Geometry", "Calculus", "Graph Theory"]
+</q>
+<q>Using the arrays array1 = [this], array 2 = [an], array3 =[is], 
+and array4 = [example], write the line of code that will make array1 contain [this, is, an, example]</q>
+<q>True or False
+<ol>
+<li><pre>6%2=!1 and 6%2 == 0</pre></li>
+<li><pre>(-999>-99 and 99>=99) or 13%2 == 0</pre></li>
+<li><pre>(-1>0 or 1>-2) and 2/3>1</pre></li>
+<li><pre> -4>0 or 1>-2</pre>
+</li>
+</ol>
+</q>
+<q>What are the logical operators discussed in Section 3.4 that are syntactically correct in Python?
+</q>
+<q><p>In section 3.5 we discussed why our factorial code would not be ideal if we wanted to compute 60! at some 
+point and then 90! later. We said that, in the event that a problem is found in this algorithm, it would 
+be inconvenient and possibly problematic for us to search through an entire program looking to change both 
+instances. Which of the four principles of programming (efficiency, scalability, readability, or 
+maintainability) is this problem referring to? 
+</p></q>
+<q><p><b>Part A</b>: Below is a while loop that computes exponentials. Given x and y, this loop continually 
+multiplies it"s <i>total</i> by <i>x</i> until <i>y</i> is decremented to 0. Thus, this while loop computes x^y. Now suppose 
+you are planning on computing exponentials many times in your program. Define a function called exponential 
+that takes in two variables, called x and y for consistency, and returns the variable <i>total</i>.</p>
+<pre>total = 1
+while (y != 0):
+   total = total * x
+   y = y - 1</pre>
+<p><b>Part B</b>: Imagine what would happen if you called this function with the input values x = 4 and y = -1. 
+What would happen (we have a name for this behavior, see ch.2)? What kind of error would occur (compiler 
+or runtime)? What about this code causes the problem? </p>
+</q>
+<q>For the code,
+<pre>   x = 12
+   y = 4
+   z = 8
+   def example(x):
+   y = x / 4
+   z = y * 2
+   print("x / 2 is ")
+   print(z)
+   print("x / 4 is ")
+   print(y)
+   return z</pre>
+<p>What is/are the input(s) and output(s) of the function, what is printed, and what is the final value of 
+the variables x, y, and z?</p>
+</q>
+<q>The syntax of naming functions is as follows:
+<pre>def function_name(input_variable_name):
+   [lines of code that comprise the function]
+   return <i>expression</i></pre>
+For the following lines, explain what each part is or does. Include if each line is input or output.
+<pre>def function_name: 
+input_variable_name:
+[lines of code that comprise the function]:
+return expression:</pre>
+</q>
+</hw>
+</homework>

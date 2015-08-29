@@ -1,0 +1,1148 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet href="box.xsl" type="text/xsl"?><section number='4A'>
+<title>Advanced ISA and Assembly Language</title>
+<section><title>Advanced ISA Features</title>
+
+<section><title>Advanced addressing modes</title>
+<summary>AVR has instructions for easily reading or writing a set of
+successive of addresses in RAM.</summary>
+
+<text>
+<p>Earlier we discussed instructions for reading from and storing to
+address X.  But suppose we have 20 values in RAM, starting at address
+500, and we want to do something to each of them.  
+
+<code>500 = 244 + 256*1</code>
+
+So to read the first slot in this sequence, we set r26 = 244 and r27 =
+1: 
+
+<code>ldi r26, 244
+ldi r27, 1
+ld r0, X
+...[Do stuff with the value in r0 that we just read from RAM]</code>
+</p>
+
+<p>The next slot will be at 501, so since 
+
+<code>501 = 245 + 256*1</code>
+
+we need can just increment r26 and leave r27 alone: 
+
+<code>ldi r26, 244
+ldi r27, 1
+ld r0, X
+...[Do stuff with the value in r0 that we just read from RAM slot 500]
+inc r26
+ld r0, X
+...[Do stuff with the value in r0 that we just read from RAM slot 501]
+</code>
+
+</p>
+
+<p>We can do this several more times without issue, but around slot
+511 we will start to have a problem, since
+
+<code>511 = 255 + 256*1</code>
+
+So r26 will be 255, and incrementing it will cause an overflow, making
+it 0.  Then we'll be reading from slot 0 + 256*1 = 256, rather than
+slot 512.  </p>
+
+<p>So this is exactly the problem we faced before of incrementing a
+combined number.  So to fix this, we could also add C to r27 as we
+discussed in the previous section.  However, it turns out that this
+operation of reading a sequence of values in memory is common enough
+that there is a modified version of the 'read from X' instruction
+which again reads from X, but then increments X correctly after it
+does so.  </p>
+
+<p>This instruction is again called ld, and its first operand is again
+a register in which to store the value read from RAM, but for its
+second operand we write X+, telling it to increment X after reading
+the value.  </p>
+
+<p>With this instruction, our code becomes: 
+<code>ldi r26, 244
+ldi r27, 1
+ld r0, X+
+...[Do stuff with the value in r0 that we just read from RAM slot 500]
+ld r0, X+
+...[Do stuff with the value in r0 that we just read from RAM slot 501]
+ld r0, X+
+...[Do stuff with the value in r0 that we just read from RAM slot 502]
+...
+</code>
+
+and the ld __, X+ instruction takes care of incrementing X carefully,
+exactly as we learned to do by hand in the previous section.</p>
+
+<p>There is an analogous 'st X+, register' instruction that stores to
+address X and then increments X afterward.  Further, because going
+backwards through memory is also a reasonably common operation, there
+are also instructions for decrementing X before reading or storing.
+These are all described in the table below: </p>
+
+<table class='ISA_table'><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>ld</pre></td>
+<td>Load from RAM and increment address</td>
+<td><pre>reg</pre></td>
+<td><pre>X+</pre></td>
+<td><pre>op1 = RAM[r26 + 256*r27]
+X = X + 1</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>st</pre></td>
+<td>Store to RAM and increment address</td>
+<td><pre>X+</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>RAM[r26 + 256*r27] = op2
+X = X + 1</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr><tr>
+<td><pre>ld</pre></td>
+<td>Decrement address and load from RAM</td>
+<td><pre>reg</pre></td>
+<td><pre>-X</pre></td>
+<td><pre>X = X - 1
+op1 = RAM[r26 + 256*r27]</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>st</pre></td>
+<td>Decrement address and store to RAM</td>
+<td><pre>-X</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>X = X - 1
+RAM[r26 + 256*r27] = op2</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+</table>
+</text></section>
+
+<section><title>The stack</title>
+<summary>AVR also provides a mechanism for quickly saving/restoring
+the values of registers by means of the stack.  The stack is a region
+in RAM that can be accessed by special instructions that make it
+convenient to store a bunch of register values there and later restore
+those values to the actual registers.  </summary>
+<text>
+<p>AVR provides us with 32 general-purpose registers for computation
+and whatever else we need.  In many cases, this is plenty, but
+sometimes we want to quickly save off a register value or two and
+restore them later.  </p>
+
+<p>There are instructions that do exactly this, called push and pop,
+both of which take just one register for an operand.  Before we
+discuss what these actually do in terms of the architecture, we will
+describe how to think about them: </p>
+
+<p>When you push a register, e.g.
+
+<code>push r0</code>
+
+This will save the value in r0 somewhere.  If you then do 
+
+<code>pop r1</code>
+
+this will take stored that value and put it in r1.  </p>
+
+<p>If we instead push multiple registers, like: 
+
+<code>push r0
+push r1
+push r0
+push r5</code>
+
+then this saves the values of those registers in that order.  The pop
+instruction then recovers the values we stored with push in reverse
+order.  If we do 
+
+<code>pop r10
+pop r11
+pop r12
+pop r13</code>
+
+then the first thing that gets popped into r10 is the value we stored
+from r5.  Then when we pop into r11, this gets the value that was
+pushed from r0.  Then r12 gets the value that was pushed from r1.
+Then r13 gets the value from r0.</p>
+
+<p>This behaviour is often described as a <b>stack</b>, because
+'pushing' a value is like placing that value on the top of a stack.
+Then 'popping', is like taking the top value off the stack.  </p>
+
+<figure><description>The register file is represented by a row of
+boxes with whatever values in them.  We represent the stack by a stack
+of numbers, maybe written on blocks or something (something stackable,
+or otherwise not a row/column of boxes so that it doesn't get mistaken
+for a memory) and show its evolution (as well as that of the register
+file) through a sequence of push and pop
+operations.</description><caption></caption></figure>
+
+<p>This is a helpful mental picture to have when using the stack, but
+it is only that.  The architectural reality behind this conceptual
+idea of the stack is the following: 
+
+<def term='stack pointer'><def term='sp'>There is a RAM address called
+the <b>stack pointer</b>--often called <b>sp</b>.</def></def> When we
+push a register, its value gets written to RAM at the address sp, and
+then sp gets decremented by 1.  When you pop a register, the
+stack pointer gets incremented by 1 and then the register receives the
+value in RAM at the address sp.  </p>
+
+<figure><description>The above figure, now showing the stack in RAM
+and the sp instead of the representative stack, and showing the
+evolution of this through the same sequence of
+pushes/pops.</description><caption></caption></figure>
+
+<p>So push and pop behave as in the mental model, using a region in
+RAM to store the values.  But where, in turn, is this mysterious stack
+pointer stored?  As with many mysterious things, this is actually
+stored using the I/O registers.  Since sp is an address in RAM, it has
+to be a combined number from two registers, like X.  In this case, it
+is made up of I/O registers 61 and 62 as:
+
+<code>sp = IO[61] + 256*IO[62]</code>
+
+In particular, if we are going to use push and pop instructions, we
+have to first set the sp to some sensible place in RAM where it
+doesn't get in the way of anything else we do in RAM.  For example,
+maybe we decide to set it to 5000 to keep it out of the way.  Since 
+
+<code>5000 = 12*256 + 136</code>
+
+we need to set IO[61] to 136 and IO[62] to 12.  We can do this using
+the 'out' instruction to write to the I/O registers:
+
+<code>ldi r31, 136
+out 61, r31
+ldi r31, 12
+out 62, r31</code>
+
+Now the stack is set up, and the first push will write to address 5000
+in RAM, the next push will write to address 4999, etc.  </p>
+
+<table class='ISA_table'><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>push</pre></td>
+<td>Push register to stack</td>
+<td><pre>reg</pre></td>
+<td><pre>none</pre></td>
+<td><pre>RAM[sp] = op1
+sp = sp - 1</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>pop</pre></td>
+<td>Pop register off stack</td>
+<td><pre>reg</pre></td>
+<td><pre>none</pre></td>
+<td><pre>sp = sp + 1
+op1 = RAM[sp]</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+</table>
+</text></section>
+
+<section><title>Functions</title>
+<summary>The construction of a function in Python was a useful way to
+reuse a chunk of code in several places without just copying it.  The
+AVR ISA has support for this behaviour in the form of its rcall and
+ret instructions.  </summary>
+<text>
+<p>In Python, if we ever wrote a piece of code that we want to reuse
+elsewhere, we could package it up as a function and then call it from
+multiple places elsewhere in our code.  In the ISA, we have already
+seen code that would be useful to treat this way: Our code for
+outputting a number (say, the contents of r30): 
+
+<code>ldi 255, r31
+out 26, r31
+out 27, r30</code>
+
+If we end up wanting to output more than one thing in our program,
+we'll have this snippet of code appearing everywhere, so if we could
+reuse it more effeciently that would be excellent.  However, it turns
+out that having a chunk of code that we can reuse in this way is
+tricky: The main challenge comes from the fact that we have to be able
+to jump to this chunk of code from anywhere, run the code, and then
+have the code jump back to wherever it was called from.  </p>
+
+<p>The AVR ISA comes with two instructions--called rcall and
+ret--which together accomplish this by using the stack.  rcall takes a
+single operand, which is a value in the range -64-63.  It pushes onto
+the stack the value pc + 1, and then adds the operand + 1 to the
+pc--effectively jumping to some other piece of code.  So this has put
+us in another section of our code and has saved the address of the
+instruction after the rcall--i.e. the instruction that we want to
+return to after we finish our chunk of code!</p>
+
+<p>To actually use this stored value to return to where we called the
+code, we use the ret instruction, which takes no operands and very
+simply pops the pc off the stack.  </p>
+
+<table class='ISA_table'><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>rcall</pre></td>
+<td>Call relative address</td>
+<td><pre>value -64-63</pre></td>
+<td><pre>none</pre></td>
+<td><pre>RAM[sp] = pc
+sp = sp - 1</pre></td>
+<td><pre>pc = pc + op1
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>ret</pre></td>
+<td>Return from most recent call</td>
+<td><pre>none</pre></td>
+<td><pre>none</pre></td>
+<td><pre></pre></td>
+<td><pre>sp = sp + 1
+pc = RAM[sp]
+sreg: unchanged</pre></td>
+</tr>
+</table>
+
+<p>For example, we can now try to write code that reuses our above
+output code.  Let us consider writing code that first outputs the
+number 13, then multiplies it by 8 and outputs that.  We can start
+with the outline: 
+
+<code>ldi r30, 13
+[call to output code to output r30]
+add r30, r30
+add r30, r30
+add r30, r30
+[call to output code to output r30]
+</code>
+
+We need to put our output code somewhere, so maybe we'll put it at the
+beginning: 
+
+<code>ldi 255, r31
+out 26, r31
+out 27, r30
+ldi r30, 13
+[call to output code to output r30]
+add r30, r30
+add r30, r30
+add r30, r30
+[call to output code to output r30]
+</code>
+
+But now when we first run this program, our output code will be run
+first, and then our interesting code will be run.  That's no good.  We
+could put it at the end, but then that just moves the problem to the
+end of the program, where the output code will be run an extra time
+once everything else is finished.  To resolve this, we make the first
+instruction an rjmp which skips over the output code to the first line
+of our computation code: 
+
+<code>rjmp 3
+ldi 255, r31
+out 26, r31
+out 27, r30
+ldi r30, 13
+[call to output code to output r30]
+add r30, r30
+add r30, r30
+add r30, r30
+[call to output code to output r30]
+</code>
+
+Now we can fill in the call lines: the first one is making a call 4
+instructions back, so it will be rcall -5, and the second call needs
+to call the code 8 instructions back, so it will be rcall -9: 
+
+<code>rjmp 3
+ldi 255, r31
+out 26, r31
+out 27, r30
+ldi r30, 13
+rcall -5
+add r30, r30
+add r30, r30
+add r30, r30
+rcall -9
+</code>
+
+But this is no good still--once we rcall -5, we jump back to the line 
+
+<code>ldi 255, r31</code>
+
+and essentially start over.  Rather, we want our output code to use
+the ret instruction once it finishes: 
+
+<code>rjmp 4
+ldi 255, r31
+out 26, r31
+out 27, r30
+ret
+ldi r30, 13
+rcall -6
+add r30, r30
+add r30, r30
+add r30, r30
+rcall -10
+</code>
+
+(Note we've had to shift all the rcall and rjmp operands.)</p>
+
+<p>There is another issue: rcall is using the stack, but we don't
+actually know at this point that sp is an address that makes sense,
+since we never set it up.  So we do this as the first thing: 
+
+<code>ldi r31, 136
+out 61, r31
+ldi r31, 12
+out 62, r31
+rjmp 4
+ldi 255, r31
+out 26, r31
+out 27, r30
+ret
+ldi r30, 13
+rcall -6
+add r30, r30
+add r30, r30
+add r30, r30
+rcall -10
+</code>
+
+And now, finally, we've got things set up so that we can reuse the
+outputting code as we'd hoped.</p>
+
+<p>There were quite a few pitfalls in getting this set up, so we
+record for future reference our code-reuse checklist: 
+
+<ul>
+  <li>Ensure that the sp is set to something sensible</li>
+  <li>Place the reuseable somewhere where it won't get executed,
+  e.g. by placing it at the beginning and jumping over it.</li>
+  <li>Ensure the reuseable code ends with a ret instruction</li>
+  <li>Call the code using rcall with an operand that shifts you to the
+  start of the reuseable code, being careful to update these offsets
+  if you change any intervening code.</li>
+</ul></p>
+
+<p><b>Caller vs. callee-saved registers: </b></p>
+
+<p>There is one further issue that doesn't actually cause a problem in
+the above example, but can easily become a problem in more complicated
+examples, namely that the output code trashes the r31 register.
+Specifically, it fills it with a value that it uses for its own
+purposes, overwriting whatever value was in it before.  </p>
+
+<p>To see this in action, suppose instead of multiplying r30 by 8, we
+wanted to add the number 41 to it two times, output r30, and then add
+41 to it three more times and output the result of that:
+
+<code>ldi r31, 136
+out 61, r31
+ldi r31, 12
+out 62, r31
+rjmp 4
+ldi 255, r31
+out 26, r31
+out 27, r30
+ret
+ldi r30, 13
+rcall -6
+ldi r31, 41
+add r30, r31
+add r30, r31
+rcall -10
+add r30, r31
+add r30, r31
+add r30, r31
+rcall -14
+</code>
+
+In this example, we use r31 to hold our value of 41 that we are adding
+to r30.  But after the line 
+
+<code>rcall -10</code>
+
+we continue adding r31 to r30, expecting that r31 still has the value
+41, oblivious to the fact that our output code overwrites r31 with the
+value 255!  </p>
+
+<p>There are two remedies--we can make our output code save the
+previous value of r31 using the stack, and then restore it before it
+returns: </p>
+
+<code>ldi r31, 136
+out 61, r31
+ldi r31, 12
+out 62, r31
+rjmp 6
+push r31
+ldi 255, r31
+out 26, r31
+out 27, r30
+pop r31
+ret
+ldi r30, 13
+rcall -8
+ldi r31, 41
+add r30, r31
+add r30, r31
+rcall -12
+add r30, r31
+add r30, r31
+add r30, r31
+rcall -16
+</code>
+
+<p>(Note again the need to adjust the operands to the jumps and
+calls.)</p>
+
+<p><def term='callee-saved'>In this case, r31 is being saved by the
+function we're calling, so it is referred to as a <b>callee-saved
+register</b>.</def> Another option would be that before we call the
+code, we note that it will trash r31 and so we save it onto the stack
+before calling and then restore it after the code returns: 
+
+<code>ldi r31, 136
+out 61, r31
+ldi r31, 12
+out 62, r31
+rjmp 4
+ldi 255, r31
+out 26, r31
+out 27, r30
+ret
+ldi r30, 13
+rcall -6
+ldi r31, 41
+add r30, r31
+add r30, r31
+push r31
+rcall -11
+pop r31
+add r30, r31
+add r30, r31
+add r30, r31
+rcall -16
+</code>
+
+<def term='caller-saved'>In this case, the output code will happily
+trash r31, and it is the responsibility of any code that calls it to
+save its value.  In this case, the register is known as a
+<b>caller-saved register</b>.</def>
+
+</p>
+
+<p><b>Aside--Abusing rcall: </b>You'll have noted that most of our
+operations thus far only act on general-purpose registers.  However if
+we really wanted, we could make them act on sreg or sp by reading
+these from the appropriate I/O registers into the general-purpose
+registers, computing with these general-purpose registers, and then
+writing the results back to the relevant I/O registers.  However none
+of our instructions can take pc as an operand, and pc doesn't actually
+live in the I/O register file either.  </p>
+
+<p>So if we're merrily going through a program and for whatever reason
+we want to get the current pc in a register, there is not an
+instruction we can use that does this.  However, we can accomplish it
+in several instructions with a slight abuse of rcall: note that rcall
+places the address after the current pc on the stack.  And we have an
+instruction that reads a value off the stack into a register--namely
+pop.  So we can do:
+
+<code>rcall 1
+pop r0</code>
+
+and this will put the stored pc into register r0!  Note that this
+stored pc is the address of the pop instruction in program memory, but
+we can subsequently adjust r0 with arithmetic operations to get r0 to
+be the address of whatever instruction we're actually interested in.
+</p>
+
+</text></section>
+
+
+<section><title>Further ISA features</title>
+<text>
+<p>We have described most of the major families of instructions in the
+AVR ISA, but there are a very large number of instructions defined as
+part of the ISA beyond what we've mentioned.  Some of these perform
+functions that we have not mentioned, such as reading an actual
+encoded instruction from the program memory into a register.  Others
+perform functions that we can perform by using the instructions
+described here, but which are packaged into a single extra instruction
+for convenience.  An example of such an instruction that is not
+strictly necessary is cp.  We note that cp sets the sreg flags in
+exactly the same way as sub, so everywhere we used cp, we could have
+used sub instead.  The inconvenience is that sub also modifies one of
+its operands, and if we're just comparing two numbers we often don't
+want this comparison to also modify one of them.  So we can do
+literally the same thing as 
+
+<code>cp r10, r11</code>
+
+by saving off the value (r10) that will get modified by sub and then
+restoring it after: 
+
+<code>push r10
+sub r10, r11
+pop r10</code></p>
+
+<p>Not all of these 'convenient but not strictly necessary'
+instructions are available on all models of AVR computer--cheaper
+chips may have a more barebones set of available instructions.  For a
+complete list of all instructions, and a breakdown of which are
+available on which models of AVR microprocessor, refer to [Wikipedia?
+Some Atmel document?]</p>
+</text>
+</section>
+</section>
+
+<section><title>Assembly language</title>
+<summary>Assembly language is the programming language that one often
+uses to write code in the ISA.  It is easy to convert from assembly to
+nothing but pure ISA instructions--a job that is done by an
+'assembler'--but assembly has features that make it easier to use than
+the ISA itself.</summary>
+<text>
+<p>Writing useful code using the ISA can be a pain.  At one level, it
+is going to be difficult no matter what, since each instruction only
+performs one small operation at a time, so anything complicated will
+take a large number of instructions.  At the same time, there are some
+things that are sufficiently difficult that a very small layer was
+created to put on top of the ISA, namely assembly language.  </p>
+
+<p><def term='assembly langauge'><b>Assembly language </b> is a
+programming language whose syntax mostly consists of ISA instructions,
+but which has a few additional features to ameliorate some of the more
+painful tasks when programming in the ISA directly.  </def> The tasks
+of this sort that we shall address specifically are the following:
+
+<ul>
+<li><b>Specifying offsets for relative jumps and branches: </b>Recall our
+example above in listing ???.  We have multiple rcalls to a particular
+place in the code, but because rcall requires an offset, we have to
+recompute each offset for each individual rcall.  Further, if we ever
+want to add anything to the middle of the program, we have to
+recalculate all the offsets.  Assembly language includes a mechanism
+for jumping to a specific location that will, in effect, compute all
+these offsets for us.  This mechanism is called labels.</li>
+<li><b>Initialising RAM with specified data: </b>Currently, if we want a
+large amount of data stored in RAM, then since the only way of storing
+data we have is with the st instructions, we will have to do one st
+instrucion for each number we want stored.  This can get tedious if we
+have hundreds of things to store, so assembly provides a mechanism to
+pre-populate RAM at specified locations with whatever values are
+desired.</li>
+<li><b>Strings: </b>We haven't yet discussed how Python's strings can
+be realised in the ISA.  This discussion will largely be deferred to
+the next chapter, but for now we mention that there is some way to
+correspond letters in a string to numbers 0-255.  So storing a string
+would involve looking up which letters correspond to which numbers and
+using st instructions to store the appropriate sequence of numbers.
+Assembly includes syntax to let us simply type the desired string and
+have the assembler convert this to numbers for storage. </li>
+</ul>
+</p>
+
+<p>Now, we're trying to program the computer.  What this means is
+getting certain numbers corresponding to our desired instructions into
+the program memory of the computer.  <def term='assembler'>When we
+write a program in assembly language, a program called an
+<b>assembler</b> will convert this into numbers for storage into the
+program memory.</def> However, assembly language not only allows you
+to populate program memory with numbers corresponding to instructions,
+but also allows you to pre-populate RAM with numbers if desired.</p>
+
+<p>As mentioned, assembly language is a programming language, so just
+as we explained the Python programming language in terms of its
+syntax--what constructions are legal, and its semantics--what the
+constructions mean, we can do this with assembly.  Further, since all
+an assembly language program is meant to do is turn into certain
+numbers that will go into program memory and certain other numbers
+that go into RAM, describing the semantics of an element of assembly
+language is as easy as explaining what numbers it corresponds to and
+where in memory those numbers are stored.  </p>
+
+
+	<table>
+	  <tr>
+	    <td>Language element</td>
+	    <td>Syntax</td>
+	    <td>Semantics</td>
+	    <td>Examples</td>
+	  </tr>
+	  
+	  <tr>
+	    <td>Line</td>
+	    <td>Either an <i>ISA operation</i>, a <i>label</i>,
+	    or an <i>assembler directive</i>.</td>
+	    <td>A line is the basic unit of assemvly language code.
+	    Each line in an assembly program is run in sequence.</td>
+	    <td>
+</td>
+	  </tr>
+	  <tr>
+	    <td>ISA operation</td>
+	    <td>An ISA operation can be any of the above operations we
+	    described.  The added feature is that is that in place of
+	    an operand that represents an offset, you may use a label
+	    name, and in place of a number you may use a character</td>
+	    <td>Performs the specified ISA operation</td>
+	    <td>
+	      <pre>ldi r31, 51</pre><br />
+	      <pre>cpi r14, 'A'</pre><br />
+	      <pre>breq -17</pre><br />
+	      <pre>rjmp hello</pre><br />
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Label</td>
+	    <td><pre><i>label_name</i>:</pre></td>
+	    <td>Marks this offset in the program as being named by the
+	    given label name</td>
+	    <td>
+	      <pre>hello: </pre><br />
+	      <pre>this_is_a_label: </pre><br />
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Assembler directive</td>
+	    <td>Either a <i>byte directive</i>, or a <i>string
+	    directive</i></td>
+	    <td>
+	      <pre>.byte 101</pre>
+	      <pre>.byte 121,87,0,33</pre>
+	      <pre>.string "hello"</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Label name</td>
+	    <td>Any combination of letters, numbers, and underscores,
+	    except that a variable name cannot begin with a number or
+	    be a name that Python already treats as special (e.g. if,
+	    while, else--for a complete list, see the next section)</td>
+	    <td>Specifies the name of a variable.</td>
+	    <td><pre>helo
+abc1DEF0__0GHIJ</pre><br /><br />
+
+Non-examples: 
+
+<pre>2hello
+7
+true
+my name</pre></td>
+	  </tr>
+	  <tr>
+	    <td>Character</td>
+	    <td>Any single character from the keyboard enclosed in
+	    single quotes</td>
+	    <td>Stands in for a number that represents that character
+	    (see ASCII in the next chapter).  </td>
+	    <td>
+	      <pre>'h'</pre>
+	      <pre>'A'</pre>
+	      <pre>'%'</pre>
+	      <pre>' '</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>String</td>
+	    <td>Any sequence of characters (except a single-quote)
+	    enclosed in double-quotes.</td>
+	    <td>Strings provide a method to store and manipulate
+	    text.  </td>
+	    <td>
+<pre>&quot;Hello world!&quot;
+&quot;'That is beautiful', he said&quot;</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>byte directive</td>
+	    <td><pre>.byte <i>list of bytes</i></pre></td>
+	    <td>Instructs that these bytes should be inserted into the
+	    program at this point.  Note that a byte can either by a
+	    number 0-255 or a character</td>
+	    <td>
+	      <pre>.byte 42</pre>
+	      <pre>.byte 0, 0, 0, 0, 0</pre>
+	      <pre>.byte 123, 'A', 1</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>string directive</td>
+	    <td>
+	      <pre>.ascii <i>string</i></pre>
+	    </td>
+	    <td>Translates each character in the string into a byte
+	    and inserts those bytes into the program at the location
+	    of the string directive in order.</td>
+	    <td></td>
+	  </tr>
+	</table>
+
+	<p>As with Python, assembly language has in fact many features
+	beyond those explained here, but they are much less powerful
+	than the extra features of Python, and from this book we shall
+	elide them entirely.</p>
+</text>
+
+<section><title>ISA Operations</title>
+<text>
+  <p>We have already discussed in detail the syntax and semantics of
+  the various ISA operations.  The only thing new in assembly language
+  is the ability to replace certain operands with characters or
+  labels.  Specifically:
+  <ul>
+    <li><p>Any operand designated above as an 'offset' can be replaced
+    with the name of a label.  This covers the operands to rjmp,
+    rcall, and all the branch instructions.  The assembler will then
+    compute the offset in the program between the jump/branch
+    instruction and the location in the code where the label appears
+    and will substitute that offset as the actual operand.  </p>
+
+    <p>For example, take the program:
+
+    <code>hello:
+ldi r31,0
+cpi r31,8
+breq stuff
+inc r31
+rjmp hello
+stuff:
+dec r31
+cpi r31,8
+breq stuff</code>
+
+The label 'stuff' appears two instructions after the first 'breq
+stuff' instruction, so the assembler replaces the first 'breq stuff'
+with 'breq 2'.  On the other hand, the stuff label appears three
+instructions before the second 'breq stuff', so this is replaced with
+'breq -3'.  Likewise, 'rjmp hello' gets replaced by 'rjmp -5'.  So
+the above program is equivalent to: 
+
+
+<code>ldi r31,0
+cpi r31,8
+breq 2
+inc r31
+rjmp -5
+dec r31
+cpi r31,8
+breq -3</code>
+
+Of course, writing the program using labels means we don't have to
+adjust all the offsets of our jumps and branches if we change the
+program a little, so labels do indeed solve that problem.
+    </p>
+    </li>
+    <li>Any character corresponds to a byte in a standard way.  So
+    with just the naive ISA operations, we could already do string
+    manipulation by taking any string we wanted to use, figuring out
+    which bytes its characters corresponded to, and using those
+    numbers in place of the actual string.  This would make the
+    purpose of a program rather hard to divine, however.  Imagine:
+<code>ldi r30, 255
+out 26, r30
+ldi r30, 72
+out 27, r30
+ldi r30, 255
+out 26, r30
+ldi r30, 105
+out 27, r30</code>
+
+    We know from earlier that this is outputting the numbers 72 and
+    105, but these numbers turn out to correspond to the characters
+    'H' and 'i', respectively.  So this is outputting the text 'Hi',
+    and we can make this more evident by replacing the numbers with
+    the characters they correspond to:  
+<code>ldi r30, 255
+out 26, r30
+ldi r30, 'H'
+out 27, r30
+ldi r30, 255
+out 26, r30
+ldi r30, 'i'
+out 27, r30</code>
+
+    The assembler will turn this into the earlier program anyway,
+    since ldi of course requires a number as its second operand, but
+    we are free to use characters when they are more convenient than
+    the raw numbers and let the assembler take care of the conversion.
+    </li>
+  </ul>
+  </p>
+
+  <p>As we mentioned, the assembler's job is to put numbers into
+  program memory corresponding to the specified instructions.  We've
+  seen how to specify ISA operations, even using labels and characters
+  when convenient, but have not discussed the conversion of ISA
+  operations into numbers.  This will be the topic of the next
+  chapter, and for now all we mention is that there is some
+  correspondence.  For example, the instruction
+
+  <code>ori r22,0x58</code>
+
+  corresponds to the number 26725.  
+  </p>
+  
+</text></section>
+
+<section><title>Labels</title>
+<text>
+  <p>Labels are lines that look like:
+
+  <code><i>label_name</i>: </code>
+
+  Where a label name can be exactly what a variable name in Python
+  could be: Anything containing only letters, numbers, or underscores,
+  except it cannot start with a number.</p>
+  
+  <p>Labels are used to mark a place in the programto refer to in
+  actual instructions, as in the examples of the previous section.
+  They do not themselves constitute actual instructions.  For example,
+  the two programs below are identical in terms of the instructions
+  that will be stored in program memory: 
+
+  <code>ldi r30, 255
+out 26, r30
+ldi r30, 'H'
+out 27, r30
+ldi r30, 255
+out 26, r30
+ldi r30, 'i'
+out 27, r30</code>
+
+
+<code>hello:
+ldi r30, 255
+out 26, r30
+ldi r30, 'H'
+some_label: 
+out 27, r30
+ldi r30, 255
+babel: 
+out 26, r30
+ldi r30, 'i'
+out 27, r30</code>
+
+  </p>
+</text></section>
+
+<section><title>Assembler directives</title>
+<text>
+
+<p>We will discuss only two kinds of assembler directives here, which
+will serve the single purpose of helping us pre-populate RAM with
+data.  We should note that this task is not an easy one--</p>
+
+<!-- <p><b>Data directive: </b></p> -->
+
+<!-- <p>Every line of an assembly program gets translated into numbers: ISA -->
+<!-- operations get translated to numbers of width 16 according to the -->
+<!-- encoding, and label lines get translated to nothing (though their -->
+<!-- location in the program is used to help translate other ISA operations -->
+<!-- that refer to them), and all these numbers get stored into program -->
+<!-- memory.  Until, that is, the program reaches the data directive.  </p> -->
+
+<!-- <p><def term='data directive'>The <b>data directive</b> is a line in -->
+<!-- an assembly program that just contains the content:  -->
+
+<!-- <pre>.data</pre> -->
+
+<!-- It can show up at most once per program, and every line of the program -->
+<!-- that appears before this directive, when it gets translated into a -->
+<!-- number, gets stored in program memory.  Every line of the program -->
+<!-- following the data directive, when translated into a number, will -->
+<!-- be placed into RAM instead.  </def></p> -->
+
+<!-- <p>Of course, then we have to ask: What can we put after the data -->
+<!-- directive?  All the valid lines of assembly language we know about -->
+<!-- thus far are ISA operations, labels, and the data directive.  The only -->
+<!-- one of those that actually corresponds to numbers, are ISA -->
+<!-- operations.  For example, the ISA operation -->
+
+<!-- <pre>ldi r30, 255</pre> -->
+
+<!-- corresponds to the two numbers: -->
+
+<!-- <pre>239, 239</pre> -->
+
+<!-- So if we want two consecutive 239's stored into RAM, we can do: -->
+
+<!-- <pre>.data -->
+<!-- ldi r30, 255</pre> -->
+
+<!-- However this is hard: What if we want only one 239?  Or if we want a -->
+<!-- 238 instead?  Do we have to go find an instruction whose encoding -->
+<!-- includes the number 238?  Thankfully the answer is 'no', and there is -->
+<!-- a way of specifying precisely what numbers you want without having to -->
+<!-- reference the ISA's encoding.  This is the job of the byte directive. -->
+<!-- </p> -->
+
+<p><b>Byte directives</b></p>
+
+<p><def term='byte directive'>A <b>byte directive</b> looks like:
+
+<code>.byte 12,189,200,0,0</code>
+
+It will write the sequence of bytes (separated by commas) in the list
+into program memory verbatim.  </def></p>
+
+<p>For a example: 
+
+<code>.byte 12,56,121,0,0,0,0
+.byte 78
+.byte 255,'A'</code>
+
+are all valid byte directives--the last because, as we discussed, 'A'
+is a valid way to speicfy the byte that encodes the character 'A',
+namely 65.</p>
+
+<p>Since everything that gets written to program memory anyway is
+numbers, we can write our whole program with byte directives by
+knowing what numbers our instructions would be translated into.  For
+example, the program
+
+<code>ldi r30, 255
+out 26, r30
+ldi r30, 'i'
+out 27, r30</code>
+
+would be turned into the numbers
+
+<code>61423,48106,59113,48107</code>
+
+Translating these into bytes, e.g. 61423 = 239*256+239, we find that
+this program is equivalent to:
+
+<code>.byte 239,239,234,187,233,230,235,187</code>
+
+TODO: check endianness issues.
+</p>
+
+<p>In general, however, we don't write programs using the byte
+directive.  Instead, we use the byte directive to include data that we
+want to reference in our program.  For example, if we want to sun the
+first 10 Fibonacci numbers, we could write some code to compute these,
+or we could just place them into our program with a byte directive:
+
+<code>.byte 1,1,2,3,5,8,13,21,35,56</code></p>
+
+<p>Another sort of data that we often want to manipulate is string
+data.  Using the byte directive, we can store the string 'Hello
+World!' in our program like:
+
+<code>.byte 'H','e','l','l','o',' ','W','o','r','l','d','!'</code></p>
+
+<p><b>String directives</b></p>
+
+<p>That last example for including strings may have looked a little
+inconvenient, so assembly language provides a second directive that
+makes this easier: the <b>string directive</b>.
+
+<def term='string directive'>The string directive looks like:
+
+<code>.ascii <i>string</i></code>
+
+where a string is the same as it was in our description of Python--any
+sequence of characters enclosed in double quotes, where newlines,
+tabs, and double-quotes inside the string are all represented with
+escape sequences.</def></p>
+
+<p>For example, we can recover the 'Hello World!' example with the
+string directive simply thus:
+
+<code>.asciz &quot;Hello World!&quot;</code></p>
+
+<p><b>Getting data into RAM</b></p>
+
+<p>The byte and string directives allow us to put data into program
+memory, but you notice that all our storage instructions were about
+loading from and storing to registers and to RAM--never to the program
+memory.  So how can this newfound ability to store bytes in the
+program memory help us?  It turns out there is one further instruction
+in the ISA we did not mention, which loads a single byte from program
+memory into a register.  It is called 'lpm' (for 'load from program
+memory') and, other than the fact that it loads from program memory
+instead of RAM, it behaves the same as the load instruction that
+incremented Z: </p>
+
+<table class='ISA_table'><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>adc</pre></td>
+<td>Add with carry</td>
+<td><pre>reg</pre></td>
+<td><pre>Z+</pre></td>
+<td><pre>op1 = PM[Z]
+Z = Z + 1</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+</table>
+
+<p>Now, finally, we can describe a scheme for including data along
+with our programs and using that data.  For instance, suppose we want
+to make a program that prints 'Hello World!', we do the following: We
+make the first instruction of the program an rjmp to the actual start
+of the program.  After the first instruction, we include all the data
+we want to use--in this case, the string 'Hello World!'.  Then we
+start the actual program, and we can access the data by means of
+labels when needed:
+
+<code>rjmp prog_start
+.asciz &quot;Hello World!&quot;
+prog_start:
+ldi r30, 255
+out 26, r30
+ldi r30,0
+ldi r31,2
+loop_start:
+lpm r16,Z+
+out 27, r16
+cmp r16,0
+brne loop_start</code>
+</p>
+
+</text></section>
+
+</section>
+
+</section>

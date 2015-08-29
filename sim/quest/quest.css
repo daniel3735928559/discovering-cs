@@ -1,0 +1,81 @@
+.quest{
+    display:inline-block;
+    width:100%;
+    padding: 5px;
+    /* height:90%; */
+}
+
+.quest_controls{
+    width:90%;
+    float:left;
+    border:1px solid #aaa;
+    padding: 5px;
+    height:4em;
+    margin-bottom:5px;
+}
+
+.quest_main{
+    float:left;
+    width:100%;
+    height:80%;
+}
+
+.quest_panel{
+    float:left;
+    width:8%;
+    font-size:10pt;
+    border:1px solid #aaa;
+    margin-right:5px;
+    padding: 5px;
+    height:100%;
+    text-align:center;
+    overflow:scroll;
+}
+
+.quest_problem_button{
+    width:80%;
+    margin-bottom:5px;
+    cursor:pointer;
+    display:inline-block;
+    text-align:left;
+    padding:5px;
+}
+
+.quest_other{
+    background-color:#ffc;
+}
+
+.quest_current{
+    background-color:#cff;
+}
+
+.quest_title{
+    width:100%;
+    color: #999;
+    border-bottom:1px solid #aaa;
+    text-align:center;
+    padding-bottom:5px;
+    margin-bottom:5px;
+}
+
+.quest_description{
+    float:left;
+    width:20%;
+    border:1px solid #aaa;
+    margin-right:5px;
+    padding: 5px;
+    height:100%;r;
+    overflow:scroll;
+}
+
+.quest_simulator{
+    display:inline-block;
+    float:left;
+    border-left:1px solid #aaa;
+    border-top:1px solid #aaa;
+    border-right:1px solid #aaa;
+    margin-right:5px;
+    padding: 5px;
+    width:65%;
+    height:100%;
+}

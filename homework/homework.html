@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Homeworks</title>
+    <link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
+    <link rel="stylesheet" type="text/css" href="/sim/quest/quest.css" />
+    <link rel="stylesheet" type="text/css" href="/homework/homework.css" />
+    <link rel="stylesheet" href="/sim/cm/codemirror.css" />
+    <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
+    <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
+    <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
+    <script type="text/javascript" src="/homework/homework.js"></script>
+    <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
+    <script type="text/javascript" src="/sim/quest/quest.js"></script>
+    <script type="text/javascript" src="/sim/py/expr_ng.js"></script>
+    <script type="text/javascript" src="/sim/py/sim.js"></script>
+  </head>
+  <body ng-app="app">
+    <div class="quest" ng-controller="HomeworkController">
+      <div class="quest_controls">
+	<!-- Current: <b>{{homeworks[homework_id].name}}</b><br /> -->
+	Go to: <select ng-change="switch_hw()" ng-model="homework_id" ng-options="h.index as h.name for h in homeworks"></select>
+	<div class="homework_button" ng-click="submit_homework()">Submit</div>
+      </div>
+      <div class="quest_main" ng-include="'/sim/quest/quest.html'" ng-repeat="quest_name in [homeworks[homework_id].file]">
+      </div>
+      <!-- Lightbox for verification --> 
+      <div class="lightbox_background" ng-if="verify_submission == true" ng-click="exit_verify()">
+	<div class="lightbox_foreground" ng-click="$event.stopPropagation()">
+	  <div style="width:100%;text-align:center;"><b>Verify that these are your desired answers.  <br /><br />Then press "Submit" at the bottom. </b><br /><br /></div>
+	  <div ng-repeat="p in submission_programs track by $index">
+	    <b>Problem {{$index}}: </b>
+	    <pre>{{p}}</pre>
+	  </div>
+	  <div style="width:100%;text-align:center;font-size:12pt;"><div class="homework_button" ng-click="submit_homework_for_real();$event.stopPropagation()">Submit for real</div></div>
+	</div>
+      </div>
+    </div>
+  </body>
+</html>

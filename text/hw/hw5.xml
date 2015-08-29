@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<homework>
+  <hw>
+<q>In what ways is programming in a high level language different than programming in ISA?
+</q>
+<q>What does an ISA consist of? Explain the different parts.
+</q>
+<q>List some different types of memory on the AVR chip as discussed in this text.
+</q>
+<q>What are the significant flags used in the status register and when are they set or cleared?
+</q>
+<q>What is persistent memory and why is it useful?
+</q>
+<q> Explain three aspects of the ISA.
+</q>
+<q>Explain the task of the assembler.
+</q>
+<q>Define what the AVR processor’s memory size and width are?
+</q>
+<q>What registers can be used in the ldi instruction?
+</q>
+<q>Whereas Python had three main functions, assignment, printing, and flow-control, what categories does the ISA instructions split into?
+</q>
+<q>What type of instructions can be used to execute a non-sequential instruction?
+</q>
+<q>Which 7 specific ISA operations can alter the program counter by more than 1?
+</q>
+<q>Fill in each comment in the following AVR program saying which flag is set (N, Z, C, or none) after each of the specified lines finish executing
+<pre>ldi r16 255
+ldi r17 1
+ldi r18 1
+add r16 r17  ; __ flag is set
+sub r17 r16  ; __ flag is set
+sub r16 r18  ; __ flag is set
+add r17 r18  ; __ flag is set
+add r17 r16  ; __ flag is set
+dec r17      ; __ flag is set</pre>
+</q>
+<q>Can you think of a situation in which both the N and C flags would be set at the same time? N and Z? C and Z? What about all three flags?</q>
+<q>Explain how the following program implements a kind of “loop” behavior. Is this an infinite loop? If yes, what makes it infinite? If no, at what point will the loop stop? How would your answer change if the second line of the program was “ldi r17 11” instead? Which operation could you replace the “brne” with that would give the program the same exact functionality?
+<pre>ldi r16 10
+ldi r17 3
+inc r17
+cp r16 r17
+brne -3</pre>
+</q>
+<q>Explain why simply switching the cp operands in the table from section 5.3.4 switches the functionality from >= to &lt;=
+</q>
+<q>What function does the immediate serve in immediate instructions?
+</q>
+<q>Briefly explain the stack.
+</q>
+<q>What is callee-saved registers and how do they differ from caller-saved registers?
+</q>
+<q>The following program is unnecessarily long. Shorten it by replacing some of the lines with the instructions that were introduced in section 5.4.1. Make sure you do not alter the overall functionality of the program
+<pre>ldi r16 2
+ldi r17 4
+ldi r18 6
+ldi r19 8
+sub r20 r16
+cp r21 r17
+sub r22 r18
+cp r23 r19</pre>
+</q>
+<q>What is AVR assembly language,what does it consist of, and how does it differ from AVR ISA operations?
+</q>
+<q>What do the following assembly statements do? Draw the relevant portion of RAM with any updates made because of the statement.
+<ol>
+<li><pre>.byte(1204) 12,189,200,0,0</pre></li>
+<li><pre>.byte(440) ‘H’,’e’,’l’,’l’,’o’</pre></li>
+<li><pre>.byte(440) 72,101,108,108,111</pre></li>
+<li><pre>.string(440) “Hello”</pre></li>
+</ol></q>
+<q>Explain how to operate with large numbers in AVR assembly language.
+</q>
+<q>Which branch instruction is used largely when mimicking an if/else statement?
+</q>
+<q>Why is complexity important when coding, using the search engine example as an example or springboard for your response?
+</q>
+</hw>
+</homework>
