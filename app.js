@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({
 
 
 app.get('/', function(req, res){
+    console.log(get_ip(req));
     res.redirect('/text/box.xml');
 });
 
@@ -34,6 +35,7 @@ app.post('/homework/get', function(req, res){
 });
 
 app.get('/homework', function(req, res){
+    console.log(JSON.stringify(req.headers));
     res.redirect('/homework/homework.html');
 });
 
@@ -89,5 +91,17 @@ var get_user_data = function(req){
 	    'username':"test_user"};
 }
 
-server = http.createServer(app).listen(61453, args[0]);
-console.log("Server running!");
+server = http.createServer(app).listen(61453);
+
+if(args.length > 0){
+    server.on('connection', function (sock) {
+	if(sock.remoteAddress != args[0]){
+	console.log("Denied: " + sock.remoteAddress);
+	    sock.end("Access denied");
+	}
+    });
+    console.log("Server running on:" + args[0]);
+}
+else{
+    console.log("Server running!");
+}

@@ -403,7 +403,7 @@
 	  <p>We have just described abstraction and how it allows us
 	  to think about complicated systems without getting
 	  overwhelmed by complexity.  A pithy rephrasing of this idea
-	  comes from Gregor Kiczales:
+	  comes from Gregor Kiczales <footnote />:
 	  </p>
 
 	  <p><i>'[Abstraction] is a primary concept in all engineering
@@ -457,7 +457,7 @@
 	  languages provides you is actually a very leaky one.  And in
 	  the day when one of the abstractions leaks in a critical
 	  way, understanding the implementation behind the interface
-	  is key.  </p>
+	  is key.  <footnote /></p>
 
 	  <p>As we discuss the various layers of abstractions, in this
 	  text, we will not tend to dwell excessively on every little
@@ -1125,7 +1125,7 @@ y = 199 </code>
 	would have to have states also for things like exercising its
 	hunting instinct and for whatever it is that <a
 	href="https://www.youtube.com/watch?v=YrmEOgELheE">this
-	cat</a> is doing.  And there are a lot more ways of
+	cat</a><footnote /> is doing.  And there are a lot more ways of
 	interacting with a cat than we listed above.</p>
 
 	<p>Computers, on the other hand, are relatively simple: The
@@ -1432,7 +1432,7 @@ y = 199 </code>
       manages to get answers to these sorts of questions.  In your
       study of computer science you will almost surely encounter this
       area at some point, but we will venture no further in that
-      direction in this text.</p>
+      direction in this text.<footnote /></p>
     </text>
   </section>
 
@@ -1477,9 +1477,9 @@ y = 199 </code>
 
       <p>The scope of the problem is dizzying--Google themseves
       estimate the size of their index at over a billion GB
-      <footnote>4</footnote>--i.e. a quintillion bytes--with about 2
+      <footnote />--i.e. a quintillion bytes--with about 2
       million search queries coming in every minute
-      <footnote>5</footnote>.  The engineering problem associated even
+      <footnote />.  The engineering problem associated even
       with just getting a webpage that displays the search box sent
       out 2 million times a minute are substantial, let alone solving
       the high-level problem stated above at least as many times every

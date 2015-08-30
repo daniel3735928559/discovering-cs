@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <homework>
   <hw>
-<q>True or False: Mobile phones and game consoles are both computers. </q>
+<q>True or false: Mobile phones and game consoles are both computers. </q>
 <q>What four things is the computer capable of?</q>
 <q>Define a computer.</q>
-<q>For each of the steps [i(one) through v(five)] in the algorithm written below, mention which among the four capabilities of a computer are required (A step may require more than one capability):
+<q>For each of the steps 1-5 in the algorithm written below, mention which among the four capabilities of a computer are required (A step may require more than one capability):
 <ol>
 <li>Take a number from the user and call it n1.</li>
 <li>Take another number from the user and call it n2.</li>
-<li>add n1 and n2. Save the sum in a memory location. We will call this memory location total.</li>
+<li>Add n1 and n2. Save the sum in a memory location. We will call this memory location total.</li>
 <li>Divide total  by 2. If you get 0 as a remainder, go to step v, else go to step vi.</li>
 <li>Display “total is even” on the monitor.</li>
 </ol></q>
 <q><p>Write an algorithm to determine whether the result of A / B should be rounded up, down, or has no remainder, if the rules for rounding are to round up if the remainder is .5 or greater and round down if it is less than .5. </p>
 <p>Assume you are not able to use the modulus operator (%) and that A > B.</p></q>
 <q>What is an algorithm?</q>
-<q>What is the difference between a fixed-program device and a stored-program device?</q>
+<q>What is the difference between a fixed-program device and a
+stored-program device?  Is your basic pocket calculator a fixed-program computer or a stored-program computer?</q>
 <q>According to the text, the ENIAC was:
 <ol><li>Turing Complete</li>
 <li>a fixed program device</li>
@@ -24,34 +25,26 @@
 <li>A and B</li>
 <li>none of the above</li>
 </ol></q>
-<p>The following 4 problems refer to the 4-step square root algorithm from this section:</p>
-<q>(Calculator required) Apply the square root algorithm to x = 9. Iterate through the 4 steps one time. Keep track of the current s-value by writing it down at the end of each step.</q>
-<q>Design a list of steps similar to the square root algorithm that computes A*B and stores the result in C, where A and B are positive integers. Assume that your hardware is only capable of adding, comparing (>, &lt;, >=, &lt;=, =), and storing.</q>
+<p>The following 4 problems refer to the 4-step square-root algorithm from this section:</p>
+<q>(Calculator required) Apply the square-root algorithm to x = 9. Iterate through the 4 steps one time. Keep track of the current s-value by writing it down at the end of each step.</q>
+<q>Design a list of steps similar to the square-root algorithm that computes A*B and stores the result in C, where A and B are positive integers. Assume that your hardware is only capable of adding, comparing (>, &lt;, >=, &lt;=, =), and storing.</q>
 <q>Now verify that your algorithm works by testing the values A=2 and B=3. Iterate through the steps until completion. Keep track of your B and C values by writing them down at the end of each step. </q>
-<q>Now verify that your algorithm works by testing the values A=2 and B=3. Iterate through the steps until completion. Keep track of your B and C values by writing them down at the end of each step. </q>
-<q>What's the difference between a fixed program and a stored program?</q>
 <q>Define the property Turing Complete.</q>
 <q> What is the fundamental difference between the ABC and the ENIAC?</q>
-<q>Is your basic pocket calculator a fixed-program computer or a stored-program computer?</q>
 <q>Why is the following sequence of steps not a valid computer algorithm?
 <ol><li>Store 0 in a memory location, and call the memory location sum.</li>
 <li>Add 1 to sum, and save the result back in sum.</li>
-<li>If sum is large enough, go to step iv, else go to step ii.</li>
+<li>If sum is large enough, go to step 4, else go to step 3.</li>
 <li>Display sum on the console.</li>
 <li>Stop</li></ol></q>
-<q>True or False: Systems are more abstract than computers.</q>
+<q>True or false: Systems are more abstract than computers.</q>
 <q>What is the difference between systems and computers?</q>
 <q>Explain the difference between implementation and interface and give an example of both.</q>
 <q>What is an abstraction?
 <p>(An abstraction, not just abstraction in general)</p></q>
 <q>Draw and explain all levels of abstraction. 
 <p>In figures 1.3.1.1 and 1.3.1.2, what do the large arrows connecting the customer to WaffleCo represent?</p></q>
-<q>Describe in simple/abstract terms the interface (input and output) of the Compiler.</q>
-<q><p>Describe in simple/abstract terms the interface (input and output) of the Compiler.</p>
-<pre>ldi r30,5
-ldi r31,6
-add r30, r31</pre>
-</q>
+<q>Describe the interface of a compiler.  </q>
 <q> What are the benefits of black-boxing?</q>
 <q>Differentiate between the ISA and the microarchitecture.</q>
 <q>Explain all the layers in a computer.</q>
@@ -71,12 +64,12 @@ add r30, r31</pre>
 <li>time taken to write the algorithm</li>
 <li>time to execute</li>
 <li>b and d</li></ol></q>
-<q>How are syntax/compile-time errors and runtime errors similar and how do they differ?</q>
+<q>How are syntax errors and runtime errors similar and how do they differ?</q>
 <q><p>According to the max(?, ?) function defined in this section, would the following incorrect usage be a syntax error or runtime error?  </p>
 <p>max( 4 , “dog” )</p></q>
 <q> What are programming languages and their syntax and semantics?</q>
 <q> Explain the errors which might occur while programming.</q>
-<q>Differentiate between high level and low level programming languages. Give examples of low-level languages.</q>
+<q>Differentiate between high-level and low-level programming languages. Give examples of low-level languages.</q>
 <q> Programming using a high-level language is much easier than using ISA instructions directly. But, what is a benefit in programming using ISA instructions directly?</q>
 <q><p> In some programming language, to display the natural logarithm of any number n, this is what we need to write: print (log(n))</p>
 <p>A group of students were assigned to display log(5).Three different students wrote:</p>
@@ -84,34 +77,47 @@ add r30, r31</pre>
 <li>print (log((5)</li>
 <li>print (log(55))</li></ol>
 <p>Which student got the right answer? What were the type of errors experienced by the  other two students?</p></q>
-<q><p> State true or false:</p>
+<q><p>True or false:</p>
 <ol><li>If  I plan to change the type of transistors I was using, I would have to change my ISA.</li>
 <li>If I plan to use a different programming language, I would have to develop a new ISA.</li>
 <li>If I disallow some instructions from my ISA, some Python instructions may stop working.</li>
 </ol></q>
-<q>Companies tend to stick with very similar or same ISA across generations of computers, even when there can be some benefit in performance if they changed it. Why do you think they do that?</q>
+<q>Companies tend to stick with very similar or the same ISA across generations of computers, even when there can be some benefit in performance if they changed it. Why do you think they do that?</q>
 <q>What is a state machine?</q>
-<q>Create a truth table for NOR, where the output is not true when one or both of the inputs is true and the output is true otherwise.</q>
+<q>Create a truth table for NOR, where the output is 0 when either of
+the inputs is 1 and the output is 1 otherwise.</q>
 <q>Create a state machine that uses binary inputs of 0 and 1 and looks for four consecutive 1s and outputs “Found four 1s” when this occurs. Use only 0 and 1 for inputs at each state and write outputs of states inside the state “bubble” when creating the diagram.</q>
-<q>Use figure 1.5.1.1 to answer the following: Beginning in the Neutral state, which state will the cat be in after the following sequence of inputs is applied? </q>
-<q>What is encoding and how is it used by computers? Based off of this, why can’t we use ‘A’ in computers?</q>
+<q>Use figure 1.5.1.1 to answer the following: Beginning in the
+neutral state, which state will the cat be in after the following
+sequence of inputs is applied?
+<ol>
+  <li>Ignore, ignore, ignore, pet, pet, pet</li>
+  <li>Ignore, ignore, pet, pet, pet</li>
+  <li>Feed, ignore, ignore, ignore, feed, ignore, ignore, pet</li>
+</ol>
+</q>
+<q>What is an encoding and how is it used by computers?</q>
 <q>What is a Turing Machine?</q>
-<q>What does Turing Complete mean? Is a mobile phone or a laptop computer Turing Complete?</q>
-<q>What does computational complexity help solve?</q>
-<q>What is computational complexity?</q>
-<q>How is text converted to a language that computer can understand with respect to a search engine?</q>
-<q>Explain how abstraction works with respect to a search engine and the individual teams involved solve this problem (Hint: Look in section 1.8.1.).</q>
+<q>Explain how abstraction works in the search engine example,
+specifying the individual components/teams involved.</q>
 <q>All objects in a game are:
 <ol><li>squares</li>
 <li>circles</li>
 <li>triangles</li></ol></q>
-<q>What two distinct parts are there to creating a game and what are their main duties?</q>
-<q>What are the two engines used in the software-side of the game?</q>
-<q>The decimal value 6 can be represented in binary as 0110, which is shown in the table. Using the procedure for multiplying by 2 shown in figure 1.9.4.5, show and explain how 6*2 = 12 = 1100 in binary.</q>
+<q>What are the two distinct components involved with programming a
+game and what are their main duties?</q>
+<q>What are the two engines used in the software side of the game?</q>
+<q>The decimal value 6 can be represented in binary as 0110, which is
+shown in the table in section in 1.9.4. Using the procedure for
+multiplying by 2 shown in figure 1.9.4.5, show and explain how 6*2 =
+12 = 1100 in binary.</q>
 <q>What are some sensors used in mobile phones?</q>
 <q>What is noise, how does it affect phones, and explain how it is compensated for in phones, using both software and hardware input and calculation.</q>
-<q>In section 1.5 we introduced the truth table for the AND gate. In this section, we define an OR gate as one that turns on (output is 1) if either input 1 is on, or input 2 is on, or both. Based on this description, fill in the truth table for the OR gate:
-<p><table border = "1" style = "width:100%">
+<q>In section 1.5 we introduced the truth table for the AND gate. In
+this section, we define an OR gate as one that turns on (output is 1)
+if only input 1 is on, or if only input 2 is on, or if both are
+on. Based on this description, fill in the truth table for the OR
+gate: <p><table border = "1" style = "width:100%">
 <tr>
 <th>Input 1</th>
 <th>Input 2</th>
@@ -138,8 +144,10 @@ add r30, r31</pre>
 </tr>
 </table></p>
 </q>
-<q>In this section, we define an XOR gate as one that turns on (output is 1) only if input 1 is on, or if input 2 is on, but not if both are on. Based on this description, fill in the truth table for the XOR gate:
-<p><table border = "1" style = "width:100%">
+<q>In this section, we define an XOR gate as one that turns on (output
+is 1) if input 1 or input 2 is on, but not if both are on. Based on
+this description, fill in the truth table for the XOR gate: <p><table
+border = "1" style = "width:100%">
 <tr>
 <th>Input 1</th>
 <th>Input 2</th>
@@ -166,6 +174,9 @@ add r30, r31</pre>
 </tr>
 </table></p>
 </q>
-<q>The XOR name is shorthand for “Exclusive OR”. How does this name so accurately represent the functionality of the XOR gate? (Hint: what exactly is the difference between OR and XOR? What is “exclusive” about the XOR functionality?)</q>
+<q>The XOR name is shorthand for "Exclusive OR". How does this name so
+accurately represent the functionality of the XOR gate? (Hint: what
+exactly is the difference between OR and XOR? What is "exclusive"
+about the XOR functionality?)</q>
 </hw>
 </homework>

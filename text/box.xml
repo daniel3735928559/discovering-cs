@@ -2,10 +2,9 @@
 <?xml-stylesheet href="box.xsl" type="text/xsl"?>
 <toc>
   <title>Discovering Computer Science</title>
-  <subtitle>An introduction to computer science<br /><br />
-  By <b>Daniel Ross</b>,  <b>Karthikeyan Sankaralingam</b>,
-  
-  <br /><b>Raghuraman Balasubramanian</b><br /><br />
+  <subtitle>An introduction to computer engineering<br /><br />
+  <b>Daniel Ross</b>, <br /><b>Karthikeyan Sankaralingam</b>,<br />
+  <b>Raghuraman Balasubramanian</b><br /><br />
 
   <font size="3pt"><a href="info/copyright.xml">Licensed under Creative Commons
   BY-NC-SA</a></font><br />

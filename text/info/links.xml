@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="../box.xsl" type="text/xsl"?><section number='Links'>
   <title></title>
   <text>
+    <p>These are links to external sites that may be referenced in the
+    text.  Because they are not under our control, their content is
+    subject to change without our knowledge.  </p>
     <h3>Chapter 1: </h3>
-    <ul>
+    <ol>
+
       <li>
-	<a href="https://www.youtube.com/watch?v=BVxOb8-d7Ic">Dara O' Briain on abstractions in modern life</a>
+	<a href="http://www2.parc.com/csl/groups/sda/publications/papers/Kiczales-IMSA92/for-web.pdf">Gregor Kiczales: Towards a New Model of Abstraction in Software Engineering</a> [Advisory: PDF]
+      </li>
+      <li>
+	<a href="https://www.youtube.com/watch?v=BVxOb8-d7Ic">Dara O' Briain on abstractions in modern life</a> [Advisory: language]
+      </li>
+      <li>
+	<a href="https://www.youtube.com/watch?v=YrmEOgELheE">Cat behaviour is not as simple as our state machine suggests</a> [Advisory: cute]
       </li>
       <li>
 	<a href="http://pleasingfungus.com/Manufactoria">A game that illustrates a concept very similar to a classic Turing machine</a>
-      </li>
-      <li>
-	<a href="https://www.youtube.com/watch?v=YrmEOgELheE">Cat behaviour is not as simple as our state machine suggests</a>
       </li>
       <li>
 	<a href="http://www.google.com/insidesearch/howsearchworks/crawling-indexing.html">Vague indication of the size of Google's search index</a>
@@ -18,6 +25,7 @@
       <li>
 	<a href="http://www.internetlivestats.com/google-search-statistics/">Number of searches per minute</a>
       </li>
-    </ul>
+    </ol>
+    
   </text>
 </section>

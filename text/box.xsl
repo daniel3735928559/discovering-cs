@@ -85,7 +85,7 @@
   </xsl:template>
 
   <xsl:template match="footnote">
-    <a href="/text/info/links.xml"><sup>[<xsl:value-of select="text()" />]</sup></a>
+    <a href="/text/info/links.xml"><sup>[<xsl:value-of select="count(preceding::footnote)+1" />]</sup></a>
   </xsl:template>
 
   <xsl:template match="exercise">
@@ -190,7 +190,7 @@
       <!-- <xsl:if test="./description"> -->
       <!-- 	<pre><xsl:value-of select="description/text()" /></pre> -->
       <!-- </xsl:if> -->
-      <div class="caption">(File: <xsl:value-of select="concat($number,'.fig',count(preceding-sibling::figure)+1,'.png')" />) <xsl:value-of select="caption" /></div>
+      <div class="caption">Figure <xsl:value-of select="concat($number,'.',count(preceding-sibling::figure)+1)" />: <xsl:value-of select="caption" /></div>
     </div>
   </xsl:template>
 
@@ -266,7 +266,7 @@
 	    
 	    <div class="sidebar_header">Course:</div>
 	    <a href="http://pages.cs.wisc.edu/~karu/courses/cs252/fall2015/wiki/index.php"><div class="sidebar_link">Homepage</div></a>
-	    <a href="/homework"><div class="sidebar_link">Online HW</div></a>
+	    <!-- <a href="/homework"><div class="sidebar_link">Online HW</div></a> -->
 	    
 	    <div class="sidebar_header">Simulators:</div>
 	    <a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a>
