@@ -1126,6 +1126,17 @@ f5 28 60 b8
       telling the computer to add two numbers it has stored, you have
       to know how the numbers are stored and tell it to use the
       appropriate procedure for adding those two kinds of numbers.</p>
+
+      <p>To play around with the different possible interpretations of
+      the same sequence of bits, enter a sequence of bits into the box
+      at the top of this widget.  When you click the "[update]"
+      button, the various interpretations will be rendered when they
+      make sense (for example, if you enter a 13-bit number and
+      specify in the second row "8-bit two's complement integer",
+      interpreting a 13-bit representation as an 8-bit integer doesn't
+      make sense and an appropriate error will be displayed).</p>
+      
+      <binsim />
     </text>
   </section>
   <section>

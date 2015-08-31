@@ -1148,13 +1148,48 @@ y = 199 </code>
 	  add numbers.</caption>
 	</figure>
 
-	<p>Of course, this is just a sequence of steps executed in
-	order.  A state machine only really becomes interesting when
-	it involves choosing different steps to execute depending on
-	its input.  The ISA doesn't only have arithmetic instructions,
-	but also some for storage and some for branching and some for
-	I/O.  So let us add states for the instruction "Jump ahead X
-	instructions":</p>
+	<p>This state machine is slightly different from the cat
+	example: The processor has a memory bank where it stores all
+	its instructions (the stored program we described earlier).
+	At all times, this memory bank is sending out the current
+	instruction.  This instruction is the input to our state
+	machine.  The state machine simply advances on its own at
+	regular intervals, and which state it advances to is
+	determined by the current instruction.  The instruction itself
+	doesn't change unless we get to the state "Get the next
+	instruction."</p>
+
+	<p>For example, the state machine starts at "Get next
+	instruction".  Suppose the memory bank storing the
+	instructions looks like:
+
+	<table><tr><td>Add 5 and 8 and store it in the 11th memory
+	slot</td></tr><tr><td>Add -1 and 90 and store it in the 5th
+	memory slot</td></tr></table>
+
+	Then to start out, "Get next instruction" will make the
+	current instruction be "Add 5 and 8 and store it in the first
+	slot."  The state machine will advance on its own.  Because
+	its input is the current instruction, which is an adding
+	instruction, it will advance to "Add the two numbers" and
+	perform the sum 5+8.  This doesn't affect which instruction is
+	the current instruction, so the next time it advances, the
+	state machine's input is still the same adding instruction, so
+	it advances to "Store the result", so it takes the result that
+	it computed, namely 13, and stores this as directed.  This
+	still doesn't change the current instruction, so it advances
+	to the state "Get next instruction".  This changes the curent
+	instruction to "Add -1 and 90 and store it in the 5th memory
+	slot."  Now that is the current instruction, and the cycle
+	continues.</p>
+
+	<p>This state machine is of course just a sequence of steps to
+	execute for each instruction.  It only really becomes
+	interesting when it involves choosing different steps to
+	execute depending on the type of instruction.  The ISA doesn't
+	only have arithmetic instructions, but also some for storage
+	and some for branching and some for I/O.  So let us add states
+	for the instruction "Jump ahead X instructions":</p>
 
 	<figure width="600px"><caption>A state machine for a computer that can both
 	add numbers and branch to different

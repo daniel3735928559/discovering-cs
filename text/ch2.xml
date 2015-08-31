@@ -764,12 +764,6 @@ And so on.
 	the expression 89*90--i.e. the number 8010--into a variable
 	called H3LL0_th3re_.</p>
 
-	<p>We will discuss each element in greater detail in the next
-	section, but place the whole thing in brief here as a
-	reference: </p>
-
-	<div ng-include="'sim/py/ref.html'">
-	</div>
       </text>
       
     </section>

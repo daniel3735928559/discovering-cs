@@ -2,12 +2,14 @@
   <title></title>
   <text>
     <p><b>Daniel Ross: </b> Daniel Ross is a graduate student in the
-    mathematics department at the University of Wisconsin--Madison,
-    where he spends his time thinking and writing about numbers.  He
-    is an occasional software developer, having written over 17 lines
-    of code in his life (it might be more, but he doesn't usually
-    think about numbers that large).  He is also, apparently, an
-    author.</p>
+    mathematics department at the University of Wisconsin--Madison.
+    He spends his time thinking about numbers, 18th century English
+    poetry, highway interchanges, and the best way to prepare a mango.
+    He is an occasional software developer, having written over 17
+    lines of code in his life (maybe more, but larger numbers make him
+    nervous), as well as sysadmin, frontend designer, and author.
+    Despite having written most chapters of this text, he doesn't know
+    how to write a bio.  He has never held a baby ostrich.</p>
 
     <p><b>Karu Sankaralingam: </b> Karu is an associate professor in
     the computer sciences department at the University of
@@ -24,6 +26,15 @@
     2006, and was the lead student architect of the TRIPS chip, a 170
     million transistor chip.</p>
     
-    <p><b>Raghuraman Balasubramanian: </b> Bio coming soon.</p>
+    <p><b>Raghuraman Balasubramanian: </b> Raghu is a hardware
+    engineer at Google. His interests include microprocessors,
+    networking, digital design and computer sciences education. He
+    holds masters in Computer Sciences from University of
+    Wisconsin--Madison, Electrical Engineering from National
+    University of Singapore and Physics from BITS Pilani, India. When
+    not working or doing a masters, Raghu can be found playing with
+    Arduinos.  His explorations and side-projects during his masters
+    work comprised the nucleus around which this course took
+    shape.</p>
   </text>
 </section>

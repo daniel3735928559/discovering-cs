@@ -1,6 +1,6 @@
-var binsim_app = angular.module('binsim_app', []);
+if(!app) var app = angular.module('app', []);
 
-binsim_app.controller("BinSimController", ['$scope','$timeout',function($scope, $timeout){
+app.controller("BinSimController", ['$scope','$timeout',function($scope, $timeout){
     $scope.hex_dict = {"0000":"0",
 		       "0001":"1",
 		       "0010":"2",

@@ -2,6 +2,7 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html" indent="no" omit-xml-declaration="yes" />
+  <xsl:param name="print" />
 
   <xsl:key name="section_key" match="section" use="title" />
   
@@ -90,14 +91,21 @@
 
   <xsl:template match="exercise">
     <xsl:variable name="exc_name" select="@name" />
-    <div class="exc_toggle" ng-init="toggles['{$exc_name}'] = false" ng-click="exc_toggle('{$exc_name}')">
-      <xsl:apply-templates select="question/*|question/text()" />
-    </div>
 
-    <div class="exc_toggleable" ng-if="toggles['{$exc_name}'] == true">
+    <xsl:if test="$print!='yes'">
+      <div class="exc_toggle" ng-init="toggles['{$exc_name}'] = false" ng-click="exc_toggle('{$exc_name}')">
+	<xsl:apply-templates select="question/*|question/text()" />
+      </div>
+      <div class="exc_toggleable" ng-if="toggles['{$exc_name}'] == true">
+	<xsl:apply-templates select="answer/*|answer/text()" />
+      </div>
+    </xsl:if>
+    <xsl:if test="$print='yes'">
+      <font color="blue"><u><xsl:apply-templates select="question/*|question/text()" /></u></font><br />
       <xsl:apply-templates select="answer/*|answer/text()" />
-    </div>
+    </xsl:if>
 
+    
   </xsl:template>
  
   
@@ -126,13 +134,35 @@
   </xsl:template>
 
   <xsl:template match="python">
-    <div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}">
-    </div>
+    <xsl:if test="$print!='yes'">
+      <div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}">
+      </div>
+    </xsl:if>
+    <xsl:if test="$print='yes'">
+      <div class="code"><pre><xsl:apply-templates /></pre></div>
+    </xsl:if>
   </xsl:template>
-  
+
+  <xsl:template match="binsim">
+    <xsl:if test="$print!='yes'">
+      <div id="binsim_super" ng-controller="BinSimController">
+	<div class="binsim_input_div" ng-include="'/sim/bin/sim.html'">
+	</div>
+      </div>
+    </xsl:if>
+    <xsl:if test="$print='yes'">
+      <div class="code"><pre>[Binary simulator goes here in website version]</pre></div>
+    </xsl:if>
+  </xsl:template>
+      
   <xsl:template match="avrasm">
-    <div ng-include="'/sim/avr/simavr.html'" ng-repeat="program in ['{text()}']">
-    </div>
+    <xsl:if test="$print!='yes'">
+      <div ng-include="'/sim/avr/simavr.html'" ng-repeat="program in ['{text()}']"></div>
+    </xsl:if>
+    <xsl:if test="$print='yes'">
+      <div class="code"><pre><xsl:apply-templates /></pre></div>
+    </xsl:if>
+    
   </xsl:template>
   
   <xsl:template name="index">
@@ -179,7 +209,7 @@
       <!-- <br /> -->
       <!-- <xsl:value-of select="concat(/section/@number,'.',$number,'.fig',count(preceding-sibling::figure)+1,'.png')" /><br /> -->
 
-      <img src="{concat('figures/',$number,'.fig',count(preceding-sibling::figure)+1,'.png')}">
+      <img src="{concat('/text/figures/',$number,'.fig',count(preceding-sibling::figure)+1,'.png')}">
 	<xsl:attribute name="width">
 	  <xsl:choose>
 	    <xsl:when test="@width"><xsl:value-of select="@width" /></xsl:when>
@@ -223,6 +253,7 @@
 	<link rel="stylesheet" type="text/css" href="/text/box.css" />
 	<link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
 	<link rel="stylesheet" type="text/css" href="/sim/avr/sim.css" />
+	<link rel="stylesheet" type="text/css" href="/sim/bin/sim.css" />
 	<link rel="stylesheet" href="/sim/cm/codemirror.css" />
 	<link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
@@ -232,12 +263,13 @@
 	<script type="text/javascript" src="/sim/py/expr_ng.js"></script>
 	<script type="text/javascript" src="/sim/py/sim.js"></script>
 	<script type="text/javascript" src="/sim/avr/sim.js"></script>
+	<script type="text/javascript" src="/sim/bin/sim.js"></script>
       </head>
       <body ng-app="app">	
-	  
 	<div id="super" ng-controller="BoxController">
-	  
-	  <div class="sidebar">
+
+	  <xsl:if test="$print!='yes'">
+	    <div class="sidebar">
 
 	    
 	    <!-- <a href="#" ng-if="!signed_in" ng-click="show_login()"><div style="font:12pt Sans serif;padding-bottom:5px;">Sign in</div></a> -->
@@ -270,7 +302,7 @@
 	    
 	    <div class="sidebar_header">Simulators:</div>
 	    <a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a>
-	    <a href="/sim/bin/sim.html"><div class="sidebar_link">Binary</div></a>
+	    <a href="/sim/bin/bin.html"><div class="sidebar_link">Binary</div></a>
 	    <a href="/sim/avr/avr.html"><div class="sidebar_link">AVR</div></a>
 
 	    <div class="sidebar_header">Additional:</div>
@@ -278,7 +310,8 @@
 	    <a href="/text/info/acknowledgements.xml"><div class="sidebar_link">Contributors</div></a>
 	    <a href="/text/info/copyright.xml"><div class="sidebar_link">Copyright</div></a>
 	    <a href="/text/info/links.xml"><div class="sidebar_link">Links</div></a>
-	  </div>
+	    </div>
+	  </xsl:if>
 	  <div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()">
 	  </div>
 	  <div class="index"  ng-if="display_index == true">
@@ -329,6 +362,7 @@
     <xsl:copy>
       <xsl:apply-templates select="@*|node()">
 	<xsl:with-param name="number" select="$number" />	
+	<xsl:with-param name="print" select="$print" />	
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>

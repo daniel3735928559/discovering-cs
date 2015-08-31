@@ -1,33 +1,21 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title>Binary Simulator</title>
-    <link rel="stylesheet" type="text/css" href="sim.css">
-    <script src="angular.min.js"></script>
-    <script type="text/javascript" src="sim.js"></script>
-  </head>
-  <body ng-app="binsim_app">
-    <div id="binsim_super" ng-controller="BinSimController">
-      <div class="binsim_input_div">
-	<input class="binsim_big_input" ng-model="byte1" />
-	<div class="binsim_button" ng-click="update(byte1)">[update]</div>
-	<div class="binsim_button" ng-click="update(byte1)">[reset]</div>
-	<div class="binsim_interpretations">
-	  <table>
-	    <tr>
-	      <td class="desc">Unsigned integer</td><td>{{interpretations.unsigned_integer}}</td></tr>
-	    <tr>
-	      <td class="desc"><input class="binsim_input" ng-model="twoscomplement_bits" />-bit two's
-		complement integer</td><td>{{interpretations.twos_complement}}</td></tr>
-	    <tr>
-	      <td class="desc">Fixed-point, with point after bit number
-		<input class="binsim_input" ng-model="point_bits" />
-	      </td><td>{{interpretations.fixed_point}}</td></tr>
-	    <tr><td class="desc">Floating point with <input class="binsim_input" ng-model="exp_bits" />
-		bits for the exponent</td><td>{{interpretations.floating_point}}</td></tr>
-	    <tr><td class="desc">Hexadecimal</td><td>{{interpretations.hexadecimal}}</td></tr>
-	  </table>
-	</div>
-      </div>
-    </div>
-  </body>
-</html>
+<div class="binsim_input_div">
+  <input class="binsim_big_input" ng-model="byte1" />
+  <div class="binsim_button" ng-click="update(byte1)">[update]</div>
+  <div class="binsim_button" ng-click="update(byte1)">[reset]</div>
+  <div class="binsim_interpretations">
+    <table border="1px">
+      <tr>
+	<td class="bin_desc">Unsigned integer</td><td class="bin_res">{{interpretations.unsigned_integer}}</td></tr>
+      <tr>
+	<td class="bin_desc"><input class="binsim_input" ng-model="twoscomplement_bits" />-bit two's
+	  complement integer</td><td class="bin_res">{{interpretations.twos_complement}}</td></tr>
+      <tr>
+	<td class="bin_desc">Fixed-point, with point after bit number
+	  <input class="binsim_input" ng-model="point_bits" />
+	</td><td class="bin_res">{{interpretations.fixed_point}}</td></tr>
+      <tr><td class="bin_desc">Floating point with <input class="binsim_input" ng-model="exp_bits" />
+	  bits for the exponent</td><td class="bin_res">{{interpretations.floating_point}}</td></tr>
+      <tr><td class="bin_desc">Hexadecimal</td><td class="bin_res">{{interpretations.hexadecimal}}</td></tr>
+    </table>
+  </div>
+</div>
