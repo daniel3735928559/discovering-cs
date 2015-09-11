@@ -4,30 +4,48 @@
     <title>Practical Programming</title>
 
     <summary>In the previous chapter, we introduced a simplified
-    notion of programming in order to communicate the fundamental
-    ideas involved.  This meant that the subset of Python we used was
-    highly restrictive compared to the full Python language.  In this
-    chapter, we'll explore further features of Python that allow us to
-    complete the same tasks more simply. </summary>
+    version of Python in order to communicate the fundamental ideas of
+    programming.  In this chapter, we'll explore further features of
+    Python that allow us to complete the same tasks a we had in
+    chapter 2 more simply. </summary>
     
     <text>
-      <p>The goal of the previous chapter was to introduce concepts
-      around the idea of programming--things like syntax and semantics
-      and the rigidity of a programming language and how to think
-      within its rules to accomplish basic tasks.  It was not,
-      however, a guide on anything resembling effective, practical
-      programming.  For one, think back to this example that simulated
-      searching a file for a user-supplied string: </p>
+      <p>In our journey down the tower of abstractions, we are
+      currently discussing high-level programming languages--the tool
+      with which large-scale systems are built.  The goal of the
+      previous chapter was to introduce the basic concepts of
+      programming--things like syntax, semantics, the rigidity of a
+      programming language, and how to think within its rules to
+      accomplish basic tasks.  For this purpose, we introduced a basic
+      subset of Python.  </p>
       
-      <pre>
-search_word = &quot;the&quot;
-file1_name = &quot;Ode on the death of a favourite cat&quot;
+      <p>As our goal is to drill down into the lower layers of
+      abstraction rather than give a full introduction to actual
+      programming (which is easily a class all on its own), we'll only
+      spend this brief chapter talking about more advanced features of
+      Python, and then just enough to convince ourselves that Python
+      can actually solve the real-world probems we posed in a sensible
+      way.  For example, think back to the code that simulated
+      search-engine behavior, searching a file for a user-supplied
+      string: </p>
+
+      <code>search_word = &quot;the&quot;
+file1_name = &quot;Ode on the death of a favorite cat&quot;
 file1_word1 = &quot;twas&quot;
 file1_word2 = &quot;on&quot;
 file1_word3 = &quot;a&quot;
 file1_word4 = &quot;lofty&quot;
 file1_word5 = &quot;vases&quot;
 file1_word6 = &quot;side&quot;
+file2_name = &quot;Elegy written in a country churchyard&quot;
+file2_word1 = &quot;the&quot;
+file2_word2 = &quot;curfew&quot;
+file2_word3 = &quot;tolls&quot;
+file2_word4 = &quot;the&quot;
+file2_word5 = &quot;knell&quot;
+file2_word6 = &quot;of&quot;
+file2_word7 = &quot;parting&quot;
+file2_word8 = &quot;day&quot;
 if(search_word == file1_word1): 
    print(file1_name)
 if(search_word == file1_word2): 
@@ -40,9 +58,25 @@ if(search_word == file1_word5):
    print(file1_name)
 if(search_word == file1_word6): 
    print(file1_name)
-	</pre>
+if(search_word == file2_word1): 
+   print(file2_name)
+if(search_word == file2_word2): 
+   print(file2_name)
+if(search_word == file2_word3): 
+   print(file2_name)
+if(search_word == file2_word4): 
+   print(file2_name)
+if(search_word == file2_word5): 
+   print(file2_name)
+if(search_word == file2_word6): 
+   print(file2_name)
+if(search_word == file2_word7): 
+   print(file2_name)
+if(search_word == file2_word8): 
+   print(file2_name)</code>
 
-	<p>There are many feature of this that are unsatisfying:
+	<p>There are many feature of this that would count as
+	un-sensible:
 
 	<ul>
 	  <li>We aren't actually reading a file--we're pretending we
@@ -57,8 +91,8 @@ if(search_word == file1_word6):
 	  decided, say, we wanted to print something else along with
 	  the name of the file that contained the query word, we'd
 	  have to change every single if-block.  Quite the chore.</li>
-	  <li>If we typoed one of the variable names, we may skip a
-	  word from the file and not realise it.</li>
+	  <li>If we had accidentally typoed one of the variable names,
+	  we may skip a word from the file and not realise it.</li>
 	</ul>
 	
 	Several of these concerns deal with the unrealistic nature of
@@ -66,9 +100,9 @@ if(search_word == file1_word6):
 	However some of them get at further concerns beyond realism
 	and even beyond those of efficiency and scalability that we
 	discussed in the previous chapter.  These new concerns start
-	to matter more when you've written a sizable quantity of code,
-	but are worth at least thinking about for any code you write:
-	Readability and maintainability.</p>
+	to matter more when your code gets very large and has many
+	users, but are worth at least thinking about for any code you
+	write: Readability and maintainability.</p>
 
 	<p><def term="readability"><b>Readability</b> refers to how
 	easy it is to look at the code and both understand what it is
@@ -85,37 +119,39 @@ if(search_word == file1_word6):
 
 	<ul>
 	  <li>Identifying and fixing a bug.</li>
-	  <li>Changing the behaviour of the code.</li>
+	  <li>Changing the behavior of the code.</li>
 	  <li>Adding a new feature.</li>
 	</ul>
 
 	Code is said to be maintainable if it is written in such a way
 	that makes these three tasks easy.  </def></p>
 	
-	<p>Our old code from the previous chapter fails miserably on
-	both of these measures: As far as readability, it is
-	relatively easy to figure out what the code means to do, but
-	ensuring that it does this requires us to e.g. read through
-	every single if block to ensure there are no typos in variable
-	names.  And adding another word requires adding three lines of
-	code.  Adding another file with even just 100 words (the
-	length of a short poem) requires 300 new lines to be added!
-	While we did point out that short code is not necessarily more
-	readable, code that is performing a relatively simple task
-	shouldn't be hundreds of lines.  And as far as
-	maintainability, well, go take that code and make it print out
+	<p>Our search engine code from the previous chapter fails
+	miserably on both of these measures: As far as readability, it
+	is relatively easy to figure out what the code means to do,
+	but in order to ensure that it actually does what it is
+	supposed to without error, we have to (among other things)
+	read through every single if block to ensure there are no
+	typos in variable names.  Further, as far as maintainability,
+	adding another word requires adding three lines of code.
+	Adding another file with even just 100 words (the length of a
+	short poem) requires 300 new lines to be added!  While we did
+	point out that short code is not necessarily more readable,
+	code that is performing a relatively simple task shouldn't be
+	hundreds of lines.  And thinking about changing the behavior
+	of the code, well, imagine changing it to have it print out
 	its output in the format:
 	
-	<pre>"Found a result: [filename]"</pre>
+	<code>"Found a result: [filename]"</code>
 
 	The internal groaning you just experienced speaks for
 	itself.</p>
 
 	<p>This is not the fault of our methodology, but of our tools:
-	Python has more features than we introduced in the previous
-	chapter, and can in fact accomplish this same task in maybe
-	five lines of code regardless of how many files you want to
-	search.  </p>
+	Actual Python has more features than we introduced in the
+	previous chapter, and can in fact accomplish this same task in
+	maybe five lines of code regardless of how many files you want
+	to search.  </p>
 
 	<p>Before we embark on this chapter's brief journey into
 	real-world programming, we indulge in one further remark on
@@ -124,25 +160,38 @@ if(search_word == file1_word6):
 	and maintainability, are not independent, and they sometimes
 	war against each other.  Sometimes the most efficient way to
 	accomplish something is a highly obscure and clever algorithm
-	that, when realised in code, obfuscates the purpose of that
+	that, when realized in code, obfuscates the purpose of that
 	code entirely.  It is also very common in large projects for
 	reasonable amounts of efficiency to be sacrificed for the sake
 	of having code that can easily be understood and modified in
 	the future, say when a new programmer is hired and has to be
 	introduced to the existing code that the other programmers
-	have written.</p>
+	have written.  </p>
+	
+	<p>Real-world programming almost always involves
+	<b>trade-offs</b>, where we trade in, for example, a small
+	amount of efficiency to make the code much more
+	maintainable.</p>
       </text>
     </section>
     <section>
-      <title>Programming with Python and IDLE</title>
-      <summary></summary>
+      <title>Running actual Python code</title>
       <text>
-	<p>PLACEHOLDER: Course-specific details to come</p>
+	<p>For the moment, the only things described in this chapter
+	that are supported by the in-browser simulator are the library
+	functions we'll describe towards the end.  This means that if
+	you want to see the code here in action, you have to use an
+	actual Python compiler from a command-line.  Because this
+	chapter is in some ways an excursion from our main journey,
+	actually doing this is currently outside the scope of the
+	text.</p>
       </text>
     </section>
     <section>
       <title>Arrays</title>
-      <summary></summary>
+      <summary>Arrays are a way of storing multiple values in a single
+      variable.  The individual values stored in an array can be
+      accessed by subscript notation.</summary>
 
       <text>
 	<p>Probably the most notionally offensive example from the
@@ -159,7 +208,7 @@ if(search_word == file1_word6):
 	get each word that is stored individually.  There is in fact a
 	way of doing this:
 	
-	<pre>file1_words = ["twas","on","a","lofty","vases","side"]</pre>
+	<code>file1_words = ["twas","on","a","lofty","vases","side"]</code>
 
 	Such a variable is called an array.  All the variables we met
 	in the previous chapter were storing one value under one name,
@@ -170,91 +219,99 @@ if(search_word == file1_word6):
 	arrays, which let us store multiple values in one variable.
 	The syntax for creating an array is
 
-	<pre>variable_name = [value1, value2, ...]</pre>
+	<code><i>variable_name</i> = [<i>expression</i>, <i>expression</i>, ...]</code>
 
-	where each value can be an expression.  So, for instance, 
-
-<pre>x = 4
-an_array = ["hello", 2, 9*x, x, "goodbye"]</pre>
+	So, for instance, 
+	
+<code>x = 4
+an_array = ["hello", 2, 9*x, x, "goodbye"]</code>
 
 declares an array with values 
 
-<pre>"hello"
+<code>"hello"
 9
 36
 4
-"goodbye"</pre>
+"goodbye"</code>
 
-Once we have this set up, we can access the individual values stored in the array with the following subscript notation: 
+<def term="subscript">Once we have this set up, we can access the individual values stored
+in the array with the following <b>subscript</b> notation</def>:
 
-<pre>an_array[4]</pre>
+<code>an_array[4]</code>
 
-accesses entry number 4 in the array.  So if we want to print this entry, we'd do 
+This accesses entry number 4 in the array.  So if we want to print
+this entry, we'd do
 
-<pre>print(an_array[4])</pre>
+<code>print(an_array[4])</code>
 
-and we see
+As a result, we see printed: 
 
-<pre>goodbye</pre>
+<code>goodbye</code>
 
-Great!  Or is it?  If you were paying attention, you'd notive that "goodbye" is the 5th entry in the array.  What gives?  In Python (as in most programming languages that have arrays, though not all) the number you put in the square brackets is not the index of the word you want, but rather the offset from the first entry of the array.  So 
+Great!  Or is it?  If you were paying attention, you'd notive that
+"goodbye" is the 5th entry in the array.  What gives?  In Python (as
+in most programming languages that have arrays) the number you put in
+the subscript is the offset from the first entry of the array.  So
 
-<pre>an_array[4]</pre>
+<code>an_array[4]</code>
 
-means "start at the first word and go 4 to the right".  In particular, if you want the first word, you start at the first word and going 0 to the right, i.e. 
+means "start at the first value in the array and go 4 to the right".
+So, if instead you want the first word, you would start at the first
+word and go 0 to the right, i.e.
 
-<pre>an_array[0]</pre></p>
+<code>an_array[0]</code></p>
 
-<p>An array element is a variable like any other, so you can use them in expressions or assignments just like any other variable: 
+<p>An array element such as <icode>an_array[0]</icode> is a variable
+like any other, so you can use them in expressions or assignments just
+like any other variable:
 
-<pre>some_nums = [4,6,99,-1]
-some_nums[0] = 5
-print(some_nums)
-print(some_nums[1])
-some_nums[2] = some_nums[1] * some_nums[2]
-print(some_nums)
-if(some_nums[0] % 2 == 0):
-   print("some_nums starts with an even number!")
+<code>some_nums = [4,6,99,-1]
+some_nums[0] = 5                                  # Now some_nums is [5,6,99,-1]
+print(some_nums)                                  # Prints [5,6,99,-1]
+print(some_nums[1])                               # Prints 6
+some_nums[2] = some_nums[1] * some_nums[2]        # Now some_nums is [5,6,594,-1]
+print(some_nums)                                  # Prints [5,6,594,-1]
+if(some_nums[0] % 2 == 0):                        # Not true
+   print("some_nums starts with an even number!") # Skipped
 else:
-   print("some_nums starts with an odd number!")</pre>
+   print("some_nums starts with an odd number!")  # Prints the string</code>
 
-So we see that we can access the various values stored in the array using this subscript notation, and any particular value in an array can be used in an expression or assignment just like any other variable.  In particular, we know how to modify existing elements of an array, but what if we want to add elements to the array?  Python allows you to add arrays with the + operator: 
+So we see that we can access the various values stored in the array
+using this subscript notation, and any particular value in an array
+can be used in an expression or assignment just like any other
+variable.  In particular, we know how to modify existing elements of
+an array, but what if we want to add elements to the array?  Python
+allows you to add arrays with the + operator:
 
-<pre>array1 = [1,2,3]
+<code>array1 = [1,2,3]
 array2 = [0,-1,-2]
 big_array = array1 + array2
-print(big_array)</pre>
+print(big_array)</code>
 
 prints 
 
-<pre>[1,2,3,0,-1,-2]</pre></p>
+<code>[1,2,3,0,-1,-2]</code></p>
 
 <p>So what if we just want to put the value 4 on the end of the array?  
 
-<pre>array1 = [1,2,3]</pre>
+<code>array1 = [1,2,3]</code>
 
 We cannot do
 
-<pre>array1[3] = 4</pre>
+<code>array1[3] = 4</code>
 
-since there is no array1[3].  array1 has only three elements, and so trying to assign to its fourth will give an error: 
+since there is no array1[3].  array1 has only three elements, and so
+trying to assign to its fourth will give a logic error.  Instead, we
+need to assign array1 to be array1 plus a list containing just the
+element 4:
 
-<pre>>>> array1 = [1,2,3]
->>> array1[3] = 4
-Traceback (most recent call last):
-  File "&lt;stdin>", line 1, in &lt;module>
-IndexError: list assignment index out of range
->>> </pre>
-
-Instead, we need to assign array1 to array1 plus a list containing just the element 4: 
-
-<pre>array1 = [1,2,3]
+<code>array1 = [1,2,3]
 array1 = array1 + [4]
-print(array1)</pre>
+print(array1)</code>
 
 prints:
 
-<pre>[1,2,3,4]</pre></p>
+<code>[1,2,3,4]</code></p>
     </text>
     <section>
       <title>Strings as read-only arrays</title>
@@ -268,23 +325,28 @@ prints:
 	and concatenate arrays--these are operations we would equally
 	want to be able to do to strings:
 
-<pre>blah = "Hello World!"
+<code>blah = "Hello World!"
 print(blah[6])
-print(blah[11])</pre>
+print(blah[11])</code>
 
 prints 
 
-<pre>W
-!</pre></p>
+<code>W
+!</code></p>
 
-<p>So, for instance, if the user has inputted 5 words, and we want to find all those words they've inputted that start with a, we can now test this, since we know how to access the individual letters of a word.  For example: 
+<p>So, for instance, if the user has inputted 5 words, and we want to
+find all those words they've inputted that start with "a", we can now
+test this, since we know how to access the individual letters of a
+word.  For example:
 
-<pre>word = "betrothed"
-print(word[0])</pre>
+<code>word = "betrothed"
+print(word[0])</code>
 
-prints the first letter--namely, b.  Now we don't want to print the letter, but to use it in a test.  Recall that a test is something of the form 
+prints the first letter--namely, b.  Now we don't want to print the
+letter, but to use it in a test.  Recall that a test is something of
+the form
 
-<pre><i>expression comparison expression</i></pre>
+<code><i>expression comparison expression</i></code>
 
 where the comparison we want is clearly == to test if the first letter
 of the word is equal to "a".  Recall an expression is either a number,
@@ -293,17 +355,19 @@ first value in the array called word.</p>
 
 <p>Thus our test will be: 
 
-<pre>word[0] == "a"</pre>
+<code>word[0] == "a"</code>
 
 and we get: 
 
-<pre>word = "betrothed"
+<code>word = "betrothed"
 if(word[0] == "a"):
-   print(word[0])</pre>
+   print(word[0])</code>
 
-which will not print anything, since word[0] is in fact "b".  Now, putting this together with 5 random words (which will eventually be replaced with 5 user inputs): 
+which will not print anything, since word[0] is in fact "b".  Now,
+putting this together with 5 random words (which will eventually be
+replaced with 5 user inputs):
 
-<pre>word1 = "blithe"
+<code>word1 = "blithe"
 word2 = "alphabetic"
 word3 = "crocodiles"
 word4 = "ate"
@@ -317,36 +381,39 @@ if(word3[0] == "a"):
 if(word4[0] == "a"):
    print(word4)
 if(word5[0] == "a"):
-   print(word5)</pre>
+   print(word5)</code>
 
-This is somewhat reminiscent of our stupid search program, and indeed we make a slight initial improvement by storing all the words in an array:  
+This is somewhat reminiscent of our stupid search program, and indeed
+we make a slight initial improvement by storing all the words in an
+array:
 
-<pre>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]</pre></p>
+<code>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]</code></p>
 
-<p>But now careful--how do we get, say, the third word?  It is the first value in the words array, so it can be accessed like
+<p>But now careful--how do we get, say, the third word in this array?
+It is the first value in the words array, so it can be accessed like
 
-<pre>words[2]</pre>
+<code>words[2]</code>
 
 Indeed: 
 
-<pre>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]
-print(words[2])</pre>
+<code>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]
+print(words[2])</code>
 
 prints 
 
-<pre>crocodiles</pre></p>
+<code>crocodiles</code></p>
 
 <p>But now how do we get the first letter of the third word?  The
 third word is words[2], and this is a string.  How do we get the first
 letter of a string?  By appending [0] to the name of the string.  This
 string is called words[2], so indeed we can do:
 
-<pre>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]
-print(words[2][0])</pre>
+<code>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]
+print(words[2][0])</code>
 
 which will print the letter c.  Thus we can modify our code: 
 
-<pre>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]
+<code>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]
 if(words[0][0] == "a"):
    print(words[0])
 if(words[1][0] == "a"):
@@ -356,31 +423,31 @@ if(words[2][0] == "a"):
 if(words[3][0] == "a"):
    print(words[3])
 if(words[4][0] == "a"):
-   print(words[4])</pre>
+   print(words[4])</code>
 
 As with the search program, we'll learn how to improve this later.  </p>
 
 <aside><p>As a remark, we said that arrays can store any list of values, and that those values can be anything that is allowed in a variable.  But an array is allowed in a variable!  So can we store an array with arrays as its values?  The answer is "yes", and this is in fact what we just did above.  But we can be more direct about it: 
 
-<pre>a_big_array = [[1,2,3],[99,-5],[1,2,-1,0,0]]</pre>
+<code>a_big_array = [[1,2,3],[99,-5],[1,2,-1,0,0]]</code>
 
 Then to access the first value of the second array, we can do: a_big_array[1][0].  Recall that a_big_array[1] is the second value in a_big_array, which in this case is [99,-5].  So a_big_array[1] is itself an array, and to get its first value, we append [0].  </p>
 
 <p>This is called a 2-dimensional array.  So, for example, if you wanted to store the state of a tic-tac-toe game, you could store: 
 
-<pre>board = [["X","O","_"],["_","X","O"],["_","_","_"]]</pre>
+<code>board = [["X","O","_"],["_","X","O"],["_","_","_"]]</code>
 
 and you could print the board with: 
 
-<pre>print(board[0][0] + board[0][1] + board[0][2])
+<code>print(board[0][0] + board[0][1] + board[0][2])
 print(board[1][0] + board[1][1] + board[1][2])
-print(board[2][0] + board[2][1] + board[2][2])</pre>
+print(board[2][0] + board[2][1] + board[2][2])</code>
 
 which prints
 
-<pre>XO_
+<code>XO_
 _XO
-___</pre>
+___</code>
 </p>
 
 </aside>
@@ -391,33 +458,37 @@ ___</pre>
   
   <section>
     <title>Logical operators</title>
-    <summary></summary>
+    <summary>Before, an if or while statement could only include one
+    test at a time.  In fact, there is a way to combine multiple tests
+    using logical operators, specifying either that we want all of the
+    tests to pass, or that we want any of the tests to pass.</summary>
+    
     <text>
-<p>One final feature ("final" in the sense of being the last one we'll
-address, rather than the last one actually present) of the previous
-chapter's examples that might have felt somewhat notionally offensive
-was this business: In order to check if player 1 won, we had to check
-if his score was bigger than player 2's.  And then, in the event that
-it was, we then had to have an inside if block to check whether player
-1's score was also higher than player 3's.  And if that held true as
-well, then we could finally declare player 1 the winner:
+<p>Another feature of the previous chapter's examples that might have
+felt somewhat notionally offensive was the following: In order to
+check if player 1 won, we had to check if his score was bigger than
+player 2's.  And then, in the event that it was, we then had to have
+an inside if block to check whether player 1's score was also higher
+than player 3's.  And if that held true as well, then we could finally
+declare player 1 the winner:
 
-<pre>if(player1_score > player2_score):
+<code>if(player1_score > player2_score):
    if(player1_score > player3_score):
       print("PLAYER 1 WINS")
-</pre>
+</code>
 
 One might hope that instead, we can just test two things at once using
 something like:
 
-<pre>if(player1_score > player2_score and player1_score > player3_score):
-   print("PLAYER 1 WINS")</pre>
+<code>if(player1_score > player2_score and player1_score > player3_score):
+   print("PLAYER 1 WINS")</code>
 
 In fact, Python is pleasant enough that literally this actually
 works.  More generally, we are allowed to combine the simple tests of
 chapter 2 using the logical operators and and or.  So, for instance:
 
-<pre>x = int(input("Give me a number 0-10, but no 8s--they taste weird"))
+<code>print("Give me a number 0-10, but no 8s--they taste weird")
+x = 4
 if(x > 0 and x &lt; 10 and x != 8):
    print("good job!")
 else:
@@ -425,69 +496,84 @@ else:
       print("Yuck!")
 else:
    print("BETWEEN 0 AND 10!")
-</pre>
+</code>
 
 Or:
 
-<pre>x = int(input("Give me a number, 0 or 1--your choice"))
-   if(x == 0 or x == 1):
-      print("Thank you, kind human.")
-   else:
-      print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</pre></p>
+<code>print("Give me a number, 0 or 1--your choice")
+x = 4
+if(x == 0 or x == 1):
+   print("Thank you, kind human.")
+else:
+   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</code></p>
 
 <p>Any combination of multiple tests with your choice of and and or is
 valid, but there are some pitfalls:
 
-<pre>x = int(input("Give me a positive number, either odd or above 10: "))
+<code>print("Give me a positive number, either odd or above 10: ")
+x = 4
 if(x > 0 and x > 10 or x%2 == 1):
    print("Thank you, kind human.")
 else:
-   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</pre>
+   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</code>
 
 This program is meant to accept any integer above 10, but also any odd
-number 1-9 as well.  However, this program will actually even accepts
+number 1-9 as well.  However, this program will actually even accept
 -1 as a valid input.  The reason is that ands are grouped together
-before ors.  Put another way, the test could equivalently have been
-written:
+before <icode>or</icode>s.  Put another way, the test could
+equivalently have been written:
 
-<pre>(x > 0 and x > 10) or x%2 == 1</pre>
+<code>(x > 0 and x > 10) or x%2 == 1</code>
 
 So when confronted with x = -1, it goes:
 
-<pre>
+<code>
 (-1 > 0 and -1 > 10) or -1 % 2 == 1
    THIS IS FALSE        THIS IS TRUE
-</pre>
-And so the test gives an answer of true.</p>
+</code>
+And so since one of the tests is true, the combined test has a value
+of true.</p>
+
+<p>To fix it, we can clarify our meaning by using parentheses:
+
+<code>print("Give me a positive number, either odd or above 10: ")
+x = 4
+if(x > 0 and (x > 10 or x%2 == 1)):
+   print("Thank you, kind human.")
+else:
+   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</code>
+</p>
 
     </text>
   </section>
   <section>
     <title>Functions</title>
-      <summary>Hello</summary>
-      <text>
+      <summary>Functions are a way of storing actual code so that it
+      can be easily re-used in multiple places in a program.</summary>
+      
+      <text>	
 <p>In the previous chapter, we often set up our code to have certain
 variables acting as the inputs to that code.  For instance, recall our
 factorial code:
 
-<pre>input = 50
+<code>input = 50
 answer = 1
 counter = 2
 while(counter &lt;= input):
    answer = answer * counter
    counter = counter + 1
-print(answer)</pre>
+print(answer)</code>
 
 The advantage of this was that if we wanted to compute instead 60!, we
 could just change the first line to
 
-<pre>input = 60</pre>
+<code>input = 60</code>
 
 and it would happen.  But if in our code we want to compute first the
 factorial of 50 and then later that of 90, say, we'll have to have
 this same code appearing twice, like:
 
-<pre>input = 50
+<code>input = 50
 answer = 1
 counter = 2
 while(counter &lt;= input):
@@ -501,7 +587,7 @@ counter = 2
 while(counter &lt;= input):
    answer = answer * counter
    counter = counter + 1
-print(answer)</pre>
+print(answer)</code>
 
 This is unpleasant for a lot of reasons.  If in the future we discover
 a subtle bug in our factorial code, or even just a faster way to
@@ -527,17 +613,17 @@ where to store the outputs.</p>
 
 <p>If we've managed to name the above code factorial, then to compute 50!, we should be able to say
 
-<pre>factorial(50)</pre>
+<code>factorial(50)</code>
 
 if we want to store this in some variable called x, then we can do
 
-<pre>x = factorial(50)</pre></p>
+<code>x = factorial(50)</code></p>
 
 <p>In order to do this, we set up the above code in the following way: 
 
-<pre>def function_name(input_variable_name):
+<code>def function_name(input_variable_name):
    [lines of code that comprise the function]
-   return expression</pre>
+   return expression</code>
  
 The expression in the final line will be the output of this function--called its return value.  </p>
 
@@ -545,21 +631,21 @@ The expression in the final line will be the output of this function--called its
 
 <p>To invoke the function, then, you may simply use the function's name like: 
 
-<pre>function_name(expression)</pre></p>
+<code>function_name(expression)</code></p>
 
 <p>The input variable will be set to equal the value of the expression, and then the code in the function will be run.  When it reaches the a return line, the return value will be used as the value of this function call.  </p>
 
 <p>That was rather a mouthful, so let's go through it slowly with an example: 
 
-<pre>def mogrify(x):
+<code>def mogrify(x):
    y = x+1
    return 5*y+9*x*x
 z = mogrify(2)
-print(z)</pre>
+print(z)</code>
 
 So the function is named mogrify, and its input is named x.  Then when we run the line 
 
-<pre>z = mogrify(2)</pre>
+<code>z = mogrify(2)</code>
 
 This does the steps above: 
 
@@ -590,26 +676,26 @@ subtract in the other order to get the correct answer of 1.  So we use
 an if statement as follows (in this example, say the points are -1 and
 6):
 
-<pre>point1 = -1
+<code>point1 = -1
 point2 = 6
 if(point1 &lt; point2): 
    answer = point2-point1
 else:
    answer = point1-point2
-print(answer)</pre></p>
+print(answer)</code></p>
 
 <p>But if we're going to be doing this often, maybe we want it in a function.  Once again, the inputs are relatively clear--point1 and point2--and the output is once again perspicuously called answer.  So: 
 
-<pre>def line_distance(point1, point2):
+<code>def line_distance(point1, point2):
    if(point1 &lt; point2): 
       answer = point2-point1
    else:
       answer = point1-point2
-   return answer</pre>
+   return answer</code>
 
 Then if later we call 
 
-<pre>d = line_distance(3,5)</pre>
+<code>d = line_distance(3,5)</code>
 
 we will start executing the first line of the function with point1 set
 to 3 and point2 set to 5.  Then, because point1 is less than point2,
@@ -629,11 +715,11 @@ Thus d is assigned the value 2.</p>
 	  appears in an expression, is treated as being whatever value
 	  the function returns.  So, for instance,
 
-	  <pre>def f(x):
+	  <code>def f(x):
 	  y = x*x
 	  return x + y*y
 	  print("I'm going to compute something!")
-	  print(2*f(3))</pre>
+	  print(2*f(3))</code>
 
 	  Let us consider that last line and how it makes sense: it is
 	  a print line.  If we look at our chart, we see that inside a
@@ -655,7 +741,7 @@ Thus d is assigned the value 2.</p>
 
 
 	  <table><tr><td>Current line</td><td>Why we went to this line</td><td>Variables after current line runs</td><td>Output so far</td></tr><tr>
-	  <td><pre>print("I'm going to compute something!")</pre></td>
+	  <td><icode>print("I'm going to compute something!")</icode></td>
 	  <td>
 	  It was the first line (after the definition of the function)
 	  </td>
@@ -665,7 +751,7 @@ Thus d is assigned the value 2.</p>
 	  "I'm going to compute something!"
 	  </td>
 	  <td>
-	  <pre>print(2*f(3))</pre>
+	  <icode>print(2*f(3))</icode>
 	  </td>
 	  <td>
 	  It was the next line
@@ -686,7 +772,7 @@ Thus d is assigned the value 2.</p>
 	  
 
 	 
-	  <td><pre>   y = x*x</pre></td></tr>
+	  <td><icode>   y = x*x</icode></td></tr>
 	  <tr>
 	  <td>
 	  We just called the function f, so we go to its first line
@@ -717,7 +803,7 @@ Thus d is assigned the value 2.</p>
 	  having got the return value of f as 84</td></tr><tr>
 
 	  
-	  <td><pre>print(2*f(3))</pre></td>
+	  <td><icode>print(2*f(3))</icode></td>
 	  <td>
 	  We now have the return value of the function, so we know
 	  what f(3) is, namely 84
@@ -727,8 +813,8 @@ Thus d is assigned the value 2.</p>
 	  <td>
 	  
 
-	    <pre>"I'm going to compute something!"
-168</pre>
+	    <icode>"I'm going to compute something!"
+168</icode>
 	  </td>
 	  </tr></table>
 	  
@@ -742,13 +828,13 @@ Thus d is assigned the value 2.</p>
 	  <p>For instance, it would not be unheard of in a mathematics
 	  course to see functions like:
 
-	  <pre>f(x) = x^2+1
+	  <code>f(x) = x^2+1
 	  g(x) = x/13-1
-	  h(x) = 77+x</pre>
+	  h(x) = 77+x</code>
 
 	  and then to have to compute
 
-	  <pre>f(2*g(h(0)+1))</pre>
+	  <code>f(2*g(h(0)+1))</code>
 
 	  You may already know how to do this intuitively (or possibly
 	  not--this is one of the things that can trip students up),
@@ -802,11 +888,11 @@ Thus d is assigned the value 2.</p>
 	  <p>There is some slight danger here regarding variables that
 	  were created inside functions:
 
-	  <pre>def f(x):
+	  <code>def f(x):
    y = 1
    return x + y
 print(f(2))
-print(y)</pre>
+print(y)</code>
 
 	  We might expect that when we call f(2) on line 4, we then go
 	  into the function which, among other things, creates the
@@ -814,10 +900,10 @@ print(y)</pre>
 	  line 5, we should merrily see the value 1 as we expect.
 	  Instead, what we see is:
 
-	  <pre>3
+	  <code>3
 	  Traceback (most recent call last):
 	  File "&lt;string>", line 5, in &lt;module>
-	  NameError: name 'y' is not defined</pre>
+	  NameError: name 'y' is not defined</code>
 
 	  The 3 is the expected return value of f(2), so that line
 	  succeeds, but apparently something bad happens on line 5.
@@ -855,7 +941,7 @@ print(y)</pre>
 	  y = 1
 	  </td><td></td></tr><tr>
 
-	  <td><pre>print(f(2))</pre></td>
+	  <td><icode>print(f(2))</icode></td>
 	  <td>
 	  We've finished running f, so now we come back here
 	  </td>
@@ -866,9 +952,9 @@ print(y)</pre>
 	  </td>
 	  <td>
 	  
-	  <pre>3</pre>
+	  <icode>3</icode>
 	  </td></tr><tr><td>
-	  <pre>print(y)</pre></td><td>
+	  <icode>print(y)</icode></td><td>
 	  It was the next line</td><td>
 	  x = 2
 	  y = 1</td><td>
@@ -903,7 +989,7 @@ print(y)</pre>
 	  <td>(Variables from the function no longer exist)
 	  </td><td></td></tr><tr>
 
-	  <td><pre>print(f(2))</pre></td>
+	  <td><icode>print(f(2))</icode></td>
 	  <td>
 	  We've finished running f, so now we come back here
 	  </td>
@@ -911,9 +997,9 @@ print(y)</pre>
 	  </td>
 	  <td>
 	  
-	  <pre>3</pre>
+	  <icode>3</icode>
 	  </td></tr><tr><td>
-	  <pre>print(y)</pre></td><td>
+	  <icode>print(y)</icode></td><td>
 	  It was the next line</td><td></td><td>
 	  3
 	  [Error message]</td></tr></table>
@@ -921,17 +1007,17 @@ print(y)</pre>
 	  <p>But what if the variable existed before the function was
 	  called?</p>
 
-<pre>def f(x):
+<code>def f(x):
    y = 1
    return x + y
 y = 2
 print(f(3))
-print(y)</pre>
+print(y)</code>
 
 	  <p>It turns out that this prints</p>
 
-	  <pre>4
-2</pre>
+	  <code>4
+2</code>
 	  
 	  <p>But surely what should have happened is that y got created
 	  on line 4.  Then we called the function, which, among other
@@ -958,7 +1044,7 @@ print(y)</pre>
 	  <td>
 	  </td>
 	</tr><tr>
-	  <td><pre>print(f(3))</pre></td>
+	  <td><icode>print(f(3))</icode></td>
 	  <td>
 	  It was the next line
 	  </td>
@@ -970,12 +1056,12 @@ print(y)</pre>
 	  <td>
 	    </td></tr><tr><td colspan="4">Call to the function f with
 	    argument value 3</td></tr><tr>
-	  <td><pre>y = 1</pre></td><td>
+	  <td><icode>y = 1</icode></td><td>
 	  We just called the function f, so we go to its first line</td><td>
 	  x = 3
 	  y = 1</td><td></td></tr>
 	<tr>
-	  <td><pre>return x + y</pre></td><td>
+	  <td><icode>return x + y</icode></td><td>
 	  It was the next line</td><td>
 	  x = 3
 	  y = 1</td><td></td></tr>
@@ -983,18 +1069,18 @@ print(y)</pre>
 	  4</td></tr>
 	  
 	<tr>
-	  <td><pre>print(f(3))</pre></td><td>
+	  <td><icode>print(f(3))</icode></td><td>
 	  We now return to the line that called the function with the
 	  return value of the function</td><td>
 	  y = 2 (The function is over, so any changes it made to any
 	  variables are discarded and any variables that existed
-	  before the function call retain their previous values</td><td><pre>4</pre></td>
+	  before the function call retain their previous values</td><td><icode>4</icode></td>
 	</tr>
 	<tr>
-	  <td><pre>print(y)</pre></td><td>
+	  <td><icode>print(y)</icode></td><td>
 	  It was the next line</td><td>
-	  y = 2</td><td><pre>4
-2</pre></td>
+	  y = 2</td><td><icode>4
+2</icode></td>
 	</tr>
 
 	</table>	  
@@ -1003,7 +1089,7 @@ print(y)</pre>
     </section>
     
     <section>
-      <title>Libraries</title>
+      <title>Library functions</title>
       <summary></summary>
       <text>
       </text>
@@ -1015,61 +1101,10 @@ print(y)</pre>
 	</text>
       </section>
       <section>
-	<title>Files</title>
-	<summary></summary>
-	<text>
-	</text>
-      </section>
-      <section>
 	<title>Graphics</title>
 	<summary></summary>
 	<text>
 	</text>
       </section>
-      <section>
-	<title>Arduino</title>
-	<summary></summary>
-	<text><p>????????</p></text>
-      </section>
     </section>
-  <section>
-    <title>Case-studies</title>
-    <summary></summary>
-    <text></text>
-    
-    <section>
-      <title>Search engine</title>
-      <summary></summary>
-      <text>
-	<p>We will explain how to read a file and split its contents
-	into an array.  We will also explain how to read the contents
-	of a folder.  The reader's task will then be to build a
-	program that builds an index of the files in a folder, prompts
-	for a search term, and outputs results in order of
-	relevance.</p>
-
-	<p>Maybe include a web frontend?</p>
-      </text>
-    </section>
-    <section>
-      <title>Game console</title>
-      <summary></summary>
-      <text>
-	<p>We will explain how to draw things on screen with pygame
-	and how to animate.  We will provide, by the end, a basic ball
-	bouncing within a rectangle example.  The reader's task will
-	then be to build a breakout game, or really anything
-	similar.</p></text>
-    </section>
-    <section>
-      <title>Mobile phone</title>
-      <summary></summary>
-      <text><p>Some Arduino libraries and things?</p></text>
-    </section>
-  </section>
-  
-  <section>
-    <title>Exercises</title>
-    <exercises />
-  </section>
 </section>    
