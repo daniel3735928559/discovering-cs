@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <homework>
   <hw>
-<q><p>What does programming express to the computer?
-</p>
+<q>What does programming express to the computer?
 <ol>
-<li> A real world problem in terms that the computer can understand.</li>
-<li>A high-level, more human-friendly way to tell the computer what operations to do.</li>
-<li> A sequence of steps for it to perform--also known as the program, specified in a way that the computer understands--also known as a programming language. </li>
-<li>Both b and c</li>
-<li>All of the above</li>
-<li> None of the above</li></ol>
+  <li> A real world problem in terms that the computer can understand.</li>
+  <li>A high-level, more human-friendly way to tell the computer what operations to do.</li>
+  <li> A sequence of steps for it to perform--also known as the program, specified in a way that the computer understands--also known as a programming language. </li>
+  <li>Both b and c</li>
+  <li>All of the above</li>
+  <li> None of the above</li>
+</ol>
 </q>
 <q>Explain what programmers fundamentally do by coding programs.</q>
 <q>What acts as an intermediary between the programming language and the hardware?</q>
-<q><p>In the classic parable mentioned in the chapter, what exactly caused the trouble?</p>
+<q>In the classic parable mentioned in the chapter, what exactly caused the trouble?
 <p>What does a computer programming language and algorithm need to ensure to avoid such a situation?</p></q>
 <q>According to the text, what specific method to solve problems do computers need that humans may not necessarily need?</q>
-<q>What are edge-cases?</q>
-<q>How do efficiency and scalability affect an algorithm?</q>
-<q><p> Define efficiency and scalability. How are they related?</p>
+<q>What are edge cases (also known as "corner cases")?</q>
+<q>Define efficiency and scalability. How are they related?
 <p>Under what circumstances will you not bother making your program more efficient?</p></q>
 <q>What three line structures are there in Python?</q>
 <q>How does indentation play a role in flow-control lines?</q>
@@ -35,7 +34,7 @@ print("Done!")</pre>
 </q>
 <q><p> If a computer executed the instruction "a=2" on line number 21, what would be the line number of the next instruction executed?</p>
 <p> What type of instruction would have to be on line 21 to move to an instruction that is not on the following line?</p></q>
-<q><p>Using the definition of an assignment, assignments assign a(n) ___ to a(n) ___?</p>
+<q>Using the definition of an assignment, assignments assign a(n) ___ to a(n) ___?
 <ol>
 <li> variable name, expression</li>
 <li> expression, test</li>
@@ -43,11 +42,11 @@ print("Done!")</pre>
 <li>  variable name, comparison</li>
 </ol></q>
 <q>What is camel-casing?</q>
-<q><p>What is the arithmetic operation permitted on Strings and what is it specifically called? </p>
+<q>What is the arithmetic operation permitted on Strings and what is it specifically called? 
 <p>Give an example of this principle.</p></q>
 <q>How does the backslash character (\) play a role in Python syntax?</q>
 <q>How do you comment in Python?</q>
-<q><p>Which of the following are valid Python variable names?:</p>
+<q>Which of the following are valid Python variable names?:
 <ol>
 <li><pre>_num_items</pre></li>
 <li><pre>item_#6</pre></li>
@@ -59,14 +58,14 @@ print("Done!")</pre>
 <li><pre>sixth-item</pre></li>
 <li><pre>global</pre></li>
 </ol></q>
-<q><p>In this example program from section 2.4.2.2,</p>
+<q>In this example program from section 2.4.2.2,
 <pre>x = 4
 y = x + 1 		
 x = 2
 x = 5*x + 2*(3 - y)</pre>
 <p>we know that 6 is the value stored in x after the code has finished executing. What is the final value stored in y? Explain.
 </p></q>
-<q><p>Copy the following program into the python simulator and run it. Why does this program yield an incorrect result? </p>
+<q>Copy the following program into the python simulator and run it. Why does this program yield an incorrect result? 
 <p> What should be changed in order for this program to work as desired?</p>
 <pre># you have $30 and the taxi will cost $20. Do you have enough money to cover the ride? 
 cashAmount = 30

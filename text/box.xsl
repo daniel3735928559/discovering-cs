@@ -122,7 +122,7 @@
   </xsl:template>
 
   <xsl:template match="code">
-    <div class="code"><pre><xsl:apply-templates /></pre>
+    <div class="code"><pre><xsl:apply-templates select="text()|*[name()!='caption']" /></pre>
     </div>
     <xsl:if test="count(./caption) > 0">
       <div class="code_caption"><xsl:value-of select="caption" /></div>
@@ -229,7 +229,7 @@
     <xsl:param name="number" select="position()" />
     <xsl:param name="file" select="concat('ch',$number,'.xml')" />
     <div class="chapter_index">
-      <a href="/text/{$file}"><h2><xsl:value-of select="$number" />: <xsl:value-of select="title" /></h2></a>
+      <h2><a href="/text/{$file}"><xsl:value-of select="$number" />: <xsl:value-of select="title" /></a></h2>
       <div class="description">
 	<xsl:apply-templates select="description/*" />
       </div>
@@ -280,14 +280,14 @@
 	    <div class="sidebar_header">Book:</div>
 	    <table class="chapter_links">
 	    <tr><td>0</td><td><a href="/text/box.xml">Title page</a></td></tr>
-	    <tr><td>1</td><td><a href="/text/ch1.xml">Introduction</a></td></tr>
-	    <tr><td>2</td><td><a href="/text/ch2.xml">Programming</a></td></tr>
-	    <tr><td>3</td><td><a href="/text/ch3.xml">Advanced Programming</a></td></tr>
-	    <tr><td>4</td><td><a href="/text/ch4.xml">Numbers</a></td></tr>
-	    <tr><td>5</td><td><a href="/text/ch5.xml">ISA</a></td></tr>
-	    <tr><td>6</td><td><a href="/text/ch6.xml">Encodings</a></td></tr>
-	    <tr><td>7</td><td><a href="/text/ch7.xml">Micro&#173;architecture</a></td></tr>
-	    <tr><td>8</td><td><a href="/text/ch8.xml">Digital Logic</a></td></tr>
+	    <tr><td>1</td><td><a href="/text/ch1.xml">Introduction</a> (<a class="print_link" href="/text/print/ch1.pdf">PDF</a>)</td></tr>
+	    <tr><td>2</td><td><a href="/text/ch2.xml">Programming</a> (<a class="print_link" href="/text/print/ch2.pdf">PDF</a>)</td></tr>
+	    <tr><td>3</td><td><a href="/text/ch3.xml">Advanced Programming</a> (<a class="print_link" href="/text/print/ch3.pdf">PDF</a>)</td></tr>
+	    <tr><td>4</td><td><a href="/text/ch4.xml">Numbers</a> (<a class="print_link" href="/text/print/ch4.pdf">PDF</a>)</td></tr>
+	    <tr><td>5</td><td><a href="/text/ch5.xml">ISA</a> (<a class="print_link" href="/text/print/ch5.pdf">PDF</a>)</td></tr>
+	    <tr><td>6</td><td><a href="/text/ch6.xml">Encodings</a> (<a class="print_link" href="/text/print/ch6.pdf">PDF</a>)</td></tr>
+	    <tr><td>7</td><td><a href="/text/ch7.xml">Micro&#173;architecture</a> (<a class="print_link" href="/text/print/ch7.pdf">PDF</a>)</td></tr>
+	    <tr><td>8</td><td><a href="/text/ch8.xml">Digital Logic</a> (<a class="print_link" href="/text/print/ch8.pdf">PDF</a>)</td></tr>
 	    </table>
 	    
 	    <xsl:if test="number(/section/@number) >= 1">
@@ -324,18 +324,6 @@
 	    <h2>Terminology Index:</h2>
 	    <xsl:call-template name="definitions" />
 	  </div>
-	  <div class="login"  ng-if="display_login == true">
-	    <h2>Login:</h2>
-	    <table>
-	      <tr><td>Username: </td><td><input id="login_username" type="text" ng-keydown="$event.which === 13 &amp;&amp; $event.ctrlKey &amp;&amp; sign_in()" ng-model="login.username" /></td></tr>
-	      <tr><td>Password: </td><td><input id="login_password" type="password" ng-keypress="$event.which === 13 &amp;&amp; sign_in()" ng-model="login.password" /></td></tr>
-	    </table>
-	    <button ng-click="sign_in()">Sign in</button><br /><br />
-	    <a href="#">Forgot password</a><br />
-	    <button>Second-factor sign-on</button>
-	    <!-- <span class="login_message">{{login_message}}</span> -->
-	  </div>
-
 	  
 	  <div class="super">
 	    <xsl:apply-templates select="@*|node()"/>

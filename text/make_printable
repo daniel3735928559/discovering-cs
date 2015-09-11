@@ -1,1 +1,0 @@
-for x in {1..7}; do xsltproc --stringparam print yes box.xsl ch"$x".xml> print/ch"$x".html; done

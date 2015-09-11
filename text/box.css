@@ -37,6 +37,7 @@ div.active_comments {
 }
 
 div.code {
+    margin:12px 0 12px 0;
     padding:5px 5px 5px 15px;
     background-color: #ccc;
     border:solid 1px #333;
@@ -95,6 +96,10 @@ div.sidebar {
     background: #9cc;
     overflow-y:auto;
     padding:5px;
+}
+
+a.print_link {
+    font-size:8pt;
 }
 
 div.sidebar_link {

@@ -5,7 +5,7 @@ var fs = require('fs');
 
 SubsProvider = function(host, port) {
     this.MAX_FILE_SIZE = 33333;
-    this.num_homeworks = 11;
+    this.num_homeworks = 0;
     this.homework_sizes = [23,10,10,15,10,9,10,7,10,10,18]
 };
 
@@ -20,6 +20,11 @@ SubsProvider.prototype.gen_path = function(user_data, hw_data){
     if(!this.is_valid_number(hwid) || !this.is_valid_number(pid)) return "";
     hwid = parseInt(hwid);
     pid = parseInt(pid);
+    try {
+	fs.mkdirSync("sub_data/"+username+"/");
+    } catch(e) {
+	if (e.code != 'EEXIST') throw e;
+    }
     if(0 <= hwid && hwid < this.num_homeworks && 0 <= pid && pid < this.homework_sizes[hwid]){
 	return "sub_data/" + username + "/" + hwid + "." + pid
     }

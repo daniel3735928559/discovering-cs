@@ -1042,8 +1042,8 @@
 	  but is conveniently 8 bits, so can be broken up.  </p>
 
 	  <p>We break this up as 0100 1101, which (consulting the
-	  above table) correspond to hex digits 8 and d respectively,
-	  so the hex representation is 0x8d.  </p>
+	  above table) correspond to hex digits 4 and d respectively,
+	  so the hex representation is 0x4d.  </p>
 	  </answer>
 	</exercise>
 	
@@ -1589,7 +1589,7 @@ f5 28 60 b8
 	used to optimize code.  We leave these here for you to think
 	about and test your understanding on:
 	<ul>
-	  <li>"shift right" on an unsigned binary number will multiply
+	  <li>"shift left" on an unsigned binary number will multiply
 	  that number by 2.  </li>
 	  <li>For any sequence of bits x, x ^ x = 0 always. </li>
 	  <li>To negate an integer called x represented with a sign

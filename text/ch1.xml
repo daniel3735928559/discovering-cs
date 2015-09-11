@@ -118,8 +118,8 @@
       </ol>
       
       This is an abstract recipe, written for human understanding with
-      no particular machine in mind.  Such a recipe is called an
-      <b>algorithm</b>.  (It may not actually be obvious that this
+      no particular machine in mind.  Such a recipe will be called an
+      "algorithm".  (It may not actually be obvious that this
       algorithm actually computes the square root of x.  In fact it
       relies on a technique from calculus called 'Newton's method of
       approximation', but it is not necessary for the moment to
@@ -130,7 +130,7 @@
       </p>
       
       <p>Now that we have contrived an algorithm that turns the
-      problem 'Compute some square roots' into a sequence of simple
+      problem "Compute some square roots" into a sequence of simple
       arithmetic operations, we want an actual machine to compute some
       actual square roots so that we don't have to run this procedure
       by hand.  To that end, we can design some separate bits of
@@ -806,13 +806,25 @@ add r30,r31</code>
 	  numbers and performing arithmetic on them.  However, we do
 	  not necessarily start by writing code, since this requires
 	  us to think about the specific way that the programming
-	  language requires us to write the various
-	  operations (i.e., its syntax).  <def term='algorithm'>To begin
-	  with, it is often helpful to try to think of the solution in
-	  terms of what the programming language can do--basic
-	  arithmetic and storage--but to phrase it simply in English
-	  (or other human language of your choice).  Such a phrasing
-	  is called an <b>algorithm</b>.</def></p>
+	  language requires us to write the various operations (i.e.,
+	  its syntax).  <def term='algorithm'>To begin with, it is
+	  often helpful to try to think of the solution in terms of
+	  what the programming language can do--basic arithmetic and
+	  storage--but to phrase it simply in English (or other human
+	  language of your choice).  A sufficiently precise such
+	  phrasing is called an <b>algorithm</b>.  Specifically, An
+	  algorithm must satisfy two properties:
+
+	  <ol><li>Every step in it must be precise and unambiguous, to
+	  the point that it could be rephrased as a combination of the
+	  basic types of operations that computers perform.  By having
+	  this property we can ensure that a computer can execute
+	  every step in an algorithm.</li>
+
+	  <li>It must terminate.  That is, we will only consider
+	  algorithms that have a definite ending after finishing some
+	  number of steps.</li></ol>
+	  </def></p>
 
 	  <p>We discussed this in general earlier when we described
 	  the problem of computing the square root of a number: Our
@@ -993,10 +1005,10 @@ y = 199 </code>
 	  wrong.  Remember that a programming language is defined by
 	  its syntax and semantics: what sorts of constructs are
 	  allowed as valid programs, and what the various constructs
-	  actually do.  Corresponding to these two are two types of
+	  actually do.  Corresponding to these two are three types of
 	  problems you may encounter when running your code: <b>syntax
-	  errors</b> (or <b>compile-time errors</b>), and <b>runtime
-	  errors</b>.</p>
+	  errors</b> (or <b>compile-time errors</b>), <b>logic
+	  errors</b>, and <b>runtime errors</b>.</p>
 
 	  <p><def term='syntax error'>A <b>syntax error</b> is where
 	  your program was written with invalid structure that fails
@@ -1018,12 +1030,12 @@ y = 199 </code>
 	  job) only understands code written that obeys the
 	  programming language's syntax, which the above does not.</p>
 
-	  <p><def term='runtime error'>A <b>runtime error</b> is when
-	  your program is written with valid syntax, so the compiler
-	  can turn it into ISA code that the computer can actually
-	  run, but where what gets run is not what you intended.
-	  </def> For instance, if we again intended to compute the
-	  maximum of 2 and 3 but accidentally typed instead:
+	  <p><def term='logic error'>A <b>logic error</b> is when your
+	  program is written with valid syntax, so the compiler can
+	  turn it into ISA code that the computer can actually run,
+	  but where what gets run is not what you intended.  </def>
+	  For instance, if we again intended to compute the maximum of
+	  2 and 3 but accidentally typed instead:
 
 	  <code>max(2,2)</code>
 	  
@@ -1032,20 +1044,27 @@ y = 199 </code>
 	  will give back 2 as the result, whereas the desired result
 	  was 3.</p>
 
-	  <p>When your code has an error of either kind, obviously
-	  you'll want to fix it.  <def term='debugging'>The process of
-	  fixing errors is called <b>debugging</b></def> (there was an
+	  <p><def term='runtime error'>A <b>runtime error</b> is a
+	  slightly more subtle one that we shall not discuss at
+	  length.  In brief, it is when some external circumstance to
+	  the program causes the program to fail.  For example, if the
+	  program attempts to save some file to a disk, but the disk
+	  is full.</def></p>
+
+	  <p>When your code has an error of any kind, obviously you'll
+	  want to fix it.  <def term='debugging'>The process of fixing
+	  errors is called <b>debugging</b></def> (there was an
 	  incident in the very early days of computers in which a
 	  system was behaving oddly and the problem was traced back to
 	  a bug that had decided to nest in the equipment; thanks to
-	  this, errors--though mainly runtime errors--are also called
+	  this, errors--though mainly logic errors--are also called
 	  'bugs').  With compile-time errors, debugging is usually
 	  easier--if the compiler finds a piece of your code that it
 	  cannot understand, it can just tell you "Hey, I don't
 	  understand line 15 in file X," and you can go look at file X
 	  and hopefully spot the invalid syntax and correct it.</p>
 
-	  <p>When our code has a runtime error, debugging is much more
+	  <p>When our code has a logic error, debugging is much more
 	  challenging because the computer doesn't see any
 	  problem--the code is understandable and runnable, but it
 	  just doesn't do what the programmer intended.  So the
@@ -1054,7 +1073,7 @@ y = 199 </code>
 	  minds.  Yet...)</p>
 	  
 	  <p>In chapters 2 and 3 when we talk about programming, we
-	  will talk through some techniques for debugging runtime
+	  will talk through some techniques for debugging logic
 	  errors, but this is a skill that you will constantly be
 	  working to improve throughout your programming life and is
 	  simply one of the hard parts of programming.</p>
@@ -1145,7 +1164,12 @@ y = 199 </code>
 
 	<figure width="600px">
 	  <caption>A state machine for a simple computer that can only
-	  add numbers.</caption>
+	  add numbers.  This machine advances state automatically at
+	  regular intervals.  It chooses its next state based on the
+	  current instruction, which does not change as a result of
+	  the "Add" or "Store" states, so any single "add" intruction
+	  goes through both of these states before the machine gets
+	  the next instruction.</caption>
 	</figure>
 
 	<p>This state machine is slightly different from the cat
@@ -1544,7 +1568,7 @@ y = 199 </code>
 
       <figure sk="sk14.png">
 	<description></description>
-      <caption>Hello</caption></figure>
+      <caption>A level-2 view of the search engine system.</caption></figure>
       	
       </text>
     </section>
@@ -2428,17 +2452,15 @@ y = 199 </code>
 	with a visualization to indicate how what looks like a smooth
 	surface is actually many small triangles fused together: </p>
 
-	<figure><caption>A 3D rendering of a teapot using [largish
-	number] triangles.  [Taken from internet--recreate for
-	real]</caption></figure>
+	<figure><caption>A 3D rendering of a teapot using a large
+	of triangles.  </caption></figure>
 
 	<p>In order to make this look smooth, we simply used a large
 	enough number of triangles.  If we use fewer, then we get
 	something like: </p>
 	
 	<figure width="500px"><caption>A 3D rendering of a teapot
-	using [smaller number] triangles.  [Taken from
-	internet--recreate for real]</caption></figure>
+	using fewer triangles.  </caption></figure>
 
 	<p>So in fact, when we do a physics calculation like "did the
 	falling teapot actually collide with the crate?", what we
@@ -2474,7 +2496,7 @@ y = 199 </code>
 	wants displayed and which calculations it wants to do.  </p>
 
 	<figure width="500px"><description></description><caption>High-level
-	architecture involved with running a game.</caption></figure>
+	view of the game console system.</caption></figure>
       </text>
     </section>
     <section>
@@ -2544,8 +2566,9 @@ y = 199 </code>
 	game mechanics: Counting points, how many crates we've
 	smashed, etc.</li></ul>
 
-	<figure width="600px"><caption>The components of the game and console, and
-	their interactions.</caption></figure>
+	<figure width="600px"><caption>Peeling back a layer of
+	abstraction: The components of the game and console, and their
+	interactions.</caption></figure>
 
       </text>
     </section>

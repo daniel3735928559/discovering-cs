@@ -88,7 +88,7 @@ var get_homework_data = function(req){
 
 var get_user_data = function(req){
     return {'ip':get_ip(req),
-	    'username':"test_user"};
+	    'username':req.headers['proxy-user']};
 }
 
 server = http.createServer(app).listen(61453);

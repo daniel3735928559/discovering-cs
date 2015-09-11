@@ -21,8 +21,8 @@
       <ul><li>How can we program a computer?</li>
       <li>How can we build a computer?</li></ul>
 
-      The first question will be addressed in chapters 2-5, and the
-      second in chapters 6-8.</p>
+      The first question will be addressed in chapters 2&#8211;6, and the
+      second in chapters 7&#8211;8.</p>
     </description>
   </chapter>
   <chapter>
@@ -58,28 +58,28 @@
     <description>
       <p>Chapter 4 is a brief digression: As we descend to the level
       of the computer hardware, we are going to need a new language to
-      talk about numbers as a computer understands them.  This is
-      accomplished by the binary representation of numbers, which is
-      the focus of chapter 4.</p>
+      talk about numbers <i>as a computer understands them</i>.  This
+      is accomplished by using binary representations for numbers, as
+      is explained in chapter 4.</p>
     </description>
   </chapter>
   <chapter>
     <title>ISA</title>
     <description>
-      <p>In chapters 2 and 3, we learned our first programming language.
-      However this language is not something that a computer
-      understands itself.  Rather, the computer understands a much
-      more basic language, called the ISA, and our programs from
-      chapters 2 and 3 were being secretly translated to this basic
-      language before being run by the computer.  </p>
+      <p>In chapters 2 and 3, we learned our first programming
+      language.  This language is not understood or used directly by
+      the computer.  Instead, the computer understands a much more
+      basic language, called the ISA, and our programs from chapters 2
+      and 3 had to be translated to this basic language before being
+      run by the computer.  </p>
 
       <p>To truly understand what a computer does under the hood, we
-      need to learn to work with the ISA directly.  This happens in
-      two parts: We learn what the main components inside the computer
-      are (that is, the computer's "architecture"), and then we learn
-      what instructions the computer itself natively understands for
-      manipulating these components (that is, the computer's
-      "instruction set").</p>
+      need to learn to work with the ISA directly, which is the goal
+      of chapter 5.  This happens in two parts: We learn what the main
+      components inside the computer are (that is, the computer's
+      "architecture"), and then we learn what instructions the
+      computer itself natively understands for manipulating these
+      components (that is, the computer's "instruction set").</p>
     </description>
   </chapter>
   <chapter>
@@ -100,20 +100,22 @@
   <chapter>
     <title>Microarchitecture</title>
     <description>
-      <p>Chapter 7 resumes the `How to build a computer' thread by
+      <p>Chapter 7 switches to the second question of "How to build a
+      computer".  Since we now understand the ISA, we can do this by
       taking the major tasks that the various ISA instructions need to
       be able to accomplish, imagining we have some black-box circuit
-      components that perform these tasks, and examining how these
-      large-scale components can be connected to create an actual
-      computer.  </p>
+      components that perform these tasks, and examining how the
+      circuit components can be connected to create an actual machine
+      that accomplishes the ISA tasks--that is, a computer!  </p>
     </description>
   </chapter>
   <chapter>
     <title>Digital Logic and Transistors</title>
     <description>
-      <p>Finally, now that we know that to build a computer, all that
-      remains is to build the components we hooked up in the previous
-      chapter, we examine the building blocks of digital circuits:
+      <p>Once we have in hand a list of the circuit components we need
+      to build a machine capable of executing ISA instructions, all
+      that remains is to build these components.  To do this, we
+      examine in chapter 8 the building blocks of digital circuits:
       Logic gates and, ultimately, transistors.  </p>
     </description>
   </chapter>

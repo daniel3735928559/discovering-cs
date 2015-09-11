@@ -131,11 +131,11 @@ the scores</caption></code>
     </text>
     <section>
       <title>Edge-cases</title>
-      <summary><p>Edge-cases are situations that are unusual or
+      <summary>Edge-cases are situations that are unusual or
       unexpected, but may nonetheless occur.  A simple example of this
       is a tied score in a game.  Sloppy algorithms may work under
       normal circumstances but break down when faced with certain
-      edge-cases.</p></summary>
+      edge-cases.</summary>
       <text>
 	<p>When you sit down to write an algorithm, you should have
 	some understanding of what you can and cannot expect of the
@@ -160,7 +160,7 @@ the scores</caption></code>
 	they can honestly never appear.  This decision comes from
 	asking the higher-level question of how we in fact want the
 	game to work.  If we really don't want there to be ties in the
-	end (e.g. we always make it so there are tiebreaker rounds
+	end (e.g., we always make it so there are tiebreaker rounds
 	until all ties are resolved), then we may do as we suggested.
 	But if we actually think ties should be a valid result in our
 	game, then we would have to expand our score-comparison
@@ -169,13 +169,13 @@ the scores</caption></code>
     </section>
     <section>
       <title>Efficiency</title>
-      <summary><p>Simply having an algorithm that solves the problem
-      given doesn't have to be the end of the story.  We can ask
-      whether there is a more "efficient" algorithm, where "efficient"
-      may mean anything from "takes less time to finish in every
-      situation" to "requires more storage space to finish in some
-      cases, but requires way less storage in the few cases we
-      actually expect to run into".  </p></summary>
+      <summary>Simply having an algorithm that solves the given
+      problem isn't the end of the story.  We can ask whether there is
+      a more "efficient" algorithm, where "efficient" may mean
+      anything from "takes less time to finish in every situation" to
+      "requires more storage space to finish in some cases, but
+      requires way less storage in the few cases we actually expect to
+      run into".  </summary>
       <text>
 	<p>There are two things about this algorithm's inefficiency
 	that might offend your sensibilities: We're comparing three
@@ -263,7 +263,7 @@ level.  We will see examples of this in chapter 5.  </p></warning>
       has a million?  This is another measure of an algorithm--how
       well it behaves when faced with larger and larger versions of
       the problem it was meant to solve.  In other words, how well it
-      "scales".</summary>
+      "scales."</summary>
       <text>
 <p>There is a related but more subtle concern about the original
 algorithm, which is: Suppose instead we had 10 players?  Or 100?  What
@@ -299,11 +299,11 @@ then using this algorithm, each winner calculation will take at least
 computer, we can thus only compute a winner around 10 times per
 second.  And if we want to constantly be displaying the current leader
 on the screen as the game progresses, this means the game can only
-update the display 10 times per second at most (i.e. run the game at
-what 10 "frames per second").  But the illusion of smoothness in
-gameplay comes from updating the picture on the screen at the very
-least 30 times per second, so limiting a game to 10 frames per second
-would result in noticeable stuttering and could easily render the game
+update the display 10 times per second at most (i.e., run the game at
+10 "frames per second").  But the illusion of smoothness in gameplay
+comes from updating the picture on the screen at the very least 30
+times per second, so limiting a game to 10 frames per second would
+result in noticeable stuttering and could easily render the game
 unplayable.  </p>
 
 <p><def term="scalability">This is an analysis of
@@ -344,7 +344,7 @@ your time right at the start of such a project.  </p>
       various instructions actually do.</def></p>
 
       <p>In this chapter alone, we will discuss only a subset of
-      Python, which will be sufficient accomplish many goals, at the
+      Python, which will be sufficient to accomplish many goals, at the
       price of being less powerful than the whole Python language
       actually us.  In chapter 3 we shall see some of Python's
       advanced features and how they simplify some of the tasks that
@@ -368,7 +368,7 @@ your time right at the start of such a project.  </p>
       simulator.</summary>
       <text>
 	<p>Python is a real-world programming language with many uses
-	in the wild.  However, in this chapter, since we're focusing
+	in the wild.  In this chapter, however, since we're focusing
 	on a very small part of the Python language, we will not run
 	any code on a real computer.  Rather, we will use the web
 	browser to simulate the code being run.  This way, we will get
@@ -381,7 +381,7 @@ your time right at the start of such a project.  </p>
 	sort of person who would rather play the game without first
 	reading the rules, a few example programs and challenges are
 	available by clicking the "Python" link on the sidebar, or by
-	clicking <a href="tied/quest.html">here</a>.  </p>
+	clicking <a href="sim/py/python.html">here</a>.  </p>
 
 	<p>To use the simulator, you write your program in the text
 	box on the right.  When ready, click the "run" button above
@@ -482,10 +482,9 @@ with a remainder of 1".  That is, 4 goes into 13 three times, but then
 there's one left over.</p>
 
 <p>In Python, the "/" operation represents the decimal division--so 13
-/ 4 is 3.25.  The "//" operation represents integer division--i.e. the
-more naive notion of "how many times does this number go into that
-one", so 13 // 4 is 3.  <def term="modulus">Finally, the "%" operation
-gives the remainder of the integer division, so 13 % 4 is 1.  This
+/ 4 is 3.25.  <def term="modulus">The "%" operation performs integer
+division and gives back not the quotient, but the remainder.  So 13 %
+4 is 1, because 4 goes 3 times into 13, with a remainder of 1.  This
 operator is known as the <b>modulus</b> operator.</def></p>
 
 <aside><p>In case you're wondering where this word "modulus" comes
@@ -518,7 +517,7 @@ Print out the text "Done" (I/O)
 
 <p>Now, we said that programming is taking an algorithm and expressing
 it in a computer's terms.  To this end, we shall take the above
-algorithm and write a Python program that runs it(don't worry if you
+algorithm and write a Python program that runs it (don't worry if you
 don't understand it yet--all will be explained in time): </p>
 
 <python>x = 27
@@ -680,7 +679,7 @@ follow along with the program, one line at a time, to see:
 <tr>	 
 <td><pre>   y = x % 2</pre></td>
 <td>     We reached the end of the while block, but x was not 1, so we go back to the start</td>
-<td><pre>x =41, y = 1</pre></td>
+<td><pre>x = 41, y = 1</pre></td>
 <td>     82
 <br />   41</td>
 </tr>    
@@ -749,7 +748,7 @@ And so on.
 	variable name can be anything with letters, numbers, and
 	underscores, but not starting with a number, and not a Python
 	keyword.  So we can decide to call our variable, say, 
-	<code>H3LL0_th3re_</code>.  </p>
+	<icode>H3LL0_th3re_</icode>.  </p>
 
 	<p>But what about the expression bit?  Expressions are defined
 	in the table as any valid combination of numbers, strings, and
@@ -761,7 +760,7 @@ And so on.
 
 	And the fact that we have followed the table tells us that
 	this is a valid assignment line which will store the value of
-	the expression 89*90--i.e. the number 8010--into a variable
+	the expression 89*90--i.e., the number 8010--into a variable
 	called H3LL0_th3re_.</p>
 
       </text>
@@ -772,11 +771,11 @@ And so on.
   <section>
     <title>A detailed explanation of Python</title>
     <summary>The above table represents nearly all of the features of
-    Python that we shall use in this chapter.  However the table
-    doesn't explain how to think about or when to use these in
-    practice.  This section will get more into that, as well as a
-    small number of odds and ends that don't come up often and so were
-    left out of the reference table.</summary>
+    Python that we shall use in this chapter.  The table does not
+    explain how to think about or when to use these in practice.  This
+    section will get more into that, as well as a small number of odds
+    and ends that don't come up often and so were left out of the
+    reference table.</summary>
     <text>
       <p>We now give a more detailed explanation of the Python
       language elements we introduced above.  For example, in addition
@@ -798,8 +797,8 @@ And so on.
 	ensuring proper syntax in your Python is very much the easy
 	part, and doesn't even require you to think about or even know
 	what your code does.  Much as you can probably tell that the
-	phrase "Begone, you ancephalous lummox!" is valid English,
-	whereas "Accismus very kerfuffle the, bromnopea in" is not,
+	phrase "Begone you ancephelous lummox!" is valid English,
+	whereas "Accismus very kerfuffle the, bromnopnea in" is not,
 	even without knowing the meaning of many of the words
 	involved, you do not need to understand Python semantics in
 	order to tackle its syntax.</p>
@@ -838,15 +837,15 @@ x = 5 + x</python>
 
 	<figure width="500px"><caption>Lines of the program colored by type</caption></figure>
 
-	<p>And further, for e.g. x = 5 + x to be a valid assignment,
-	the first thing must be a valid variable name.  "x" indeed
-	satisfies all the rules, so this is OK.  Then there must be an
-	"=", which there is.  Finally, there must appear a valid
-	expression.  "5+x" is a combination of a variable and a number
-	using the "+" operator, so indeed qualifies as a valid
+	<p>And further, for a line like x = 5 + x to be a valid
+	assignment, the first thing must be a valid variable name.
+	"x" indeed satisfies all the rules, so this is OK.  Then there
+	must be an "=", which there is.  Finally, there must appear a
+	valid expression.  "5+x" is a combination of a variable and a
+	number using the "+" operator, so indeed qualifies as a valid
 	expression.  We can perform this analysis with the rest of the
-	program, colorizing each syntax element according to its
-	type, and we get: </p>
+	program, colorizing each syntax element according to its type,
+	and we get: </p>
 	
 	<figure width="500px"><caption>Lines of the program, with sub-elements
 	colorized by type.</caption></figure>
@@ -864,7 +863,7 @@ while(x != 1):
    print(x)
 print("Done!")</python>
 
-<p>and check line-by-line that it is a valid program: </p>
+<p>and check line by line that it is a valid program. </p>
 
 <code>x = 27 </code>
 
@@ -874,7 +873,7 @@ print("Done!")</python>
 
 <p>Indeed, looking at the rules for variable names, "x" is a valid
 variable name.  Further, expressions are defined as numbers, strings,
-variables, or combinations thereof.  27 is a number, and hence a valid
+variables, or combinations thereof.  "27" is a number, and hence a valid
 expression.  So indeed, this is a valid assignment line.</p>
       
 <code>while(x != 1):</code>
@@ -912,23 +911,26 @@ allowed operators (%), is an expression.  </p>
       x = 3 * x + 1
 </code>
 
-<p>Note that the line following the "if" line is indented by two steps.
-The if line is indented once because it is inside the while loop.
-Then remember that lines under the if statement have to be indented
-not just "three spaces" full stop, but three spaces more than the if
-line they are following.  The effect is that the line</p>
+<p>Note that the line following the "if" line is indented by two
+steps.  The if line is indented once because it is inside the while
+loop.  Then remember that lines under the if statement have to be
+indented three spaces more than the if line they are following.  The
+effect is that the line</p>
 
 <code>      x = x / 2</code>
 
-<p>gets indented using 6 spaces, since it is inside the if, which is inside a while.  </p>
+<p>gets indented using six spaces since it is inside the "if", and the
+"if" is already indented by three spaces since it is inside the
+"while".
+</p>
 
 <code>   print(x)</code>
 
-<p>This is a print statement, i.e. something like </p>
+<p>This is a print line, which looks in general like </p>
 
 <code>print(<i>expression</i>)</code>
 
-<p>and is indeed valid, since x, being a variable name, is a valid expression</p>
+<p>and is indeed valid, since x, being a variable name, is a valid expression.</p>
 
 <code>print("Done!")</code>
 
@@ -978,7 +980,12 @@ instance, the line</p>
 
 <code>x = 2</code>
 
-<p>stores the value 2 in a variable called x.  Then if we later want to use this stored value, we can refer to it by its name, x.  For instance, </p>
+<p>stores the value 2 in a variable called x.  It is worth noting that
+here "=" is functioning as an action: "set x to have value 2", unlike
+its use in mathematics, where it serves to make statements of fact ("x
+is equal to 2").</p>
+
+<p>If later in the program we want to use this stored value, we can refer to it by its name, x.  For instance, </p>
 
 <code>y = 2 * x</code>
 
@@ -1002,19 +1009,23 @@ multiplication operator *.  We might naively write the code:
 <code>2 * x</code>
 
 This is a valid expression, but we note from our syntax tree that an
-expression is not one of the three valid kinds of lines of code!
-However, we do have valid lines like print lines which can print the
-value of an expression, or assignment lines, which can store the value
-of an expression.  So if you want to multiply x by 2, you have to
-store the result somewhere, and so you would use an assignment line.
-Either you would create a new variable, maybe called y, and store the
-value there:
+expression is not one of the three valid kinds of lines of code!  We
+do have valid lines like print lines which can print the value of an
+expression, or assignment lines, which can store the value of an
+expression.  So if you want to multiply x by 2, you have to store the
+result somewhere, and so you would use an assignment line.  Either you
+would create a new variable, maybe called y, and store the value
+there:
 
 <code>y = 2 * x</code>
 
 or you might overwrite the old value of x with this new value: 
 
-<code>x = 2 * x</code></p>
+<code>x = 2 * x</code>
+
+or you might print this quantity without storing it anywhere: 
+
+<code>print(2 * x)</code></p>
 
       </text>
       
@@ -1028,7 +1039,7 @@ or you might overwrite the old value of x with this new value:
 	
 	<text>
 <p>We've already specified in the syntax discussion what valid
-variable names are, but there are a few further points to make: </p>
+variable names are, but there are a few further points to make. </p>
 
 <p>Remember we said variable names cannot be words that Python treats
 as special?  While you're not terribly likely to use them by accident,
@@ -1077,24 +1088,24 @@ independently.  Likewise, </p>
 <code>x = 3
 y = 3*X</code>
 
-<p>Will cause an error, since the second assignment tries to use the
+<p>will cause an error, since the second assignment tries to use the
 variable called X.  We just created a variable called x, but that is
 unrelated to the completely different variable called X.  </p>
 
-<p>Finally, even though x, y, z etc. are valid variable names, and
+<p>Finally, even though x, y, and z are valid variable names, and
 using one-letter names will save on typing, there is a balance between
 brevity and perspicuity to be struck: Imagine you're reading someone
-else's code and you come upon a line like: </p>
+else's code and you come upon a line like</p>
 
 <code>a = mass * radius * radius * roll_rate * roll_rate / 5 + mass * velocity * velocity / 2</code>
 
-<p>You'd say--great, you're doing some physics.  You've got some
+<p>You'd say--"Great, you're doing some physics.  You've got some
 object with mass, radius, velocity, rolling, and you've stored these
 quantities in sensibly named variables called mass, radius, roll_date,
 and velocity, and you're doing some massive computation involving all
 of these, and you're storing it in some variable called a.  That's all
 nice, but what the heck is this thing you're computing supposed to
-mean?  How much more obvious is this:</p>
+mean?"  How much more obvious is this:</p>
 
 <code><font size="2pt">rolling_sphere_kinetic_energy = mass * radius * radius * roll_rate * roll_rate / 5 + mass * velocity * velocity / 2</font></code>
 
@@ -1109,14 +1120,11 @@ we wanted to name a variable as 'rolling sphere kinetic energy'), we
 will have all the words be lower-case and separated by underscores
 (since spaces are not allowed in variable names).  
 
-<def term='camel-casing'>There is another convention that some people
+<def term='camel casing'>There is another convention that some people
 use, which is to have nothing separate the words but to capitalize the
 first letter of each word, as in
-<code>RollingSphereKineticEnergy</code>
-
-This is called
-
-<b>camel-casing</b>.</def></p>
+<icode>RollingSphereKineticEnergy</icode>.  This is called <b>camel
+casing</b>.</def></p>
 	</text>
 	
       </section>
@@ -1130,35 +1138,35 @@ This is called
 	</summary>
 	
 	<text>
-<p>The right hand side of an assignment also bears a little more
-discussion: expressions.  We said that an expression was any variable
-name, number, string, or valid combination thereof using arithmetic
-operations.  </p>
+<p>The right-hand side of an assignment is required to be an
+expression, i.e. any variable name, number, string, or valid
+combination thereof using arithmetic operations.
+</p>
 
-<p>Any expression has a <b>value</b>which is what is stored in the
-variable during an assignment.  For example, 
-
-<code>x = 2 * 3</code>
-
-stores 6 into x because the value of the expression <code>2 * 3</code>
-is 6.  The process of determining the value of an expression is called
-<b>evaluation</b>, and happens as follows: 
+<p><def term="value (expression)">Any expression has a <b>value</b>
+which is the result of retrieving what is stored in each variable
+mentioned in the expression and applying all the specified arithmetic
+operations.  </def>For example, the line <icode>x = 2 * 3</icode>
+stores 6 into x because the value of the expression <icode>2 *
+3</icode> is 6.  <def term="evaluation (expression)">The process of
+determining the value of an expression is called
+<b>evaluation</b></def>, and happens as follows:
 
 <ul>
   <li>First, find any variable names in the expression and substitute
   in place of those variable names the values currently stored in the
   corresponding variables.  If any of the variables has no stored
-  value, give a runtime error.</li>
-  <li>Then perform the operations specified in the expressions in the
-  with the usual order of operations: 
+  value, throw up a logic error.</li>
+  <li>Then perform the operations specified in the expression, with
+  the usual order of operations:
   <ul>
-    <li>Anything in parentheses gets evaluated first</li>
+    <li>Anything in parentheses gets evaluated first.</li>
     <li>Any multiplication or division or modulus operations get
     performed left-to-right.  </li>
     <li>Then finally any addition and subtraction happen last.</li>
   </ul>
-  If any operation has invalid inputs--e.g. division by zero, or
-  attempting to multiply things that are not numbers, give a runtime
+  If any operation has invalid inputs (e.g., division by zero or
+  attempting to multiply things that are not numbers) throw up a logic
   error.
   </li>
 </ul>
@@ -1170,12 +1178,13 @@ y = x + 1
 x = 2
 x = 5*x + 2*(3 - y)</python>
 
-The first assignment sets x to 4.  The second one sets y to whatever
-is the value of x + 1.  To evaluate this expression, we plug in the
-current value of x (namely 4) in place of the name 'x' in this
-expression, yielding 4 + 1, and then we perform the arithmetic to get
-a value of 5.  So the second assignment assigns the value 5 to y.  The
-third assignment stores the value 2 in x.</p>
+The first assignment sets <icode>x</icode> to 4.  The second one sets
+y to whatever is the value of <icode>x + 1</icode>.  To evaluate this
+expression, we plug in the current value of <icode>x</icode> (namely
+4) in place of the name <icode>x</icode> in this expression, yielding
+4 + 1, and then we perform the arithmetic to get a value of 5.  So the
+second assignment assigns the value 5 to <icode>y</icode>.  The third
+assignment stores the value 2 in <icode>x</icode>.</p>
 
 <p>Finally, to find out what the last assignment stores in x, we need
 to evaluate the last expression
@@ -1215,11 +1224,10 @@ is not a valid expression and will similarly elicit an error.  </p>
 
 <code>"hello" + "world"</code>
 
-is a valid expression, and its value is the 
-
-<def term='concatenation'><b>concatenation</b> (i.e. sticking the two
+is a valid expression, and its value is the <def
+term='concatenation'><b>concatenation</b> (i.e., sticking the two
 strings together to make one long string) of the two strings</def>:
-'helloworld'</p>
+"helloworld"</p>
 
 <p>So consider the following examples: </p>
 
@@ -1262,11 +1270,11 @@ y = 89/x</python>
       <section>
 	<title>Strings</title>
 	<summary>Strings are anything enclosed in quotation marks.  To
-	include a quotation mark inside a string, escape
-	it--i.e. precede it by a backslash.  To insert a line-break
-	into a string, escape the letter n.  To insert an actual
-	backslash into a string, just escape a single backslash with a
-	second one.</summary>
+	include a quotation mark inside a string, escape it--i.e.,
+	precede it by a backslash.  To insert a line break into a
+	string, escape the letter n.  To insert an actual backslash
+	into a string, just escape a single backslash with a second
+	one.</summary>
 	<text>
 <p>Recall we defined a string as any sequence of characters contained
 inside quotation-marks.  It is a type of expression whose value is the
@@ -1294,13 +1302,14 @@ variable called hi (since this is outside any quotes, so is not a part
 of the string), followed by the string &quot;, he said&quot;.
 Disaster follows. </p>
 
-<p>To include a quote, then, you need to <def term='escape'><b>escape</b>
-it--that is, you precede it in the string with a backslash</def>.  In
-general, backslash is the string escape character, meaning that
-whatever character comes after it doesn't have its usual meaning, but
-has some special meaning.  The usual meaning of ' is 'this is the
-boundary of a string', but if we precede it with a backslash, then its
-meaning just becomes just 'the single-quote character'.  So </p>
+<p>To include a quote, then, you need to <def
+term='escape'><b>escape</b> it--that is, you precede it in the string
+with a backslash</def>.  In general, backslash is the string escape
+character, meaning that whatever character comes after it doesn't have
+its usual meaning, but has some special meaning.  The usual meaning of
+the double-quote character is "this is the boundary of a string", but
+if we precede it with a backslash, then its meaning just becomes just
+"the double-quote character".  So </p>
 
 <code>print(&quot;\&quot;hi\&quot;, he said&quot;)</code>
 
@@ -1349,7 +1358,7 @@ print(y+"zzzzz")</python>
 1.6
 blahzzzzz</code>
 
-<p>We can use it to print the value stored in a variable</p>
+<p>We can use it to print the value stored in a variable.</p>
 
 <python>print("Hello")
 x = 2
@@ -1357,7 +1366,7 @@ print(x-3)
 print(x)</python>
 
 <p>A common use-case for print beyond just printing a final answer is
-debugging: if we have a program that is misbehaving and we want to get
+debugging: If we have a program that is misbehaving and we want to get
 some idea of what is happening, we can insert a print statement in the
 middle.  For instance, suppose we accidentally wrote our 3x+1 program
 thus:
@@ -1468,8 +1477,8 @@ behold x:
     </section>
     <section>
       <title>Flow control</title>
-      <summary>Flow control lines determine what line gets executed
-      next.  A flow control line can either be an if/else pair or a
+      <summary>Flow-control lines determine what line gets executed
+      next.  A flow-control line can either be an if/else pair or a
       while loop.</summary>
       <text>
 	<p>Flow-control lines are lines that control the order in which
@@ -1496,28 +1505,28 @@ writing a search engine, and we have a variable that stores the word
 the user is searching for.  It might have come from one of two files:
 poems.txt or raps.txt, and we need to determine which.  (It's a very
 simple search engine for now).  To display the answer, we'll have to
-have both the line</p>
+have both the line
 
 <code>print(&quot;poems.txt&quot;) </code>
 
-<p>and the line</p>
+and the line
 
 <code>print(&quot;raps.txt&quot;)</code>
 
-<p>somewhere in our code.  But we definitely don't want both of them
+somewhere in our code.  But we definitely don't want both of them
 to run--we only ever want at most one to run, but which one we want
 depends on which file the word was found in.  Choosing what code to
 run depending on some condition is exactly the job of the if
 statement.  </p>
 
-<p>If you recall, an if/else statement is: </p>
+<p>If you recall, an if/else statement is: 
 
 <code>if(<i>test</i>): 
    indented lines
 else: 
    indented lines</code>
 
-<p>and it runs the first set of indented lines if the test succeeds,
+and it runs the first set of indented lines if the test succeeds,
 and the second set if the test fails.</p>
 
 <p>So if we can contrive a test that will tell us whether the
@@ -1526,7 +1535,7 @@ then put the first print statement
 
 <code>print(&quot;poems.txt&quot;)</code>
 
-in the first set of indented lines, and the second print statement: 
+in the first set of indented lines, and the second print statement
 
 <code>print(&quot;raps.txt&quot;)</code>
 
@@ -1548,7 +1557,7 @@ discuss that later.)</p>
 
 <p>For if statements in general, the semantic meaning of the
 indentation makes it very important, and often a source of subtle
-bugs: </p>
+bugs: 
 
 <python>x = 2
 if(x == 2): 
@@ -1557,12 +1566,12 @@ else:
    print(&quot;x is not two&quot;)
 print(&quot;potato&quot;)</python>
 
-<p>outputs</p>
+outputs
 
 <code>x is two
 potato</code>
 
-<p>whereas </p>
+whereas 
 
 <python>x = 2
 if(x == 2): 
@@ -1571,15 +1580,15 @@ else:
    print(&quot;x is not two&quot;)
    print(&quot;potato&quot;)</python>
 
-<p>outputs only</p>
+outputs only
 
 <code>x is two</code>
 
-<p>because the line </p>
+because the line 
 
 <code>print(&quot;potato&quot;)</code>
 
-<p>is indented, which puts it in the block of lines that only get
+is indented, which puts it in the block of lines that only get
 executed if the test fails.  And since the test is testing whether x
 is equal to 2, the test does not fail.  </p>
 
@@ -1598,8 +1607,8 @@ tells us that they have to look like
 
 <code><i>expression</i> <i>comparison</i> <i>expression</i></code>
 
-We already know what expressions are, and our syntax tree tells us
-that comparisons are any of: 
+We already know what expressions are.  To find out what a "comparison"
+is, we look at our syntax tree and find that comparisons are any of:
 
 <code>&lt;, &gt;, &lt;=, &gt;=, ==, !=</code>
 
@@ -1691,17 +1700,27 @@ print(":)")
 print(":)")
 print(":/")</python>
 
-<p>However if we wanted to print 100 smileys, our program would get rather long, and it may be harder to ensure we got exactly 100 print statements in there.  To simplify this dramatically, we can instead use a while statement.  This requires some thought, however: The while statement will repeat the indented block as long as the test is true.  So clearly we want the print line to be in the indented block: </p>
+<p>But if we wanted to print 100 smileys, our program would get rather
+long, and it may be harder to ensure we got exactly 100 print
+statements in there.  To simplify this dramatically, we can instead
+use a while statement.  This requires some thought, however: The while
+statement will repeat the indented block as long as the test is true.
+So clearly we want the print line to be in the indented block: </p>
 
-<code>while(something):
+<code>while(<i>something</i>):
    print(&quot;:)&quot;)
 print(&quot;:/&quot;)</code>
 
-<p>But what should the something be?  We want the indented block to repeat 20 times, so the something should be a test that is true the first 20 times it is run, but not the 21st time.  One way to accomplish this is to have a counter variable that counts how many times the indented block has been run.  When the program starts, we'll set the counter to 0: </p>
+<p>What should the something be?  We want the indented block to repeat
+20 times, so the something should be a test that is true the first 20
+times it is run, but not the 21st time.  One way to accomplish this is
+to have a counter variable that counts how many times the indented
+block has been run.  When the program starts, we'll set the counter to
+0: </p>
 
 <code>counter = 0
-while(something): 
-	print(&quot;:)&quot;)
+while(<i>something</i>): 
+   print(&quot;:)&quot;)
 print(&quot;:/&quot;)</code>
 
 <p>Except now, each time the block is run, we want the counter to increase by 1.  An assignment that can increase the counter by 1 is: </p>
@@ -1711,9 +1730,9 @@ print(&quot;:/&quot;)</code>
 <p>so if we put this inside the indented block, it will be run each time the indented block is run: </p>
 
 <code>counter = 0
-while(something): 
-	print(&quot;:)&quot;)
-	counter = counter + 1
+while(<i>something</i>): 
+   print(&quot;:)&quot;)
+   counter = counter + 1
 print(&quot;:/&quot;)</code>
 
 <p>Now finally, what should the something be?  The first time the while block is run, counter will start as 0 and get updated to 1.  The second time, it will start as 1 and be updated to 2.  The third time, the counter will start as 2 and be updated to 3 during the execution of the block.  So if the something is </p>
@@ -1846,7 +1865,7 @@ indented lines for as long as the condition is true, it will print
 smileys forever.  This is called an <b>infinite loop</b></def>.  They
 can happen intentionally when you're just trying to be infinitely
 happy like in the above example, but they are generally a run-time
-error (i.e. part of a valid program that provides undesirable
+error (i.e., part of a valid program that provides undesirable
 behavior when run), and are not always as obvious as that first
 example might lead you to believe.  For instance: </p>
 
@@ -1921,10 +1940,10 @@ print("Done")</code>
     <text>
       <p>Now we set about writing some simple programs.  As discussed
       in chapter 1 and reflected in the structure of this chapter,
-      this happens in two stages: turning the problem into a
+      this happens in two stages: First, turning the problem into a
       computer-friendly but still human-readable algorithm, and then
-      writing that algorithm in a computer-friendly language, namely
-      Python.</p>
+      second, writing that algorithm in a computer-friendly language,
+      (in our case, Python).</p>
 
       <p>That is the theory, at least.  In practice, the first
       algorithm we think of won't always do the trick quite correctly,
@@ -1941,7 +1960,7 @@ print("Done")</code>
       <section>
 	<title>Factorial</title>
 	<summary><p>To write a program that computes factorials (10
-	factorial is 10*9*8*7*6*5*4*3*2*1, e.g.) we use the idea of a
+	factorial is 10*9*8*7*6*5*4*3*2*1, for example) we use the idea of a
 	while loop with a counter, but we keep another variable that
 	will eventually store the answer that we multiply by the
 	counter each time we go through the loop.</p>
@@ -1964,20 +1983,22 @@ print("Done")</code>
 	  
 	  <p>The definition above is completely unambiguous, and
 	  explains perfectly well to a human how to compute
-	  factorials.  However we just saw all the things we can tell
-	  a computer how to do, namely assignment, print, if, if/else,
-	  and while.  You'll note that "multiply the integers 1
-	  through 10" is not on that list, so we need to find a way of
-	  telling the computer how to compute 10! using these simple
-	  operations.</p>
+	  factorials.  On the other hand, we saw earlier a complete
+	  list of all the things we can tell a computer how to do,
+	  namely assignment, print, if, if/else, and while.  You'll
+	  note that "multiply the integers 1 through 10" is not on
+	  that list, so we need to find a way of telling the computer
+	  how to compute 10! using only these simpler operations.</p>
 
-	  <p>Well, this is easy: Clearly we want to print the product
-	  1*2*3*...*27.  If we reference our chart above, we see that
-	  we are allowed to print any expression.  But what was an
-	  expression?  It was any number, string, variable, or
-	  combination thereof using operations +, -, *, /, %.  Aha!
-	  So 1*2*3*4*5 is an expression--it is a combination of
-	  numbers using the operation *.  Therefore: </p>
+	  <p>From one perspective, this is easy: Clearly we want to
+	  print the product 1*2*3*...*10.  If we reference our chart
+	  above, we see that we are allowed to print any expression.
+	  But what was an expression?  It was any number, string,
+	  variable, or combination thereof using operations +, -, *,
+	  /, %.  Aha!  So, for example, 1*2*3*4*5 is an expression (as
+	  it is a combination of numbers using the operation *).
+	  Therefore:
+	  </p>
 
 	  <p><b>Program: </b></p>
 
@@ -1987,12 +2008,12 @@ print("Done")</code>
 
 	  <p>That was all very good, except now say I want to know
 	  what is 27!  Now I have to make non-trivial and tedious
-	  changes to the program--in fact, it is basically the same
-	  work as doing this on a calculator by hand!  In short, we
-	  have a problem of scalability--this program cannot compute
-	  larger factorials without us doing a large amount of work
-	  also to change it.  What we would like is a program that
-	  looks like:</p>
+	  changes to the program--it is basically the same work as
+	  doing this on a calculator by hand!  In short, we have a
+	  problem of scalability.  This program cannot compute larger
+	  factorials without us doing a large amount of work also to
+	  change it.  What we would like is a program that looks
+	  like:</p>
 
 <code>input = 10
 ... some things
@@ -2013,19 +2034,19 @@ and leave the rest of the program untouched, and still get the correct answer.  
 
 <p><b>Algorithm, Mark II: </b></p>
 
-<p>The above desired form of the program tells us the first and last steps of the algorithm: </p>
+<p>The above desired form of the program tells us the first and last steps of the algorithm: 
 
 <code>Step 1: Store the number whose factorial we want in a variable called input.  
 ...
 Step last: print the number stored in the variable answer.  
 </code>
 
-<p>So clearly at some point we'll need to make a variable called
-answer.  May as well make that step 2.  So step 2 will be an
-assignment (a valid operation), setting answer equal to...what?
-Clearly we cannot just say <code>answer = input!</code>, since ! is not
-one of the operations that Python understands.  So let's just start
-small--answer = 1</p>.
+So clearly at some point we'll need to make a variable called answer.
+May as well make that step 2.  So step 2 will be an assignment (a
+valid operation), setting answer equal to...what?  Clearly we cannot
+just say <icode>answer = input!</icode> since ! is not one of the
+operations that Python understands.  So let's just start
+small--<icode>answer = 1</icode>.
 
 <code>Step 1: Store the number whose factorial we want in a variable called input.  
 Step 2: Store the number 1 in the variable answer.
@@ -2033,13 +2054,13 @@ Step 2: Store the number 1 in the variable answer.
 Step last: print the number stored in the variable answer.  
 </code>
 
-<p>Now, clearly what we need to do is to first multiply answer by 2,
+Now, clearly what we need to do is to first multiply answer by 2,
 and then by 3, and then by 4, and so on until we get to 10.  So let us
 store the thing we're multiplying by in yet another variable.  This
 variable will be counting up from 2, and will be multiplied into
 answer at each step.  So we'll call this variable counter, and since
 the first multiplication will be by 2, we'll start this variable at 2.
-</p>
+
 
 <code>Step 1: Store the number whose factorial we want in a variable called input.  
 Step 2: Store the number 1 in the variable answer.
@@ -2048,7 +2069,7 @@ Step 3: Store the number 2 in the variable counter.
 Step last: print the number stored in the variable answer.  </code>
 
 
-<p>Now we want to increment counter repeatedly until it is 10, or, more precisely, until it matches whatever is in the variable input.  Intuitively this process looks like: 
+Now we want to increment counter repeatedly until it is 10, or, more precisely, until it matches whatever is in the variable input.  Intuitively this process looks like: 
 
 <code>answer = answer*counter
 counter = counter + 1
@@ -2061,6 +2082,7 @@ counter = counter + 1
 ...</code>
 
 except we want this to stop when counter exceeds input.  </p>
+
 <p>So: 
 
 <code>Step 1: Store the number whose factorial we want in a variable called input.  
@@ -2070,10 +2092,9 @@ Step 4: Repeat the following until counter is greater than input:
 	Substep 1: Replace answer with answer * counter
 	Substep 2: Increment counter by 1
 Step 5: print the number stored in the variable answer.  </code>
-</p>
 
-<p>And recall that this 'repeat the following' sort of step is
-something that we can tell the computer to do--this is what the while
+And recall that this 'repeat the following' sort of step is something
+that we can tell the computer to do--this is what the while
 instruction does!  So we do: </p>
 
 <p><b>Program, Mark II: </b></p>
@@ -2227,13 +2248,16 @@ print(answer)</code>
 	  <p><b>Introduction: </b></p>
 
 	  <p>A prime number is a positive integer that is not evenly
-	  divisible by any other positive integer than itself and 1.
-	  For instance, 12 is evenly divisible by 4, and therefore is
-	  not prime, whereas 13 is prime.  Prime numbers are of
-	  interest because every number can be built out of primes: 12
-	  is not prime, as it is evenly divisible by 4: 12 = 4*3.  And
-	  4 is not prime--it is evenly divisible by 2: 4 = 2*2, so we
-	  can break up 12 further: 12 = 2*2*3.  </p>
+	  divisible by any positive integer other than itself and 1.
+	  For instance, 12 is evenly divisible by 4 and therefore is
+	  not prime.  13, on the other hand is prime.  Prime numbers
+	  are of interest because every number can be built out of
+	  primes.  For example, we just saw that 12 is evenly
+	  divisible by 4.  More specifically, 12 = 4*3.  4, in turn,
+	  is also not prime--it is evenly divisible by 2.  More
+	  specifically, 4 = 2*2.  So when we wrote 12 = 4*3, we could
+	  break it up further as 12 = 2*2*3.  2 and 3 are primes, so
+	  we have shown how to make 12 using just prime numbers.</p>
 
 	  <p>It is sometimes of great interest to determine whether a
 	  number is prime.  In this section, we shall write a program
@@ -2280,21 +2304,22 @@ Step 3: is_prime = 1
 Step 4: Repeat the following as long as counter &lt; n: 
 	Substep 1: Test if counter divides into n evenly.  If it does, set is_prime to 0
 	Substep 2: Increment counter
-Step 5: If is_prime is 1, print &quot;n is prime&quot;
-Step 6: If is_prime is 0, print &quot;n is not prime&quot;</code>
+Step 5: If is_prime is 1, print "n is prime"
+Step 6: If is_prime is 0, print "n is not prime"</code>
 
         <p><b>Program:</b></p>
 
 	<p>To turn this into an honest program is reasonably
 	straightforward.  The elements we have not yet used are the
 	tests, which are accomplished with the if/else instructions.
-	How to see if counter divides n evenly?  One way to do it is
-	to divide n by counter and see if the quotient is an integer.
-	However we don't yet have any operation for testing &quot;is this
-	variable an integer&quot;, so that's no good for now.  Another way
-	would be to divide n by counter and see if the remainder is 0.
-	Recall we can get the remainder of this division with n %
-	counter.  So we get:</p>
+	How to see if <icode>counter</icode> divides <icode>n</icode>
+	evenly?  One way to do it is to divide n by counter and see if
+	the quotient is an integer.  However we don't yet have any
+	operation for testing "is this variable an integer",
+	so that's no good for now.  Another way would be to divide n
+	by counter and see if the remainder is 0.  Recall we can get
+	the remainder of this division with n % counter.  So we
+	get:</p>
 
 <python>n = 1000001
 counter = 2
@@ -2350,12 +2375,12 @@ if(is_prime == "penguin goes shopping"):
 	prime--that is, tell us a number that divides evenly into
 	it.</p>
 	
-	<p>This program is also far far less efficient than it could
+	<p>This program is also far, far less efficient than it could
 	be in many ways.  You can probably think of improvements
 	already--for instance, we don't have to test all the possible
-	divisors counter &lt; n--we can certainly get away with
-	testing only to n/2, since if n/2 evenly divides n, then 2
-	also evenly divides n, so we would have caught that already.
+	divisors less than <icode>n</icode>--we can certainly get away
+	with testing only to n/2, since if n/2 evenly divides n, then
+	2 also evenly divides n, so we would have caught that already.
 	Also, none of the numbers between n/2 and n can possibly
 	divide evenly into n.  In fact we can get away with fewer than
 	that.  </p>
@@ -2369,7 +2394,7 @@ if(is_prime == "penguin goes shopping"):
 	until an undergraduate project by two students together with
 	their adviser at the Indian Institute of Technology found an
 	algorithm that they could prove would get the answer quickly
-	in all cases.</p>
+	(in some precise complexity-theory sense) in all cases.</p>
 
 	</text>
       </section>
@@ -2443,7 +2468,7 @@ while loop as long as <icode>n > 1</icode>.  But even at the start, this
 test fails, as <icode>n = 1</icode>, so <icode>n</icode> is not greater than
 1!  So the stuff inside the while loop gets skipped entirely, and the
 value of <icode>digit_count</icode>--namely 0--gets printed.  And this is
-definitely the wrong answer--the number '1' has 1 digit!  </p>
+definitely the wrong answer--the number 1 has one digit!  </p>
 
 <p>In fact, this isn't the only issue--this problem shows up whenever
 <icode>n</icode> gets set to 1 during execution, for example if it started
@@ -2494,7 +2519,7 @@ print(digit_count)</python>
     <title>Applications</title>
     <text>
       <p> In this section, we'll revisit our three example
-      applications of search engine, game console, and cell phone, to
+      applications of search engine, game console, and cell phone to
       see how we might start to apply our limited knowledge of Python
       in the direction of creating these systems.  The programs we'll
       write here will only be indicative of the ideas involved, since
@@ -2502,7 +2527,7 @@ print(digit_count)</python>
       realistic solution for any of them--for instance, we don't even
       have a way of getting user input without requiring the user to
       edit the program!  But we'll bash on ahead anyway and see what
-      we can do:
+      we can do.
       </p>
     </text>
     
@@ -2752,9 +2777,9 @@ print(average)
 	useful complexity that we could get away with.  </p>
 	
 	<p>As a result, none of the preceding "real world" examples
-	contains realistic production-quality code.  They do, however,
+	contain realistic production-quality code.  They do, however,
 	contain the nuggets of basic ideas that are used in those
-	worlds in a more full, unrestricted programming language
+	worlds in a more full, unrestricted programming-language
 	environment.  In the next chapter, we'll learn some more
 	advanced constructs in Python that will allow far less
 	cumbersome implementations.</p>
