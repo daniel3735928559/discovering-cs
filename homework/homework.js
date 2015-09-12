@@ -36,7 +36,7 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
     }
     $scope.$on('set_hwid',function(event,data){
 	$scope.hwid = data;
-	console.log("GETTING ASDHASDJHBASJDHB");
+	console.log("GETTING ASDHASDJHBASJDHB",data);
 	$scope.get_saved_homeworks();
     });
     $scope.$on('program_data',function(event,data){
@@ -74,6 +74,5 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
 	$scope.submit_homework_for_real();
 	
     }
-    $timeout($scope.get_saved_homeworks, 3000);
 }]);
 

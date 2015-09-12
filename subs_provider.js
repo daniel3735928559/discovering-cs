@@ -25,8 +25,10 @@ SubsProvider.prototype.gen_path = function(user_data, hw_data){
 	fs.mkdirSync("sub_data/"+username+"/");
 	console.log("made");
     } catch(e) {
-	console.log("EXC: ",e);
-	if (e.code != 'EEXIST') throw e;
+	if (e.code != 'EEXIST'){
+	    console.log("EXC: ",e);
+	    throw e;
+	}
     }
     if(hwid in this.homeworks && 0 <= pid && pid < this.homeworks[hwid]){
 	return "sub_data/" + username + "/" + hwid + "." + pid
@@ -40,7 +42,9 @@ SubsProvider.prototype.get = function(user_data, hw_data, callback) {
 	count = this.homeworks[hw_data.hwid];
     }
     else{
+	console.log("HWID problem", hw_data);
 	callback("Invalid homework ID");
+	return;
     }
     var read_data = [];
     for(var i = 0; i < count; i++){

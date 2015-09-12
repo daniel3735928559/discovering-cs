@@ -298,7 +298,7 @@
 	    
 	    <div class="sidebar_header">Course:</div>
 	    <a href="http://pages.cs.wisc.edu/~karu/courses/cs252/fall2015/wiki/index.php"><div class="sidebar_link">Homepage</div></a>
-	    <!-- <a href="/homework"><div class="sidebar_link">Online HW</div></a> -->
+	    <a href="/homework"><div class="sidebar_link">Online HW</div></a>
 	    
 	    <div class="sidebar_header">Simulators:</div>
 	    <a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a>
