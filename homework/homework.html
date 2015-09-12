@@ -17,21 +17,29 @@
   <body ng-app="app">
     <div class="quest" ng-controller="HomeworkController">
       <div class="quest_controls">
-	<!-- Current: <b>{{homeworks[homework_id].name}}</b><br /> -->
-	Go to: <select ng-change="switch_hw()" ng-model="homework_id" ng-options="h.index as h.name for h in homeworks"></select>
-	<div class="homework_button" ng-click="submit_homework()">Submit</div>
+	<!-- <select ng-change="switch_hw()" ng-model="homework_id" ng-options="h.index as h.name for h in homeworks"></select> -->
+	<div style="display:inline-block;"><b>{{homeworks[homework_id].name}}</b></div>
+	<div class="homework_button" ng-click="submit_homework()">Save all problems</div>
+	<div class="homework_status">Status: {{hw_status}}</div>
       </div>
       <div class="quest_main" ng-include="'/sim/quest/quest.html'" ng-repeat="quest_name in [homeworks[homework_id].file]">
       </div>
       <!-- Lightbox for verification --> 
       <div class="lightbox_background" ng-if="verify_submission == true" ng-click="exit_verify()">
 	<div class="lightbox_foreground" ng-click="$event.stopPropagation()">
-	  <div style="width:100%;text-align:center;"><b>Verify that these are your desired answers.  <br /><br />Then press "Submit" at the bottom. </b><br /><br /></div>
+	  <div style="width:100%;text-align:center;"><b>Verify that
+	  these are your desired answers.  <br /><br />Then press
+	  "Save" at the bottom.  <br /><br />These will overwrite any
+	  previously saved answers.  <br /><br />You can save as
+	  many times as you like before the deadline.</b><br /><br /></div>
 	  <div ng-repeat="p in submission_programs track by $index">
-	    <b>Problem {{$index}}: </b>
+	    <b>{{submission_problems[$index].id}}: </b>
 	    <pre>{{p}}</pre>
 	  </div>
-	  <div style="width:100%;text-align:center;font-size:12pt;"><div class="homework_button" ng-click="submit_homework_for_real();$event.stopPropagation()">Submit for real</div></div>
+	  <div style="width:100%;text-align:center;font-size:12pt;">
+	    <div class="homework_button" ng-click="exit_verify()">Cancel</div>
+	    <div class="homework_button" ng-click="submit_homework_for_real();$event.stopPropagation()">Save</div>
+	  </div>
 	</div>
       </div>
     </div>

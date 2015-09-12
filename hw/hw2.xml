@@ -1,17 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?><quest name="HW 2" id="1">
-  <q type="python" id="Basics2">
-<program>x = 2
-y = 4</program>
-<text>What is 1*8?
-</text>
+<?xml version="1.0" encoding="UTF-8"?><quest name="HW 2" id="2">
+
+
+<q type="python" id="Problem 10">
+  <program>a = 28
+b = -190</program>
+  <text>Write a program to swap (exchange) the values of two variables
+  a and b. You may create additional variables if needed.</text>
 </q>
 
-<q type="python" id="Variables">
-  <program>x = 3/2
-y = 1+x*(-1)
-hello = (x+2*y)/y
-x = x + 1
-y = y - x</program>
-  <text>What is 1/2?</text>
+<q type="python" id="Problem 11">
+  <program>n = 15</program>
+  <text>Write a program to print the first 15 Fibonacci numbers. Start
+  with 0 and 1 as the first two numbers. The next number is created by
+  adding the previous two numbers. Thus, the third number is the sum
+  of the first two: 0 + 1 = 1.  Then the fourth is the sum of the
+  second and third: 1 + 1 = 2.  The fifth is then 1 + 2 = 3, and so
+  on.</text>
+</q>
+<q type="python" id="Problem 12">
+  <program></program>
+  <text>Say you wanted to print out the Celsius equivalent for all
+  integer Fahrenheit temperatures from -50 degrees F to 50 degrees
+  F. Write a program to print out this conversion information using
+  the equation for converting Fahrenheit (F) to Celsius (C):
+  <pre>C = (F-32)*5/9</pre>
+  
+  Pseudocode for implementing this is given below:
+
+  <ol>
+    <li>Set F's initial value to -50</li>
+    <li>While F is less than or equal to 50, do the following:
+    <ol>
+      <li>Convert Fahrenheit to Celsius.</li>
+      <li>If Fahrenheit and Celsius are equal:
+      <ol><li>print "Fahrenheit and Celsius are equal at -40 degrees!"</li></ol>
+      Else
+      <ol><li>print the number of degrees in Fahrenheit followed by the
+      number of degrees in Celsius. This should be printed using the
+      line
+
+      <pre>print("F=" + F + ", " + "C=" + C)</pre></li></ol>
+      </li>
+      <li>Increment F</li>
+    </ol>
+    </li>
+  </ol>
+  </text>
 </q>
 </quest>

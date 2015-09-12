@@ -36,6 +36,11 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		    $scope.reset();
 		$scope.$apply();
 	    });
+	    $scope.$on('set_the_program',function(event, data){
+		console.log("Set",data);
+		$scope.program = data;
+		$scope.editor.setValue($scope.program);
+	    });
 	    $scope.$on('save_program',function(event, data){
 		var cur = data;
 		console.log("SAVING", event, data, $scope.quest.programs[cur]);

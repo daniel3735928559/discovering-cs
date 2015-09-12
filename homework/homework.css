@@ -9,6 +9,14 @@
     cursor:pointer;
 }
 
+.homework_status{
+    display:inline-block;
+    height:22px;
+    color:red;
+    margin:5px;
+    font:12px Sans-Serif;
+}
+
 
 div.lightbox_background {
     height:100%;

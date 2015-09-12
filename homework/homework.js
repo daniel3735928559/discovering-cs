@@ -4,7 +4,9 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
     $scope.verify_submission = false;
     console.log("HI");
     $scope.homework_id = 0;
-    $scope.homeworks = [{"name":"Homework 1","file":"/hw/hw1.xml"},{"name":"Homework 2","file":"/hw/hw2.xml"},{"name":"Homework 3","file":"/hw/hw3.xml"}]
+    $scope.hwid = null;
+    $scope.hw_status = "Loading saved homework data...";
+    $scope.homeworks = [{"name":"Homework 2","file":"/hw/hw2.xml"}]
     for(var i = 0; i < $scope.homeworks.length; i++){
 	$scope.homeworks[i].index = i;
     }
@@ -12,8 +14,16 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
 	console.log("SMETHING",$scope.homework_id);
 	$scope.$broadcast('change_quest',$scope.homeworks[$scope.homework_id].file);
     }
-    $scope.get_homework_manifest = function(){
-	
+    $scope.get_saved_homeworks = function(){
+	get_data = {"hwid":$scope.hwid};
+	$http.post("/homework/get",get_data).then(function(response){
+	    console.log("Success",response.data.data);
+	    $scope.hw_status = "Loaded saved data";
+	    $scope.$broadcast('set_programs',response.data.data);
+	}, function(response){
+	    console.log("Error",response);
+	    $scope.status("Failed to load saved data");
+	})
     }
     $scope.submit_homework = function(){
 	console.log("hi");
@@ -24,16 +34,22 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
 	console.log("ASDA");
 	$scope.verify_submission = false;
     }
+    $scope.$on('set_hwid',function(event,data){
+	$scope.hwid = data;
+	console.log("GETTING ASDHASDJHBASJDHB");
+	$scope.get_saved_homeworks();
+    });
     $scope.$on('program_data',function(event,data){
 	console.log("GOT",data);
-	$scope.submission_programs = data;
+	$scope.submission_problems = data.problems;
+	$scope.submission_programs = data.programs;
     });
     $scope.submit_homework_for_real = function(){
 	console.log("Aaaaas yooooooou wiiiiiiiiiiiiiiiiiiiiiiiiiish...");
 	var sub_data = {};
 	sub_data['total'] = $scope.submission_programs.length;
 	for(var i = 0; i < $scope.submission_programs.length; i++){
-	    sub_data[i] = {"hwid":$scope.homework_id,"pid":i,"text":$scope.submission_programs[i]};
+	    sub_data[i] = {"hwid":$scope.hwid,"pid":i,"text":$scope.submission_programs[i]};
 	}
 	$http.post("/homework/saveall",sub_data).then(function(response){
 	    console.log("Success",response);
@@ -58,5 +74,6 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
 	$scope.submit_homework_for_real();
 	
     }
+    $timeout($scope.get_saved_homeworks, 3000);
 }]);
 

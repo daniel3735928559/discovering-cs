@@ -69,12 +69,19 @@ app.controller("QuestController", ['$scope','$http','$cookies', '$window', '$tim
 		$scope.quests.push(new_quest);
 		console.log("QS",$scope.quests);
 		$scope.quest = $scope.quests[0];
+		$scope.$emit('set_hwid',$scope.quest.id);
 	    }).
 	    error(function(data, status, headers, config) {
 		console.log(status);
 	    });
     }
     $scope.wait_for($scope.getstuff);
+    $scope.$on('set_programs',function(event, data){
+	console.log("CHANGE",data,data[$scope.userdata.current_problem]);
+	$scope.quest.programs = data;
+	$scope.userdata.programs = data;
+	$scope.$broadcast("set_the_program",data[$scope.userdata.current_problem]);
+    });
     $scope.$on('change_quest',function(event, data){
 	console.log("CHANGE",data);
     });
@@ -83,7 +90,7 @@ app.controller("QuestController", ['$scope','$http','$cookies', '$window', '$tim
 	$scope.$broadcast('save_program',$scope.userdata.current_problem);
     });
     $scope.$on('program_saved',function(event,data){
-	$scope.$emit('program_data',$scope.quest.programs);
+	$scope.$emit('program_data',{'problems':$scope.quest.problems,'programs':$scope.quest.programs});
     });
 //    $timeout($scope.getstuff, $scope.wf_timeout);
     console.log($scope.problems);
