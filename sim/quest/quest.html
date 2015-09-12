@@ -25,6 +25,10 @@
 	<div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {'big':quest.programs[userdata.current_problem]}">
 	</div>
       </div>
+      <div ng-if="quest.problems[userdata.current_problem].type == 'avr'" id="super" ng-controller="AvrSimController">
+	<div ng-include="'/sim/avr/simavr.html'" ng-repeat="(simid,program) in {'big':quest.programs[userdata.current_problem]}">
+	</div>
+      </div>
     </div>
   </div>
 </div>
