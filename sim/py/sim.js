@@ -237,7 +237,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	return a;
     }
     $scope.parse = function(inst){
-	if(/^[ \t]*$/.test(inst))
+	if(/^[ \t]*$|^[ \t]*#/.test(inst))
 	    return null;
 	var matches = inst.match(/( *)([^ ].*)/);
 	if(matches[1].length % 3 != 0){

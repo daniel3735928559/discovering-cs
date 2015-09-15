@@ -1,15 +1,20 @@
 var express = require('express');
 var http = require('http');
-var bodyParser = require('body-parser')
-
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var filesystem = require('fs')
 var SubsProvider = require('./subs_provider').SubsProvider;
 var subs_provider = new SubsProvider();
 
 var args = process.argv.slice(2);
 
+var accessLogStream = filesystem.createWriteStream(__dirname + '/logs/access.log', {flags: 'a'})
+
 var app = express();
 
+
 //app.use(BodyParser.json());
+app.use(morgan('combined', {stream: accessLogStream}));
 app.use(express.static(__dirname + '/'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
