@@ -299,12 +299,17 @@
 	    <div class="sidebar_header">Course:</div>
 	    <a href="http://pages.cs.wisc.edu/~karu/courses/cs252/fall2015/wiki/index.php"><div class="sidebar_link">Homepage</div></a>
 	    <a href="/homework"><div class="sidebar_link">Online HW</div></a>
+	    <a href="/homework/rating.html"><div class="sidebar_link">Rate lecture</div></a>
 	    
 	    <div class="sidebar_header">Simulators:</div>
-	    <a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a>
+	    <a href="/sim/py/python_full.html"><div class="sidebar_link">Python</div></a>
 	    <a href="/sim/bin/bin.html"><div class="sidebar_link">Binary</div></a>
 	    <a href="/sim/avr/avr.html"><div class="sidebar_link">AVR</div></a>
 
+	    <div class="sidebar_header">Tutorials:</div>
+	    <a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a>
+
+	    
 	    <div class="sidebar_header">Additional:</div>
 	    <a href="/text/info/authors.xml"><div class="sidebar_link">Authors</div></a>
 	    <a href="/text/info/acknowledgements.xml"><div class="sidebar_link">Contributors</div></a>

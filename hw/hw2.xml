@@ -47,4 +47,10 @@ b = -190</program>
   </ol>
   </text>
 </q>
+
+<q type="python" id="Problem 13">
+  <program></program>
+  <text>Write a program to print "Hello World!" (with or without
+  quotes is fine).</text>
+</q>
 </quest>

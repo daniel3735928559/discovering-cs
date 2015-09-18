@@ -10,10 +10,14 @@ var args = process.argv.slice(2);
 
 var accessLogStream = filesystem.createWriteStream(__dirname + '/logs/access.log', {flags: 'a'})
 
+var rating_file = __dirname + '/ratings/ratings.log';
+
 var app = express();
 
 
 //app.use(BodyParser.json());
+morgan.token('remote-addr',function(req,res){ return get_ip(req); });
+morgan.token('remote-user',function(req,res){ return req.headers['proxy-user']; });
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use(express.static(__dirname + '/'));
 app.use(bodyParser.json());
@@ -30,6 +34,17 @@ app.get('/', function(req, res){
 
 app.get('/text/', function(req, res){
     res.redirect('/text/box.xml');
+});
+
+app.post('/homework/rate', function(req, res){
+    console.log("RATE",req.body);
+    var date = new Date();
+    var s = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + ":" + date.getHours() + ":" + date.getMinutes() + "; ";
+    if(req.body.r) s += req.body.r + ";";
+    if(req.body.comments) s += " " + req.body.comments.length + "," + req.body.comments;
+    s += "\n";
+    filesystem.appendFile(rating_file, s, function(err) { console.log("RATE ERR", err); });
+    res.redirect('/homework/thankyou.html');
 });
 
 app.post('/homework/get', function(req, res){

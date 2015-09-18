@@ -1,4 +1,4 @@
-//var app = angular.module('app', []);
+var app = app || angular.module('app', []);
 
 
 app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout){
