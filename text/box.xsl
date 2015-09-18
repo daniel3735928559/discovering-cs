@@ -69,14 +69,33 @@
     <div class="hwq">
       <div class="hwnum"><b><xsl:value-of select="$num" />: </b></div>
       <div class="hwcontent">
-      <xsl:apply-templates select="*[name()!='q']|text()" />
+      <xsl:apply-templates select="*[name()!='q']|text()">
+	<xsl:with-param name="q_name" select="concat('eoc_exc_',$qnum,'.',$index)" />
+      </xsl:apply-templates>
       <xsl:for-each select="q">
 	<xsl:variable name="subindex"><xsl:number value="position()" format="a" /></xsl:variable>
 	<p><b><xsl:value-of select="concat($num,'.',$subindex)" />: </b>
 	<xsl:apply-templates select="*|text()" /></p>
       </xsl:for-each>
+      
+
       </div>
+      
     </div>
+  </xsl:template>
+
+  <xsl:template match="a">
+    <xsl:param name="q_name" />
+    <xsl:if test="$print!='yes'">
+      <div class="exc_toggle" ng-init="toggles['{$q_name}'] = false" ng-click="exc_toggle('{$q_name}')">Show answer</div>
+	<div class="exc_toggleable" ng-if="toggles['{$q_name}'] == true">
+	  <xsl:apply-templates select="*|text()" />
+	</div>
+      </xsl:if>
+      <xsl:if test="$print='yes'">
+	<b>Answer: </b><br />
+	<xsl:apply-templates select="*|text()" />
+      </xsl:if>
   </xsl:template>
   
   <xsl:template match="warning">
