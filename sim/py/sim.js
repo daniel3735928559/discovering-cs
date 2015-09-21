@@ -269,7 +269,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	} catch(e) {
 	    $scope.raise_error("Expression has no valid value: " + expr);
 	}
-	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer) || $scope.is_valid_array(answer))){
+	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer) || $scope.is_valid_array(answer) || 'bool' in answer)){
 	    $scope.raise_error("Expression has no valid value: " + expr);
 	}
 	if($scope.is_valid_string(answer)){
@@ -316,18 +316,11 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    else if(comp == '<=') return lhs <= rhs;
 	    else if(comp == '>=') return lhs >= rhs;
 	}},
-	"if":{"regex":/^if\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *(==|!=|>|<|>=|<=) *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\): *$/,"execute":function(data){
+	"if":{"regex":/^if\(([a-zA-Z0-9_\+\-\.\*\/%()[\],=!><" ]+)\): *$/,"execute":function(data){
 	    console.log(data);
-	    var lhs = $scope.parse_expression(data[1]);
-	    var rhs = $scope.parse_expression(data[3]);
-	    var comp = data[2];
-	    console.log(lhs, comp, rhs);
-	    if(comp == '==') return lhs == rhs;
-	    else if(comp == '!=') return lhs != rhs;
-	    else if(comp == '<') return lhs < rhs;
-	    else if(comp == '>') return lhs > rhs;
-	    else if(comp == '<=') return lhs <= rhs;
-	    else if(comp == '>=') return lhs >= rhs;
+	    var test = $scope.parse_expression(data[1]);
+	    console.log(test);
+	    return test.bool;
 	}},
 	"else":{"regex":/else: */,"execute":function(data){}},
 	"print":{"regex":/^print\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){

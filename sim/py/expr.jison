@@ -17,6 +17,11 @@
 "["                    return '['
 "]"                    return ']'
 ","                    return ','
+">"                    return '>'
+"<"                    return '<'
+"="                    return '='
+"!"                    return '!'
+"and"|"or"|"True"|"False"|"in"             return 'KEYWORD'
 [a-zA-Z_][a-zA-Z_0-9]* return 'VAR'
 \"((\\.|[^\"])*)\"     return 'STRING'
 <<EOF>>                return 'EOF'
@@ -38,16 +43,17 @@ expressions
     : e EOF
         { typeof console !== 'undefined' ? console.log($1) : print($1);
           return $1; }
+    | test EOF
+        { typeof console !== 'undefined' ? console.log($1) : print($1);
+          return $1; }
     ;
 
 e
     : e '+' e
         {
-	if($scope.is_valid_number($1) && $scope.is_valid_number($3))
-	    $$ = $1+$3;
-	else if($scope.is_valid_array($1) && $scope.is_valid_array($3))
+	if($scope.is_valid_array($1) && $scope.is_valid_array($3))
 	    $$ = $1.concat($3);
-	else $$ = {};}
+	else $$ = $1+$3;}
     | e '-' e
         {$$ = $1-$3;}
     | e '*' e
@@ -87,6 +93,28 @@ e
         {$$ = $2;}
     | '[' ']'
         {$$ = [];}
+    ;
+
+test
+    : e '>' e
+        {$$ = {'bool':$1 > $3};}
+    | e '<' e
+        {$$ = {'bool':$1 < $3};}
+    | e '!' '=' e
+        {$$ = {'bool':$1 != $4};}
+    | e '=' '=' e
+        {$$ = {'bool':$1 == $4};}
+    | e '>' '=' e
+        {$$ = {'bool':$1 >= $4};}
+    | e '<' '=' e
+        {$$ = {'bool':$1 <= $4};}
+    | '(' test ')'
+        {$$ = $2;}
+    | test KEYWORD test
+        {console.log($2);
+	if($2 == "and") $$ = {'bool':$1.bool && $3.bool};
+	else if($2 == "or") $$ = {'bool':$1.bool || $3.bool};
+	else $$ = 1/0;}
     ;
 
 elements
