@@ -520,14 +520,17 @@ it in a computer's terms.  To this end, we shall take the above
 algorithm and write a Python program that runs it (don't worry if you
 don't understand it yet--all will be explained in time): </p>
 
-<python>x = 27
-while(x != 1):
-   y = x % 2
-   if(y == 0):
-      x = x / 2
-   else:
-      x = 3 * x + 1
-   print(x)
+<python>
+x = 27
+
+while (x != 1):
+\ty = x % 2
+\tif (y == 0):
+\t\tx = x / 2
+\telse:
+\t\tx = 3 * x + 1
+\tprint(x)
+
 print("Done")
 </python>
 
@@ -825,12 +828,17 @@ And so on.
 
 	<p>To see how this works, let us take an example program:</p>
 
-	<python>x = 2
-if(x &lt; 2):
-   print("Hi")
-if(x >= 2):
-   print("Bye")
-x = 5 + x</python>
+<python>
+x = 2
+
+if (x &lt; 2):
+\tprint("Hi")
+
+if (x &gt;= 2):
+\tprint("Bye")
+
+x = 5 + x 
+</python>
 
         <p>First of all, of course this consists of lines.  But
 	further, each line is one of the three types of line:</p>
@@ -853,15 +861,19 @@ x = 5 + x</python>
 	<p>We can also play this game with our example program from
 	the previous section: </p>
 
-<python>x = 27
-while(x != 1):
-   y = x % 2
-   if(y == 0):
-      x = x / 2
-   else:
-      x = 3 * x + 1
-   print(x)
-print("Done!")</python>
+<python>
+x = 27
+
+while (x != 1):
+\ty = x % 2
+\tif (y == 0):
+\t\tx = x / 2
+\telse:
+\t\tx = 3 * x + 1
+\tprint(x)
+
+print("Done!")
+</python>
 
 <p>and check line by line that it is a valid program. </p>
 
@@ -991,9 +1003,11 @@ is equal to 2").</p>
 
 <p>will store the value 4 into another slot called y.  We've seen a couple of slightly trickier variants of this already.  For example, we can update variables using themselves: </p>
 
-<python>x = 2
+<python>
+x = 2
 x = 7 * x
-x = 3 * x + x</python>
+x = 3 * x + x
+</python>
 
 <p>In the first line, x is set to 2.  Then in the second line, x is
 set to 7*x.  To figure out what this stores in x, Python looks up what
@@ -1173,10 +1187,12 @@ determining the value of an expression is called
 
 We can use this to determine what gets stored in x in the following case:
 
-<python>x = 4
+<python>
+x = 4
 y = x + 1
 x = 2
-x = 5*x + 2*(3 - y)</python>
+x = 5 * x + 2 * (3 - y)
+</python>
 
 The first assignment sets <icode>x</icode> to 4.  The second one sets
 y to whatever is the value of <icode>x + 1</icode>.  To evaluate this
@@ -1231,9 +1247,11 @@ strings together to make one long string) of the two strings</def>:
 
 <p>So consider the following examples: </p>
 
-<python>x = Hello world!
-y = z+1
-z = 3+&quot;hello&quot;</python>
+<python>
+x = Hello world!
+y = z + 1
+z = 3 + "hello"
+</python>
 
 <p>The variable names on the left sides are fine, but all three
 expressions are invalid.  The first one looks like it is meant to be a
@@ -1258,13 +1276,17 @@ y = 78/x</code>
 0 will cause an error, since as in mathematics generally, dividing by
 zero does not make sense to a computer: </p>
 
-<python>x = 4
-y = x/2-2
-z = x % y</python>
+<python>
+x = 4
+y = x / 2 - 2
+z = x % y
+</python>
 
 <p>Further, if you try to operate on a number and a string, this is not going to go well: </p>
-<python>x = &quot;hello&quot;
-y = 89/x</python>
+<python>
+x = "hello"
+y = 89 / x
+</python>
 </text>
       </section>
       <section>
@@ -1293,7 +1315,9 @@ contain a quote?  For instance, </p>
 
 <p>We might try </p>
 
-<python>print(&quot;&quot;hi&quot;, he said&quot;)</python>
+<python>
+print(""hi", he said")
+</python>
 
 <p>But Python understands this as three things: </p>
 
@@ -1346,11 +1370,13 @@ line.  </def> Thus </p>
 straightforward: it simply prints to the screen the value of the
 expression it is given: </p>
 
-<python>print("hello")
+<python>
+print("hello")
 x = 4
 y = "blah"
-print(x*2/5)
-print(y+"zzzzz")</python>
+print(x * 2 / 5)
+print(y + "zzzzz")
+</python>
 
 <p>prints</p>
 
@@ -1360,10 +1386,12 @@ blahzzzzz</code>
 
 <p>We can use it to print the value stored in a variable.</p>
 
-<python>print("Hello")
+<python>
+print("Hello")
 x = 2
-print(x-3)
-print(x)</python>
+print(x - 3)
+print(x)
+</python>
 
 <p>A common use-case for print beyond just printing a final answer is
 debugging: If we have a program that is misbehaving and we want to get
@@ -1372,15 +1400,19 @@ middle.  For instance, suppose we accidentally wrote our 3x+1 program
 thus:
 </p>
 
-<python>x = 27
-while(x != 1):
-   y = x / 2
-   if(y == 0):
-      x = x / 2
-   else:
-      x = 3 * x + 1
-   print(x)
-print("Done!")</python>
+<python>
+x = 27
+
+while (x != 1):
+\ty = x / 2
+\tif (y == 0):
+\t\tx = x / 2
+\telse:
+\t\tx = 3 * x + 1
+\tprint(x)
+
+print("Done!")
+</python>
 
 <p>Then we would see printed </p>
 
@@ -1393,16 +1425,20 @@ print("Done!")</python>
 
 <p>If we wanted to know what was happening in more detail, we could think: y is supposed to be either 0 or 1, telling us whether x was even or odd.  So let us confirm that this is happening by printing y during the loop as well: </p>
 
-<python>x = 27
-while(x != 1):
-   y = x / 2
-   if(y == 0):
-      x = x / 2
-   else:
-      x = 3 * x + 1
-   print(y)
-   print(x)
-print("Done!")</python>
+<python>
+x = 27
+
+while (x != 1):
+\ty = x / 2
+\tif (y == 0):
+\t\tx = x / 2
+\telse:
+\t\tx = 3 * x + 1
+\tprint(y)
+\tprint(x)
+
+print("Done!")
+</python>
 
 <p>And we see printed </p>
 
@@ -1424,18 +1460,22 @@ print("Done!")</python>
 
 <p>So something has gone wonky, since we shouldn't be seeing any decimals in the procedure run normally.  To make it even more clear, we'll add in some more print statements to show us which numbers being printed were x and which were y: </p>
 
-<python>x = 27
-while(x != 1):
-   y = x / 2
-   if(y == 0):
-      x = x / 2
-   else:
-      x = 3 * x + 1
-   print("here is y: ")
-   print(y)
-   print("behold x: ")
-   print(x)
-print("Done!")</python>
+<python>
+x = 27
+
+while (x != 1):
+\ty = x / 2
+\tif (y == 0):
+\t\tx = x / 2
+\telse:
+\t\tx = 3 * x + 1
+\tprint("here is y: ")
+\tprint(y)
+\tprint("behold x: ")
+\tprint(x)
+
+print("Done!")
+</python>
 
 <p>Giving: </p>
 
@@ -1559,12 +1599,16 @@ discuss that later.)</p>
 indentation makes it very important, and often a source of subtle
 bugs: 
 
-<python>x = 2
-if(x == 2): 
-   print(&quot;x is two&quot;)
+<python>
+x = 2
+
+if (x == 2): 
+\tprint("x is two")
 else:
-   print(&quot;x is not two&quot;)
-print(&quot;potato&quot;)</python>
+\tprint("x is not two")
+
+print("potato")
+</python>
 
 outputs
 
@@ -1573,12 +1617,15 @@ potato</code>
 
 whereas 
 
-<python>x = 2
-if(x == 2): 
-   print(&quot;x is two&quot;)
+<python>
+x = 2
+
+if (x == 2): 
+\tprint("x is two")
 else:
-   print(&quot;x is not two&quot;)
-   print(&quot;potato&quot;)</python>
+\tprint("x is not two")
+\tprint("potato")
+</python>
 
 outputs only
 
@@ -1678,7 +1725,7 @@ entirely equivalent code: </p>
 
 <p>This comes in handy when, as an example, we want to print 20 smiley faces followed by a smirk.  We could use 21 print statements: </p>
 
-<python>print(":)")
+<python>
 print(":)")
 print(":)")
 print(":)")
@@ -1698,7 +1745,9 @@ print(":)")
 print(":)")
 print(":)")
 print(":)")
-print(":/")</python>
+print(":)")
+print(":/")
+</python>
 
 <p>But if we wanted to print 100 smileys, our program would get rather
 long, and it may be harder to ensure we got exactly 100 print
@@ -1745,11 +1794,15 @@ print(&quot;:/&quot;)</code>
 
 <p>Thus if we wanted to print three smileys and then a smirk, we would do: </p>
 
-<python>counter = 0
-while(counter &lt; 3): 
-   print(":)")
-   counter = counter + 1
-print(":/")</python>
+<python>
+counter = 0
+
+while (counter &lt; 3): 
+\tprint(":)")
+\tcounter = counter + 1
+
+print(":/")
+</python>
 
 <p>We can double-check our understanding of what happens by single-stepping this program: </p>
 
@@ -1844,11 +1897,15 @@ print(&quot;:/&quot;)</code>
 
 <p>This pattern of having a counter incrementing by 1 in a while loop is very common, and you should bear it closely in mind for the future, but it is not the only paradigm for while loops.  For example, we can use a while loop to print all the powers of 2 less than a thousand: </p>
 
-<python>x = 1
-while(x &lt; 1000):
-   print(x)
-   x = 2*x
-print(&quot;Done&quot;)</python>
+<python>
+x = 1
+
+while (x &lt; 1000):
+\tprint(x)
+\tx = 2 * x
+
+print("Done")
+</python>
 
 <p>If you're not comfortable with why this program accomplishes this goal, single-step it in the same manner as before to see.</p>
 
@@ -1856,8 +1913,10 @@ print(&quot;Done&quot;)</python>
 have a dumb while loop example.  Remember, 1 == 1 is still a valid
 test, so </p>
 
-<python>while(1 == 1):
-   print(&quot;:)&quot;)</python>
+<python>
+while (1 == 1):
+\tprint(":)")
+</python>
 
 <p>is a valid while loop.  <def term="infinite loop">Since the test is
 always true, and the while statement is supposed to repeat the
@@ -1869,11 +1928,14 @@ error (i.e., part of a valid program that provides undesirable
 behavior when run), and are not always as obvious as that first
 example might lead you to believe.  For instance: </p>
 
-<python>x = 49
-while(x*x % 4 != 3):
-   x = x + 1
-   print(x)
-   print(x*x % 4)</python>
+<python>
+x = 49
+
+while (x * x % 4 != 3):
+\tx = x + 1
+\tprint(x)
+\tprint(x * x % 4)
+</python>
 
 <p>Does this program infinite-loop or not?</p>
 
@@ -2002,7 +2064,9 @@ print("Done")</code>
 
 	  <p><b>Program: </b></p>
 
-	  <python>print(1*2*3*4*5*6*7*8*9*10)</python>
+<python>
+print(1*2*3*4*5*6*7*8*9*10) 
+</python>
 
           <p><b>Debrief: </b></p>
 
@@ -2099,13 +2163,17 @@ instruction does!  So we do: </p>
 
 <p><b>Program, Mark II: </b></p>
 
-<python>input = 10
+<python>
+input = 10
 answer = 1
 counter = 2
-while(counter &lt; input): 
-   answer = answer * counter
-   counter = counter + 1
-print(answer)</python>
+
+while (counter &lt; input): 
+\tanswer = answer * counter
+\tcounter = counter + 1
+
+print(answer)
+</python>
 
 <p>Let us single-step this program with a slightly smaller input: 4.  So the program should compute 4! = 4*3*2*1 = 24 and print this result.  Let us see: </p>
 
@@ -2190,37 +2258,48 @@ run.</p>
 is that we want the loop to run when counter is less than input or
 equal to it.  To get this behavior, we replace &lt; by &lt;= to get:
 
-<python>input = 10
+<python>
+input = 10
 answer = 1
 counter = 2
-while(counter &lt;= input): 
-answer = answer * counter
-counter = counter + 1
+
+while (counter &lt;= input): 
+\tanswer = answer * counter
+\tcounter = counter + 1
+
 print(answer)
 </python>
 
 Another possible fix, the analysis of which is left as an exercise, is the following: 
 
-<python>input = 10
+<python>
+input = 10
 answer = 1
 counter = 1
-while(counter &lt; input): 
-   counter = counter + 1
-   answer = answer * counter
-print(answer)</python>
+
+while (counter &lt; input): 
+\tcounter = counter + 1
+\tanswer = answer * counter
+
+print(answer)
+</python>
 </p>
 
 <p><b>Debrief: </b></p>
 
 <p>So finally we have a factorial program that we can easily use to compute larger factorials too: 
 
-<python>input = 50
+<python>
+input = 50
 answer = 1
 counter = 2
-while(counter &lt;= input): 
-   answer = answer * counter
-   counter = counter + 1
-print(answer)</python>
+
+while (counter &lt;= input): 
+\tanswer = answer * counter
+\tcounter = counter + 1
+
+print(answer)
+</python>
 
 Later we will learn how to make the program ask for and receive input from the person running the program (as opposed to now, when you have to actually change the program to affect the computation it runs).  Having written the program not using any foreknowledge of the value of the input, it will be easy plug in the code for reading like: 
 
@@ -2321,17 +2400,22 @@ Step 6: If is_prime is 0, print "n is not prime"</code>
 	the remainder of this division with n % counter.  So we
 	get:</p>
 
-<python>n = 1000001
+<python>
+n = 1000001
 counter = 2
 is_prime = 1
-while(counter &lt; n):
-   if(n % counter == 0): 
-      is_prime = 0
-   counter = counter + 1
-if(is_prime == 1):
-   print("n is prime")
-if(is_prime == 0):
-   print("n is not prime")</python>
+
+while (counter &lt; n):
+\tif (n % counter == 0): 
+\t\tis_prime = 0
+
+\tcounter = counter + 1
+
+if (is_prime == 1):
+\tprint("n is prime")
+if (is_prime == 0):
+\tprint("n is not prime")
+</python>
 
         <p>This may take quite a few steps.  Remember that you can
         adjust how many steps are taken by the "step" button using the
@@ -2347,17 +2431,21 @@ if(is_prime == 0):
 	divisor of n, we could change it to the string "penguin goes
 	shopping" and get the exact same behavior: </p>
 
-<python>n = 1000001
+<python>
+n = 1000001
 counter = 2
 is_prime = "durian"
-while(counter &lt; n):
-   if(n % counter == 0): 
-      is_prime = "penguin goes shopping"
-   counter = counter + 1
-if(is_prime == "durian"):
-   print("n is prime")
-if(is_prime == "penguin goes shopping"):
-   print("n is not prime")</python>
+
+while (counter &lt; n):
+\tif (n % counter == 0): 
+\t\tis_prime = "penguin goes shopping"
+\tcounter = counter + 1
+
+if (is_prime == "durian"):
+\tprint("n is prime")
+if (is_prime == "penguin goes shopping"):
+\tprint("n is not prime")
+</python>
    
         <p>The use of 1 and 0 is sort of standard, however, because in
         some sense (which we will discuss later), it takes the least
@@ -2448,12 +2536,15 @@ Step 4: Print digit_count</code>
 
 <p><b>Program: </b></p>
 
-<python>n = 1238129
+<python>
+n = 1238129
 digit_count = 0
-while(n > 1):
-   digit_count = digit_count + 1
-   n = n/10
-print(digit_count)</python>
+while (n &gt; 1):
+\tdigit_count = digit_count + 1
+\tn = n / 10
+
+print(digit_count)
+</python>
 
 <p>You would be right to worry about an off-by-one error--do we start
 digit_count at 0 or at 1?  We can tell by single-stepping the program
@@ -2480,12 +2571,16 @@ this--it stops if n is below 1 <i>or if n is equal to 1</i>.  We can
 rectify this by telling it to continue with the while loop even when n
 is 1:
 
-<python>n = 1238129
+<python>
+n = 1238129
 digit_count = 0
-while(n >= 1):
-   digit_count = digit_count + 1
-   n = n/10
-print(digit_count)</python>
+
+while (n &gt;= 1):
+\tdigit_count = digit_count + 1
+\tn = n / 10
+
+print(digit_count)
+</python>
 
 </p>
 
@@ -2499,18 +2594,24 @@ the sense that factorials were pretty huge.  To get an idea of how
 huge, we can combine our digit-counting program with our factorial
 program to find out how many digits are in 99!: </p>
 
-<python>input = 99
+<python>
+input = 99
 answer = 1
 counter = 1
-while(counter &lt; input): 
-   counter = counter + 1
-   answer = answer * counter
+
+while (counter &lt; input): 
+\tcounter = counter + 1
+\tanswer = answer * counter
+
 n = answer
 digit_count = 0
-while(n >= 1):
-   digit_count = digit_count + 1
-   n = n/10
-print(digit_count)</python>
+
+while (n &gt;= 1):
+\tdigit_count = digit_count + 1
+\tn = n/10
+
+print(digit_count)
+</python>
 
 	</text>
       </section>
@@ -2564,51 +2665,55 @@ file2_word8 = &quot;day&quot;</code>
 
 <p>So the full program looks like: </p>
 
-<python>search_word = &quot;the&quot;
-file1_name = &quot;Ode on the death of a favorite cat&quot;
-file1_word1 = &quot;twas&quot;
-file1_word2 = &quot;on&quot;
-file1_word3 = &quot;a&quot;
-file1_word4 = &quot;lofty&quot;
-file1_word5 = &quot;vases&quot;
-file1_word6 = &quot;side&quot;
-file2_name = &quot;Elegy written in a country churchyard&quot;
-file2_word1 = &quot;the&quot;
-file2_word2 = &quot;curfew&quot;
-file2_word3 = &quot;tolls&quot;
-file2_word4 = &quot;the&quot;
-file2_word5 = &quot;knell&quot;
-file2_word6 = &quot;of&quot;
-file2_word7 = &quot;parting&quot;
-file2_word8 = &quot;day&quot;
-if(search_word == file1_word1): 
-   print(file1_name)
-if(search_word == file1_word2): 
-   print(file1_name)
-if(search_word == file1_word3): 
-   print(file1_name)
-if(search_word == file1_word4): 
-   print(file1_name)
-if(search_word == file1_word5): 
-   print(file1_name)
-if(search_word == file1_word6): 
-   print(file1_name)
-if(search_word == file2_word1): 
-   print(file2_name)
-if(search_word == file2_word2): 
-   print(file2_name)
-if(search_word == file2_word3): 
-   print(file2_name)
-if(search_word == file2_word4): 
-   print(file2_name)
-if(search_word == file2_word5): 
-   print(file2_name)
-if(search_word == file2_word6): 
-   print(file2_name)
-if(search_word == file2_word7): 
-   print(file2_name)
-if(search_word == file2_word8): 
-   print(file2_name)</python>
+<python>
+search_word = "the"
+
+file1_name = "Ode on the death of a favorite cat"
+file1_word1 = "twas"
+file1_word2 = "on"
+file1_word3 = "a"
+file1_word4 = "lofty"
+file1_word5 = "vases"
+file1_word6 = "side"
+file2_name = "Elegy written in a country churchyard"
+file2_word1 = "the"
+file2_word2 = "curfew"
+file2_word3 = "tolls"
+file2_word4 = "the"
+file2_word5 = "knell"
+file2_word6 = "of"
+file2_word7 = "parting"
+file2_word8 = "day"
+
+if (search_word == file1_word1): 
+\tprint(file1_name)
+if (search_word == file1_word2): 
+\tprint(file1_name)
+if (search_word == file1_word3): 
+\tprint(file1_name)
+if (search_word == file1_word4): 
+\tprint(file1_name)
+if (search_word == file1_word5): 
+\tprint(file1_name)
+if (search_word == file1_word6): 
+\tprint(file1_name)
+if (search_word == file2_word1): 
+\tprint(file2_name)
+if (search_word == file2_word2): 
+\tprint(file2_name)
+if (search_word == file2_word3): 
+\tprint(file2_name)
+if (search_word == file2_word4): 
+\tprint(file2_name)
+if (search_word == file2_word5): 
+\tprint(file2_name)
+if (search_word == file2_word6): 
+\tprint(file2_name)
+if (search_word == file2_word7): 
+\tprint(file2_name)
+if (search_word == file2_word8): 
+\tprint(file2_name)
+</python>
       </text>
     </section>
     <section>
@@ -2660,18 +2765,22 @@ Thus we get the code:
 
 So for a full version of this program, we get:
 
-<python>player1_score = 20
+<python>
+player1_score = 20
 player2_score = 21
 player3_score = -1
-if(player1_score > player2_score):
-   if(player1_score > player3_score):
-      print(&quot;PLAYER 1 WINS&quot;)
-if(player2_score > player1_score):
-   if(player2_score > player3_score):
-      print(&quot;PLAYER 2 WINS&quot;)
-if(player3_score > player1_score):
-   if(player3_score > player2_score):
-      print(&quot;PLAYER 3 WINS&quot;)</python>
+
+if (player1_score &gt; player2_score):
+\tif (player1_score &gt; player3_score):
+\t\tprint("PLAYER 1 WINS")
+
+if (player2_score &gt; player1_score):
+\tif (player2_score &gt; player3_score):
+\t\tprint("PLAYER 2 WINS")
+if (player3_score &gt; player1_score):
+\tif (player3_score &gt; player2_score):
+\t\tprint("PLAYER 3 WINS")
+</python>
 </p>
 
 <p><b>Computing distances: </b></p>
@@ -2707,18 +2816,21 @@ can just compare, x1*x1 + y1*y1 with x2*x2 + y2*y2, since sqrt is an
 increasing function.  So we'll modify our algorithm to not compute the
 distances, but rather the square distances, and get the program: </p>
 
-<python>point1_x = 20
+<python>
+point1_x = 20
 point1_y = 55
 point2_x = 10
 point2_y = 60
-square_distance1 = point1_x*point1_x + point1_y*point1_y
-square_distance2 = point2_x*point2_x + point2_y*point2_y
-if(square_distance1 &lt; square_distance2): 
-   print(&quot;Point 1 is closer to origin&quot;)
-if(square_distance1 > square_distance2): 
-   print(&quot;Point 2 is closer to origin&quot;)
-if(square_distance1 == square_distance2): 
-   print(&quot;Points are the same distance from the origin&quot;)</python>
+square_distance1 = point1_x * point1_x + point1_y * point1_y
+square_distance2 = point2_x * point2_x + point2_y * point2_y
+
+if (square_distance1 &lt; square_distance2): 
+\tprint("Point 1 is closer to origin")
+if (square_distance1 &gt; square_distance2): 
+\tprint("Point 2 is closer to origin")
+if (square_distance1 == square_distance2): 
+\tprint("Points are the same distance from the origin")
+</python>
       </text>
     </section>
     <section>
@@ -2747,8 +2859,8 @@ reading_3 = 15
 reading_4 = 22
 reading_5 = 20
 summation = reading_1 + reading_2 + reading_3 + reading_4 + reading_5
-average = summation/5
-print(&quot;The average is: &quot;)
+average = summation / 5
+print("The average is: ")
 print(average)
 </python>
       </text>
