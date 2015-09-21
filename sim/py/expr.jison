@@ -42,11 +42,21 @@ expressions
 
 e
     : e '+' e
-        {$$ = $1+$3;}
+        {$$ = $scope.is_valid_number($1) && $scope.is_valid_number($3) ? $1+$3 : {};}
     | e '-' e
         {$$ = $1-$3;}
     | e '*' e
-        {$$ = $1*$3;}
+        {
+	if($scope.is_valid_array($1) || $scope.is_valid_array($3)){
+            $$ = {}
+	}
+        else if($scope.is_valid_number($1) && $scope.is_valid_number($3)){
+	    $$ = $1*$3;
+	}
+	else if($scope.is_valid_string($1) || $scope.is_valid_string($3)){
+            $$ = {};
+	}
+	else $$={};}
     | e '/' e
         {$$ = $1/$3;}
     | e '%' e

@@ -88,13 +88,23 @@ case 1:
           return $$[$0-1]; 
 break;
 case 2:
-this.$ = $$[$0-2]+$$[$0];
+this.$ = $scope.is_valid_number($$[$0-2]) && $scope.is_valid_number($$[$0]) ? $$[$0-2]+$$[$0] : {};
 break;
 case 3:
 this.$ = $$[$0-2]-$$[$0];
 break;
 case 4:
-this.$ = $$[$0-2]*$$[$0];
+
+	if($scope.is_valid_array($$[$0-2]) || $scope.is_valid_array($$[$0])){
+            this.$ = {}
+	}
+        else if($scope.is_valid_number($$[$0-2]) && $scope.is_valid_number($$[$0])){
+	    this.$ = $$[$0-2]*$$[$0];
+	}
+	else if($scope.is_valid_string($$[$0-2]) || $scope.is_valid_string($$[$0])){
+            this.$ = {};
+	}
+	else this.$={};
 break;
 case 5:
 this.$ = $$[$0-2]/$$[$0];
