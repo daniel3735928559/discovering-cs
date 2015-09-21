@@ -76,6 +76,9 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
     $scope.toggle_lightboard = function(){
 	$scope.lightboard_on = !$scope.lightboard_on;
     }
+    $scope.is_valid_array = function(o) {
+	return o instanceof Array || Array.isArray(o);
+    }
     $scope.is_valid_string = function(o) {
 	return typeof o == "string" || (typeof o == "object" && o.constructor === String);
     }
@@ -266,7 +269,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	} catch(e) {
 	    $scope.raise_error("Expression has no valid value: " + expr);
 	}
-	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer))){
+	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer) || $scope.is_valid_array(answer))){
 	    $scope.raise_error("Expression has no valid value: " + expr);
 	}
 	if($scope.is_valid_string(answer)){
@@ -298,7 +301,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.outputs.push(stuff);
     }
     $scope.line_types = {
-	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
+	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
 	    $scope.set_variable(data[1], $scope.parse_expression(data[2]));
 	}},
 	"while":{"regex":/^while\(((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *(==|!=|>|<|>=|<=) *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*)\): *$/,"execute":function(data){

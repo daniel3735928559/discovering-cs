@@ -14,6 +14,9 @@
 "%"                    return '%'
 "("                    return '('
 ")"                    return ')'
+"["                    return '['
+"]"                    return ']'
+","                    return ','
 [a-zA-Z_][a-zA-Z_0-9]* return 'VAR'
 \"((\\.|[^\"])*)\"     return 'STRING'
 <<EOF>>                return 'EOF'
@@ -58,5 +61,15 @@ e
         {$$ = $1.substring(1,yytext.length-1);}
     | VAR
         {$$ = $scope.get_variable(yytext);}
+    | VAR '[' e ']'
+        {$$ = $scope.get_variable($1)[$3];}
+    | '[' elements ']'
+        {$$ = $2;}
     ;
 
+elements
+    : elements ',' e
+        {$$ = $1.concat([$3]);}
+    | e
+        {$$ = [$1];}
+    ;
