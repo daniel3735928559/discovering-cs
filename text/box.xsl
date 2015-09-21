@@ -273,16 +273,20 @@
 	<link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
 	<link rel="stylesheet" type="text/css" href="/sim/avr/sim.css" />
 	<link rel="stylesheet" type="text/css" href="/sim/bin/sim.css" />
-	<link rel="stylesheet" href="/sim/cm/codemirror.css" />
 	<link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
 	<script type="text/javascript" src="/text/box.js"></script>
-	<script type="text/javascript" src="/sim/cm/codemirror.js"></script>
 	<script type="text/javascript" src="/sim/py/expr_ng.js"></script>
 	<script type="text/javascript" src="/sim/py/sim.js"></script>
 	<script type="text/javascript" src="/sim/avr/sim.js"></script>
 	<script type="text/javascript" src="/sim/bin/sim.js"></script>
+
+  <!-- MiniPy stylesheets -->
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/codemirror.css" /> <!-- v5.6 -->
+
+  <!-- MiniPy javascript -->
+  <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/codemirror.js"></script> <!-- v5.6 -->
       </head>
       <body ng-app="app">	
 	<div id="super" ng-controller="BoxController">
