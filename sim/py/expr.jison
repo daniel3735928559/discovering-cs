@@ -42,7 +42,12 @@ expressions
 
 e
     : e '+' e
-        {$$ = $scope.is_valid_number($1) && $scope.is_valid_number($3) ? $1+$3 : {};}
+        {
+	if($scope.is_valid_number($1) && $scope.is_valid_number($3))
+	    $$ = $1+$3;
+	else if($scope.is_valid_array($1) && $scope.is_valid_array($3))
+	    $$ = $1.concat($3);
+	else $$ = {};}
     | e '-' e
         {$$ = $1-$3;}
     | e '*' e
@@ -73,8 +78,15 @@ e
         {$$ = $scope.get_variable(yytext);}
     | VAR '[' e ']'
         {$$ = $scope.get_variable($1)[$3];}
+    | VAR '(' e ')'
+        {
+	    if($1 == "len") $$ = $3.length;
+	    else $$ = {};
+	}
     | '[' elements ']'
         {$$ = $2;}
+    | '[' ']'
+        {$$ = [];}
     ;
 
 elements
