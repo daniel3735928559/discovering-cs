@@ -154,7 +154,7 @@
 
   <xsl:template match="python">
     <xsl:if test="$print!='yes'">
-      <div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}">
+      <div ng-include="'/sim/py/minipy/embedded/minipy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}">
       </div>
     </xsl:if>
     <xsl:if test="$print='yes'">
@@ -270,7 +270,6 @@
       <head>
 	<title><xsl:value-of select="chapter/title" /></title>
 	<link rel="stylesheet" type="text/css" href="/text/box.css" />
-	<link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
 	<link rel="stylesheet" type="text/css" href="/sim/avr/sim.css" />
 	<link rel="stylesheet" type="text/css" href="/sim/bin/sim.css" />
 	<link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
@@ -278,18 +277,25 @@
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
 	<script type="text/javascript" src="/text/box.js"></script>
 	<script type="text/javascript" src="/sim/py/expr_ng.js"></script>
-	<script type="text/javascript" src="/sim/py/sim.js"></script>
 	<script type="text/javascript" src="/sim/avr/sim.js"></script>
 	<script type="text/javascript" src="/sim/bin/sim.js"></script>
 
   <!-- MiniPy stylesheets -->
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/embedded/css/minipy.css" />
   <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/codemirror.css" /> <!-- v5.6 -->
   <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/theme/neat.css" />
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/embedded/css/minipy.css" />
 
   <!-- MiniPy javascript -->
   <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/codemirror.js"></script> <!-- v5.6 -->
   <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/mode/python/python.js"></script>
   <script type="text/javascript" src="/sim/py/MiniPy/libs/jQuery/jquery.min.js"></script> <!-- v2.1.4 -->
+  <script type="text/javascript" src="/sim/py/MiniPy/libs/minipy.js"></script>
+
+  <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/miniPyController.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/banner.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/error.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/state.js"></script>
       </head>
       <body ng-app="app">	
 	<div id="super" ng-controller="BoxController">
