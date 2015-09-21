@@ -289,6 +289,7 @@
   <!-- MiniPy javascript -->
   <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/codemirror.js"></script> <!-- v5.6 -->
   <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/mode/python/python.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/libs/jQuery/jquery.min.js"></script> <!-- v2.1.4 -->
       </head>
       <body ng-app="app">	
 	<div id="super" ng-controller="BoxController">
