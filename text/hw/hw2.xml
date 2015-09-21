@@ -12,24 +12,24 @@
   <li>All of the above</li>
   <li> None of the above</li>
 </ol>
-<a>(5), programming: solves real world problems, is high-level and human-friendly, and expresses algorithms to the computer.</a>
+<ans>(5), programming: solves real world problems, is high-level and human-friendly, and expresses algorithms to the computer.</ans>
 </q>
 <q>What acts as an intermediary between a high-level programming
-language and a low-level language?<a>A compiler</a></q>
+language and a low-level language?<ans>A compiler</ans></q>
 <q>In the classic parable mentioned in the chapter, what exactly
 caused the trouble?  <p>What does a computer programming language and
-algorithm need to ensure to avoid such a situation?</p><a>Ambiguity in
+algorithm need to ensure to avoid such a situation?</p><ans>Ambiguity in
 the instructions caused the trouble. To prevent this issue, a precise
-and unambiguous algorithm is required.</a></q>
+and unambiguous algorithm is required.</ans></q>
 <q>According to the text, what specific method to solve problems do computers need that humans may not necessarily need?</q>
-<q>What are edge cases (also known as "corner cases")?<a>Edge-cases
+<q>What are edge cases (also known as "corner cases")?<ans>Edge-cases
 are situations within a program that are in some way exceptional, such
 as a variable having a value on the boundary between desirable values
 and undesirable values, or a resource that the program wants to access
-being unavailable.</a></q>
+being unavailable.</ans></q>
 <q>Define efficiency and scalability. How are they related?  <p>Under
 what circumstances will you not bother making your program more
-efficient?</p><a><p>Efficiency is how many (or how few) resources are
+efficient?</p><ans><p>Efficiency is how many (or how few) resources are
 used to execute a program. These resources can include time, memory,
 CPU, money, etc.. Scalability is how well a program would operate if
 it were required to handle big data (how efficiently it operates when
@@ -44,13 +44,13 @@ scale. For example, a video game developer may create a game that runs
 well for 5 people playing at once, but would work inefficiently with
 20 people playing at once. The developer doesn’t need to improve
 his/her program’s efficiency if it is not meant to be scaled beyond 5
-players.</p></a></q>
-<q>What three line types are there in Python?<a>Assignment lines,
-print lines, and flow-control lines.</a></q>
-<q>How does indentation play a role in flow-control lines?<a>The
+players.</p></ans></q>
+<q>What three line types are there in Python?<ans>Assignment lines,
+print lines, and flow-control lines.</ans></q>
+<q>How does indentation play a role in flow-control lines?<ans>The
 indented lines following a flow-control line are executed if the test
 on the flow-control line evaluates to true, and are skipped
-otherwise.</a></q>
+otherwise.</ans></q>
 <q><p>Label each line of the example python program from section 2.3.2  as an 'assignment line', 'print line', or a 'flow-control' line.</p>
 <pre>x = 27
 while(x != 1):
@@ -61,7 +61,7 @@ while(x != 1):
       x = 3*x+1     	
    print(x)   
 print("Done!")</pre>
-<a><pre>
+<ans><pre>
 x = 27          <b>assignment</b>
 while(x != 1):  <b>flow-control</b>
    y = x % 2    <b>assignment</b>
@@ -70,20 +70,20 @@ while(x != 1):  <b>flow-control</b>
    else:        <b>flow-control</b>
       x = 3*x+1 <b>assignment</b>
    print(x)     <b>print</b>
-print("Done!")  <b>print</b></pre> </a>
+print("Done!")  <b>print</b></pre> </ans>
 </q>
 <q><p> If a computer executed the instruction "a=2" on line number 21, what would be the line number of the next instruction executed?</p>
 <p> What type of instruction would have to be on line 21 to move to an
-instruction that is not on the following line?</p><a>Line 22 would be
+instruction that is not on the following line?</p><ans>Line 22 would be
 the next line unless line 21 contained a flow-control line with test
-that evaluated to false</a></q>
+that evaluated to false</ans></q>
 <q>Using the definition of an assignment, assignments assign a(n) ___ to a(n) ___?
 <ol>
 <li> variable name, expression</li>
 <li> expression, test</li>
 <li> expression, comparison</li>
 <li>  variable name, comparison</li>
-</ol><a>(1)</a></q>
+</ol><ans>(1)</ans></q>
 <q>What is camel-casing?</q>
 <q>What is the arithmetic operation permitted on Strings and what is it specifically called? 
 <p>Give an example of this principle.</p></q>

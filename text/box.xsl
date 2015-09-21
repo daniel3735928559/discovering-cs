@@ -84,7 +84,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="a">
+  <xsl:template match="ans">
     <xsl:param name="q_name" />
     <xsl:if test="$print!='yes'">
       <div class="exc_toggle" ng-init="toggles['{$q_name}'] = false" ng-click="exc_toggle('{$q_name}')">Show answer</div>
