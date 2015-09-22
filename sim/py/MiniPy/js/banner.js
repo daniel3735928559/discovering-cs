@@ -21,7 +21,7 @@ var Banner = (function(editorWrapperElement) {
 		fadeOut: 500,
 	};
 
-	var template = '<div class="mp-banner mp-banner-type-{type}" style="display:none">{message}</div>';
+	var template = '<div class="mp-banner mp-banner-type-{type}" style="display:none"><i class="icon"></i>{message}</div>';
 
 	var currentBanner = null;
 

@@ -1,0 +1,42 @@
+/* special styles for fullpage homework simulator */
+
+html, body {
+	margin: 0;
+	padding: 0;
+	background-color: #f8f8f8;
+	font-family: "Roboto", sans-serif;
+}
+
+.mp-debugger {
+	position: absolute;
+	top: 80px;
+	right: 24px;
+	bottom: 80px;
+	left: 24px;
+}
+
+@media (max-width:1024px) {
+	.mp-debugger {
+		height: 784px;
+		margin-bottom: 60px;
+	}
+
+	.mp-debugger .mp-editor {
+		width: auto;
+		height: 50%;
+		left: -8px;
+		right: -8px;
+	}
+
+	.mp-debugger .mp-runtime {
+		width: auto;
+		height: 50%;
+		top: 50%;
+		left: -8px;
+		right: -8px;
+	}
+
+	.mp-debugger .mp-runtime .mp-wrapper {
+		top: 16px;
+	}
+}

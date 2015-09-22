@@ -281,10 +281,10 @@
 	<script type="text/javascript" src="/sim/bin/sim.js"></script>
 
   <!-- MiniPy stylesheets -->
-  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/embedded/css/minipy.css" />
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/main.css" />
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/embedded/css/embedded.css" />
   <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/codemirror.css" /> <!-- v5.6 -->
   <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/theme/neat.css" />
-  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/embedded/css/minipy.css" />
 
   <!-- MiniPy javascript -->
   <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/codemirror.js"></script> <!-- v5.6 -->
@@ -293,9 +293,9 @@
   <script type="text/javascript" src="/sim/py/MiniPy/libs/minipy.js"></script>
 
   <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/miniPyController.js"></script>
-  <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/banner.js"></script>
-  <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/error.js"></script>
-  <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/state.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/js/banner.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/js/error.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/js/state.js"></script>
       </head>
       <body ng-app="app">	
 	<div id="super" ng-controller="BoxController">

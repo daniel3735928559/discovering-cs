@@ -1,21 +1,208 @@
+<!doctype html>
 <html>
-  <head>
-    <title>Python</title>
-    <link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
-    <link rel="stylesheet" type="text/css" href="/sim/quest/quest.css" />
-    <link rel="stylesheet" href="/sim/cm/codemirror.css" />
-    <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
-    <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
-    <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
-    <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
-    <script type="text/javascript" src="/sim/quest/quest.js"></script>
-    <script type="text/javascript" src="/sim/py/expr_ng.js"></script>
-    <script type="text/javascript" src="/sim/py/sim.js"></script>
-  </head>
-  <body ng-app="app">
-    <div class="quest" ng-controller="QuestController">
-      <div class="quest_main" ng-include="'/sim/quest/quest.html'" ng-repeat="quest_name in ['/sim/quest/quest.xml']">
-      </div>
-    </div>
-  </body>
+	<head>
+		<title>Learn Python</title>
+
+		<!-- <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.css"> -->
+		<link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMIrror/codemirror.css">
+		<link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/theme/neat.css">
+		<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+
+		<link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/main.css">
+		<link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/fullpage/css/fullpage.css">
+
+		<style>
+			.mp-debugger {
+				left: 616px; /* 24px + 120px + 16px */
+			}
+
+			.mp-program-select {
+				width: 576px;
+				position: absolute;
+				top: 80px;
+				bottom: 32px;
+				left: 16px;
+				/*background-color: red;*/
+			}
+
+			.mp-program-select ul {
+				width: 120px;
+				margin: 0;
+				padding: 0;
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				list-style: none;
+				/*background-color: green;*/
+				overflow-y: scroll;
+			}
+
+			.mp-program-select li {
+				margin: 0;
+				padding: 6px 0 6px 16px;
+				list-style: none;
+				font-weight: 400;
+				font-size: 14px;
+				color: rgb(146, 146, 146);
+				cursor: pointer;
+			}
+
+			.mp-program-select li.current {
+				color: black;
+				font-weight: 500;
+			}
+
+			.mp-program-select li:hover {
+				color: black;
+			}
+
+			.mp-program-description {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 136px;
+				/*background-color: blue;*/
+				overflow-y: scroll;
+			}
+
+			.mp-program-description h1 {
+				margin: 0;
+				padding: 0;
+				color: rgb(33, 31, 37);
+			}
+
+			.mp-program-description p {
+				margin: 16px 0;
+				padding: 0;
+				line-height: 2em;
+				font-size: 14px;
+			}
+
+			.mp-program-description pre {
+				padding-left: 32px;
+				font-size: 12px;
+				font-family: "Source Code Pro", monospace;
+			}
+
+			@media (max-width: 2048px) {
+				.mp-debugger {
+					height: auto;
+					margin-bottom: 0;
+					position: absolute;
+					bottom: 32px;
+					/*background-color: orange;*/
+				}
+
+				.mp-debugger .mp-editor {
+					width: auto;
+					height: 50%;
+					left: -8px;
+					right: -8px;
+				}
+
+				.mp-debugger .mp-runtime {
+					width: auto;
+					height: 50%;
+					top: 50%;
+					left: -8px;
+					right: -8px;
+				}
+
+				.mp-debugger .mp-runtime .mp-wrapper {
+					top: 16px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="mp-controls">
+			<button class="mp-control-button" data-command="run"><i class="icon"></i>Run</button>
+			<button class="mp-control-button" data-command="validate"><i class="icon"></i>Check</button>
+			<button class="mp-control-button" data-command="step"><i class="icon"></i>Step</button>
+			<button class="mp-control-button mp-button-disabled" data-command="stop"><i class="icon"></i>Stop</button>
+		</div>
+		<div class="mp-program-select">
+			<ul></ul>
+			<div class="mp-program-description"></div>
+		</div>
+		<div class="mp-debugger">
+			<div class="mp-editor mp-panel-bordered">
+				<div class="mp-panel-description"><i class="icon"></i>Python Mini</div>
+			</div>
+			<div class="mp-runtime">
+				<div class="mp-wrapper">
+					<div class="mp-scope mp-panel-bordered">
+						<div class="mp-panel-description">Scope</div>
+						<div class="mp-shadow-top"></div>
+						<div class="mp-shadow-bottom"></div>
+						<ul></ul>
+					</div>
+					<div class="mp-stdout mp-panel-bordered">
+						<div class="mp-panel-description">Output</div>
+						<div class="mp-shadow-top"></div>
+						<div class="mp-shadow-bottom"></div>
+						<ul></ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 3rd party libraries -->
+		<script src="/sim/py/MiniPy/libs/jQuery/jquery.min.js"></script>
+		<script src="/sim/py/MiniPy/libs/CodeMirror/codemirror.js"></script>
+		<script src="/sim/py/MiniPy/libs/CodeMirror/mode/python/python.js"></script>
+
+		<!-- other libraries -->
+		<!-- <script src="site/js/libs/mousetrap.min.js"></script> -->
+
+		<!-- the magic (ideally) -->
+		<script src="/sim/py/MiniPy/libs/minipy.js"></script>
+
+		<!-- page-specific scripts -->
+		<script src="/sim/py/MiniPy/js/banner.js"></script>
+		<script src="/sim/py/MiniPy/js/state.js"></script>
+		<script src="/sim/py/MiniPy/js/error.js"></script>
+		<script src="/sim/py/MiniPy/fullpage/js/fullpage.js"></script>
+
+		<!-- <script src="site/js/concat.js"></script> -->
+
+		<script>
+			$.get('/sim/py/MiniPy/tutorial.xml', function(data) {
+				var tutorial = [];
+
+				$(data).find('q').each(function () {
+					var title = $(this).attr('id');
+					var program = $(this).children('program').text().trim();
+					var text = $(this).children('text').html();
+
+					tutorial.push({
+						title: title,
+						program: program,
+						text: text,
+					});
+				});
+
+				tutorial.forEach(function (lesson, index) {
+					// create lesson navigation
+					$('<li>' + lesson.title + '</li>')
+						.appendTo(('.mp-program-select ul'))
+						.on('click', function() {
+							if ($(this).hasClass('current') === false) {
+								$('.mp-program-select li.current').removeClass('current');
+								$(this).addClass('current');
+
+								var header = '<h1>' + lesson.title + '</h1>';
+								$('.mp-program-description').html(header + lesson.text);
+
+								cm.setValue(lesson.program);
+							}
+						});
+				});
+
+				$('.mp-program-select li').first().trigger('click');
+			});
+		</script>
+	</body>
 </html>
