@@ -37,6 +37,48 @@
 	cursor: default;
 }
 
+.mp-controls .mp-control-button .icon {
+	width: 18px;
+	height: 18px;
+	margin: 0 8px 0 0;
+	float: left;
+	background-image: url("/sim/py/MiniPy/static/sprite.png");
+	background-size: 90px 72px;
+	background-repeat: no-repeat;
+}
+
+.mp-controls .mp-control-button[data-command="run"] .icon {
+	background-position: 0 0;
+}
+
+.mp-controls .mp-control-button[data-command="run"].mp-button-disabled .icon {
+	background-position: 0 -54px;
+}
+
+.mp-controls .mp-control-button[data-command="validate"] .icon {
+	background-position: -54px 0;
+}
+
+.mp-controls .mp-control-button[data-command="validate"].mp-button-disabled .icon {
+	background-position: -54px -54px;
+}
+
+.mp-controls .mp-control-button[data-command="step"] .icon {
+	background-position: -18px 0;
+}
+
+.mp-controls .mp-control-button[data-command="step"].mp-button-disabled .icon {
+	background-position: -18px -54px;
+}
+
+.mp-controls .mp-control-button[data-command="stop"] .icon {
+	background-position: -36px 0;
+}
+
+.mp-controls .mp-control-button[data-command="stop"].mp-button-disabled .icon {
+	background-position: -36px -54px;
+}
+
 .mp-debugger {
 	position: absolute;
 	top: 80px;
@@ -75,6 +117,16 @@
 .mp-debugger .mp-editor.locked .mp-panel-description {
 	width: 88px;
 	text-align: right;
+}
+
+.mp-debugger .mp-editor.locked .mp-panel-description .icon {
+	width: 16px;
+	height: 16px;
+	float: left;
+	background-image: url("/sim/py/MiniPy/static/sprite.png");
+	background-size: 80px 64px;
+	background-position: -64px 0;
+	background-repeat: no-repeat;
 }
 
 .mp-debugger .mp-editor .CodeMirror {
@@ -132,6 +184,16 @@
 	text-align: right;
 	color: white;
 	z-index: 1000;
+}
+
+.mp-debugger .mp-editor .mp-banner .icon {
+	width: 36px;
+	height: 36px;
+	position: absolute;
+	top: 6px;
+	left: 12px;
+	background-image: url("/sim/py/MiniPy/static/sprite.png");
+	background-size: 90px 72px;
 }
 
 .mp-debugger .mp-editor .mp-banner.mp-banner-type-generic {
