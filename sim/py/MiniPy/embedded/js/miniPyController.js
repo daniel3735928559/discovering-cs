@@ -43,7 +43,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 
 		var BannerHandler = Banner(jQuery($element).find('.mp-editor'));
 		var ErrorHandler = ErrorControl(mirror, BannerHandler);
-		var StateHandler = State(jQuery($element).find('.mp-scope ul'), jQuery($element).find('.mp-stdout ul'))
+		var StateHandler = State(jQuery($element).find('.mp-scope ul'), jQuery($element).find('.mp-stdout ul'));
 
 		// functions that will be attached to their respective
 		// control buttons for `click` events

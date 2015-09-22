@@ -10,7 +10,7 @@ var ErrorControl = (function(mirror, BannerHandler) {
 		return (typeof n === 'number' && n >= 0);
 	}
 
-	function post (error) {
+	function post(error) {
 		console.log(error);
 		if (error instanceof MiniPy.Error) {
 			// handle MiniPy error
