@@ -31,7 +31,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 		// create CodeMirror editor
 		var mirror = CodeMirror.fromTextArea(textarea[0], {
 			mode: 'python',
-			// theme: 'neat',
+			theme: 'neat',
 
 			lineNumbers: true,
 			indentUnit: 4,
