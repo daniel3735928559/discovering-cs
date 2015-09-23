@@ -71,13 +71,13 @@ e
         {$$ = ['val',$scope.get_variable(yytext)];}
     | VAR '[' e ']'
         {$$ = ['val',$scope.get_variable($1)[$3]];}
-    | VAR '(' e ')'
+    | VAR '(' elements ')'
         {
 	    if($1 == "len") $$ = ['len',$3];
-	    else $$ = {};
+	    else $$ = ['call',['name',$1],['array'].concat($3)];
 	}
     | '[' elements ']'
-        {$$ = ['array',$2];}
+        {$$ = ['array'].concat($2);}
     | '[' ']'
         {$$ = ['val',[]];}
     ;

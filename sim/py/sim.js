@@ -1,8 +1,18 @@
 var app = app || angular.module('app', []);
 
+function Deque()
+{
+    this.state=new Array();
+    this.is_empty = function(){ return this.state.length == 0; }
+    this.pop=function(){ return this.state.pop(); }
+    this.push=function(item){ this.state.push(item); }
+    this.pop_front=function(){ return this.state.shift(); }
+    this.push_front=function(item){ this.state.unshift(item); }
+}
 
 app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout){
     $scope.p = parser;
+    $scope.call_stack = [];
     $scope.syntax_elements = {
 	"add":function(args){
 	    if($scope.is_valid_array(args[0]) && $scope.is_valid_array(args[1]))
@@ -77,7 +87,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log("building array",args);
 	    for(var i = 0; i < args.length; i++){
 		console.log("pushing",args[i]);
-		val.push($scope.walk_ast(args[i]));
+		val.push(args[i]);
 	    }
 	    console.log("built array",val);
 	    return val;
@@ -263,6 +273,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.remaining_steps = 0;
 	$scope.steps = {"count":1};
 	$scope.variables = {};
+	$scope.functions = {};
 	$scope.outputs = [];
 	$scope.updated = [];
 	$scope.awaiting_input = false;
@@ -340,14 +351,71 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.raise_error("Bad line: "+inst + "\nAnalysis: " + analysis);
 	return new $scope.instruction(inst, null, null, null, indent_level, "Line is not one of the valid types.  " + analysis);
     }
+    $scope.find_calls = function(ast){
+	var calls = new Deque();
+	var to_search = new Deque();
+	to_search.push({"path":[],"node":ast});
+	console.log("TS",JSON.stringify(to_search.state));
+	while(!(to_search.is_empty())){
+	    var current = to_search.pop_front();
+	    if(current.node[0] == 'call'){
+		calls.push(current.path.concat([0]));
+	    }
+	    if (current.node[0] != 'val' && current.node[0] != 'name'){
+		for(var i = 1; i < current.node.length; i++){
+		    to_search.push({"path":current.path.concat([i]),"node":current.node[i]});
+		}
+	    }
+	}
+	console.log("FOUND CALLS",JSON.stringify(calls.state));
+	return calls;
+    }
+    $scope.get_call(call_path,ast){
+	var c = ast;
+	for(var i = 0; i < call_path.length; i++){
+	    c = c[call_path[i]];
+	}
+    }
     $scope.walk_ast = function(ast){
+	var calls = $scope.find_calls(ast);
+	console.log("CALLS",calls.state);
+	if(!(calls.is_empty())){
+	    /*
+	      Call the last function
+
+	      To call a function: 
+	      - Push variables onto scope stack
+	      - Push current line, ast, and path within the ast to the call we're making all onto return stack
+
+	      To return from a function:
+	      - Pop variables off scope stack
+	      - Pop current line, ast, and path to the call we just returned from off the return stack
+	    */
+	    
+	    // Push state onto the call stack
+	    var call_path = calls.pop();
+	    var state = {
+		"ast":ast,
+		"current_call":call_path,
+		"scope":$scope.variables,
+		"line":$scope.current_block.line,
+		"block":$scope.current_block
+	    };
+	    $scope.call_stack.push(state);
+
+	    // Set variables according to function arguments
+
+	    
+	    
+	    // Move to function's block
+
+	    $scope.current_block = inst.block;
+	    $scope.current_block.line = 0;
+	    return null;
+	}
 	if(ast[0] == 'val'){
 	    console.log("val",ast[1]);
 	    return ast[1];
-	}
-	else if(ast[0] == 'array'){
-	    console.log("arr",ast[1]);
-	    return $scope.syntax_elements[ast[0]](ast[1]);
 	}
 	var args = [];
 	for(var i = 1; i < ast.length; i++){
@@ -396,6 +464,10 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.variables[var_name] = val;
 	$scope.updated.push(var_name);
     }
+    $scope.set_function = function(fn_name, val){
+	console.log("Setting fn",fn_name, val);
+	$scope.functions[fn_name] = val;
+    }
     $scope.handle_string_escapes = function(s){
 	s = s.replace(/(([^\\]|)(\\\\)*)\\n/g,"$1\n");
 	s = s.replace(/(([^\\]|)(\\\\)*)\\"/g,"$1\"");
@@ -421,7 +493,12 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log(test);
 	    return test;
 	}},
-	"else":{"regex":/else: */,"execute":function(data){}},
+	"def":{"regex":/^def ([a-zA-Z_][a-zA-Z_0-9]*)\(([a-zA-Z_][a-zA-Z_0-9]*)\): *$/,"execute":function(data){
+	}},
+	"return":{"regex":/^return *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
+	    return $scope.parse_expression(data[1]);
+	}},
+	"else":{"regex":/^else: *$/,"execute":function(data){}},
 	"print":{"regex":/^print\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){
 	    $scope.output($scope.parse_expression(data[1]));
 	}},
@@ -438,6 +515,11 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	"expression":{"verify":/ */,"parse":function(){return true;}},
 	"test":{"regex":/ */},
     };
+    $scope.pyfunction = function(name, arg_names, block){
+	this.name = name;
+	this.arg_names = arg_names;
+	this.block = block;
+    }
     $scope.instruction = function(text, type, data, exec, indent_level, error){
 	this.text = text;
 	this.type = type;
@@ -494,6 +576,19 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		    $scope.update_status();
 		}
 	    }
+	    else if(inst.type == 'return'){
+		var ret_val = inst.run();
+		console.log(ret_val);
+		// do something
+	    }
+	    else if(inst.type == 'def'){
+		console.log("DEF",inst.data);
+		var arg_names = [];
+		for(var i = 2; i < inst.data.length; i++)
+		    arg_names.push(inst.data[i]);
+		$scope.set_function(inst.data[1], new $scope.pyfunction(inst.data[1],arg_names,inst.block));
+		self.advance();
+	    }
 	    else {
 		inst.run();
 		self.advance();
@@ -546,8 +641,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.editor.setGutterMarker(l-1, "breakpoints", $scope.make_marker());
 	//$scope.status = $scope.running ? "Running" : "Not running";
     }
-	$scope.step = function(){
-	    
+    $scope.step = function(){
 	console.log("STEPPING");
 	if($scope.awaiting_input) return;
 	//$scope.print_block($scope.current_block);
@@ -579,9 +673,14 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    }
 	    inst.line_num = l+1;
 	    console.log(inst.text, inst.indent_level, current_level)
+	    if(inst.indent_level > 0 && inst.type == "def"){
+		$scope.status = "Error at line "+(l+1)+": def may not be used inside a block";
+		$scope.set_error_line(l);
+		return;
+	    }
 	    if(inst.indent_level == current_level+1){
-		if(prev_inst == null || (prev_inst.type != 'if' && prev_inst.type != 'else' && prev_inst.type != 'while')){
-		    $scope.status = "Error at line "+(l+1)+": indented lines may only follow if, else, or while";
+		if(prev_inst == null || (prev_inst.type != 'if' && prev_inst.type != 'else' && prev_inst.type != 'while' && prev_inst.type != 'def')){
+		    $scope.status = "Error at line "+(l+1)+": indented lines may only follow if, else, while, or def";
 		    $scope.set_error_line(l);
 		    return;
 		}
