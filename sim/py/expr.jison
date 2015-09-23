@@ -50,71 +50,58 @@ expressions
 
 e
     : e '+' e
-        {
-	if($scope.is_valid_array($1) && $scope.is_valid_array($3))
-	    $$ = $1.concat($3);
-	else $$ = $1+$3;}
+        {$$ = ['add',$1,$3];}
     | e '-' e
-        {$$ = $1-$3;}
+        {$$ = ['sub',$1,$3];}
     | e '*' e
-        {
-	if($scope.is_valid_array($1) || $scope.is_valid_array($3)){
-            $$ = {}
-	}
-        else if($scope.is_valid_number($1) && $scope.is_valid_number($3)){
-	    $$ = $1*$3;
-	}
-	else if($scope.is_valid_string($1) || $scope.is_valid_string($3)){
-            $$ = {};
-	}
-	else $$={};}
+        {$$ = ['mul',$1,$3];}
     | e '/' e
-        {$$ = $1/$3;}
+        {$$ = ['div',$1,$3];}
     | e '%' e
-        {$$ = $1%$3;}
+        {$$ = ['mod',$1,$3];}
     | '-' e %prec UMINUS
-        {$$ = -$2;}
+        {$$ = ['neg',$2];}
     | '(' e ')'
         {$$ = $2;}
     | NUMBER
-        {$$ = Number(yytext);}
+        {$$ = ['val',Number(yytext)];}
     | STRING
-        {$$ = $1.substring(1,yytext.length-1);}
+        {$$ = ['val',$1.substring(1,yytext.length-1)];}
     | VAR
-        {$$ = $scope.get_variable(yytext);}
+        {$$ = ['val',$scope.get_variable(yytext)];}
     | VAR '[' e ']'
-        {$$ = $scope.get_variable($1)[$3];}
+        {$$ = ['val',$scope.get_variable($1)[$3]];}
     | VAR '(' e ')'
         {
-	    if($1 == "len") $$ = $3.length;
+	    if($1 == "len") $$ = ['len',$3];
 	    else $$ = {};
 	}
     | '[' elements ']'
-        {$$ = $2;}
+        {$$ = ['array',$2];}
     | '[' ']'
-        {$$ = [];}
+        {$$ = ['val',[]];}
     ;
 
 test
     : e '>' e
-        {$$ = {'bool':$1 > $3};}
+        {$$ = ['gt',$1, $3];}
     | e '<' e
-        {$$ = {'bool':$1 < $3};}
+        {$$ = ['lt',$1, $3];}
     | e '!' '=' e
-        {$$ = {'bool':$1 != $4};}
+        {$$ = ['neq',$1, $4];}
     | e '=' '=' e
-        {$$ = {'bool':$1 == $4};}
+        {$$ = ['eq',$1, $4];}
     | e '>' '=' e
-        {$$ = {'bool':$1 >= $4};}
+        {$$ = ['geq',$1, $4];}
     | e '<' '=' e
-        {$$ = {'bool':$1 <= $4};}
+        {$$ = ['leq',$1, $4];}
     | '(' test ')'
         {$$ = $2;}
     | test KEYWORD test
         {console.log($2);
-	if($2 == "and") $$ = {'bool':$1.bool && $3.bool};
-	else if($2 == "or") $$ = {'bool':$1.bool || $3.bool};
-	else $$ = 1/0;}
+	if($2 == "and") $$ = ['bool_and',$1, $3];
+	else if($2 == "or") $$ = ['bool_or',$1, $3];
+	else $$ = {};}
     ;
 
 elements

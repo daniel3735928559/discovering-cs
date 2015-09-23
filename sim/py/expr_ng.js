@@ -89,83 +89,73 @@ case 1: case 2:
           return $$[$0-1]; 
 break;
 case 3:
-
-	if($scope.is_valid_array($$[$0-2]) && $scope.is_valid_array($$[$0]))
-	    this.$ = $$[$0-2].concat($$[$0]);
-	else this.$ = $$[$0-2]+$$[$0];
+this.$ = ['add',$$[$0-2],$$[$0]];
 break;
 case 4:
-this.$ = $$[$0-2]-$$[$0];
+this.$ = ['sub',$$[$0-2],$$[$0]];
 break;
 case 5:
-
-	if($scope.is_valid_array($$[$0-2]) || $scope.is_valid_array($$[$0])){
-            this.$ = {}
-	}
-        else if($scope.is_valid_number($$[$0-2]) && $scope.is_valid_number($$[$0])){
-	    this.$ = $$[$0-2]*$$[$0];
-	}
-	else if($scope.is_valid_string($$[$0-2]) || $scope.is_valid_string($$[$0])){
-            this.$ = {};
-	}
-	else this.$={};
+this.$ = ['mul',$$[$0-2],$$[$0]];
 break;
 case 6:
-this.$ = $$[$0-2]/$$[$0];
+this.$ = ['div',$$[$0-2],$$[$0]];
 break;
 case 7:
-this.$ = $$[$0-2]%$$[$0];
+this.$ = ['mod',$$[$0-2],$$[$0]];
 break;
 case 8:
-this.$ = -$$[$0];
+this.$ = ['neg',$$[$0]];
 break;
-case 9: case 15: case 23:
+case 9: case 23:
 this.$ = $$[$0-1];
 break;
 case 10:
-this.$ = Number(yytext);
+this.$ = ['val',Number(yytext)];
 break;
 case 11:
-this.$ = $$[$0].substring(1,yytext.length-1);
+this.$ = ['val',$$[$0].substring(1,yytext.length-1)];
 break;
 case 12:
-this.$ = $scope.get_variable(yytext);
+this.$ = ['val',$scope.get_variable(yytext)];
 break;
 case 13:
-this.$ = $scope.get_variable($$[$0-3])[$$[$0-1]];
+this.$ = ['val',$scope.get_variable($$[$0-3])[$$[$0-1]]];
 break;
 case 14:
 
-	    if($$[$0-3] == "len") this.$ = $$[$0-1].length;
+	    if($$[$0-3] == "len") this.$ = ['len',$$[$0-1]];
 	    else this.$ = {};
 	
 break;
+case 15:
+this.$ = ['array',$$[$0-1]];
+break;
 case 16:
-this.$ = [];
+this.$ = ['val',[]];
 break;
 case 17:
-this.$ = {'bool':$$[$0-2] > $$[$0]};
+this.$ = ['gt',$$[$0-2], $$[$0]];
 break;
 case 18:
-this.$ = {'bool':$$[$0-2] < $$[$0]};
+this.$ = ['lt',$$[$0-2], $$[$0]];
 break;
 case 19:
-this.$ = {'bool':$$[$0-3] != $$[$0]};
+this.$ = ['neq',$$[$0-3], $$[$0]];
 break;
 case 20:
-this.$ = {'bool':$$[$0-3] == $$[$0]};
+this.$ = ['eq',$$[$0-3], $$[$0]];
 break;
 case 21:
-this.$ = {'bool':$$[$0-3] >= $$[$0]};
+this.$ = ['geq',$$[$0-3], $$[$0]];
 break;
 case 22:
-this.$ = {'bool':$$[$0-3] <= $$[$0]};
+this.$ = ['leq',$$[$0-3], $$[$0]];
 break;
 case 24:
 console.log($$[$0-1]);
-	if($$[$0-1] == "and") this.$ = {'bool':$$[$0-2].bool && $$[$0].bool};
-	else if($$[$0-1] == "or") this.$ = {'bool':$$[$0-2].bool || $$[$0].bool};
-	else this.$ = 1/0;
+	if($$[$0-1] == "and") this.$ = ['bool_and',$$[$0-2], $$[$0]];
+	else if($$[$0-1] == "or") this.$ = ['bool_or',$$[$0-2], $$[$0]];
+	else this.$ = {};
 break;
 case 25:
 this.$ = $$[$0-2].concat([$$[$0]]);

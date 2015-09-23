@@ -3,6 +3,86 @@ var app = app || angular.module('app', []);
 
 app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout){
     $scope.p = parser;
+    $scope.syntax_elements = {
+	"add":function(args){
+	    if($scope.is_valid_array(args[0]) && $scope.is_valid_array(args[1]))
+		return args[0].concat(args[1]);
+	    else if(($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1])) || ($scope.is_valid_string(args[0]) && $scope.is_valid_string(args[1])))
+		return args[0] + args[1];
+	},
+	"sub":function(args){
+	    if($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1]))
+		return args[0] - args[1]
+	    return {'error':'Invalid arguments to -'};
+	},
+	"mul":function(args){
+	    if($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1]))
+		return args[0] * args[1]
+	    return {'error':'Invalid arguments to *'};
+	},
+	"div":function(args){
+	    if($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1]) && args[1] != 0)
+		return args[0] / args[1]
+	    return {'error':'Invalid arguments to /'};
+	},
+	"mod":function(args){
+	    if($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1]) && args[1] != 0)
+		return args[0] % args[1]
+	    return {'error':'Invalid arguments to %'};
+	},
+	"neg":function(args){
+	    if($scope.is_valid_number(args[0]))
+		return -args[0]
+	    return {'error':'Invalid arguments to negation -'};
+	},
+	"len":function(args){
+	    if($scope.is_valid_array(args[0]))
+		return args[0].length;
+	    return {'error':'Invalid arguments to len()'};
+	},
+	"gt":function(args){
+	    if($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1]))
+		return args[0] > args[1]
+	    return {'error':'Invalid arguments to >'};
+	},
+	"lt":function(args){
+	    if($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1]))
+		return args[0] < args[1]
+	    return {'error':'Invalid arguments to <'};
+	},
+	"geq":function(args){
+	    if($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1]))
+		return args[0] >= args[1]
+	    return {'error':'Invalid arguments to >='};
+	},
+	"leq":function(args){
+	    if($scope.is_valid_number(args[0]) && $scope.is_valid_number(args[1]))
+		return args[0] <= args[1]
+	    return {'error':'Invalid arguments to <='};
+	},
+	"eq":function(args){
+	    return args[0] == args[1]
+	},
+	"neq":function(args){
+	    return args[0] != args[1]
+	},
+	"bool_and":function(args){
+	    return args[0] && args[1]
+	},
+	"bool_or":function(args){
+	    return args[0] || args[1]
+	},
+	"array":function(args){
+	    var val = [];
+	    console.log("building array",args);
+	    for(var i = 0; i < args.length; i++){
+		console.log("pushing",args[i]);
+		val.push($scope.walk_ast(args[i]));
+	    }
+	    console.log("built array",val);
+	    return val;
+	}
+    };
     $scope.lightboard_on = false;
     $scope.grid_rows = 10;
     $scope.grid_cols = 10;
@@ -260,17 +340,42 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.raise_error("Bad line: "+inst + "\nAnalysis: " + analysis);
 	return new $scope.instruction(inst, null, null, null, indent_level, "Line is not one of the valid types.  " + analysis);
     }
+    $scope.walk_ast = function(ast){
+	if(ast[0] == 'val'){
+	    console.log("val",ast[1]);
+	    return ast[1];
+	}
+	else if(ast[0] == 'array'){
+	    console.log("arr",ast[1]);
+	    return $scope.syntax_elements[ast[0]](ast[1]);
+	}
+	var args = [];
+	for(var i = 1; i < ast.length; i++){
+	    args.push($scope.walk_ast(ast[i]));
+	}
+	console.log("args",args);
+	console.log("processing",ast[0]);
+	return $scope.syntax_elements[ast[0]](args);
+    }
     $scope.parse_expression = function(expr){
 	// Parse the expression and return its value
 	//return parseInt(expr, 10);
 	console.log("PARSING",expr);
 	try{
-	    var answer =  $scope.p.parse(expr, $scope);
+	    var ast = $scope.p.parse(expr, $scope);
 	} catch(e) {
 	    $scope.raise_error("Expression has no valid value: " + expr);
+	    return;
 	}
-	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer) || $scope.is_valid_array(answer) || 'bool' in answer)){
+	var answer = $scope.walk_ast(ast);
+	console.log(answer);
+	if(answer.error){
+	    $scope.raise_error("Error: "+answer.error);
+	    return;
+	}
+	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer) || $scope.is_valid_array(answer) || answer == true || answer == false)){
 	    $scope.raise_error("Expression has no valid value: " + expr);
+	    return;
 	}
 	if($scope.is_valid_string(answer)){
 	    answer = $scope.handle_string_escapes(answer);
@@ -304,23 +409,17 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
 	    $scope.set_variable(data[1], $scope.parse_expression(data[2]));
 	}},
-	"while":{"regex":/^while\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *(==|!=|>|<|>=|<=) *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\): *$/,"execute":function(data){
-	    var lhs = $scope.parse_expression(data[1]);
-	    var rhs = $scope.parse_expression(data[3]);
-	    var comp = data[2];
-	    console.log("while",lhs,comp,rhs);
-	    if(comp == '==') return lhs == rhs;
-	    else if(comp == '!=') return lhs != rhs;
-	    else if(comp == '<') return lhs < rhs;
-	    else if(comp == '>') return lhs > rhs;
-	    else if(comp == '<=') return lhs <= rhs;
-	    else if(comp == '>=') return lhs >= rhs;
-	}},
 	"if":{"regex":/^if\(([a-zA-Z0-9_\+\-\.\*\/%()[\],=!><" ]+)\): *$/,"execute":function(data){
 	    console.log(data);
 	    var test = $scope.parse_expression(data[1]);
 	    console.log(test);
-	    return test.bool;
+	    return test;
+	}},
+	"while":{"regex":/^while\(([a-zA-Z0-9_\+\-\.\*\/%()[\],=!><" ]+)\): *$/,"execute":function(data){
+	    console.log(data);
+	    var test = $scope.parse_expression(data[1]);
+	    console.log(test);
+	    return test;
 	}},
 	"else":{"regex":/else: */,"execute":function(data){}},
 	"print":{"regex":/^print\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){
