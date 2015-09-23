@@ -6,7 +6,7 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
     $scope.homework_id = 0;
     $scope.hwid = null;
     $scope.hw_status = "Loading saved homework data...";
-    $scope.homeworks = [{"name":"Homework 2","file":"/hw/hw2.xml"}]
+    $scope.homeworks = [{"name":"Homework 2 (ended)","file":"/hw/hw2.xml"}]
     for(var i = 0; i < $scope.homeworks.length; i++){
 	$scope.homeworks[i].index = i;
     }
@@ -52,8 +52,8 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
 	    sub_data[i] = {"hwid":$scope.hwid,"pid":i,"text":$scope.submission_programs[i]};
 	}
 	$http.post("/homework/saveall",sub_data).then(function(response){
-	    console.log("Success",response);
-	    alert(response.data['success']);
+	    console.log("Response",response);
+	    alert(response.data['success'] ? response.data['success'] : response.data['error']);
 	    $scope.verify_submission = false;
 	}, function(response){
 	    console.log("Error",response);
