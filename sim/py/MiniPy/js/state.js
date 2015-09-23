@@ -3,8 +3,47 @@
 var State = (function(scopeElementList, stdoutElementList) {
 	var knownVariables = {};
 
-	var variableTemplate = '<li data-identifier={identifier}><span class="identifier">{identifier}</span><span class="value {type}">{value}</span></li>';
-	var printTemplate = '<li><span class="value {type}">{output}</span><span class="origin">{line}</span></li>';
+	var variableTemplate = '<li data-identifier={identifier}><span class="identifier">{identifier}</span>{value}</li>';
+	var printTemplate = '<li>{value}<span class="origin">{line}</span></li>';
+
+	var valueTemplate = '<span class="value {type}">{value}</span>';
+
+	function valueToHTML(value, reverse) {
+		// defaults to `false`
+		reverse = (reverse === true);
+
+		if (value instanceof Array) {
+			// arrays
+			var rightBracket = '<span class="value punctuation">]</span>';
+
+			var elements = value.map(function (element) {
+				return valueToHTML(element.value);
+			});
+
+			if (reverse === true) {
+				elements.reverse();
+			}
+
+			var elementsHTML = elements.join('<span class="value punctuation">,</span>');
+
+			var leftBracket = '<span class="value punctuation">[</span>';
+
+			if (reverse === true) {
+				// elements are reversed in order so that when CSS property `float: right`
+				// is applied they will be in the correct order
+				var html = rightBracket + elementsHTML + leftBracket;
+			} else {
+				var html = leftBracket + elementsHTML + rightBracket;
+			}
+		} else {
+			// single values
+			var html = valueTemplate
+				.replace('{type}', typeof value)
+				.replace('{value}', value.toString());
+		}
+
+		return html;
+	}
 
 	function hasVariable(identifier) {
 		return (knownVariables[identifier] === true);
@@ -33,11 +72,13 @@ var State = (function(scopeElementList, stdoutElementList) {
 		// add identifier to list of known variables
 		knownVariables[variable.identifier.toString()] = true;
 
+		var reverse = true;
+		var valueHTML = valueToHTML(variable.value.value, reverse);
+
 		var html = variableTemplate
 			.replace('{identifier}', variable.identifier)
 			.replace('{identifier}', variable.identifier)
-			.replace('{type}', typeof variable.value)
-			.replace('{value}', variable.value.toString());
+			.replace('{value}', valueHTML);
 
 		// add to DOM
 		var variableElem = $(html).appendTo(scopeElementList);
@@ -55,12 +96,12 @@ var State = (function(scopeElementList, stdoutElementList) {
 	}
 
 	function printOut(results) {
-		// TODO: only prints one print argument currently
-		var value = results.arguments[0];
+		console.log(results);
+		var valueHTML = valueToHTML(results.arguments[0]);
 
 		var html = printTemplate
-			.replace('{type}', typeof value)
-			.replace('{output}', value.toString())
+			.replace('{type}', 'line')
+			.replace('{value}', valueHTML)
 			// switch from 0-based line count (MiniPy) to 1-based (visual editor)
 			.replace('{line}', results.from + 1);
 
