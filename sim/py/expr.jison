@@ -67,10 +67,10 @@ e
         {$$ = ['val',Number(yytext)];}
     | STRING
         {$$ = ['val',$1.substring(1,yytext.length-1)];}
+    | VAR '[' e ']'
+        {$$ = ['arr_val',['name',$1],$3];}
     | VAR
         {$$ = ['val',$scope.get_variable(yytext)];}
-    | VAR '[' e ']'
-        {$$ = ['val',$scope.get_variable($1)[$3]];}
     | VAR '(' elements ')'
         {
 	    if($1 == "len") $$ = ['len',$3];
