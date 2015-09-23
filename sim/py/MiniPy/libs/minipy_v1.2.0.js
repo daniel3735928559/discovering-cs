@@ -1,4 +1,4 @@
-// MiniPy.js v1.0.1
+// MiniPy.js v1.2.0
 
 (function(root) {
 	var exports = {};
@@ -11,6 +11,7 @@
 		lexer: 'Lexer',
 		parser: 'Parser',
 		scope: 'Scope',
+		types: 'Type',
 		interpreter: 'Interpreter',
 	};
 
@@ -36,122 +37,79 @@
 
 	// [MiniPy] /src/enums.js
 
-	var ErrorType = {
-		UNKNOWN_ERROR: 0,
-
-		// compile-time errors
-		UNEXPECTED_CHARACTER: 1,
-		UNEXPECTED_TOKEN: 2,
-		UNEXPECTED_EOF: 3,
-		BAD_INDENTATION: 4,
-
-		// runtime errors
-		UNDEFINED_VARIABLE: 10,
-		TYPE_VIOLATION: 11,
-		EXECUTION_TIMEOUT: 12,
-	};
-
-	var TokenType = {
-		EOF: 0,
-
-		// whitespace
-		NEWLINE: 1,
-		INDENT: 2,
-		DEDENT: 3,
-
-		// syntactic symbols
-		PUNCTUATOR: 4,
-		KEYWORD: 5,
-		IDENTIFIER: 6,
-
-		// literals
-		BOOLEAN: 7,
-		STRING: 8,
-		NUMBER: 9,
-	};
-
-	var TokenTypeStrings = [
-		'EOF',
-		'Newline',
-		'Indent',
-		'Dedent',
-		'Punctuator',
-		'Keyword',
-		'Identifier',
-		'Boolean',
-		'String',
-		'Number',
-	];
-
 	exports.enums = {
-		ErrorType: ErrorType,
-		TokenType: TokenType,
-		TokenTypeStrings: TokenTypeStrings,
+		ErrorType: {
+			UNKNOWN_ERROR: 0,
+
+			// compile-time errors
+			UNEXPECTED_CHARACTER: 1,
+			UNEXPECTED_TOKEN: 2,
+			UNEXPECTED_EOF: 3,
+			BAD_INDENTATION: 4,
+
+			// runtime errors
+			UNDEFINED_VARIABLE: 10,
+			TYPE_VIOLATION: 11,
+			EXECUTION_TIMEOUT: 12,
+			UNKNOWN_OPERATION: 13,
+			OUT_OF_BOUNDS: 14,
+		},
+
+		TokenType: {
+			EOF: 0,
+
+			// whitespace
+			NEWLINE: 1,
+			INDENT: 2,
+			DEDENT: 3,
+
+			// syntactic symbols
+			PUNCTUATOR: 4,
+			KEYWORD: 5,
+			IDENTIFIER: 6,
+
+			// literals
+			BOOLEAN: 7,
+			STRING: 8,
+			NUMBER: 9,
+		},
+
+		TokenTypeStrings: [
+			'EOF',
+			'Newline',
+			'Indent',
+			'Dedent',
+			'Punctuator',
+			'Keyword',
+			'Identifier',
+			'Boolean',
+			'String',
+			'Number',
+		],
+
+		ValueType: {
+			BOOLEAN: 0,
+			NUMBER: 1,
+			STRING: 2,
+			ARRAY: 3,
+		},
 	};
 
 
 	// [MiniPy] /src/error/error.js
 
 	exports.MiniPyError = (function() {
-		var spacesPerTabs = 4;
-
-		function mul(c, n) {
-			for (var o = ''; n > 0; n--) {
-				o = o + c;
-			}
-
-			return o;
-		}
-
-		function printOffense(source, lineNumber, column, width) {
-			var lines = source.split('\n');
-
-			if (lineNumber < 0) {
-				var offendingSourceLine = lines[0];
-			} else if (lineNumber >= lines.length) {
-				var offendingSourceLine = lines[lines.length - 1];
-			} else {
-				var offendingSourceLine = lines[lineNumber];
-			}
-
-			var totalTabsBefore = (offendingSourceLine.substring(0, column).match(/\t/g) || []).length;
-			var spacedOffendingLine = offendingSourceLine.replace(/\t/g, mul(' ', spacesPerTabs));
-			var spacedColumn = column + ((spacesPerTabs - 1) * totalTabsBefore);
-
-			// calculate padding
-			var totalPadding = spacedColumn;
-			var padding = mul('-', totalPadding);
-
-			var underline = mul('^', width || 1);
-
-			return spacedOffendingLine + '\n' + (padding + underline);
-		}
-
 		function MiniPyError(source, details) {
 			this.type = details.type || 0;
 			this.message = details.message || '';
 
 			this.from = details.from || undefined;
 			this.to = details.to || undefined;
+
+			this.toString = function() {
+				return JSON.stringify(details, null, '   ');
+			};
 		}
-
-		MiniPyError.prototype.toString = function() {
-			var pos = '';
-
-			if (this.range.length > 0) {
-				if (typeof this.range[0].line === 'number') {
-					pos += ' (line ' + (this.range[0].line + 1);
-				}
-
-				if (typeof this.range[0].column === 'number') {
-					pos += ', column ' + (this.range[0].column + 1) + ')';
-				} else {
-					pos += ')';
-				}
-			}
-
-			return this.type + ' ' + this.message + pos;
-		};
 
 		return MiniPyError;
 	}());
@@ -220,31 +178,7 @@
 		function Token(lexer, type, value, line, column) {
 			this.lexer = lexer;
 			this.type = type;
-
-			switch (type) {
-				case TokenType.NUMBER:
-					this.raw = value;
-					this.value = parseFloat(value);
-
-					if (isNaN(this.value)) {
-						throw this.error({
-							type: ErrorType.MALFORMED_NUMBER,
-							message: 'Could not parse number',
-						});
-					}
-
-					break;
-				case TokenType.BOOLEAN:
-					this.raw = value;
-					this.value = (value === 'True');
-					break;
-				case TokenType.STRING:
-					this.raw = '"' + value + '"';
-					this.value = value;
-					break;
-				default:
-					this.value = value;
-			}
+			this.value = value;
 
 			this.line = line;
 			this.column = column;
@@ -259,15 +193,11 @@
 		};
 
 		Token.prototype.getLength = function() {
-			if (this.raw != undefined) {
-				return this.raw.length;
+			if (this.value !== null) {
+				return this.value.toString().length;
 			} else {
-				if (this.value != undefined) {
-					return this.value.length;
-				} else {
-					// for Indents and Dedents
-					return 0;
-				}
+				// for Indents and Dedents
+				return 0;
 			}
 		};
 
@@ -582,6 +512,10 @@
 								var type = TokenType.KEYWORD;
 							} else if (isBooleanLiteral(value)) {
 								var type = TokenType.BOOLEAN;
+
+								// in the case of boolean values, convert the string
+								// to a real boolean value
+								value = (value === 'True');
 							} else {
 								var type = TokenType.IDENTIFIER;
 							}
@@ -643,7 +577,16 @@
 								});
 							}
 
-							pushToken(new Token(self, TokenType.NUMBER, value, line, column));
+							// try to parse the string to a real number
+							var parsed = parseFloat(value);
+
+							if (isNaN(parsed) === true) {
+								// throw an error if the JS parser couldn't make
+								// sense of the string
+								throw new Error('Could not parse number: "' + value + '"');
+							}
+
+							pushToken(new Token(self, TokenType.NUMBER, parsed, line, column));
 							return true;
 						} else if (p === '"' || p === '\'') {
 							// handle string literals
@@ -758,7 +701,7 @@
 								}
 							}
 
-							pushToken(new Token(self, TokenType.String, value, line, column));
+							pushToken(new Token(self, TokenType.STRING, value, line, column));
 							return true;
 						} else if (contains(prefixOperatorCharacters, p) ||
 							contains(punctuationCharacters, p)) {
@@ -830,6 +773,7 @@
 	exports.Parser = (function() {
 		var ErrorType = require('../enums').enums.ErrorType;
 		var TokenType = require('../enums').enums.TokenType;
+		var TokenTypeStrings = require('../enums').enums.TokenTypeStrings;
 
 		function Parser(lexer) {
 			var self = this;
@@ -907,6 +851,27 @@
 								default:
 									return operator.error(details);
 							}
+						};
+					},
+
+					Array: function(elements) {
+						this.type = 'Literal';
+						this.subtype = TokenType.ARRAY;
+						this.elements = elements;
+
+						this.error = function(details) {
+							return elements[0].error(details);
+						};
+					},
+
+					Subscript: function(root, subscript, leftBracketToken) {
+						this.type = 'Subscript';
+						this.root = root;
+						this.subscript = subscript;
+						this.operator = leftBracketToken;
+
+						this.error = function(details) {
+							return leftBracketToken.error(details);
 						};
 					},
 
@@ -1041,6 +1006,54 @@
 							self.next(TokenType.PUNCTUATOR, ')');
 
 							return interior;
+						};
+
+						this.getPrecedence = function() {
+							return precedence;
+						};
+					},
+
+					Array: function() {
+						var precedence = 80;
+
+						this.parse = function(parser, leftBracketToken) {
+							var elements = [];
+
+							while (true) {
+								if (self.peek(TokenType.PUNCTUATOR, ']')) {
+									// break loop when end bracket encountered
+									self.next(TokenType.PUNCTUATOR);
+									break;
+								}
+
+								elements.push(parser.parseExpression());
+
+								if (self.peek(TokenType.PUNCTUATOR, ',')) {
+									self.next(TokenType.PUNCTUATOR, ',');
+								} else if (self.peek(TokenType.PUNCTUATOR, ']')) {
+									self.next(TokenType.PUNCTUATOR);
+									break;
+								}
+							}
+
+							return new self.nodes.expressions.Array(elements);
+						};
+
+						this.getPrecedence = function() {
+							return precedence;
+						};
+					},
+
+					Subscript: function() {
+						var precedence = 80;
+
+						this.parse = function(parser, leftBracketToken, rootExpression) {
+							var subscriptIndex = parser.parseExpression();
+
+							// consume right bracket
+							self.next(TokenType.PUNCTUATOR, ']');
+
+							return new self.nodes.expressions.Subscript(rootExpression, subscriptIndex, leftBracketToken);
 						};
 
 						this.getPrecedence = function() {
@@ -1190,6 +1203,7 @@
 
 			prefix('Atom', new self.nodes.parselets.Atom());
 			prefix('(', new self.nodes.parselets.Group());
+			prefix('[', new self.nodes.parselets.Array());
 
 			infix('=', 10);
 
@@ -1216,6 +1230,7 @@
 			prefix('not', 70);
 			prefix('!', 70);
 
+			infix('[', new self.nodes.parselets.Subscript());
 			infix('(', new self.nodes.parselets.Call());
 
 			prefix('if', new self.nodes.parselets.If());
@@ -1284,7 +1299,7 @@
 					var curr = this.lexer.curr();
 					throw curr.error({
 						type: ErrorType.UNEXPECTED_TOKEN,
-						message: 'Unexpected ' + (curr.type).toUpperCase() + '. Expected ' + value.toUpperCase(),
+						message: 'Unexpected ' + TokenTypeStrings[curr.type] + '. Expected ' + value.toUpperCase(),
 					});
 				}
 			}
@@ -1342,7 +1357,7 @@
 				// no prefix syntax registered with `token`'s symbol
 				throw token.error({
 					type: ErrorType.UNEXPECTED_TOKEN,
-					message: 'Unexpected ' + token.type + ' with value "' + token.getValue() + '"',
+					message: 'Unexpected ' + TokenTypeStrings[token.type] + ' with value "' + token.getValue() + '"',
 				});
 			}
 
@@ -1465,6 +1480,307 @@
 	}());
 
 
+	// [MiniPy] /src/runtime/types.js
+
+	exports.Type = (function() {
+		var ErrorType = require('../enums').enums.ErrorType;
+		var ValueType = require('../enums').enums.ValueType;
+
+		function BooleanValue(value) {
+			this.type = 'Value';
+			this.value = value;
+		}
+
+		BooleanValue.prototype.isType = function(test) {
+			return (test === ValueType.BOOLEAN);
+		};
+
+		BooleanValue.prototype.get = function() {
+			return this.value;
+		};
+
+		BooleanValue.prototype.operation = function(isUnary, operatorToken, operand, operandToken) {
+			var a = this.value,
+				b;
+
+			if (isUnary === false) {
+				if (operand.isType(ValueType.BOOLEAN) === false) {
+					throw operandToken.error({
+						type: ErrorType.TYPE_VIOLATION,
+						message: 'Expected a boolean',
+					});
+				}
+
+				// set `b` during binary operations to represent the computed
+				// value of the right operand
+				b = operand.get();
+			}
+
+			switch (operatorToken.getValue()) {
+				case 'and':
+					return new BooleanValue(a && b);
+				case 'or':
+					return new BooleanValue(a || b);
+				case 'not':
+					if (isUnary === true) {
+						// negation
+						return new BooleanValue(!a);
+					} else {
+						// operator not being used as a unary operation
+						throw operatorToken.error({
+							type: ErrorType.UNKNOWN_OPERATION,
+							message: 'The "not" operator can only be used in the form: not <expression>',
+						});
+					}
+				case '==':
+					return new BooleanValue(a === b);
+				case '!=':
+					return new BooleanValue(a != b);
+				default:
+					throw operatorToken.error({
+						type: ErrorType.UNKNOWN_OPERATION,
+						message: 'Unknown operation with symbol "' + operatorToken.getValue() + '"',
+					});
+			}
+		};
+
+		function NumberValue(value) {
+			this.type = 'Value';
+			this.value = value;
+		}
+
+		NumberValue.prototype.isType = function(test) {
+			return (test === ValueType.NUMBER);
+		};
+
+		NumberValue.prototype.get = function() {
+			return this.value;
+		};
+
+		NumberValue.prototype.operation = function(isUnary, operatorToken, operand, operandToken) {
+			var a = this.value,
+				b;
+
+			if (isUnary === false) {
+				if (operand.isType(ValueType.NUMBER) === false) {
+					throw operandToken.error({
+						type: ErrorType.TYPE_VIOLATION,
+						message: 'Expected a number',
+					});
+				}
+
+				// set `b` during binary operations to represent the computed
+				// value of the right operand
+				b = operand.get();
+			}
+
+			switch (operatorToken.getValue()) {
+				case '+':
+					return new NumberValue(a + b);
+				case '-':
+					if (isUnary === true) {
+						// negation
+						return new NumberValue(-1 * a);
+					} else {
+						// subtraction
+						return new NumberValue(a - b);
+					}
+				case '*':
+					return new NumberValue(a * b);
+				case '/':
+					if (b === 0) {
+						throw operatorToken.error({
+							type: ErrorType.UNKNOWN_ERROR, // TODO: this is an inappropriate error type
+							message: 'Cannot divide by 0',
+						});
+					}
+
+					return new NumberValue(a / b);
+				case '%':
+					return new NumberValue(a % b);
+				case '**':
+					return new NumberValue(Math.pow(a, b));
+				case '>':
+					return new NumberValue(a > b);
+				case '>=':
+					return new NumberValue(a >= b);
+				case '<':
+					return new NumberValue(a < b);
+				case '<=':
+					return new NumberValue(a <= b);
+				case '==':
+					return new NumberValue(a === b);
+				case '!=':
+					return new NumberValue(a != b);
+				default:
+					throw operatorToken.error({
+						type: ErrorType.UNKNOWN_OPERATION,
+						message: 'Unknown operation with symbol "' + operatorToken.getValue() + '"',
+					});
+			}
+		};
+
+		function StringValue(value) {
+			this.type = 'Value';
+
+			// value is supplied having already been stripped of quotes
+			this.value = value;
+		}
+
+		StringValue.prototype.isType = function(test) {
+			return (test === ValueType.STRING);
+		};
+
+		StringValue.prototype.get = function() {
+			return this.value;
+		};
+
+		StringValue.prototype.operation = function(isUnary, operatorToken, operand, operandToken) {
+			if (isUnary === true) {
+				// there are only binary string operations
+				throw operatorToken.error({
+					type: ErrorType.UNKNOWN_OPERATION,
+					message: 'Not a valid string operation',
+				});
+			}
+
+			function expectOperandType(type, message) {
+				if (operand.isType(type) === false) {
+					// expect subscript operand to be of type number
+					throw operandToken.error({
+						type: ErrorType.TYPE_VIOLATION,
+						message: 'Expected a ' + message,
+					});
+				}
+			}
+
+			var a = this.value;
+			var b = operand.get();
+
+			switch (operatorToken.getValue()) {
+				case '+':
+					expectOperandType(ValueType.STRING, 'string');
+					return new StringValue(a + b);
+				case '==':
+					expectOperandType(ValueType.STRING, 'string');
+					return new StringValue(a == b);
+				case '!=':
+					expectOperandType(ValueType.STRING, 'string');
+					return new StringValue(a != b);
+				case '[':
+					// subscript syntax
+					expectOperandType(ValueType.NUMBER, 'number');
+
+					if (b >= a.length || -b > a.length) {
+						throw operatorToken.error({
+							type: ErrorType.OUT_OF_BOUNDS,
+							message: '"' + b + '" is out of bounds',
+						});
+					} else if (b < 0) {
+						// negative index
+						return new StringValue(a[a.length + b])
+					} else {
+						// positive index
+						return new StringValue(a[b]);
+					}
+				default:
+					throw operatorToken.error({
+						type: ErrorType.UNKNOWN_OPERATION,
+						message: 'Unknown operation with symbol "' + operatorToken.getValue() + '"',
+					});
+			}
+		};
+
+		function ArrayValue(elements) {
+			this.type = 'Value';
+			this.value = elements;
+		}
+
+		ArrayValue.prototype.isType = function(test) {
+			return (test === ValueType.ARRAY);
+		};
+
+		ArrayValue.prototype.get = function(index) {
+			if (typeof index === 'number') {
+				// TODO: check to make sure index is in-range
+				return this.value[index];
+			} else {
+				return this.value;
+			}
+		};
+
+		ArrayValue.prototype.operation = function(isUnary, operatorToken, operand, operandToken) {
+			if (isUnary === true) {
+				// there are only binary array operations
+				throw operandToken.error({
+					type: ErrorType.UNKNOWN_OPERATION,
+					message: 'Not a valid array operation',
+				});
+			}
+
+			function expectOperandType(type, message) {
+				if (operand.isType(type) === false) {
+					// expect subscript operand to be of type number
+					throw operandToken.error({
+						type: ErrorType.TYPE_VIOLATION,
+						message: 'Expected a ' + message,
+					});
+				}
+			}
+
+			var a = this.value;
+			var b = operand.get();
+
+			switch (operatorToken.getValue()) {
+				case '+':
+					expectOperandType(ValueType.ARRAY, 'array');
+					// concatentate arrays
+					var concatenatedElements = [];
+
+					// add elements from `a` to new array
+					for (var i = 0, l = a.length; i < l; i++) {
+						concatenatedElements.push(a[i]);
+					}
+
+					// add elements from `b` to new array
+					for (var i = 0, l = b.length; i < l; i++) {
+						concatenatedElements.push(b[i]);
+					}
+
+					return new ArrayValue(concatenatedElements);
+				case '[':
+					expectOperandType(ValueType.NUMBER, 'number');
+
+					// subscript syntax
+					if (b >= a.length || -b > a.length) {
+						throw operatorToken.error({
+							type: ErrorType.OUT_OF_BOUNDS,
+							message: '"' + b + '" is out of bounds',
+						});
+					} else if (b < 0) {
+						// negative index
+						return a[a.length + b];
+					} else {
+						// positive index
+						return a[b];
+					}
+				default:
+					throw operatorToken.error({
+						type: ErrorType.UNKNOWN_OPERATION,
+						message: 'Unknown operation with symbol "' + operatorToken.getValue() + '"',
+					});
+			}
+		};
+
+		return {
+			Boolean: BooleanValue,
+			Number: NumberValue,
+			String: StringValue,
+			Array: ArrayValue,
+		};
+	}());
+
+
 	// [MiniPy] /src/runtime/Scope.js
 
 	exports.Scope = (function() {
@@ -1537,7 +1853,10 @@
 		// + Change print statement to function (Python 3.0)
 		// + Operation type checking
 
+		var TokenType = require('../enums').enums.TokenType;
 		var ErrorType = require('../enums').enums.ErrorType;
+
+		var Type = require('./types').Type;
 		var Scope = require('./scope').Scope;
 
 		// for preventing certain events from being called again and again
@@ -1696,144 +2015,76 @@
 			function exec(node) {
 				switch (node.type) {
 					case 'Literal':
-						return node.value;
+						switch (node.subtype) {
+							case TokenType.BOOLEAN:
+								return new Type.Boolean(node.value);
+							case TokenType.NUMBER:
+								return new Type.Number(node.value);
+							case TokenType.STRING:
+								return new Type.String(node.value);
+							case TokenType.ARRAY:
+								var executedElements = node.elements.map(function(element) {
+									return exec(element);
+								});
+
+								return new Type.Array(executedElements);
+							default:
+								throw node.error({
+									type: ErrorType.UNEXPECTED_TOKEN,
+									message: 'Unknown value',
+								});
+						}
+
+						break;
 					case 'Identifier':
 						return scope.get(node);
 					case 'AssignmentExpression':
-						var left = node.left;
-						var newValue = exec(node.right);
-						scope.set(left, newValue);
-						event('assign', [left.value, newValue]);
+						var assignee = node.left;
+						var value = exec(node.right);
+
+						scope.set(assignee, value);
+						event('assign', [assignee.value, value]);
 						break;
 					case 'UnaryExpression':
+						var operatorToken = node.operator;
 						var right = exec(node.right);
-						var rightType = typeof right;
 
-						function unaryOperationIncorrectTypes(message) {
-							return node.operator.error({
-								type: ErrorType.TYPE_VIOLATION,
-								message: message,
-							});
-						}
-
-						function expectOnce(operation, expected, actual) {
-							if (expected !== actual) {
-								var message = 'Unsupported operation "' + operation + '" ' +
-									'on type "' + actual + '"';
-								throw unaryOperationIncorrectTypes(message);
-							}
-						}
-
-						switch (node.operator.getValue()) {
-							case '+':
-								expectOnce('+', 'number', rightType);
-								return right;
-							case '-':
-								expectOnce('-', 'number', rightType);
-								return -1 * right;
-							case '!':
-							case 'not':
-								expectOnce(node.operator.getValue(), 'boolean', rightType);
-								return (right === false);
-							default:
-								throw node.operator.error({
-									type: 'SyntaxError',
-									message: 'Unknown operator: "' + node.operator.getValue() + '"',
-									from: {
-										line: node.line,
-										column: node.column,
-									},
-									to: {
-										line: node.line,
-										column: node.column + 1,
-									},
-								});
-						}
-
-						break;
+						var isUnary = true;
+						return right.operation(isUnary, operatorToken);
 					case 'BinaryExpression':
-						// TODO: check for type mismatch and return knowledgeable error message
+						var operatorToken = node.operator;
 						var left = exec(node.left);
 						var right = exec(node.right);
 
-						var leftType = typeof left;
-						var rightType = typeof right;
+						var isUnary = false;
+						return left.operation(isUnary, operatorToken, right, node.right);
+					case 'Subscript':
+						var operator = node.operator;
+						var root = exec(node.root);
+						var subscript = exec(node.subscript);
 
-						function binaryOperationIncorrectTypes(message) {
-							return node.operator.error({
-								type: ErrorType.TYPE_VIOLATION,
-								message: message,
-							});
-						}
-
-						// `el`: expected left type
-						// `er`: expected right type
-						// `al`: actual left type
-						// `ar`: actual right type
-						function expectTwice(operation, el, er, al, ar) {
-							if (al !== el || er !== ar) {
-								var message = 'Unsupported operation "' + operation + '" ' +
-									'for type(s) "' + al + '" and "' + ar + '"';
-								throw binaryOperationIncorrectTypes(message);
-							}
-						}
-
-						switch (node.operator.getValue()) {
-							case '+':
-								return left + right;
-							case '-':
-								expectTwice('-', 'number', 'number', leftType, rightType);
-								return left - right;
-							case '*':
-								expectTwice('*', 'number', 'number', leftType, rightType);
-								return left * right;
-							case '/':
-								expectTwice('/', 'number', 'number', leftType, rightType);
-								return left / right;
-							case '%':
-								expectTwice('%', 'number', 'number', leftType, rightType);
-								return left % right;
-							case '**':
-								expectTwice('**', 'number', 'number', leftType, rightType);
-								return Math.pow(left, right);
-							case '//':
-								// not technically correct, I believe Python technically
-								// does integer division (and thus truncation not rounding)
-								expectTwice('//', 'number', 'number', leftType, rightType);
-								return Math.floor(left / right);
-							case '>':
-								expectTwice('>', 'number', 'number', leftType, rightType);
-								return left > right;
-							case '>=':
-								expectTwice('>=', 'number', 'number', leftType, rightType);
-								return left >= right;
-							case '<':
-								expectTwice('<=', 'number', 'number', leftType, rightType);
-								return left < right;
-							case '<=':
-								expectTwice('<=', 'number', 'number', leftType, rightType);
-								return left <= right;
-							case '==':
-								return left === right;
-							case 'and':
-								expectTwice('and', 'boolean', 'boolean', leftType, rightType);
-								return (left === true) && (right === true);
-							case '!=':
-								return left !== right;
-							case 'or':
-								expectTwice('or', 'boolean', 'boolean', leftType, rightType);
-								return left || right;
-							default:
-								throw node.operator.error({
-									type: 'SyntaxError',
-									message: 'Unknown operator: "' + node.operator.getValue() + '"',
-								});
-						}
+						var isUnary = false;
+						return root.operation(isUnary, operator, subscript, node.subscript);
 					case 'CallExpression':
 						var calleeIdentifier = node.callee.value;
 
 						if (calleeIdentifier === 'print') {
-							event('print', exec(node.arguments[0]));
+							var printArguments = [];
+
+							for (var i = 0, l = node.arguments.length; i < l; i++) {
+								var argument = exec(node.arguments[i]);
+
+								if (argument.type === 'Value') {
+									printArguments.push(argument.get());
+								} else {
+									throw node.arguments[i].error({
+										type: ErrorType.TYPE_VIOLATION,
+										message: 'Only concrete values (ex: booleans, numbers, strings) can be printed',
+									});
+								}
+							}
+
+							event('print', printArguments);
 						} else {
 							// get identifier's value from scope
 							var fn = scope.get(node.callee);
@@ -1855,7 +2106,7 @@
 					case 'IfStatement':
 						var condition = exec(node.condition);
 
-						if (condition === true) {
+						if (condition.value === true) {
 							// IF block
 							pause(function() {
 								return execBlock(node.ifBlock);
@@ -1879,7 +2130,7 @@
 									if (thisCase.type === 'ElifStatement') {
 										var elifCondition = exec(thisCase.condition);
 
-										if (elifCondition === true) {
+										if (elifCondition.value === true) {
 											// condition matches, execute this "elif" block
 											pause(function() {
 												return execBlock(thisCase.block);
@@ -1923,7 +2174,7 @@
 							pause(function() {
 								var newCondition = exec(node.condition);
 
-								if (newCondition === true) {
+								if (newCondition.value === true) {
 									pause(function() {
 										return execBlock(node.block, loop);
 									});
@@ -1936,7 +2187,7 @@
 							});
 						};
 
-						if (condition === true) {
+						if (condition.value === true) {
 							pause(function() {
 								return execBlock(node.block, loop);
 							});
