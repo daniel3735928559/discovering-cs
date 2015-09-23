@@ -76,6 +76,9 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
     $scope.toggle_lightboard = function(){
 	$scope.lightboard_on = !$scope.lightboard_on;
     }
+    $scope.is_valid_array = function(o) {
+	return o instanceof Array || Array.isArray(o);
+    }
     $scope.is_valid_string = function(o) {
 	return typeof o == "string" || (typeof o == "object" && o.constructor === String);
     }
@@ -87,14 +90,14 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    $scope.ref_display = true;
 	    console.log("big");
 	    $scope.click_callback = null;
-	    $scope.line_types['set_color'] = {"regex":/^set_color\(((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *\) *$/,"execute":function(data){
+	    $scope.line_types['set_color'] = {"regex":/^set_color\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *\) *$/,"execute":function(data){
 		console.log(data);
 		$scope.lightboard_on = true;
 		var b = $scope.get_button($scope.parse_expression(data[1]), $scope.parse_expression(data[2]));
 		if(b) b.style['background-color'] = $scope.parse_expression(data[3]);
 		else $scope.status = "Invalid lightboard coordinates";
 	    }};
-	    $scope.line_types['set_text'] = {"regex":/^set_text\(((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *\) *$/,"execute":function(data){
+	    $scope.line_types['set_text'] = {"regex":/^set_text\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *\) *$/,"execute":function(data){
 		console.log(data);
 		$scope.lightboard_on = true;
 		var b = $scope.get_button($scope.parse_expression(data[1]), $scope.parse_expression(data[2]));
@@ -266,7 +269,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	} catch(e) {
 	    $scope.raise_error("Expression has no valid value: " + expr);
 	}
-	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer))){
+	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer) || $scope.is_valid_array(answer) || 'bool' in answer)){
 	    $scope.raise_error("Expression has no valid value: " + expr);
 	}
 	if($scope.is_valid_string(answer)){
@@ -298,10 +301,10 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.outputs.push(stuff);
     }
     $scope.line_types = {
-	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
+	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
 	    $scope.set_variable(data[1], $scope.parse_expression(data[2]));
 	}},
-	"while":{"regex":/^while\(((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *(==|!=|>|<|>=|<=) *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*)\): *$/,"execute":function(data){
+	"while":{"regex":/^while\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *(==|!=|>|<|>=|<=) *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\): *$/,"execute":function(data){
 	    var lhs = $scope.parse_expression(data[1]);
 	    var rhs = $scope.parse_expression(data[3]);
 	    var comp = data[2];
@@ -313,21 +316,14 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    else if(comp == '<=') return lhs <= rhs;
 	    else if(comp == '>=') return lhs >= rhs;
 	}},
-	"if":{"regex":/^if\(((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*) *(==|!=|>|<|>=|<=) *((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*)\): *$/,"execute":function(data){
+	"if":{"regex":/^if\(([a-zA-Z0-9_\+\-\.\*\/%()[\],=!><" ]+)\): *$/,"execute":function(data){
 	    console.log(data);
-	    var lhs = $scope.parse_expression(data[1]);
-	    var rhs = $scope.parse_expression(data[3]);
-	    var comp = data[2];
-	    console.log(lhs, comp, rhs);
-	    if(comp == '==') return lhs == rhs;
-	    else if(comp == '!=') return lhs != rhs;
-	    else if(comp == '<') return lhs < rhs;
-	    else if(comp == '>') return lhs > rhs;
-	    else if(comp == '<=') return lhs <= rhs;
-	    else if(comp == '>=') return lhs >= rhs;
+	    var test = $scope.parse_expression(data[1]);
+	    console.log(test);
+	    return test.bool;
 	}},
 	"else":{"regex":/else: */,"execute":function(data){}},
-	"print":{"regex":/^print\(((?:[a-zA-Z0-9_\+\-\.\*\/%() ]+|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){
+	"print":{"regex":/^print\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){
 	    $scope.output($scope.parse_expression(data[1]));
 	}},
 	"input_num":{"regex":/^input_num\( *([a-zA-Z_][a-zA-Z_0-9]*) *\) *$/,"execute":function(data){
