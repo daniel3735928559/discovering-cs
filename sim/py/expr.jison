@@ -71,6 +71,8 @@ e
         {$$ = ['arr_val',['name',$1],$3];}
     | VAR
         {$$ = ['val',$scope.get_variable(yytext)];}
+    | VAR '(' ')'
+        {$$ = ['call',['name',$1],['array']];}
     | VAR '(' elements ')'
         {
 	    if($1 == "len") $$ = ['len',$3];

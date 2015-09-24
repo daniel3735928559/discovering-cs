@@ -505,9 +505,16 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    
 	    // Set variables according to function arguments
 
-	    for(var i = 0; i < to_call.arg_names.length; i++){
-		$scope.set_variable(to_call.arg_names[i],$scope.walk_ast(function_call[2])[i]);
+	    var arg_arr = $scope.walk_ast(function_call[2]);
+	    if(arg_arr.length != to_call.arg_names.length){
+		$scope.raise_error("Function expected " + to_call.arg_names.length + " arguments and got " + arg_arr.length);
+		$scope.die();
+		return "";
 	    }
+	    for(var i = 0; i < to_call.arg_names.length; i++){
+		$scope.set_variable(to_call.arg_names[i],arg_arr[i]);
+	    }
+	    
 	    
 	    // Move to function's block
 	    
@@ -540,22 +547,31 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	console.log("PARSING",expr);
 	var ast = $scope.in_progress_asts.pop();
 	console.log("Looking for previous AST: ",ast);
+	if(!expr || expr == "") return "";
 	if(!ast){
 	    try{
 		var ast = $scope.p.parse(expr, $scope);
 		console.log("and the AST is...",JSON.stringify(ast));
 	    } catch(e) {
+		console.log("invalid",e);
 		$scope.raise_error("Expression has no valid value: " + expr);
 		return;
 	    }
 	}
 	var answer = $scope.walk_ast(ast);
-	console.log(answer);
+	console.log("ANSWER",answer);
+	if(!answer){
+	    console.log("no answer");
+	    if($scope.current_block.lines[$scope.current_block.line].type == "fncall")
+		return "Zamboni";
+	    return;
+	}
 	if(answer.error){
 	    $scope.raise_error("Error: "+answer.error);
 	    return;
 	}
 	if(!($scope.is_valid_number(answer) || $scope.is_valid_string(answer) || $scope.is_valid_array(answer) || answer == true || answer == false)){
+	    console.log("invlid");
 	    $scope.raise_error("Expression has no valid value: " + expr);
 	    return;
 	}
@@ -610,9 +626,14 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log(test);
 	    return test;
 	}},
+	"fncall":{"regex":/^(?!print\(|len\()([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\)$/,"execute":function(data){
+	    console.log("D0",data[0]);
+	    $scope.parse_expression(data[0]);
+	}},
 	"def":{"regex":/^def ([a-zA-Z_][a-zA-Z_0-9]*)\(((?:[a-zA-Z_][a-zA-Z_0-9]*,?)*)\): *$/,"execute":function(data){
 	}},
-	"return":{"regex":/^return *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
+	"return":{"regex":/^return *([a-zA-Z0-9_\+\-\.\*\/%()[\]," ]*)$/,"execute":function(data){
+	    console.log("D1",JSON.stringify(data[1]));
 	    return $scope.parse_expression(data[1]);
 	}},
 	"else":{"regex":/^else: *$/,"execute":function(data){}},
@@ -708,7 +729,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    else if(inst.type == 'def'){
 		console.log("DEF",inst.data);
 		var arg_names = [];
-		var arg_matches = inst.data[2].match(/[a-zA-Z_][a-zA-Z_0-9]*/g);
+		var arg_matches = inst.data[2].match(/[a-zA-Z_][a-zA-Z_0-9]*/g) || [];
 		console.log("ARM",arg_matches);
 		for(var i = 0; i < arg_matches.length; i++)
 		    arg_names.push(arg_matches[i]);
