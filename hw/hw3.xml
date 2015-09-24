@@ -1,5 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?><quest name="HW 3" id="3">
 
+<q type="python" id="Problem 6a">
+  <program></program>
+  <text>
+    Suppose I want to write a block of code that outputs the word
+    "positive" if the value of the variable number is greater than 0,
+    and output the words "not positive" if the value of number is less
+    than or equal to 0. The block of code should print to a single
+    line. There are 3 methods below that may or may not work. Fix it
+    so that all 3 methods work. If they work without editing required,
+    submit the method as is. You can initialize the variable number to
+    whatever you want.
+
+    <b>Method 1: </b>
+    <pre>if(number > 0):
+   print("positive")
+else:
+   if(number &lt; 0):
+      print("negative")
+    </pre>
+  </text>
+</q>
+
+<q type="python" id="Problem 6b">
+  <program></program>
+  <text>
+    Suppose I want to write a block of code that outputs the word
+    "positive" if the value of the variable number is greater than 0,
+    and output the words "not positive" if the value of number is less
+    than or equal to 0. The block of code should print to a single
+    line. There are 3 methods below that may or may not work. Fix it
+    so that all 3 methods work. If they work without editing required,
+    submit the method as is. You can initialize the variable number to
+    whatever you want.
+
+    <b>Method 2: </b>
+    <pre>if(number &lt;= 0):
+   print("not ")
+print("positive")
+    </pre>
+  </text>
+</q>
+
+<q type="python" id="Problem 6c">
+  <program></program>
+  <text>
+    Suppose I want to write a block of code that outputs the word
+    "positive" if the value of the variable number is greater than 0,
+    and output the words "not positive" if the value of number is less
+    than or equal to 0. The block of code should print to a single
+    line. There are 3 methods below that may or may not work. Fix it
+    so that all 3 methods work. If they work without editing required,
+    submit the method as is. You can initialize the variable number to
+    whatever you want.
+
+    <b>Method 3: </b>
+    <pre>
+if(number > 0):
+   print("positive")
+else:
+   print("not positive")
+    </pre>
+  </text>
+</q>
+
+<q type="python" id="Problem 7">
+  <program></program>
+  <text>
+    Fix all the Python syntax errors below without deleting any lines
+    of code. It does not matter what the code is trying to do, so
+    <b>ignore the logic errors</b> and <b>just focus on the syntax
+    errors</b> that exist. Assume there was no code before this.
+
+<pre>
+h3110W0RlD = "Hello World"
+_ = "h3110W0RlD"
+weAreTheChampions = 1
+# infinite loop to fight ‘til the end
+while(weAreTheCampions = 1)
+print("f1gh71ng \’til the end")
+int fahrenhype = -40
+celsius = (9 / 5) * (fahrenhype + 32
+print(Celsius)
+</pre>
+  </text>
+</q>
 
 <q type="python" id="Problem 8">
   <program></program>

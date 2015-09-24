@@ -26,7 +26,11 @@
       </span><br />
       <div class="pysim_title">Functions</div><br />
       <span ng-repeat="(name,fn) in functions">
-	<div ng-class="'pysim_reg'"><pre>{{name}}({{fn.arg_names.join(",")}})</pre></div><br />
+	<div ng-class="'pysim_reg normal'"><pre>{{name}}({{fn.arg_names.join(",")}})</pre></div><br />
+      </span><br />
+      <div class="pysim_title">Outstanding Calls</div><br />
+      <span ng-repeat="state in call_stack">
+	<div ng-class="'pysim_reg'"><pre>{{state.fn}}</pre></div><br />
       </span><br />
     </div>
     <div class="pysim_outputs">

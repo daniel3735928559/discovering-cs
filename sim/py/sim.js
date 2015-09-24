@@ -494,21 +494,10 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	      - Pop variables off scope stack
 	      - Pop current line, ast, and path to the call we just returned from off the return stack
 	    */
-	    
-	    // Push state onto the call stack
-	    var call_path = calls.pop();
-	    var state = {
-		"ast":ast,
-		"call_path":call_path,
-		"scope":JSON.parse(JSON.stringify($scope.variables)),
-		"line":$scope.current_block.line,
-		"block":$scope.current_block
-	    };
-	    console.log(JSON.stringify(state.scope));
-	    $scope.call_stack.push(state);
 
 	    // Get the function object that we're calling
 
+	    var call_path = calls.pop();
 	    var function_call = $scope.get_call(call_path,ast);
 	    var to_call = $scope.get_function(function_call[1][1]);
 	    $scope.called_a_function = true;
@@ -521,6 +510,22 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		$scope.die();
 		return "";
 	    }
+	    
+	    // Push state onto the call stack
+	    var state = {
+		"ast":ast,
+		"call_path":call_path,
+		"scope":JSON.parse(JSON.stringify($scope.variables)),
+		"line":$scope.current_block.line,
+		"block":$scope.current_block,
+		"fn":"Line " + $scope.get_line_num() + ": " + to_call.name + "("+arg_arr.join(",")+")"
+	    };
+	    console.log("FNFNFN",state.fn);
+	    console.log(JSON.stringify(state.scope));
+	    $scope.call_stack.push(state);
+
+	    // Create new state for inside function
+	    
 	    for(var i = 0; i < to_call.arg_names.length; i++){
 		$scope.set_variable(to_call.arg_names[i],arg_arr[i]);
 	    }
@@ -728,8 +733,9 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		}
 	    }
 	    else if(inst.type == 'return'){
-		if(!(self.parent_line) || self.parent_line.type != 'def'){
-		    $scope.status = "Syntax error: cannot return from outside a function";
+		if($scope.call_stack.length == 0){
+		    $scope.raise_error("Syntax error: cannot return from outside a function");
+		    $scope.die();
 		}
 		var ret_val = inst.run();
 		if($scope.called_a_function){
