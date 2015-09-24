@@ -1,17 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?><quest name="HW 3" id="3">
-  <q type="python" id="Basics">
-<program>x = 2
-y = 4</program>
-<text>What is 1+1?
+
+
+<q type="python" id="Problem 8">
+  <program></program>
+  <text>Use while loops and nested loops to print patterns of asterisks on the screen. Use the sample starter code at the end of this question to begin. The code should accept an input with the following prompt:
+
+<pre>Enter an positive odd number: </pre>
+
+and then (for example, if the user enters 9) draw the following patterns:
+
+<pre>begin printing horizontal line
+*********
+end printing horizontal line
+begin printing vertical line
+*
+*
+*
+*
+*
+*
+*
+*
+*
+end printing vertical line
+begin printing triangle 1
+*
+**
+***
+****
+*****
+******
+*******
+********
+*********
+end printing triangle 1
+begin printing triangle 2
+    *
+   ***
+  *****
+ *******
+*********
+end printing triangle 2</pre>
+
+
+
+Sample starting code (the horizontal line pattern has been done for you):
+
+<pre>input_num(positiveOddNumberInput)
+
+print("begin printing horizontal line")
+lineToPrint = ""
+i = 0
+while(i &lt; positiveOddNumberInput):
+    lineToPrint = lineToPrint + "*"
+    i = i + 1
+print(lineToPrint)
+print("end printing horizontal line")
+
+print("begin printing vertical line")
+<b># your code here</b>
+print("end printing vertical line")
+
+print("begin printing triangle 1")
+<b># your code here</b>
+print("end printing triangle 1")
+
+print("begin printing triangle 2")
+<b># your code here</b>
+print("end printing triangle 2")</pre>
 </text>
 </q>
 
-<q type="python" id="Variables">
-  <program>x = 3+2
-y = 1+x*(-1)
-hello = (x+2*y)/y
-x = x + 1
-y = y - x</program>
-  <text>What is 1+2?</text>
+<q type="python" id="Problem 9">
+  <program></program>
+  <text>Repeat Homework 2 Question 11, but this time store the
+  Fibonacci numbers into an array and then print out the array at the
+  end.
+<p>For reference, here is one possible answer to homework 2 question
+11: 
+</p>
+<pre>
+n = 15
+counter = 1
+a = 0
+b = 1
+print(a)
+while(counter &lt; n):
+   print(b)
+   temp = b
+   b = b + a
+   a = temp
+   counter = counter + 1
+</pre>
+  </text>
+</q>
+<q type="python" id="Problem 10">
+  <program></program>
+  <text>Repeat Homework 2 Question 12, but use a function to convert
+  Fahrenheit to Celsius.
+
+  <p>For reference, here is one possible answer to homework 2 question
+  12:
+  </p>
+  <pre>
+F = -50
+while(F &lt;= 50):
+   C = (F - 32) * 5 / 9
+   if(F == C):
+      print("Fahrenheit and Celsius are equal at -40 degrees!")
+   else:
+      print("F=" + F + ", " + "C=" + C)
+   F = F + 1
+  </pre>
+  </text>
 </q>
 </quest>

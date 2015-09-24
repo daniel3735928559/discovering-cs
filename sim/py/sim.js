@@ -182,7 +182,17 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    },
 	    'Shift-Tab': function(cm) {
 		cm.execCommand('indentLess');
-	    }
+	    },
+            'Enter': function(cm) {
+                if(!($scope.running))
+                    return CodeMirror.Pass;
+                $scope.step();
+                $scope.$apply();
+            },
+            'Ctrl-Enter': function(cm) {
+                $scope.run();
+                $scope.$apply();
+            }
 	});
     }
     $scope.toggle_lightboard = function(){
@@ -564,7 +574,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log("no answer");
 	    if($scope.current_block.lines[$scope.current_block.line].type == "fncall")
 		return "Zamboni";
-	    return;
+	    return answer;
 	}
 	if(answer.error){
 	    $scope.raise_error("Error: "+answer.error);
@@ -626,7 +636,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log(test);
 	    return test;
 	}},
-	"fncall":{"regex":/^(?!print\(|len\()([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\)$/,"execute":function(data){
+	"fncall":{"regex":/^(?!print *\(|input_string *\(|set_color *\(|set_text *\(|input_num *\(|input_click *\(|len *\(|return *)([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\)$/,"execute":function(data){
 	    console.log("D0",data[0]);
 	    $scope.parse_expression(data[0]);
 	}},
@@ -722,6 +732,10 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		    $scope.status = "Syntax error: cannot return from outside a function";
 		}
 		var ret_val = inst.run();
+		if($scope.called_a_function){
+		    $scope.called_a_function = false;
+		    return;
+		}
 		console.log(ret_val);
 		$scope.return_from_function(ret_val);
 		// do something
@@ -889,6 +903,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
     $scope.raise_error = function(s){
 	$scope.error_happened = true;
 	$scope.error_message = s;
+	$scope.status = $scope.error_message;
 	console.log("ERRORERRORERROR",s);
     }
     $scope.set_original = function(){

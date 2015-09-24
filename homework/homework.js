@@ -6,7 +6,7 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
     $scope.homework_id = 0;
     $scope.hwid = null;
     $scope.hw_status = "Loading saved homework data...";
-    $scope.homeworks = [{"name":"Homework 2 (ended)","file":"/hw/hw2.xml"}]
+    $scope.homeworks = [{"name":"Homework 3","file":"/hw/hw3.xml"}, {"name":"Homework 2 (ended)","file":"/hw/hw2.xml"}]
     for(var i = 0; i < $scope.homeworks.length; i++){
 	$scope.homeworks[i].index = i;
     }

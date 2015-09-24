@@ -24,6 +24,10 @@
       <span ng-repeat="(name,val) in variables">
 	<div ng-class="'pysim_reg '+ (is_updated(name) ? 'updated' : 'normal')"><pre>{{name}} = {{val}}</pre></div><br />
       </span><br />
+      <div class="pysim_title">Functions</div><br />
+      <span ng-repeat="(name,fn) in functions">
+	<div ng-class="'pysim_reg'"><pre>{{name}}({{fn.arg_names.join(",")}})</pre></div><br />
+      </span><br />
     </div>
     <div class="pysim_outputs">
       <div class="pysim_title">Output</div><br />

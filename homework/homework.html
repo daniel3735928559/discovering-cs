@@ -17,7 +17,7 @@
   <body ng-app="app">
     <div class="quest" ng-controller="HomeworkController">
       <div class="quest_controls">
-	<!-- <select ng-change="switch_hw()" ng-model="homework_id" ng-options="h.index as h.name for h in homeworks"></select> -->
+	<select ng-change="switch_hw()" ng-model="homework_id" ng-options="h.index as h.name for h in homeworks"></select>
 	<div style="display:inline-block;"><b>{{homeworks[homework_id].name}}</b></div>
 	<div class="homework_button" ng-click="submit_homework()">Save all problems</div>
 	<div style="display:inline-block;font-size:10px;height:100%;"><span style="display:inline-block;vertical-align:middle">You
