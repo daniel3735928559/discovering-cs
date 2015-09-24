@@ -5,29 +5,29 @@
 
     <summary>In the previous chapter, we introduced a simplified
     version of Python in order to communicate the fundamental ideas of
-    programming.  In this chapter, we'll explore further features of
-    Python that allow us to complete the same tasks a we had in
-    chapter 2 more simply. </summary>
+    programming.  In this chapter, we'll explore more features of
+    Python that allow us to complete the tasks that we had in chapter
+    2 more simply. </summary>
     
     <text>
       <p>In our journey down the tower of abstractions, we are
-      currently discussing high-level programming languages--the tool
+      currently discussing high-level programming languages, the tools
       with which large-scale systems are built.  The goal of the
       previous chapter was to introduce the basic concepts of
       programming--things like syntax, semantics, the rigidity of a
-      programming language, and how to think within its rules to
-      accomplish basic tasks.  For this purpose, we introduced a basic
-      subset of Python.  </p>
+      programming language, and how to think within a prescribed set
+      of rules to accomplish basic tasks.  For this purpose, we
+      introduced a basic subset of Python.  </p>
       
       <p>As our goal is to drill down into the lower layers of
-      abstraction rather than give a full introduction to actual
-      programming (which is easily a class all on its own), we'll only
-      spend this brief chapter talking about more advanced features of
-      Python, and then just enough to convince ourselves that Python
-      can actually solve the real-world probems we posed in a sensible
-      way.  For example, think back to the code that simulated
-      search-engine behavior, searching a file for a user-supplied
-      string: </p>
+      abstraction rather than to give a full introduction to actual
+      programming (which is easily an entire book all on its own),
+      we'll only spend this brief chapter talking about more advanced
+      features of Python, and then just enough to convince ourselves
+      that Python can actually solve the real-world probems we posed
+      in a sensible way.  For example, think back to the code that
+      simulated search-engine behavior, searching a file for a
+      user-supplied string: </p>
 
       <code>search_word = &quot;the&quot;
 file1_name = &quot;Ode on the death of a favorite cat&quot;
@@ -76,10 +76,10 @@ if(search_word == file2_word8):
    print(file2_name)</code>
 
 	<p>There are many feature of this that would count as
-	un-sensible:
+	less-than-delightful:
 
 	<ul>
-	  <li>We aren't actually reading a file--we're pretending we
+	  <li>We aren't actually reading a file.  We're pretending we
 	  got the words from a file into separate variables.</li>
 	  <li>We aren't actually getting user input from a prompt, but
 	  instead require users to change the program when they want
@@ -95,19 +95,21 @@ if(search_word == file2_word8):
 	  we may skip a word from the file and not realise it.</li>
 	</ul>
 	
-	Several of these concerns deal with the unrealistic nature of
+	Several of these issues deal with the unrealistic nature of
 	the example, which we'll certainly rectify in this chapter.
-	However some of them get at further concerns beyond realism
+	However, some of them get at further concerns beyond realism
 	and even beyond those of efficiency and scalability that we
-	discussed in the previous chapter.  These new concerns start
-	to matter more when your code gets very large and has many
-	users, but are worth at least thinking about for any code you
-	write: Readability and maintainability.</p>
+	discussed in the previous chapter.  Two such concerns are
+	readability of code, and maintainability of code.  These new
+	concerns start to matter more when your code gets very large
+	and has many users, but are worth at least thinking about for
+	any code you write.
+	</p>
 
 	<p><def term="readability"><b>Readability</b> refers to how
 	easy it is to look at the code and both understand what it is
 	meant to do and verify that it actually does that.
-	Readability does not necessarily mean concision--doing a
+	Readability does not necessarily mean concision.  Doing a
 	complex task in one really clever line of code may obscure
 	what task that line is actually performing.  Breaking it into
 	two or three more perspicuous lines may actually improve
@@ -155,9 +157,9 @@ if(search_word == file2_word8):
 
 	<p>Before we embark on this chapter's brief journey into
 	real-world programming, we indulge in one further remark on
-	the principles of programming: The four high-level concerns
-	that we've discussed: Efficiency, scalability, readability,
-	and maintainability, are not independent, and they sometimes
+	the principles of programming.  The four high-level concerns
+	that we've discussed (efficiency, scalability, readability,
+	and maintainability), are not independent, and they sometimes
 	war against each other.  Sometimes the most efficient way to
 	accomplish something is a highly obscure and clever algorithm
 	that, when realized in code, obfuscates the purpose of that
@@ -177,14 +179,8 @@ if(search_word == file2_word8):
     <section>
       <title>Running actual Python code</title>
       <text>
-	<p>For the moment, the only things described in this chapter
-	that are supported by the in-browser simulator are the library
-	functions we'll describe towards the end.  This means that if
-	you want to see the code here in action, you have to use an
-	actual Python compiler from a command-line.  Because this
-	chapter is in some ways an excursion from our main journey,
-	actually doing this is currently outside the scope of the
-	text.</p>
+	<p>The same procedure for running code in the previous chapter
+	carries over to this one.  </p>
       </text>
     </section>
     <section>
@@ -223,13 +219,13 @@ if(search_word == file2_word8):
 
 	So, for instance, 
 	
-<code>x = 4
-an_array = ["hello", 2, 9*x, x, "goodbye"]</code>
+<python>x = 4
+an_array = ["hello", 2, 9*x, x, "goodbye"]</python>
 
 declares an array with values 
 
 <code>"hello"
-9
+2
 36
 4
 "goodbye"</code>
@@ -242,7 +238,9 @@ in the array with the following <b>subscript</b> notation</def>:
 This accesses entry number 4 in the array.  So if we want to print
 this entry, we'd do
 
-<code>print(an_array[4])</code>
+<python>x = 4
+an_array = ["hello", 2, 9*x, x, "goodbye"]
+print(an_array[4])</python>
 
 As a result, we see printed: 
 
@@ -265,16 +263,16 @@ word and go 0 to the right, i.e.:
 like any other, so you can use them in expressions or assignments just
 like any other variable:
 
-<code>some_nums = [4,6,99,-1]
-some_nums[0] = 5                                  # Now some_nums is [5,6,99,-1]
-print(some_nums)                                  # Prints [5,6,99,-1]
-print(some_nums[1])                               # Prints 6
-some_nums[2] = some_nums[1] * some_nums[2]        # Now some_nums is [5,6,594,-1]
-print(some_nums)                                  # Prints [5,6,594,-1]
-if(some_nums[0] % 2 == 0):                        # Not true
-   print("some_nums starts with an even number!") # Skipped
+<python>some_nums = [4,6,99,-1]
+some_nums[0] = 5
+print(some_nums)
+print(some_nums[1])
+some_nums[2] = some_nums[1] * some_nums[2]
+print(some_nums)
+if(some_nums[0] % 2 == 0):
+   print("some_nums starts with an even number!")
 else:
-   print("some_nums starts with an odd number!")  # Prints the string</code>
+   print("some_nums starts with an odd number!")</python>
 
 So we see that we can access the various values stored in the array
 using this subscript notation, and any particular value in an array
@@ -315,9 +313,6 @@ prints:
     </text>
     <section>
       <title>Strings as read-only arrays</title>
-      <summary></summary>
-
-      
       <text>
 	<p>We've actually seen some examples of arrays already, namely
 	strings.  If you think about all the things we just learned
@@ -325,9 +320,9 @@ prints:
 	and concatenate arrays--these are operations we would equally
 	want to be able to do to strings:
 
-<code>blah = "Hello World!"
+<python>blah = "Hello World!"
 print(blah[6])
-print(blah[11])</code>
+print(blah[11])</python>
 
 prints 
 
@@ -342,7 +337,7 @@ word.  For example:
 <code>word = "betrothed"
 print(word[0])</code>
 
-prints the first letter--namely, b.  Now we don't want to print the
+prints the first letter, "b".  Now we don't want to print the
 letter, but to use it in a test.  Recall that a test is something of
 the form
 
@@ -413,17 +408,22 @@ print(words[2][0])</code>
 
 which will print the letter c.  Thus we can modify our code: 
 
-<code>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]
-if(words[0][0] == "a"):
-   print(words[0])
-if(words[1][0] == "a"):
-   print(words[1])
-if(words[2][0] == "a"):
-   print(words[2])
-if(words[3][0] == "a"):
-   print(words[3])
-if(words[4][0] == "a"):
-   print(words[4])</code>
+<python>words = ["blithe","alphabetic","crocodiles","ate","asparagus"]
+w = words[0]
+if(w[0] == "a"):
+   print(w)
+w = words[1]
+if(w[0] == "a"):
+   print(w)
+w = words[2]
+if(w[0] == "a"):
+   print(w)
+w = words[3]
+if(w[0] == "a"):
+   print(w)
+w = words[4]
+if(w[0] == "a"):
+   print(w)</python>
 
 As with the search program, we'll learn how to improve this later.  </p>
 
@@ -483,36 +483,34 @@ if(file1_words[1] == search_word):
 	  while loop with a counter, as we deployed in the previous
 	  chapter:
 
-	  <code>
-file1_name = "Ode on the death of a favorite cat"
-file1_number_of_words = 6	    
+	  <python>file1_name = "Ode on the death of a favorite cat"
+file1_number_of_words = 6
 file1_words = ["twas","on","a","lofty","vases","side"]
 search_word = "the"
 counter = 0
 while(counter &lt; file1_number_of_words):
    if(file1_words[counter] == search_word):
       print(file1_name)
-   counter = counter + 1
-	  </code>
+   counter = counter + 1</python>
 
 	In fact, we can use the "arrays of arrays" trick to search
 	multiple arrays:
 
-	<code>
-number_of_files = 2
+	<python>number_of_files = 2
 file_names = ["Ode on the death of a favorite cat", "Elegy in a county churchyard"]
-file_word_counts = [6,8]	    
+file_word_counts = [6,8]
 files = [["twas","on","a","lofty","vases","side"], ["the","curfew","tolls","the","knell","of","parting","day"]]
 search_word = "the"
 file_counter = 0
 while(file_counter &lt; number_of_files):
    word_counter = 0
    while(word_counter &lt; file_word_counts[file_counter]):
-      if(files[file_counter][word_counter] == search_word):
+      file = files[file_counter]
+      if(file[word_counter] == search_word):
          print(file_names[file_counter])
       word_counter = word_counter + 1
    file_counter = file_counter + 1
-	</code>
+	</python>
 	</p>
       </text>
     </section>
@@ -542,14 +540,14 @@ declare player 1 the winner:
 One might hope that instead, we can just test two things at once using
 something like:
 
-<code>if(player1_score > player2_score and player1_score > player3_score):
-   print("PLAYER 1 WINS")</code>
+<python>if(player1_score > player2_score and player1_score > player3_score):
+   print("PLAYER 1 WINS")</python>
 
 In fact, Python is pleasant enough that literally this actually
 works.  More generally, we are allowed to combine the simple tests of
 chapter 2 using the logical operators and and or.  So, for instance:
 
-<code>print("Give me a number 0-10, but no 8s--they taste weird")
+<python>print("Give me a number 0-10, but no 8s--they taste weird")
 x = 4
 if(x > 0 and x &lt; 10 and x != 8):
    print("good job!")
@@ -558,26 +556,26 @@ else:
       print("Yuck!")
 else:
    print("BETWEEN 0 AND 10!")
-</code>
+</python>
 
 Or:
 
-<code>print("Give me a number, 0 or 1--your choice")
+<python>print("Give me a number, 0 or 1--your choice")
 x = 4
 if(x == 0 or x == 1):
    print("Thank you, kind human.")
 else:
-   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</code></p>
+   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</python></p>
 
 <p>Any combination of multiple tests with your choice of and and or is
 valid, but there are some pitfalls:
 
-<code>print("Give me a positive number, either odd or above 10: ")
+<python>print("Give me a positive number, either odd or above 10: ")
 x = 4
 if(x > 0 and x > 10 or x%2 == 1):
    print("Thank you, kind human.")
 else:
-   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</code>
+   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</python>
 
 This program is meant to accept any integer above 10, but also any odd
 number 1-9 as well.  However, this program will actually even accept
@@ -598,12 +596,12 @@ of true.</p>
 
 <p>To fix it, we can clarify our meaning by using parentheses:
 
-<code>print("Give me a positive number, either odd or above 10: ")
+<python>print("Give me a positive number, either odd or above 10: ")
 x = 4
 if(x > 0 and (x > 10 or x%2 == 1)):
    print("Thank you, kind human.")
 else:
-   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</code>
+   print("CAN YOU REALLY NOT FOLLOW SIMPLE DIRECTIONS?")</python>
 </p>
 
     </text>
@@ -618,13 +616,13 @@ else:
 variables acting as the inputs to that code.  For instance, recall our
 factorial code:
 
-<code>input = 50
+<python>input = 12
 answer = 1
 counter = 2
 while(counter &lt;= input):
    answer = answer * counter
    counter = counter + 1
-print(answer)</code>
+print(answer)</python>
 
 The advantage of this was that if we wanted to compute instead 60!, we
 could just change the first line to
@@ -675,11 +673,11 @@ where to store the outputs.</p>
 
 <p>If we've managed to name the above code factorial, then to compute 50!, we should be able to say
 
-<code>factorial(50)</code>
+<code>factorial(12)</code>
 
 if we want to store this in some variable called x, then we can do
 
-<code>x = factorial(50)</code></p>
+<code>x = factorial(12)</code></p>
 
 <p>In order to do this, we set up the above code in the following way: 
 
@@ -713,20 +711,20 @@ kind of expression, whose value is the return value of the function.
 
 <p>That was rather a mouthful, so let's go through it slowly with an example: 
 
-<code>def mogrify(x):
+<python>def mogrify(x):
    y = x+1
    return 5*y+9*x*x
 z = mogrify(2)
-print(z)</code>
+print(z)</python>
 
 So the function is named mogrify, and its input is named x.  Then when we run the line 
 
 <code>z = mogrify(2)</code>
 
-This does as described above:
+which does as described above:
 
 <ol><li>It sets the input variable to the expression specified (in
-this case 2).  So since the input variable was called
+this case, 2).  So since the input variable was called
 <icode>x</icode>, it sets x to be 2.  </li>
 
 <li>Then it runs the code in the function body.  In this case, it runs
@@ -755,24 +753,25 @@ subtract in the other order to get the correct answer of 1.  So we use
 an if statement as follows (in this example, say the points are -1 and
 6):
 
-<code>point1 = -1
+<python>point1 = -1
 point2 = 6
 if(point1 &lt; point2): 
    answer = point2-point1
 else:
    answer = point1-point2
-print(answer)</code></p>
+print(answer)</python></p>
 
-<p>But if we're going to be doing this often, maybe we want it in a function.  Once again, the inputs are relatively clear--point1 and point2--and the output is once again perspicuously called answer.  So: 
+<p>But if we're going to be doing this often, maybe we want it in a function.  Once again, the inputs are relatively clear--point1 and point2--and the output is once again perspicuously called <icode>answer</icode>.  
 
-<code>def line_distance(point1, point2):
+<python>def line_distance(point1,point2):
    if(point1 &lt; point2): 
       answer = point2-point1
    else:
       answer = point1-point2
-   return answer</code>
+   return answer
+d = line_distance(3,5)</python>
 
-Then if later we call 
+So when we call 
 
 <code>d = line_distance(3,5)</code>
 
@@ -781,7 +780,7 @@ to 3 and point2 set to 5.  Then, because point1 is less than point2,
 the if block will be executed, setting answer to point2-point1,
 i.e., 2, and the else block will be ignored.  Finally the return value
 of the function will be set to answer, i.e., to 2.  And so when we say
-d = line_distance(3,5), as we stated earlier, the function call
+<icode>d = line_distance(3,5)</icode>, as we stated earlier, the function call
 itself--i.e., the line_distance(3,5) bit--is equal to the return value.
 Thus d is assigned the value 2.</p>
 
@@ -796,15 +795,15 @@ Thus d is assigned the value 2.</p>
 	own.</summary>
 	
 	<text>
-	  <p>As we've described above, a function call, when it
-	  appears in an expression, is treated as being whatever value
-	  the function returns.  So, for instance,
+	  <p>As we've described above, when a function appears in an
+	  expression, it is treated as being whatever value the
+	  function returns.  So, for instance,
 
-	  <code>def f(x):
+	  <python>def f(x):
    y = x*x
    return x + y*y
 print("I'm going to compute something!")
-print(2*f(3))</code>
+print(2*f(3))</python>
 
 	  Let us consider that last line and how it makes sense: it is
 	  a print line.  If we look at our chart, we see that inside a
@@ -961,7 +960,7 @@ h(x) = 77+x</code>
 	  f(8), which we can again compute by plugging in: f(8) =
 	  8^2+1 = 65.  So the answer is 65.</p>
 
-	  <p>This example was, as problems from maths class tend to be,
+	  <p>This example was, as problems from math class tend to be,
 	  contrived.  But the principle we saw when solving it is one
 	  that we'll need now, namely that the first actual function
 	  we evaluated was the one that was furthest inside--h(0).
@@ -971,7 +970,7 @@ h(x) = 77+x</code>
 	  so we computed f(8).</p>
 
 	  <p>This composition of functions happens all the time in
-	  programming, and allows you to express certain things very
+	  programming and allows you to express certain things very
 	  concisely, provided you can keep your head on straight well
 	  enough to do it correctly.</p>
 	  

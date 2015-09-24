@@ -339,7 +339,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	console.log("ASDASD",$scope.get_line_num());
 	if(x in $scope.variables){
 	    var arr = $scope.variables[x];
-	    if(!($scope.is_valid_array(arr))){
+	    if(!($scope.is_valid_array(arr) || $scope.is_valid_string(arr))){
 		$scope.raise_error("Error: variable " + x + " referenced on line " + $scope.get_line_num() + " is not an array!");
 		return;
 	    }
@@ -618,10 +618,10 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.outputs.push(stuff);
     }
     $scope.line_types = {
-	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
+	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*) *$/,"execute":function(data){
 	    $scope.set_variable(data[1], $scope.parse_expression(data[2]));
 	}},
-	"arr_assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*)\[((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)\] *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)$/,"execute":function(data){
+	"arr_assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*)\[((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)\] *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*) *$/,"execute":function(data){
 	    $scope.set_array_value(data[1], $scope.parse_expression(data[2]), $scope.parse_expression(data[3]));
 	}},
 	"if":{"regex":/^if\(([a-zA-Z0-9_\+\-\.\*\/%()[\],=!><" ]+)\): *$/,"execute":function(data){
@@ -636,11 +636,11 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log(test);
 	    return test;
 	}},
-	"fncall":{"regex":/^(?!print *\(|input_string *\(|set_color *\(|set_text *\(|input_num *\(|input_click *\(|len *\(|return *)([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\)$/,"execute":function(data){
+	"fncall":{"regex":/^(?!print *\(|input_string *\(|set_color *\(|set_text *\(|input_num *\(|input_click *\(|len *\(|return *)([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\) *$/,"execute":function(data){
 	    console.log("D0",data[0]);
 	    $scope.parse_expression(data[0]);
 	}},
-	"def":{"regex":/^def ([a-zA-Z_][a-zA-Z_0-9]*)\(((?:[a-zA-Z_][a-zA-Z_0-9]*,?)*)\): *$/,"execute":function(data){
+	"def":{"regex":/^def ([a-zA-Z_][a-zA-Z_0-9]*)\(((?:[a-zA-Z_][a-zA-Z_0-9]*(?:, *)?)*)\): *$/,"execute":function(data){
 	}},
 	"return":{"regex":/^return *([a-zA-Z0-9_\+\-\.\*\/%()[\]," ]*)$/,"execute":function(data){
 	    console.log("D1",JSON.stringify(data[1]));
