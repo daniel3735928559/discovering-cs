@@ -121,9 +121,71 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		"name":"list",
 		"arg_names":[],
 		"run":function(args){
-		    alert("haha");
+		    var ans = []
+		    for(var v in $scope.files){
+			ans.push(v);
+		    }
+		    return ans;
 		}
-	    }
+	    },
+	    {
+		"name":"readline",
+		"arg_names":["filename","line_num"],
+		"run":function(args){
+		    if(args[0] in $scope.files){
+			if($scope.is_valid_number(args[1]) && args[1] < $scope.files[args[0]].length)
+			    return $scope.files[args[0]][args[1]];
+			return -2
+		    }
+		    return -1;
+		}
+	    },
+	    {
+		"name":"length",
+		"arg_names":["filename"],
+		"run":function(args){
+		    if(args[0] in $scope.files){
+			return $scope.files[args[0]].length;
+		    }
+		    return -1;
+		}
+	    },
+	    {
+		"name":"write",
+		"arg_names":["filename", "text"],
+		"run":function(args){
+		    if(args[0] in $scope.files){
+			$scope.files[args[0]] = args[1].split("\n");
+			return 1;
+		    }
+		    return -1;
+		}
+	    },
+	    {
+		"name":"append",
+		"arg_names":["filename", "text"],
+		"run":function(args){
+		    if(args[0] in $scope.files){
+			$scope.files[args[0]] += args[1].split("\n");
+			return 1;
+		    }
+		    return 0;
+		}
+	    },
+	    {
+		"name":"create",
+		"arg_names":["filename"],
+		"run":function(args){
+		    $scope.files[args[0]] = [];
+		}
+	    },
+	    {
+		"name":"delete",
+		"arg_names":["filename"],
+		"run":function(args){
+		    delete $scope.files[args[0]];
+		}
+	    },
 	],
 	"sensor":[
 	    {
@@ -136,6 +198,72 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	],
 	"googlemaps":[] 
     }
+    $scope.files = {"ode.txt":
+		    ["'Twas on a lofty vase's side,",
+		     "Where China's gayest art had dyed",
+		     "    The azure flowers, that blow;",
+		     "",
+		     "Demurest of the tabby kind,",
+		     "The pensive Selima reclined,",
+		     "    Gazed on the lake below.",
+		     "",
+		     "Her conscious tail her joy declared;",
+		     "The fair round face, the snowy beard,",
+		     "    The velvet of her paws,",
+		     "Her coat, that with the tortoise vies,",
+		     "Her ears of jet, and emerald eyes,",
+		     "    She saw; and purred applause.",
+		     "",
+		     "Still had she gazed; but 'midst the tide",
+		     "Two angel forms were seen to glide,",
+		     "    The genii of the stream:",
+		     "Their scaly armour's Tyrian hue",
+		     "Through richest purple to the view",
+		     "    Betrayed a golden gleam.",
+		     "",
+		     "The hapless nymph with wonder saw:",
+		     "A whisker first and then a claw,",
+		     "    With many an ardent wish,",
+		     "She stretched in vain to reach the prize.",
+		     "What female heart can gold despise?",
+		     "    What cat's averse to fish?",
+		     "",
+		     "Presumptuous maid! with looks intent",
+		     "Again she stretched, again she bent,",
+		     "    Nor knew the gulf between.",
+		     "(Malignant Fate sat by, and smiled)",
+		     "The slippery verge her feet beguiled,",
+		     "    She tumbled headlong in.",
+		     "",
+		     "Eight times emerging from the flood",
+		     "She mewed to every watery god,",
+		     "    Some speedy aid to send.",
+		     "No dolphin came, no Nereid stirred:",
+		     "Nor cruel Tom, nor Susan heard.",
+		     "    A favourite has no friend!",
+		     "",
+		     "From hence, ye beauties, undeceived,",
+		     "Know, one false step is ne'er retrieved,",
+		     "    And be with caution bold.",
+		     "Not all that tempts your wandering eyes",
+		     "And heedless hearts, is lawful prize;",
+		     "    Nor all that glisters gold. "],
+		    "elegy.txt":[
+			"The curfew tolls the knell of parting day,",
+			"The lowing herd wind slowly o'er the lea",
+			"The ploughman homeward plods his weary way,",
+			"And leaves the world to darkness and to me.",
+			"",
+			"Now fades the glimm'ring landscape on the sight,",
+			"And all the air a solemn stillness holds,",
+			"Save where the beetle wheels his droning flight,",
+			"And drowsy tinklings lull the distant folds;",
+			"",
+			"Save that from yonder ivy-mantled tow'r",
+			"The moping owl does to the moon complain",
+			"Of such, as wand'ring near her secret bow'r,",
+			"Molest her ancient solitary reign."
+		    ]};
     $scope.lightboard_on = false;
     $scope.grid_rows = 10;
     $scope.grid_cols = 10;
@@ -646,6 +774,8 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	console.log("ANSWER",answer);
 	if(!answer){
 	    console.log("no answer");
+	    if(answer == false)
+		return answer;
 	    if($scope.current_block.lines[$scope.current_block.line].type == "fncall")
 		return "Zamboni";
 	    return answer;
