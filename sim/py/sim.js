@@ -115,6 +115,27 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    return val;
 	}
     };
+    $scope.imports = {
+	"file":[
+	    {
+		"name":"list",
+		"arg_names":[],
+		"run":function(args){
+		    alert("haha");
+		}
+	    }
+	],
+	"sensor":[
+	    {
+		"name":"list",
+		"arg_names":[],
+		"run":function(args){
+		    alert("haha");
+		}
+	    }
+	],
+	"googlemaps":[] 
+    }
     $scope.lightboard_on = false;
     $scope.grid_rows = 10;
     $scope.grid_cols = 10;
@@ -309,6 +330,15 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.steps = {"count":1};
 	$scope.variables = {};
 	$scope.functions = {};
+	$scope.add_builtin_function("print",["x"],function(args){$scope.output(args[0]);});
+	$scope.add_builtin_function("len",["array"],function(args){
+	    if($scope.is_valid_array(args[0]))
+		return args[0].length;
+	    else{
+		$scope.raise_error("Argument to len is not an array!")
+		$scope.die();
+	    }
+	});
 	$scope.outputs = [];
 	$scope.updated = [];
 	$scope.awaiting_input = false;
@@ -318,6 +348,12 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    $scope.editor.setOption("theme", "default");
 	    $scope.editor.removeLineClass($scope.error_line, "background", "active_line");
 	}
+    }
+    $scope.add_builtin_function = function(name, args, run_function){
+	var f = new $scope.pyfunction(name,args);
+	f.builtin = true;
+	f.run = run_function;
+	$scope.functions[name] = f;
     }
     $scope.set_error_line = function(l){
 	$scope.error_line = l;
@@ -365,6 +401,24 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	}
 	$scope.raise_error("Error: variable " + x + " referenced on line " + $scope.get_line_num() + " does not exist!");
     }
+    $scope.remove_array_index = function(x,idx){
+	console.log("Getting array ",x,"from",JSON.stringify($scope.variables),$scope.variables[x]);
+	console.log("ASDASD",$scope.get_line_num());
+	if(x in $scope.variables){
+	    var arr = $scope.variables[x];
+	    if(!($scope.is_valid_array(arr))){
+		$scope.raise_error("Error: variable " + x + " referenced on line " + $scope.get_line_num() + " is not an array!");
+		return;
+	    }
+	    else if(idx >= arr.length){
+		$scope.raise_error("Error: index " + idx + " in array " + x + " is past the end of the array!");
+		return;
+	    }
+	    else arr = arr.splice(idx,1);
+	    return;
+	}
+	$scope.raise_error("Error: variable " + x + " referenced on line " + $scope.get_line_num() + " does not exist!");
+    }
     $scope.get_function = function(x){
 	console.log("Getting",x);
 	console.log("ASDASD",$scope.get_line_num());
@@ -372,6 +426,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    return $scope.functions[x];
 	}
 	$scope.raise_error("Error: function " + x + " referenced on line " + $scope.get_line_num() + " does not exist!");
+	$scope.die();
     }
     $scope.die = function(){
 	$scope.running = false;
@@ -472,8 +527,8 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.current_block = prev_state.block;
 	$scope.current_block.line = prev_state.line;
 	$scope.variables = prev_state.scope;
-	//replace the call in this ast that we just returned from with its return value
-	$scope.replace_call(prev_state.call_path,prev_state.ast,ret_val);	
+	//replace the call in this ast that we just returned from with its return valuew
+	$scope.replace_call(prev_state.call_path,prev_state.ast,ret_val);
 	console.log(prev_state.ast);
 	$scope.called_a_function = false;
 	$scope.in_progress_asts.push(prev_state.ast);
@@ -483,61 +538,75 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	var calls = $scope.find_calls(ast);
 	console.log("CALLS",calls.state);
 	if(!(calls.is_empty())){
-	    /*
-	      Call the last function
-
-	      To call a function: 
-	      - Push variables onto scope stack
-	      - Push current line, ast, and path within the ast to the call we're making all onto return stack
-
-	      To return from a function:
-	      - Pop variables off scope stack
-	      - Pop current line, ast, and path to the call we just returned from off the return stack
-	    */
 
 	    // Get the function object that we're calling
 
 	    var call_path = calls.pop();
 	    var function_call = $scope.get_call(call_path,ast);
 	    var to_call = $scope.get_function(function_call[1][1]);
-	    $scope.called_a_function = true;
-	    
-	    // Set variables according to function arguments
+	    var call_waiting = true;
+	    if(!to_call) return;
+	    while(to_call.builtin){
+		var arg_arr = $scope.walk_ast(function_call[2]);
+		if(arg_arr.length != to_call.arg_names.length){
+		    $scope.raise_error("Function expected " + to_call.arg_names.length + " arguments and got " + arg_arr.length);
+		    $scope.die();
+		    return "";
+		}
+		var ret_val = to_call.run(arg_arr);
+		$scope.replace_call(call_path,ast,ret_val);
 
-	    var arg_arr = $scope.walk_ast(function_call[2]);
-	    if(arg_arr.length != to_call.arg_names.length){
-		$scope.raise_error("Function expected " + to_call.arg_names.length + " arguments and got " + arg_arr.length);
-		$scope.die();
+		if(calls.is_empty()){
+		    call_waiting = false;
+		    break;
+		}
+		
+		call_path = calls.pop();
+		function_call = $scope.get_call(call_path,ast);
+		to_call = $scope.get_function(function_call[1][1]);
+	    }
+	    if(call_waiting){
+		// We have a non-builtin function to call
+		
+		$scope.called_a_function = true;
+		
+		// Set variables according to function arguments
+		
+		var arg_arr = $scope.walk_ast(function_call[2]);
+		if(arg_arr.length != to_call.arg_names.length){
+		    $scope.raise_error("Function expected " + to_call.arg_names.length + " arguments and got " + arg_arr.length);
+		    $scope.die();
+		    return "";
+		}
+	    
+		// Push state onto the call stack
+		var state = {
+		    "ast":ast,
+		    "call_path":call_path,
+		    "scope":JSON.parse(JSON.stringify($scope.variables)),
+		    "line":$scope.current_block.line,
+		    "block":$scope.current_block,
+		    "fn":"Line " + $scope.get_line_num() + ": " + to_call.name + "("+arg_arr.join(",")+")"
+		};
+		console.log("FNFNFN",state.fn);
+		console.log(JSON.stringify(state.scope));
+		$scope.call_stack.push(state);
+		
+		// Create new state for inside function
+		
+		for(var i = 0; i < to_call.arg_names.length; i++){
+		    $scope.set_variable(to_call.arg_names[i],arg_arr[i]);
+		}
+	    
+	    
+		// Move to function's block
+		
+		
+		$scope.current_block = to_call.block;
+		$scope.current_block.line = 0;
+		$scope.update_status();
 		return "";
 	    }
-	    
-	    // Push state onto the call stack
-	    var state = {
-		"ast":ast,
-		"call_path":call_path,
-		"scope":JSON.parse(JSON.stringify($scope.variables)),
-		"line":$scope.current_block.line,
-		"block":$scope.current_block,
-		"fn":"Line " + $scope.get_line_num() + ": " + to_call.name + "("+arg_arr.join(",")+")"
-	    };
-	    console.log("FNFNFN",state.fn);
-	    console.log(JSON.stringify(state.scope));
-	    $scope.call_stack.push(state);
-
-	    // Create new state for inside function
-	    
-	    for(var i = 0; i < to_call.arg_names.length; i++){
-		$scope.set_variable(to_call.arg_names[i],arg_arr[i]);
-	    }
-	    
-	    
-	    // Move to function's block
-	    
-	    
-	    $scope.current_block = to_call.block;
-	    $scope.current_block.line = 0;
-	    $scope.update_status();
-	    return "";
 	}
 	if(ast[0] == 'val'){
 	    console.log("val",ast[1]);
@@ -641,7 +710,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log(test);
 	    return test;
 	}},
-	"fncall":{"regex":/^(?!print *\(|input_string *\(|set_color *\(|set_text *\(|input_num *\(|input_click *\(|len *\(|return *)([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\) *$/,"execute":function(data){
+	"fncall":{"regex":/^(?!input_string *\(|set_color *\(|set_text *\(|input_num *\(|input_click *\(|return *)([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\) *$/,"execute":function(data){
 	    console.log("D0",data[0]);
 	    $scope.parse_expression(data[0]);
 	}},
@@ -652,11 +721,28 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    return $scope.parse_expression(data[1]);
 	}},
 	"else":{"regex":/^else: *$/,"execute":function(data){}},
-	"print":{"regex":/^print\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){
-	    var val = $scope.parse_expression(data[1]);
+	"del":{"regex":/^del *([a-zA-Z_][a-zA-Z_0-9]*)\[([a-zA-Z0-9_\+\-\.\*\/%()[\]," ]*)\]$/,"execute":function(data){
+	    var idx = $scope.parse_expression(data[2]);
 	    if(!($scope.called_a_function))
-		$scope.output(val);
+		$scope.remove_array_index(data[1],idx);
 	}},
+	"import":{"regex":/^import *([a-zA-Z_][a-zA-Z_0-9]*)$/,"execute":function(data){
+	    if(data[1] in $scope.imports){
+		var fs = $scope.imports[data[1]]
+		for(var i = 0; i < fs.length; i++){
+		    $scope.add_builtin_function(data[1]+"."+fs[i].name,fs[i].arg_names,fs[i].run);
+		}
+	    }
+	    else{
+		$scope.raise_error("No such module to import: " + data[1]);
+		$scope.die();
+	    }
+	}},
+	// "print":{"regex":/^print\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){
+	//     var val = $scope.parse_expression(data[1]);
+	//     if(!($scope.called_a_function))
+	// 	$scope.output(val);
+	// }},
 	"input_num":{"regex":/^input_num\( *([a-zA-Z_][a-zA-Z_0-9]*) *\) *$/,"execute":function(data){
 	    console.log("data",data);
 	    $scope.variables[data[1]] = $scope.to_number(prompt("Enter a number: "));
@@ -674,6 +760,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	this.name = name;
 	this.arg_names = arg_names;
 	this.block = block;
+	this.builtin = false;
     }
     $scope.instruction = function(text, type, data, exec, indent_level, error){
 	this.text = text;

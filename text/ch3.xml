@@ -279,7 +279,7 @@ using this subscript notation, and any particular value in an array
 can be used in an expression or assignment just like any other
 variable.  In particular, we know how to modify existing elements of
 an array, but what if we want to add elements to the array?  Python
-allows you to add arrays with the + operator:
+allows you to concatenate arrays with the + operator:
 
 <code>array1 = [1,2,3]
 array2 = [0,-1,-2]
@@ -303,9 +303,9 @@ trying to assign to its fourth will give a logic error.  Instead, we
 need to assign array1 to be array1 plus a list containing just the
 element 4:
 
-<code>array1 = [1,2,3]
+<python>array1 = [1,2,3]
 array1 = array1 + [4]
-print(array1)</code>
+print(array1)</python>
 
 prints:
 
@@ -953,12 +953,12 @@ h(x) = 77+x</code>
 
 	  <p>We needed previously to know g(h(0)+1).  And now that we
 	  know h(0), we know this is g(77+1) = g(78).  And g(78) we
-	  can compute by plugging in and we get 78/13-1 = 5 - 1 = 4.</p>
+	  can compute by plugging in and we get 78/13-1 = 6 - 1 = 5.</p>
 
 	  <p>Before that, we needed to know f(2*g(h(0)+1)).  Now that
-	  we know g(h(0)+1) is just 4, we know that this is f(2*4) =
-	  f(8), which we can again compute by plugging in: f(8) =
-	  8^2+1 = 65.  So the answer is 65.</p>
+	  we know g(h(0)+1) is just 5, we know that this is f(2*5) =
+	  f(10), which we can again compute by plugging in: f(10) =
+	  10^2+1 = 101.  So the answer is 101.</p>
 
 	  <p>This example was, as problems from math class tend to be,
 	  contrived.  But the principle we saw when solving it is one
@@ -967,12 +967,22 @@ h(x) = 77+x</code>
 	  Then, once we had that, we could compute what we were
 	  plugging into g, and so we computed g(78).  Then, once we
 	  had that, we finally knew what we were plugging into f, and
-	  so we computed f(8).</p>
+	  so we computed f(10).</p>
 
 	  <p>This composition of functions happens all the time in
 	  programming and allows you to express certain things very
 	  concisely, provided you can keep your head on straight well
 	  enough to do it correctly.</p>
+
+	  <p>You can watch the above steps happen in Python:</p>
+	  
+<python>def f(x):
+   return x*x+1
+def g(x):
+   return x/13-1
+def h(x):
+   return 77+x
+print(f(2*g(h(0)+1)))</python>
 	  
 	</text>
       </section>
@@ -986,11 +996,11 @@ h(x) = 77+x</code>
 	  <p>There is some slight danger here regarding variables that
 	  were created inside functions:
 
-	  <code>def f(x):
+	  <python>def f(x):
    y = 1
    return x + y
 print(f(2))
-print(y)</code>
+print(y)</python>
 
 	  We might expect that when we call f(2) on line 4, we then go
 	  into the function which, among other things, creates the
@@ -1092,12 +1102,12 @@ print(y)</code>
 	  <p>But what if the variable existed before the function was
 	  called?</p>
 
-<code>def f(x):
+<python>def f(x):
    y = 1
    return x + y
 y = 2
 print(f(3))
-print(y)</code>
+print(y)</python>
 
 	  <p>It turns out that this prints</p>
 

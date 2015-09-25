@@ -21,6 +21,7 @@
 "<"                    return '<'
 "="                    return '='
 "!"                    return '!'
+"."		       return '.'
 "and"|"or"|"True"|"False"|"in"             return 'KEYWORD'
 [a-zA-Z_][a-zA-Z_0-9]* return 'VAR'
 \"((\\.|[^\"])*)\"     return 'STRING'
@@ -74,10 +75,11 @@ e
     | VAR '(' ')'
         {$$ = ['call',['name',$1],['array']];}
     | VAR '(' elements ')'
-        {
-	    if($1 == "len") $$ = ['len',$3];
-	    else $$ = ['call',['name',$1],['array'].concat($3)];
-	}
+        {$$ = ['call',['name',$1],['array'].concat($3)];}
+    | VAR '.' VAR '(' elements ')'
+        {$$ = ['call',['name',$1+"."+$3],['array'].concat($5)];}
+    | VAR '.' VAR '(' ')'
+        {$$ = ['call',['name',$1+"."+$3],['array']];}
     | '[' elements ']'
         {$$ = ['array'].concat($2);}
     | '[' ']'
