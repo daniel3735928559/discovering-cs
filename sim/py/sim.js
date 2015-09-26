@@ -585,6 +585,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
     }
     //$scope.program = "x = 2\ny= -3\nx = 67\nprint(8)\nif(2 == 2): \n   x = 3\nz= 0\nif(2 == 2): \n   x = 9\n   if(4 > 2): \n      y = 4\nx = 4";
     $scope.reset = function(){
+	console.log("resetting");
 	$scope.buttons = [];
 	if($scope.simid == "big"){
 	    for(var i = 0; i < $scope.grid_cols * $scope.grid_rows; i++){
@@ -1058,7 +1059,13 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log(inst.type,inst.text);
 	    $scope.updated = [];
 	    if(inst.type == 'if'){
-		if(inst.run()){
+		var val = inst.run();
+		if($scope.called_a_function){
+		    $scope.called_a_function = false;
+		    console.log("if postponed");
+		    return;
+		}
+		if(val){
 		    inst.branch_taken = true;
 		    $scope.current_block = inst.block;
 		    $scope.update_status();
@@ -1069,7 +1076,13 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		}
 	    }
 	    else if(inst.type == 'while'){
-		if(inst.run()) $scope.current_block = inst.block;
+		var val = inst.run();
+		if($scope.called_a_function){
+		    $scope.called_a_function = false;
+		    console.log("while postponed");
+		    return;
+		}
+		if(val) $scope.current_block = inst.block;
 		else self.advance();
 		$scope.update_status();
 	    }
@@ -1146,11 +1159,18 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		    $scope.current_block.advance();
 		}
 		else if(self.parent_line.type == 'while'){
-		    if(self.parent_line.run()){
+		    $scope.current_block = self.parent_block;
+		    var val = self.parent_line.run();
+		    if($scope.called_a_function){
+			$scope.called_a_function = false;
+			console.log("repeat postponed");
+			return;
+		    }
+		    if(val){
 			console.log("repeating");
+			$scope.current_block = $scope.current_block.lines[$scope.current_block.line].block;
 		    }
 		    else{
-			$scope.current_block = self.parent_block;
 			$scope.current_block.advance();
 		    }
 		}

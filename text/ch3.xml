@@ -1364,12 +1364,37 @@ while(i &lt; len(dirs)):
 	  calculations (among other things), we want a function that
 	  will do this for us.  </p>
 
-	  <p></p>
+	  <p>
+<python>import input
+def abs(x):
+   if(x &lt; 0):
+      return -x
+   return x
+
+def square_root(x):
+   s = x/2
+   while(abs(s*s-x) > 0.000001):
+      s = s+x/s
+      s = s/2
+   return s
+
+x = input.get_num("Enter x")
+print(square_root(x))</python>
+
+	  </p>
 	</text>
       </section>
       <section>
 	<title>Factorial</title>
 	<text>
+	  <p>
+	    <python>import input
+def factorial(x):
+   if(x &lt;= 0):
+      return 1
+   return x*factorial(x-1)
+print(factorial(input.get_num("Factorial of: ")))</python>
+	  </p>
 	</text>
       </section>
       <section>
