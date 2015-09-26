@@ -226,6 +226,13 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	],
 	"math":[
 	    {
+		"name":"abs",
+		"arg_names":["x"],
+		"run":function(args){
+		    return args[0] < 0 ? -args[0] : args[0];
+		}
+	    },
+	    {
 		"name":"sqrt",
 		"arg_names":["x"],
 		"run":function(args){

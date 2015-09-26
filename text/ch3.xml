@@ -1362,18 +1362,120 @@ while(i &lt; len(dirs)):
 	  was one for computing the square root of a number.  Since
 	  this is a common operation that comes up in distance
 	  calculations (among other things), we want a function that
-	  will do this for us.  </p>
+	  will do this for us.  Something like:
 
-	  <p>
+	  <code>def square_root(x):
+   # ... something</code>
+
+
+          Now we just have to fill in the something.</p>
+	  
+	  <p>Let us recap our algorithm for computing the square root
+	  of x:
+
+	  <ol>
+	    <li>Start by changing s to be s = x/2.  </li>
+	    <li>Take whatever s is currently and add the number x/s to it,
+	    making that sum the new value of s.</li>
+	    <li>Divide s by 2, making the result the new value of s.</li>
+	    <li>If s*s is not yet as close as we want it to be to x,
+	    return to step 2 and continue from there.</li>
+	  </ol>
+
+	  We can phrase this now in terms of variables to start
+	  getting it to look a little more like a Python program:
+
+
+	  <ol>
+	    <li><icode>s = x/2</icode></li>
+	    <li><icode>s = s + x/s</icode></li>
+	    <li><icode>s = s/2</icode></li>
+	    <li>If s*s is not yet as close as we want it to be to x,
+	    return to step 2 and continue from there.</li>
+	  </ol>
+
+	  So most of that translates literally into Python, but the
+	  last step is indicating some kind of a loop that contains
+	  inside it steps 2 and 3.  So maybe it should be
+	  (approximately):
+
+	  <code>def square_root(x):
+   s = x/s
+   while(<i>s*s is not yet close to x</i>):
+      s = s + x/s
+      s = s/2
+   return s</code>
+
+	  Great!  So how do we tell if s*s is close to x?  First, we
+	  have to specify how close we want them to be.  Let's say we
+	  want the first 5 digits after the decimal to be correct.
+	  This means that we need s*s and x to be within 0.000001 of
+	  each other.  </p>
+	  
+	  <p>But how, in turn, do we test this?  A good first guess
+	  would be <icode>s*s-x &lt; 0.000001</icode>.  The problem is
+	  that if somehow s*s is 4 and x is 8, then
+	  
+	  <icode>s*s - x</icode> will be -4, which is definitely less
+	  than 0.000001.  Of course, what we want is not just for
+	  <icode>s*s-x</icode> to be small (negative numbers count as
+	  very small indeed), but for the <i>absolute value</i> of
+	  this quantity to be small.  </p>
+
+	  <p>But we cannot simply write <icode>|s*s-x|</icode> to get
+	  the absolute value in a Python program, as this is not valid
+	  syntax (check the syntax tree and behold the absence of any
+	  "|" operator).  </p>
+
+	  <p>However, if we had a function, say <icode>abs_val(x)</icode>,
+	  that computed the absolute value, then we could instead
+	  write <icode>abs_val(s*s-x)</icode> for this absolute value, and
+	  then our function would become:
+	  <code>def square_root(x):
+   s = x/s
+   while(abs_val(s*s-x) &lt; 0.000001):
+      s = s + x/s
+      s = s/2
+   return s</code>
+
+          Of course, we don't have any <icode>abs_val</icode> function,
+	  but that's OK--now that we've solved the problem at hand
+	  supposing we had one, now we can go ahead and try to write
+	  that as a sub-problem.  </p>
+
+	  <p><b>The <icode>abs_val(x)</icode> function: </b> The absolute
+	  value function should receive an argument x and return just
+	  x unchanged if x is positive.  But if x is negative, we want
+	  to return "x, but made positive".  And how do we make a
+	  negative number positive?  Negate it!  So it should return
+	  <icode>x</icode> if <icode>x</icode> is positive, and
+	  <icode>-x</icode> if <icode>x</icode> is negative.  To wit:
+
+	  <python>def abs_val(x):
+   if(x &lt; 0):
+      return -x
+   return x</python>
+
+          There is kind of a corner-case to think about here: Not all
+          numbers are positive or negative.  Specifically, 0 is
+          neither, so we should make sure our function behaves
+          properly when the argument is 0.  But in fact it does return
+	  0 in this case, so all is well.
+	  </p>
+
+	  <p>Now that we have our <icode>abs_val</icode> function and our
+	  <icode>square_root</icode> function, we can put them all
+	  together into a square root calculating program: 
+	  
 <python>import input
-def abs(x):
+def abs_val(x):
    if(x &lt; 0):
       return -x
    return x
 
 def square_root(x):
    s = x/2
-   while(abs(s*s-x) > 0.000001):
+   while(abs_val(s*s-x) > 0.000001):
       s = s+x/s
       s = s/2
    return s
@@ -1382,6 +1484,88 @@ x = input.get_num("Enter x")
 print(square_root(x))</python>
 
 	  </p>
+
+	  <p><b>Debrief: </b>Take note of the strategy we used here:
+	  We wrote down the algorithm as usual, turned as much into
+	  code as we could, and then had a look at each of the pieces
+	  that we couldn't as easily turn into code.  </p>
+
+	  <p>Once we zeroed in on the problem of "How do we check if
+	  s*s is close to x?", we were able to write a description of
+	  what we wanted: "Absolute value of s*s-x needs to be less
+	  than 0.000001".  At this point, we didn't know how to
+	  compute absolute values in Python, but we realised we could
+	  pretend we had a function that would do it for us, and could
+	  therefore defer the problem to later when we would have to
+	  write this function.</p>
+
+	  <p>This is a very powerful way to use the abstraction
+	  mindset even when just working on the high-level programming
+	  layer:
+	  <ul>
+	    <li>Take your problem, figure out a set of functions that,
+	    if you wrote them, would make the problem solvable</li>
+	    <li>Solve the problem using these functions</li>
+	    <li>Then go and write those functions that you needed.</li>
+	  </ul>
+
+	  This scores high marks for readability, as we haven't
+	  inserted a bunch of absolute value computation code into the
+	  middle of the square root function, so the square root
+	  function still looks like the square root algorithm as we
+	  wrote it originally.  It also scores high marks for
+	  maintainability: If we want more accuracy in our
+	  computations, it is relatively easy to see what to change.
+	  If we think of a better way of computing absolute values, we
+	  can adjust that function independently of the square root
+	  code and the square root function will work just the
+	  same.  </p>
+	  
+	  <p>All told, this is nice, clean code.  However, it can be
+	  even cleaner.</p>
+
+	  <p><b>Square root, Mark II: </b>ur absolute value function
+	  was pretty simple and surely someone else both needed it and
+	  wrote it before us, right?  Indeed it is so: Python has a
+	  <icode>math</icode> library that includes many common (and
+	  some less common) mathematics-related functions ready to
+	  use.  The one that computes absolute values is called
+	  <icode>math.abs(x)</icode>.  So instead we could have
+	  written our square root program using it:
+
+	  <python>import input
+import math
+
+def square_root(x):
+   s = x/2
+   while(math.abs(s*s-x) > 0.000001):
+      s = s+x/s
+      s = s/2
+   return s
+
+x = input.get_num("Enter x")
+print(square_root(x))</python>
+	  </p>
+
+	  <p><b>Square root, Mark III: </b>But wait!  If you ran the
+	  above program you might have noticed that there is a
+	  <icode>math.sqrt</icode> function.  It turns out that "sqrt"
+	  is the common abbreviation for "square root".  So in fact
+	  the <icode>math</icode> module already came with a function
+	  for computing square roots, and we could simply have done: 	  
+<python>import input
+import math
+
+print(math.sqrt(input.get_num("Enter x")))</python>
+	  </p>
+
+	  <p><b>Debrief: </b>This is an important feature of
+	  real-world programming and a very attractive feature of
+	  high-level programming languages, and especially of popular
+	  ones like Python: If you have a problem that is at all
+	  common, then because the Python is so widely used, someone
+	  has probably already written a function that solves it and
+	  packaged it into a module that's ready to use.</p>
 	</text>
       </section>
       <section>
