@@ -1204,7 +1204,7 @@ print(y)</python>
 	input is performed mainly using library functions.  So we are
 	now ready to introduce various kinds of input functions.  This
 	is done in the <a href="/sim/py/python.html">simulator
-	walkthrough</a> (also linked on the sidebar).  Have fun!</p>
+	walkthrough</a> (also linked on the sidebar).</p>
       </text>
     </section>
 </section>    

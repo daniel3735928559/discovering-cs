@@ -11,7 +11,7 @@
 
 .pysim_vars{
     float:left;
-    width:13em;
+    width:90%;
     margin-bottom:5px;
     border:1px solid #aaa;
     text-align:center;
@@ -21,7 +21,8 @@
 
 .pysim_outputs{
     float:left;
-    width:13em;
+    /* width:13em; */
+    width:90%;
     margin-bottom:5px;
     border:1px solid #aaa;
     text-align:center;
@@ -75,10 +76,10 @@
 .pysim_reg{
     text-align:left;
     display:inline-block;
-    padding:4px;
+    padding:4px 4px 4px 8px;
     white-space:pre;
     /*margin:0 2px 2px 0;*/
-    width:7em;
+    width:80%;
 }
 
 .pysim_reg > pre{
@@ -92,9 +93,9 @@
 .pysim_output{
     text-align:left;
     display:inline-block;
-    padding:4px;
+    padding:4px 4px 4px 8px;
     /*margin:0 2px 2px 0;*/
-    width:7em;
+    width:80%;
 }
 
 .pysim_controls{
@@ -117,7 +118,7 @@
 .pysim_programming{
     display:inline-block;
     float:left;
-    width:35%;
+    width:40%;
 }
 
 .pysim_simulator{

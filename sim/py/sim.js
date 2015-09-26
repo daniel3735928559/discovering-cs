@@ -115,6 +115,26 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    return val;
 	}
     };
+    $scope.builtins = {
+	"print":{
+	    "name":"print",
+	    "arg_names":["str"],
+	    "run":function(args){$scope.output(args[0]);}
+	},
+	"len":{
+	    "name":"len",
+	    "arg_names":["array"],
+	    "run":function(args){
+		if($scope.is_valid_array(args[0]))
+		    return args[0].length;
+		else{
+		    $scope.raise_error("Argument to len is not an array!")
+		    $scope.die();
+		}
+	    }
+	}
+	
+    }
     $scope.imports = {
 	"file":[
 	    {
@@ -187,14 +207,60 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		}
 	    },
 	],
-	"sensor":[
+	"input":[
 	    {
-		"name":"list",
-		"arg_names":[],
+		"name":"get_num",
+		"arg_names":["prompt"],
 		"run":function(args){
-		    alert("haha");
+		    return $scope.to_number(prompt(args[0]));
+		}
+	    },
+	    {
+		"name":"get_string",
+		"arg_names":["prompt"],
+		"run":function(args){
+		    return prompt(args[0]);
 		}
 	    }
+	],
+	"lb":[
+	    {
+		"name":"set_color",
+		"arg_names":["x","y","color"],
+		"run":function(args){
+		    $scope.lightboard_on = true;
+		    var b = $scope.get_button(args[0], args[1]);
+		    if(b) b.style['background-color'] = args[2];
+		    else return -1;
+		    return 0;
+		}
+	    },
+	    {
+		"name":"set_text",
+		"arg_names":["x","y","text"],
+		"run":function(args){
+		    $scope.lightboard_on = true;
+		    console.log("SETTING",(args[2].toString())[0]);
+		    var b = $scope.get_button(args[0], args[1]);
+		    if(b) b.content = (args[2].toString())[0]
+		    else return -1;
+		    return 0
+		}
+	    },
+	    {
+		"name":"get_click",
+		"arg_names":[],
+		"run":function(args){
+		    $scope.lightboard_on = true;
+		    $scope.await_click(function(x, y){
+			$scope.return_from_function([x,y,$scope.get_button(x, y).content,$scope.get_button(x, y).style['background-color']])
+			$scope.awaiting_input = false;
+		    });
+		},
+		"wait":true
+	    }
+
+	    
 	],
 	"googlemaps":[] 
     }
@@ -332,14 +398,9 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    'Shift-Tab': function(cm) {
 		cm.execCommand('indentLess');
 	    },
-            'Enter': function(cm) {
-                if(!($scope.running))
-                    return CodeMirror.Pass;
-                $scope.step();
-                $scope.$apply();
-            },
             'Ctrl-Enter': function(cm) {
-                $scope.run();
+                if(!($scope.running)) $scope.run();
+		else $scope.step();
                 $scope.$apply();
             }
 	});
@@ -361,31 +422,6 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    $scope.ref_display = true;
 	    console.log("big");
 	    $scope.click_callback = null;
-	    $scope.line_types['set_color'] = {"regex":/^set_color\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *\) *$/,"execute":function(data){
-		console.log(data);
-		$scope.lightboard_on = true;
-		var b = $scope.get_button($scope.parse_expression(data[1]), $scope.parse_expression(data[2]));
-		if(b) b.style['background-color'] = $scope.parse_expression(data[3]);
-		else $scope.status = "Invalid lightboard coordinates";
-	    }};
-	    $scope.line_types['set_text'] = {"regex":/^set_text\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *, *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *\) *$/,"execute":function(data){
-		console.log(data);
-		$scope.lightboard_on = true;
-		var b = $scope.get_button($scope.parse_expression(data[1]), $scope.parse_expression(data[2]));
-		if(b) b.content = ($scope.parse_expression(data[3]).toString())[0];
-		else $scope.status ="Invalid lightboard coordinates";
-	    }};
-	    $scope.line_types['input_click'] = {"regex":/^input_click\( *([a-zA-Z_][a-zA-Z_0-9]*) *, *([a-zA-Z_][a-zA-Z_0-9]*) *, *([a-zA-Z_][a-zA-Z_0-9]*) *, *([a-zA-Z_][a-zA-Z_0-9]*) *\) *$/,"execute":function(data){
-		console.log(data);
-		$scope.lightboard_on = true;
-		$scope.await_click(function(x, y){
-		    $scope.variables[data[1]] = x;
-		    $scope.variables[data[2]] = y;
-		    $scope.variables[data[3]] = $scope.get_button(x, y).content;
-		    $scope.variables[data[4]] = $scope.get_button(x, y).style['background-color'];
-		    $scope.awaiting_input = false;
-		});
-	    }};
 	}
 	$scope.cm_setup();
 	console.log($scope.line_types);
@@ -458,15 +494,9 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.steps = {"count":1};
 	$scope.variables = {};
 	$scope.functions = {};
-	$scope.add_builtin_function("print",["x"],function(args){$scope.output(args[0]);});
-	$scope.add_builtin_function("len",["array"],function(args){
-	    if($scope.is_valid_array(args[0]))
-		return args[0].length;
-	    else{
-		$scope.raise_error("Argument to len is not an array!")
-		$scope.die();
-	    }
-	});
+	console.log("BUILTINS",$scope.builtins);
+	$scope.add_builtin_function("",$scope.builtins['print']);
+	$scope.add_builtin_function("",$scope.builtins['len']);
 	$scope.outputs = [];
 	$scope.updated = [];
 	$scope.awaiting_input = false;
@@ -477,10 +507,12 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    $scope.editor.removeLineClass($scope.error_line, "background", "active_line");
 	}
     }
-    $scope.add_builtin_function = function(name, args, run_function){
-	var f = new $scope.pyfunction(name,args);
+    $scope.add_builtin_function = function(module, fn){
+	var name = module == "" ? fn.name : module + "." + fn.name;
+	var f = new $scope.pyfunction(name,fn.arg_names);
 	f.builtin = true;
-	f.run = run_function;
+	f.run = fn.run;
+	f.wait = fn.wait;
 	$scope.functions[name] = f;
     }
     $scope.set_error_line = function(l){
@@ -565,12 +597,6 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	var a = "We could not determine what type of line you intended.  ";
 	if(line.search("print") > 0){
 	    a = "It looks like you wanted a print line.  These are of the form print([expression]).  ";
-	}
-	else if(line.search("input_num") >= 0){
-	    a = "It looks like you wanted an input_num line.  These are of the form input_num([variable name]).  ";
-	}
-	else if(line.search("input_num") >= 0){
-	    a = "It looks like you wanted an input_string line.  These are of the form input_string([variable name]).  ";
 	}
 	else if(line.search("if") >= 0){
 	    a = "It looks like you wanted an \"if\" line.  These must look like if([test]): and are followed by indented lines.  ";
@@ -682,6 +708,19 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		    return "";
 		}
 		var ret_val = to_call.run(arg_arr);
+		if(to_call.wait){
+		    var state = {
+			"ast":ast,
+			"call_path":call_path,
+			"scope":JSON.parse(JSON.stringify($scope.variables)),
+			"line":$scope.current_block.line,
+			"block":$scope.current_block,
+			"fn":"Line " + $scope.get_line_num() + ": " + to_call.name + "("+arg_arr.join(",")+")"
+		    };
+		    $scope.call_stack.push(state);
+		    $scope.called_a_function = true;
+		    return "";
+		}
 		$scope.replace_call(call_path,ast,ret_val);
 
 		if(calls.is_empty()){
@@ -840,7 +879,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    console.log(test);
 	    return test;
 	}},
-	"fncall":{"regex":/^(?!input_string *\(|set_color *\(|set_text *\(|input_num *\(|input_click *\(|return *)([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\) *$/,"execute":function(data){
+	"fncall":{"regex":/^(?!return *)([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\) *$/,"execute":function(data){
 	    console.log("D0",data[0]);
 	    $scope.parse_expression(data[0]);
 	}},
@@ -858,28 +897,15 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	}},
 	"import":{"regex":/^import *([a-zA-Z_][a-zA-Z_0-9]*)$/,"execute":function(data){
 	    if(data[1] in $scope.imports){
-		var fs = $scope.imports[data[1]]
-		for(var i = 0; i < fs.length; i++){
-		    $scope.add_builtin_function(data[1]+"."+fs[i].name,fs[i].arg_names,fs[i].run);
+		var fns = $scope.imports[data[1]]
+		for(var i = 0; i < fns.length; i++){
+		    $scope.add_builtin_function(data[1],fns[i]);
 		}
 	    }
 	    else{
 		$scope.raise_error("No such module to import: " + data[1]);
 		$scope.die();
 	    }
-	}},
-	// "print":{"regex":/^print\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){
-	//     var val = $scope.parse_expression(data[1]);
-	//     if(!($scope.called_a_function))
-	// 	$scope.output(val);
-	// }},
-	"input_num":{"regex":/^input_num\( *([a-zA-Z_][a-zA-Z_0-9]*) *\) *$/,"execute":function(data){
-	    console.log("data",data);
-	    $scope.variables[data[1]] = $scope.to_number(prompt("Enter a number: "));
-	}},
-	"input_string":{"regex":/^input_string\( *([a-zA-Z_][a-zA-Z_0-9]*) *\) *$/,"execute":function(data){
-	    console.log("data",data);
-	    $scope.variables[data[1]] = prompt("Enter a string: ");
 	}}
     }
     $scope.syntax = {
