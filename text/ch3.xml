@@ -1178,7 +1178,33 @@ print(y)</python>
 2</icode></td>
 	</tr>
 
-	</table>	  
+	  </table>
+
+	  <p>This behaviour also stacks when we call functions from
+	  within other functions.  Consider, for example:
+
+<python>def f(x):
+   y = 1
+   return x - y
+def g(x):
+   y = x*x
+   z = f(x+y)
+   print(y)
+   return z
+y = 2
+print(g(3))
+print(y)</python>
+
+          Here, <icode>y</icode> is initially set to 2.  Then we call
+          the function <icode>g</icode>, which sets <icode>y</icode>
+          (in this case to 9) and in turn calls <icode>f</icode>,
+          which sets <icode>y</icode> yet again, this time to 1.  But
+          when <icode>f</icode> returns and we go back to
+          <icode>g</icode>, then the value of <icode>y</icode> that
+          <icode>g</icode> set is restored.  And finally, when
+          <icode>g</icode> returns, the value of <icode>y</icode> that
+          was set before the call to <icode>g</icode> is again
+          restored.</p>
 	</text>
       </section>
     </section>
@@ -1199,12 +1225,190 @@ print(y)</python>
 	term="library function">These pre-written functions are called
 	<b>library functions</b></def>.  </p>
 
-	<p>Now, one of the things we have conspicuously omitted from
-	our explanation of Python to date was input.  This is because
-	input is performed mainly using library functions.  So we are
-	now ready to introduce various kinds of input functions.  This
-	is done in the <a href="/sim/py/python.html">simulator
-	walkthrough</a> (also linked on the sidebar).</p>
+	<p>As a note, one of the things we have conspicuously omitted
+	from our explanation of Python to date was input.  This is
+	because input is performed mainly using library functions.  So
+	we are now ready to introduce various kinds of input
+	functions.  </p>
+
+	<p><def term="module">In Python, library functions are
+	contained in <b>modules</b>--separate pieces of code that can
+	be loaded into our programs and that contain functions that
+	can be used from those programs.</def> In Python, the way to
+	load a module is with an <icode>import</icode> line:
+
+	<code>import <i>module_name</i></code>
+
+	This will make it possible to then call functions from that
+	module, which will be named like this:
+
+	<code><i>module_name</i>.<i>function_name</i></code>
+
+	For example, the module that deals with input is called
+	<icode>input</icode>.  So if we import it, get notice that
+	this adds two new functions:
+	<icode>input.get_num(prompt)</icode> and
+	<icode>input.get_string(prompt)</icode>.  These functions will
+	display a window asking the user to input a number or a string
+	(respectively) and prompting them with whatever string was
+	supplied in the argument.  They return the value that was
+	inputted.  For example:
+
+<python>import input
+
+name = input.get_string("Enter your name")
+age = input.get_num("Enter your age")
+print("Hello "+name + "!")
+if(age % 2 == 0):
+   print("Your age is even!")
+else:
+   print("Your age is odd!")
+</python>
+	</p>
+
+	We can summarise the contents of the <icode>input</icode>
+	module with a table:
+
+	<table>
+	  <tr><td>Function</td><td>Arguments</td><td>Return
+	  value</td></tr>
+	  
+	  <tr><td><icode>input.get_num(prompt)</icode></td><td><icode>prompt</icode>
+	  is a string that will be displayed in the prompt where the
+	  user may enter a number</td><td>The number that the user
+	  entered will be returned by the function</td></tr>
+	  
+	  <tr><td><icode>input.get_string(prompt)</icode></td><td><icode>prompt</icode>
+	  is a string that will be displayed in the prompt where the
+	  user may enter a string</td><td>The string that the user
+	  entered will be returned by the function</td></tr>
+	</table>
+
+	<p>Part of the power of Python is that it has many modules
+	with functions that perform many complex tasks, meaning
+	programmers can rely on modules written by others for common
+	functionality, and can therefore concentrate on designing the
+	code specific to their application.</p>
+	
+	<p>This is the greatest power of a high-level programming
+	language like Python, and the feature that enables it to be
+	most effectively used for practical tasks like programming
+	search engines and video games and so on.  </p>
+
+	<p>As another example of a Python module that performs a very
+	complicated task, we introduce the <icode>googlemaps</icode>
+	module, which provides a function that gives directions from a
+	starting address to a destination address.</p>
+
+	<table>
+	  <tr><td>Function</td><td>Arguments</td><td>Return
+	  value</td></tr>
+	  
+	  <tr><td><icode>googlemaps.init()</icode></td><td>No
+	  arguments</td><td>This function does the work needed to set
+	  up communication with the Google Maps server.  It must be
+	  called only once in the program, and must be before any
+	  other googlemaps functions are called.</td></tr>
+	  
+	  <tr><td><icode>googlemaps.directions(start,
+	  end)</icode></td><td><icode>start</icode> is a string with
+	  the address from which navigation should start, and
+	  <icode>end</icode> is a string with the destination
+	  address</td><td>The function returns an array whose entries
+	  are the steps in navigating from the starting address to the
+	  ending address.</td></tr>
+	</table>	
+
+	<p>
+	For example:
+	
+	  <python>import googlemaps
+googlemaps.init()
+dirs = googlemaps.directions("North/Clyburn, Chicago, IL","Centrailia, PA")
+i = 0
+while(i &lt; len(dirs)):
+   print(dirs[i])
+   i = i+1</python>
+
+        If you run this program, it should output the directions from
+        The North and Clyburn Red Line station in Chicago to
+        Centrailia, Pennsylvania.  You can even combine the two
+	libraries we've learned so far to let the user provide the
+	start and end addresses:
+
+	
+	<python>import googlemaps
+import input
+googlemaps.init()
+start = input.get_string("Enter the starting address")
+end = input.get_string("Enter the ending address")
+dirs = googlemaps.directions(start, end)
+i = 0
+while(i &lt; len(dirs)):
+   print(dirs[i])
+   i = i+1</python>
+
+   We'll learn more library functions as we go through some examples.
+	</p>
       </text>
     </section>
+    <section>
+      <title>More simple examples</title>
+      <text></text>
+      <section>
+	<title>Square Roots</title>
+	<text>
+	  <p>One of the early examples of an algorithm in this text
+	  was one for computing the square root of a number.  Since
+	  this is a common operation that comes up in distance
+	  calculations (among other things), we want a function that
+	  will do this for us.  </p>
+
+	  <p></p>
+	</text>
+      </section>
+      <section>
+	<title>Factorial</title>
+	<text>
+	</text>
+      </section>
+      <section>
+	<title>Primality testing</title>
+	<text>
+	  <python>import math
+import input
+N = input.get_num("See all primes less than: ")
+ns = math.range(2,N)
+c = 0
+while(c &lt; math.sqrt(N)+1):
+   i = c+1
+   while(i &lt; len(ns)):
+      if(ns[i] % ns[c] == 0):
+         del ns[i]
+      else:
+         i = i+1
+   c = c+1
+print(ns)</python>
+	</text>
+      </section>
+    </section>
+    <section>
+      <title>Applications</title>
+      <text>
+      </text>
+      <section>
+	<title>Search Engine</title>
+	<text></text>
+      </section>
+      <section>
+	<title>Game Console</title>
+	<text></text>
+      </section>
+    </section>
+    <section>
+      <title>Real-life Python versus Simulator Python</title>
+      <text>
+      </text>
+    </section>
+    
 </section>    

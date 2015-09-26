@@ -78,7 +78,7 @@ _ = "h3110W0RlD"
 weAreTheChampions = 1
 # infinite loop to fight ‘til the end
 while(weAreTheCampions = 1)
-print("f1gh71ng \’til the end")
+   print("f1gh71ng \’til the end")
 int fahrenhype = -40
 celsius = (9 / 5) * (fahrenhype + 32
 print(Celsius)
@@ -131,7 +131,8 @@ end printing triangle 2</pre>
 
 Sample starting code (the horizontal line pattern has been done for you):
 
-<pre>input_num(positiveOddNumberInput)
+<pre>import input
+positiveOddNumberInput = input.get_num("Enter a number: ")
 
 print("begin printing horizontal line")
 lineToPrint = ""

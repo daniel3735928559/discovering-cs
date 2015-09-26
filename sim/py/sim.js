@@ -31,6 +31,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
     $scope.p = parser;
     $scope.call_stack = [];
     $scope.called_a_function = false;
+    $scope.map_loaded = false;
     $scope.in_progress_asts = new Deque();
     $scope.syntax_elements = {
 	"add":function(args){
@@ -223,12 +224,59 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		}
 	    }
 	],
+	"math":[
+	    {
+		"name":"sqrt",
+		"arg_names":["x"],
+		"run":function(args){
+		    return Math.sqrt(args[0]);
+		}
+	    },
+	    {
+		"name":"distance",
+		"arg_names":["x1","y1","x2","y2"],
+		"run":function(args){
+		    x1 = args[0];
+		    y1 = args[1];
+		    x2 = args[2];
+		    y2 = args[3];
+		    return Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+		}
+	    },
+	    {
+		"name":"range",
+		"arg_names":["start","end"],
+		"run":function(args){
+		    if(args[0] >= args[1])
+			return []
+		    var ans = [];
+		    for(var i = args[0]; i < args[1]; i++){
+			ans.push(i)
+		    }
+		    return ans;
+		}
+	    },
+	    {
+		"name":"solve_quadratic",
+		"arg_names":["a","b","c"],
+		"run":function(args){
+		    a = args[0];
+		    b = args[1];
+		    c = args[2];
+		    console.log("ABC",a,b,c);
+		    if(b*b-4*a*c < 0) return [];
+		    if(b*b-4*a*c == 0) return [-b/(2*a)];
+		    return [(-b+Math.sqrt(b*b-4*a*c))/(2*a),(-b-Math.sqrt(b*b-4*a*c))/(2*a)];
+		}
+	    }
+	],
 	"lb":[
 	    {
 		"name":"set_color",
 		"arg_names":["x","y","color"],
 		"run":function(args){
 		    $scope.lightboard_on = true;
+		    $scope.$apply();
 		    var b = $scope.get_button(args[0], args[1]);
 		    if(b) b.style['background-color'] = args[2];
 		    else return -1;
@@ -240,6 +288,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		"arg_names":["x","y","text"],
 		"run":function(args){
 		    $scope.lightboard_on = true;
+		    $scope.$apply();
 		    console.log("SETTING",(args[2].toString())[0]);
 		    var b = $scope.get_button(args[0], args[1]);
 		    if(b) b.content = (args[2].toString())[0]
@@ -252,6 +301,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		"arg_names":[],
 		"run":function(args){
 		    $scope.lightboard_on = true;
+		    $scope.$apply();
 		    $scope.await_click(function(x, y){
 			$scope.return_from_function([x,y,$scope.get_button(x, y).content,$scope.get_button(x, y).style['background-color']])
 			$scope.awaiting_input = false;
@@ -262,7 +312,62 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 
 	    
 	],
-	"googlemaps":[] 
+	"googlemaps":[
+	    {
+		"name":"init",
+		"arg_names":[],
+		"run":function(args){
+		    if($scope.map_loaded) return;
+		    $scope.map_loaded = true;
+		    var script_tag = document.createElement('script');
+		    script_tag.setAttribute("type","text/javascript");
+		    window.gMapsCallback = function(){
+			console.log("done");
+		    }
+		    script_tag.setAttribute("src","http://maps.google.com/maps/api/js?sensor=false&callback=gMapsCallback");
+		    (document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
+		}
+	    },
+	    {
+		"name":"directions",
+		"arg_names":["start","end"],
+		"run":function(args){
+		    var directionsService = new google.maps.DirectionsService();
+		    var directionsRequest = {
+			origin: args[0],
+			destination: args[1],
+			travelMode: google.maps.DirectionsTravelMode.DRIVING,
+			unitSystem: google.maps.UnitSystem.IMPERIAL
+		    };
+		    $scope.awaiting_input = true;
+		    directionsService.route(directionsRequest, function (response, status) {
+			$scope.awaiting_input = false;
+			if (status == google.maps.DirectionsStatus.OK) {
+			    console.log("GOTMAP",response)
+			    var arr = [];
+			    for(var i = 0; i < response.routes[0].legs.length; i++){
+				for(var j = 0; j < response.routes[0].legs[i].steps.length; j++){
+				    var instruction = response.routes[0].legs[i].steps[j].instructions
+				    console.log("IIII",instruction);
+				    instruction = instruction.replace(/<b>/g,"[");
+				    instruction = instruction.replace(/<\/b>/g,"]");
+				    instruction = instruction.replace(/<[^>]*>/g,"\n");
+				    arr.push(instruction);
+				}
+			    }
+			    console.log("STEPS",arr);
+			    $scope.return_from_function(arr);
+			}
+			else{
+			    $scope.return_from_function("Error: "+status);
+			    console.log("MAPERR",status,response);
+			}
+			
+		    });
+		},
+		"wait":true
+	    }
+	] 
     }
     $scope.files = {"ode.txt":
 		    ["'Twas on a lofty vase's side,",
@@ -398,6 +503,11 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	    'Shift-Tab': function(cm) {
 		cm.execCommand('indentLess');
 	    },
+            'Enter': function(cm) {
+                if($scope.running) $scope.step();
+		else return CodeMirror.Pass
+                $scope.$apply();
+            },
             'Ctrl-Enter': function(cm) {
                 if(!($scope.running)) $scope.run();
 		else $scope.step();
@@ -861,25 +971,27 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	$scope.outputs.push(stuff);
     }
     $scope.line_types = {
-	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*) *$/,"execute":function(data){
-	    $scope.set_variable(data[1], $scope.parse_expression(data[2]));
+	"assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*) *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]+|"(?:[^"\\]|\\.)*")*) *$/,"execute":function(data){
+	    var val = $scope.parse_expression(data[2]);
+	    if(!($scope.called_a_function))
+		$scope.set_variable(data[1], val);
 	}},
 	"arr_assignment":{"regex":/^([a-zA-Z_][a-zA-Z_0-9]*)\[((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*)\] *= *((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],[\], ]+|"(?:[^"\\]|\\.)*")*) *$/,"execute":function(data){
 	    $scope.set_array_value(data[1], $scope.parse_expression(data[2]), $scope.parse_expression(data[3]));
 	}},
-	"if":{"regex":/^if\(([a-zA-Z0-9_\+\-\.\*\/%()[\],=!><" ]+)\): *$/,"execute":function(data){
+	"if":{"regex":/^if\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],=!>< ]+|"(?:[^"\\]|\\.)*")*)\): *$/,"execute":function(data){
 	    console.log(data);
 	    var test = $scope.parse_expression(data[1]);
 	    console.log(test);
 	    return test;
 	}},
-	"while":{"regex":/^while\(([a-zA-Z0-9_\+\-\.\*\/%()[\],=!><" ]+)\): *$/,"execute":function(data){
+	"while":{"regex":/^while\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\],=!>< ]+|"(?:[^"\\]|\\.)*")*)\): *$/,"execute":function(data){
 	    console.log(data);
 	    var test = $scope.parse_expression(data[1]);
 	    console.log(test);
 	    return test;
 	}},
-	"fncall":{"regex":/^(?!return *)([a-zA-Z_][a-zA-Z_0-9]*)\(*([a-zA-Z0-9_\+\-\.\*\/%()[\],[\]," ]+)\) *$/,"execute":function(data){
+	"fncall":{"regex":/^(?!return *)([a-zA-Z_][a-zA-Z_0-9\.]*)\(((?:[a-zA-Z0-9_\+\-\.\*\/%()[\], ]*|"(?:[^"\\]|\\.)*")*)\) *$/,"execute":function(data){
 	    console.log("D0",data[0]);
 	    $scope.parse_expression(data[0]);
 	}},
