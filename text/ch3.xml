@@ -1559,13 +1559,52 @@ import math
 print(math.sqrt(input.get_num("Enter x")))</python>
 	  </p>
 
-	  <p><b>Debrief: </b>This is an important feature of
+	  <p><b>Debrief: </b>This underscores an important feature of
 	  real-world programming and a very attractive feature of
 	  high-level programming languages, and especially of popular
 	  ones like Python: If you have a problem that is at all
 	  common, then because the Python is so widely used, someone
 	  has probably already written a function that solves it and
 	  packaged it into a module that's ready to use.</p>
+
+	  <p>In this case, we had the math module, which we document
+	  in full here:
+
+	<table>
+	  <tr><td>Function</td><td>Arguments</td><td>Return
+	  value</td></tr>
+	  
+	  <tr><td><icode>math.abs(x)</icode></td><td><icode>x</icode>
+	  is a number whose absolute value we want to
+	  compute.</td><td>Returns the absolute value of the argument
+	  <icode>x</icode></td></tr>
+	  
+	  <tr><td><icode>math.sqrt(x)</icode></td><td><icode>x</icode>
+	  is a number whose square root we want to
+	  compute.</td><td>Returns the square root of the argument
+	  <icode>x</icode></td></tr>
+	  
+	  <tr><td><icode>math.distance(x1,y1,x2,y2)</icode></td><td><icode>x1</icode>
+	  and <icode>y1</icode> are the coordinates of one point in 2D
+	  space, and <icode>x2</icode> and <icode>y2</icode> are the
+	  coordinates of a second point.</td><td>Returns the distance
+	  in 2D space between the points (x1,y1) and
+	  (x2,y2). </td></tr>
+	  
+	  <tr><td><icode>math.range(start,end)</icode></td><td><icode>start</icode>
+	  and <icode>end</icode> are numbers indicating the bounds of
+	  the array to be returned.</td><td>Returns an array of
+	  numbers, counting up by 1, between <icode>start</icode> and
+	  <icode>end</icode>.  By convention, this array excludes
+	  <icode>end</icode> so that <icode>range(0,N)</icode> is an
+	  array with <icode>N</icode> elements.</td></tr>
+	  
+	  <tr><td><icode>math.solve_quadratic(a,b,c)</icode></td><td>The
+	  three arguments are treated as the coefficients of a
+	  quadratic polynomial <icode>a*x^2 + b*x + c</icode></td><td>Returns an array containing all the
+	  solutions of the equation <icode>a*x^2 + b*x + c = 0</icode></td></tr>
+	</table>	
+	  </p>
 	</text>
       </section>
       <section>

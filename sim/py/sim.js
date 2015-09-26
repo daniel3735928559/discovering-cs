@@ -271,6 +271,10 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		    b = args[1];
 		    c = args[2];
 		    console.log("ABC",a,b,c);
+		    if(a == 0){
+			if(b == 0) return [];
+			return [-c/b];
+		    }
 		    if(b*b-4*a*c < 0) return [];
 		    if(b*b-4*a*c == 0) return [-b/(2*a)];
 		    return [(-b+Math.sqrt(b*b-4*a*c))/(2*a),(-b-Math.sqrt(b*b-4*a*c))/(2*a)];
