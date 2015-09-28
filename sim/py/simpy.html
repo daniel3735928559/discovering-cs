@@ -15,6 +15,7 @@
   <div class="pysim_simulator">
     <div class="pysim_controls">
       <div ng-class="'pysim_button ' + (running == false ? 'pysim_disabled_button' : 'pysim_enabled_button')" ng-click="reset()">end</div>
+      <div ng-class="'pysim_button ' + (running == false ? 'pysim_disabled_button' : 'pysim_enabled_button')" ng-click="run_all()">go</div>
       <div ng-class="'pysim_button ' + (running == false ? 'pysim_disabled_button' : 'pysim_enabled_button')"  ng-click="step()">step</div>
       <input class="pysim_input" ng-model="steps.count" ng-if="running == true"></input>
       <div class="pysim_status">Status: {{status}}</div>

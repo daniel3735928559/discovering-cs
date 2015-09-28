@@ -134,7 +134,6 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		}
 	    }
 	}
-	
     }
     $scope.imports = {
 	"file":[
@@ -197,14 +196,22 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		"name":"create",
 		"arg_names":["filename"],
 		"run":function(args){
+		    if(args[0] in $scope.files){
+			return -1;
+		    }
 		    $scope.files[args[0]] = [];
+		    return 1;
 		}
 	    },
 	    {
 		"name":"delete",
 		"arg_names":["filename"],
 		"run":function(args){
-		    delete $scope.files[args[0]];
+		    if(args[0] in $scope.files){
+			delete $scope.files[args[0]];
+			return 1;
+		    }
+		    return -1;
 		}
 	    },
 	],
@@ -281,6 +288,33 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		}
 	    }
 	],
+,
+	"string":[
+	    {
+		"name":"simplify",
+		"arg_names":["text"],
+		"run":function(args){
+		}
+	    },
+	    {
+		"name":"lower",
+		"arg_names":["text"],
+		"run":function(args){
+		}
+	    },
+	    {
+		"name":"upper",
+		"arg_names":["text"],
+		"run":function(args){
+		}
+	    },
+	    {
+		"name":"split",
+		"arg_names":["text","char"],
+		"run":function(args){
+		}
+	    }
+	],
 	"lb":[
 	    {
 		"name":"set_color",
@@ -291,7 +325,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		    var b = $scope.get_button(args[0], args[1]);
 		    if(b) b.style['background-color'] = args[2];
 		    else return -1;
-		    return 0;
+		    return 1;
 		}
 	    },
 	    {
@@ -304,7 +338,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		    var b = $scope.get_button(args[0], args[1]);
 		    if(b) b.content = (args[2].toString())[0]
 		    else return -1;
-		    return 0
+		    return 1
 		}
 	    },
 	    {
@@ -344,6 +378,7 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		"arg_names":["start","end"],
 		"run":function(args){
 		    var directionsService = new google.maps.DirectionsService();
+		    console.log("DIRDIR",args[0]," to ", args[1]);
 		    var directionsRequest = {
 			origin: args[0],
 			destination: args[1],
@@ -539,11 +574,8 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 	return !isNaN(parseFloat(n)) && isFinite(n);
     }
     $scope.initialize = function(){
-	if($scope.simid == "big"){
-	    $scope.ref_display = true;
-	    console.log("big");
-	    $scope.click_callback = null;
-	}
+	$scope.ref_display = true;
+	$scope.click_callback = null;
 	$scope.cm_setup();
 	console.log($scope.line_types);
     }
@@ -598,10 +630,8 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
     $scope.reset = function(){
 	console.log("resetting");
 	$scope.buttons = [];
-	if($scope.simid == "big"){
-	    for(var i = 0; i < $scope.grid_cols * $scope.grid_rows; i++){
-		$scope.buttons.push({'style':{'background-color':'gray','height':'15px','width':'15px','display':'inline-block','text-align':'center','padding':'2px','border':'1px solid black','margin':'1px','cursor':'pointer','font-size':'12px','vertical-align':'top'},'content':' '});
-	    }
+	for(var i = 0; i < $scope.grid_cols * $scope.grid_rows; i++){
+	    $scope.buttons.push({'style':{'background-color':'gray','height':'15px','width':'15px','display':'inline-block','text-align':'center','padding':'2px','border':'1px solid black','margin':'1px','cursor':'pointer','font-size':'12px','vertical-align':'top'},'content':' '});
 	}
 	$scope.call_stack = [];
 	$scope.called_a_function = false;
@@ -1210,6 +1240,11 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		break;
 	    }
 	}
+    }
+    $scope.run_all = function(){
+	console.log("GOING");
+	$scope.steps.count = 10000;
+	$scope.step();
     }
     $scope.run = function(){
 	$scope.reset();

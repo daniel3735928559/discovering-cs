@@ -1293,61 +1293,7 @@ else:
 	<p>This is the greatest power of a high-level programming
 	language like Python, and the feature that enables it to be
 	most effectively used for practical tasks like programming
-	search engines and video games and so on.  </p>
-
-	<p>As another example of a Python module that performs a very
-	complicated task, we introduce the <icode>googlemaps</icode>
-	module, which provides a function that gives directions from a
-	starting address to a destination address.</p>
-
-	<table>
-	  <tr><td>Function</td><td>Arguments</td><td>Return
-	  value</td></tr>
-	  
-	  <tr><td><icode>googlemaps.init()</icode></td><td>No
-	  arguments</td><td>This function does the work needed to set
-	  up communication with the Google Maps server.  It must be
-	  called only once in the program, and must be before any
-	  other googlemaps functions are called.</td></tr>
-	  
-	  <tr><td><icode>googlemaps.directions(start,
-	  end)</icode></td><td><icode>start</icode> is a string with
-	  the address from which navigation should start, and
-	  <icode>end</icode> is a string with the destination
-	  address</td><td>The function returns an array whose entries
-	  are the steps in navigating from the starting address to the
-	  ending address.</td></tr>
-	</table>	
-
-	<p>
-	For example:
-	
-	  <python>import googlemaps
-googlemaps.init()
-dirs = googlemaps.directions("North/Clyburn, Chicago, IL","Centrailia, PA")
-i = 0
-while(i &lt; len(dirs)):
-   print(dirs[i])
-   i = i+1</python>
-
-        If you run this program, it should output the directions from
-        The North and Clyburn Red Line station in Chicago to
-        Centrailia, Pennsylvania.  You can even combine the two
-	libraries we've learned so far to let the user provide the
-	start and end addresses:
-
-	
-	<python>import googlemaps
-import input
-googlemaps.init()
-start = input.get_string("Enter the starting address")
-end = input.get_string("Enter the ending address")
-dirs = googlemaps.directions(start, end)
-i = 0
-while(i &lt; len(dirs)):
-   print(dirs[i])
-   i = i+1</python>
-
+	search engines and video games and so on.  
    We'll learn more library functions as we go through some examples.
 	</p>
       </text>
@@ -1603,40 +1549,470 @@ print(math.sqrt(input.get_num("Enter x")))</python>
 	  three arguments are treated as the coefficients of a
 	  quadratic polynomial <icode>a*x^2 + b*x + c</icode></td><td>Returns an array containing all the
 	  solutions of the equation <icode>a*x^2 + b*x + c = 0</icode></td></tr>
-	</table>	
+	</table>
 	  </p>
 	</text>
       </section>
       <section>
 	<title>Factorial</title>
 	<text>
-	  <p>
-	    <python>import input
+	  <p>OK, so we have a bunch of mathematics functions already
+	  written for us.  This is convenient, but we notice that it
+	  doesn't include a factorial function.  So at least that will
+	  not be wasted work.  We already wrote some factorial code in
+	  the previous chapter, so we can wrap it up in a nice
+	  function here: 
+	  
+	  <python>import input
 def factorial(x):
-   if(x &lt;= 0):
-      return 1
-   return x*factorial(x-1)
-print(factorial(input.get_num("Factorial of: ")))</python>
+   answer = 1
+   counter = 1
+   while(counter &lt; x): 
+      counter = counter + 1
+      answer = answer * counter
+   return answer
+
+print(factorial(input.get_num("Enter a number")))</python>
+
+
+	  That was relatively straightforward.  In addition to
+          this, we want to mention a few alternatives that convey a
+	  few new ideas.  </p>
+
+	  <p><b>Factorial, Mark II: </b> If we step back and think for
+	  a moment about what the factorial is really doing, it is
+	  multiplying a bunch of numbers together.  This is a rather
+	  general operation: We can imagine wanting to be able to take
+	  any list of numbers and multiply all of them--not just the
+	  list from <icode>1</icode> to <icode>N</icode>, which
+	  multiply to give <icode>N!</icode>.  </p>
+	  
+	  <p>To this end, we can write a more general function that
+	  takes in an array of numbers and returns the product of all
+	  its elements.  This will look broadly similar to the
+	  factorial function: We maintain a <icode>counter</icode> and
+	  an <icode>answer</icode> variable, but instead of
+	  multiplying the answer by <icode>counter</icode> each time,
+	  we multiply it by <icode>numbers[counter]</icode>:
+
+	  
+	  <python>def multiply(numbers):
+   answer = 1
+   counter = 1
+   while(counter &lt; len(numbers)): 
+      counter = counter + 1
+      answer = answer * numbers[counter]
+   return answer
+
+print(multiply([2,4,6]))</python>
+
+          This has an off-by-one type of error.  See if you can fix
+          it!  (Answer will be given later.)  </p>
+
+	  <p>This would allow us to very easily compute factorials if
+	  we could get an array of the numbers <icode>1</icode> to
+	  <icode>N</icode> easily.  In fact, the <icode>math</icode>
+	  module has such a function: <icode>math.range</icode>.  So
+	  we can easily do the following (this version has the
+	  off-by-one error fixed too):
+
+	  <python>import math
+def multiply(numbers):
+   answer = 1
+   counter = 0
+   while(counter &lt; len(numbers)): 
+      answer = answer * numbers[counter]
+      counter = counter + 1
+   return answer
+
+def factorial(x):
+   return multiply(math.range(1,x+1))
+
+print(factorial(5))</python>
+
 	  </p>
+
+	  <p><b>Debrief: </b>This isn't really much better than the
+	  original factorial function, either in terms of
+	  maintainability or readability.  It is somewhat more
+	  general in that we wrote a function that could do something
+	  that might be useful in some other context later.  </p>
+
+	  <aside>
+	  <p><b>Factorial, Mark III: </b>There is yet another way to
+	  write the factorial function.  This method is inspired by
+	  the definition that is often given for the factorial in a
+	  mathematics textbook.  To wit:
+
+	  <code>n! = n*(n-1)!, where we define 0! = 1</code>
+
+	  This is a somewhat odd definition, since to define the
+	  factoral of <icode>n</icode>, i.e., <icode>n!</icode>, it
+	  uses the factorial in the definition.  This actually plays
+	  out just fine, however: Let's try to compute 4! just by
+	  using this definition and not any of our foregoing knowledge
+	  of what a factorial is:</p>
+	  
+	  <p>
+	    <ul>
+	      <li>First of all, by the definition, 4! = 4*3!</li>
+	      <li>So we need to know 3!.  But according to the definition, 3! = 3*2!</li>
+	      <li>But then we need to know 2!.  In turn, by the
+	      definition, 2! = 2*1!</li>
+	      <li>Now we need to now 1!.  Once again, 1! = 1*0!</li>
+	      <li>Finally, by the definition, 0! = 1</li>
+	      <li>So, now that we know 0!, we can find 1!: 1! = 1*0! =
+	      1*1 = 1.</li>
+	      <li>Then we can find 2! = 2*1! = 2*1 = 2</li>
+	      <li>Then we can find 3! = 3*2! = 3*2 = 6</li>
+	      <li>Then we can find 4! = 4*3! = 4*6 = 24</li>
+	    </ul>
+
+	    So it all works out in the end.  
+	  </p>
+	  
+	  <p><def term="recursive (definition)">This is a special kind
+	  of definition, where to define the function we use the
+	  function itself in the definition.  Such a definition is
+	  called <b>recursive</b>.</def> Obviously such definitions
+	  can fail to make sense.  Suppose I try to define a new
+	  operator <icode>@</icode> with a recursive definition like:
+
+	  <code>n@ = n * (n+1)@</code>
+	    
+	  Then if you try the same procedure as above to compute 4@,
+	  you will never finish it.  (Try on your own, if you dare!)
+	  </p>
+	  
+	  <p>But the definition of factorial does make sense, so we
+	  can mimic it with a function that, like the definition,
+	  actually calls itself:
+	    
+	  <python>import input
+def factorial(x):
+   if(x == 0):
+      return 1
+   else:
+      return x*factorial(x-1)
+print(factorial(input.get_num("Factorial of: ")))</python>
+
+          We can track its behaviour by watching the "Outstanding
+          calls" section of the simulator and observe that a call to
+          factorial(4) elicits an outstanding call to factorial(3),
+          and then to factorial(2), etc. just like our analysis of the
+          definition above went through computing 4! via 3! and 2! and
+          so on. </p>
+	  
+	  <p><def term="recursive (function)">A function that calls
+	  itself in this way is called a <b>recursive
+	  function</b>.</def> Recursive functions are relatively
+	  subtle beasts, and we won't concern ourselves any further
+	  with them in this text other than to have briefly mentioned
+	  their existence.  </p>
+	  
+	  <p>This particular example might look like a shining example
+	  of readability: It is the shortest implementation by far,
+	  and it reads almost identically to the official definition
+	  of factorial.  However for someone who isn't already
+	  comfortable with recursive functions, figuring out its exact
+	  behaviour can be a challenge.  A recursive function that is
+	  any more complicated than this can get very confusing
+	  indeed.  So in fact, depending on the audience this could
+	  instead be a shining example of concision masquerading as
+	  readability.  </p>
+	  </aside>
 	</text>
       </section>
       <section>
-	<title>Primality testing</title>
+	<title>List of prime numbers</title>
 	<text>
+	  <p>In the previous chapter, we had an example of a function
+	  that tested whether a given number is prime.  The question
+	  is now whether we can generate a list of all primes up to a
+	  given integer N.  </p>
+
+	  <p>One approach would be to start with a list of all
+	  integers 2 through N, test each one to see if it is prime,
+	  and delete the elements that are not prime.  To do this, we
+	  first have to package up our code from the previous chapter
+	  into an <icode>is_prime</icode> function.  We'll say it
+	  should return 0 if the number is non-prime, and 1 if it is
+	  prime.
+
+	  <python>import input
+
+def is_prime(n):
+   counter = 2
+   is_prime = 1
+   while(counter &lt; n):
+      if(n % counter == 0): 
+         return 0
+      counter = counter + 1
+   return 1 
+
+print(is_prime(input.get_num("Enter a number")))</python>
+
+          Then we can use <icode>math.range</icode> to make a list of
+          integers 2 through N and then use a while loop call out
+          <icode>is_prime</icode> function on each element:
+
+	  <python>import input
+import math
+
+def is_prime(n):
+   counter = 2
+   is_prime = 1
+   while(counter &lt; n):
+      if(n % counter == 0): 
+         return 0
+      counter = counter + 1
+   return 1 
+
+N = input.get_num("Enter a number")
+nums = math.range(2,N+1)
+counter = 0
+while(counter &lt; len(nums)):
+   if(is_prime(nums[counter]) == 0): 
+      del nums[counter]
+   counter = counter + 1
+print(nums)</python>
+
+          </p>
+	  
+	  <p><b>Debrief: </b>Actually, this example also has a subtler
+	  off-by-one error resulting from what happens when you delete
+	  an element from an array.  Go back and see if you can fix
+	  it.
+
+	  <exercise name="primes_off_by_one">
+	    <question>Show answer</question>
+	    <answer>
+	      Say the <icode>nums</icode> is
+	      <icode>[2,3,5,7,8,9,10]</icode> and
+	      <icode>counter</icode> is currently 4.  Then we're
+	      testing <icode>nums[counter]</icode> for primality.
+	      Since <icode>nums[counter] = 8</icode> in this case, it
+	      isn't prime, so we delete it from the list, leaving
+	      <icode>nums</icode> as <icode>[2,3,5,7,9,10]</icode> and
+	      <icode>counter</icode> is still 4.  Then we increment
+	      counter so it becomes 5.  This meanqs
+	      <icode>nums[counter]</icode> is now 10, and we've
+	      skipped testing 9 entirely.This mean we will leave 9 in
+	      the list of numbers without ever testing it!
+
+	      <p>
+		The fix is to only increment the counter if we didn't
+		delete something:
+	  <python>import input
+import math
+
+def is_prime(n):
+   counter = 2
+   is_prime = 1
+   while(counter &lt; n):
+      if(n % counter == 0): 
+         return 0
+      counter = counter + 1
+   return 1 
+
+N = input.get_num("Enter a number")
+nums = math.range(2,N+1)
+counter = 0
+while(counter &lt; len(nums)):
+   if(is_prime(nums[counter]) == 0): 
+      del nums[counter]
+   else:
+      counter = counter + 1
+print(nums)</python>
+		
+	      </p>
+	    </answer>
+	  </exercise>
+	  </p>
+	  
+	  <p>Even once we get this working, however, there is a
+	  question of this program's efficiency.  The algorithm runs
+	  by checking first if 2 is prime, then if 3 is prime, all the
+	  way up to <icode>N</icode>.  For a given <icode>x</icode>,
+	  how many steps does it take to check whether
+	  <icode>x</icode> is prime?  We run through all possible
+	  divisors of <icode>x</icode>, of which there are about
+	  <icode>x</icode> (precisely, there are <icode>x-2</icode>,
+	  but we can be approximate).</p>
+	  
+	  <p>To count the total number of steps we take, we can count
+	  the approximate number of steps needed for each number
+	  between 2 and N:
+	  <ul>
+	    <li>Check if 2 is prime: 2 steps</li>
+	    <li>Check if 3 is prime: 3 steps</li>
+	    <li>Check if 4 is prime: 4 steps</li>
+	    <li>Check if 5 is prime: 5 steps</li>
+	    <li>...</li>
+	    <li>Check if N is prime: N steps</li>
+	  </ul>
+
+	  This gives us a total of <icode>2+3+4+...+N</icode> steps.
+	  We can simplify this to
+
+	  <icode>(1/2)*N<sup>2</sup> + (1/2)*N - 1</icode>.  When N is
+	  large, N<sup>2</sup> is the only part of this expression
+	  that really matters (think: if N is around 1000, then
+	  (1/2)*N<sup>2</sup> is 500000, while (1/2)*N-1 is only
+	  499).  So we would estimate the number of steps as roughly
+	  (1/2)*N<sup>2</sup>.  </p>
+	  
+	  <p>It bears a moment's reflection to think about what this
+	  means: If we want to compute all primes up to 1 million this
+	  way, we will end up needing to take about a half trillion
+	  steps.  So how long will this take?  </p>
+	  
+	  <p>Remember first that the computer isn't actually a machine
+	  that reads and understands Python.  Rather, the Python code
+	  is getting turned into more fundamenal ISA operations which
+	  are actually being fed into the computer.  A reasonable
+	  computer will be able to run about 2 billion ISA operations
+	  per second.  Each line of Python will in practice work out
+	  to a couple ISA operations on average--for now, let's
+	  optimistically approximate by saying each line is 2
+	  operations. </p>
+	  
+	  <p>With all these approximations in place, the computer will
+	  have a trillion operations to run, which should take about
+	  one trillion divided by two billion seconds, or about 500
+	  seconds.  That is perhaps tolerable, but relies on some
+	  pretty optimistic estimates.  For instance, a computer can
+	  run 2 billion ISA operations per second, but a computer is
+	  usually running multiple programs at once and won't dedicate
+	  all of its power to running a single program's instructions
+	  all the time.  If 20 serious programs are running, now maybe
+	  the calculation takes 20 times as long.  The realistic
+	  conclusion to draw from all thisanalysis is that it will
+	  take on the order of several minutes, and possibly even up
+	  to an hour depending on exactly what situation it is running
+	  in.</p>
+
+	  <p><b>Prime listing algorithm, Mark II: </b>There is a
+	  classic algorithm for enumerating primes, which dates back
+	  to a Greek thinker called Eratosthenes of Cyrene (same guy
+	  who famously approximated the circumference of the
+	  Earth!).</p>
+	  
+	  <p>The idea is: Start with a list of numbers 2-N.  2 is
+	  prime, but then all following multiples of 2 are not, so
+	  remove them from the list.  The next number remaining in the
+	  list is 3, so it is prime, but then we can walk through and
+	  cross out all multiples of 3 from the list, as they are thus
+	  definitely not prime.  The next remaining item in the list
+	  is 5 (4 got removed when we removed multiples of 2), so it
+	  is prime, but we can cross out all multiples of 5.  </p>
+
+	  
+	  <p>To run through an example on 0-12:
+	  <ul>
+	    <li>We start with list [0,1,2,3,4,5,6,7,8,9,10,11,12]</li>
+	    <li>0 and 1 are not prime, so we "cross them out" by
+	    setting them to 0: [0,0,2,3,4,5,6,7,8,9,10,11,12]</li>
+	    <li>The first interesting number is 2.  So we can cross
+	    out list items 4, 6, 8, etc., which we shall do by setting
+	    them to 0, leaving: [0,0,2,3,0,5,0,7,0,9,0,11,0]</li>
+	    <li>The next surviving number is 3.  So we can cross out
+	    list items 6, 9, 12, etc., which we shall do by setting
+	    them to 0 (though some of them are already 0), leaving:
+	    [0,0,2,3,0,5,0,7,0,0,0,11,0]</li>
+	    <li>The next interesting number is 5, etc.</li>
+	    <li>When we're finished using this to cross numbers out,
+	    delete all the 0s, leaving: [2,3,5,7,11], a list of
+	    primes!</li>
+	  </ul></p>
+	  
+	  <p>We can turn this algorithm into a program as follows: 
+	  
 	  <python>import math
 import input
 N = input.get_num("See all primes less than: ")
-ns = math.range(2,N)
-c = 0
-while(c &lt; math.sqrt(N)+1):
-   i = c+1
-   while(i &lt; len(ns)):
-      if(ns[i] % ns[c] == 0):
-         del ns[i]
-      else:
-         i = i+1
+ns = math.range(0,N+1)
+ns[1] = 0
+c = 2
+while(c &lt;= N):
+   i = c+c
+   while(i &lt;= N):
+      ns[i] = 0
+      i = i+c
    c = c+1
+   while(ns[c] == 0):
+      c = c+1
+i = 0
+while(i &lt;= len(ns)):
+   if(ns[i] == 0):
+      del ns[i]
+   else:
+      i = i+1
 print(ns)</python>
+	  </p>
+
+	  <aside>For people with a familiarity with calculus, we can
+	  actually approximate the time efficiency of this algorithm.
+	  First, it eliminates all multiples of 2 that are below N.
+	  There are N/2 of these, so this takes N/2 steps.  Then it
+	  eliminates all multiples of 3, of which there are N/3.  Then
+	  it eliminates all multiples of 5, which is N/5 steps.  And
+	  so on, so the total number of steps is:
+
+	  <code>N/2 + N/3 + N/5 + N/7 + N/11 + ... + N/N</code>
+
+	  This is certainly less than the same series where we include
+	  1/x for every x and not just the prime x:
+	  
+	  <code>N/2 + N/3 + N/4 + N/5 + N/6 + ... + N/N</code>
+
+	  We can factor out an N: 
+	  
+	  <code>N(1/2 + 1/3 + 1/4 + 1/5 + 1/6 + ... + 1/N)</code>
+
+	  But the sum
+	  
+	  <code>1/2 + 1/3 + 1/4 + 1/5 + 1/6 + ... + 1/N</code>
+
+	  Approximates the integral from 1 to N of 1/x.  This integral
+	  evaluates to ln(N).  So in fact the expression
+	  
+	  <code>N(1/2 + 1/3 + 1/4 + 1/5 + 1/6 + ... + 1/N)</code>
+
+	  is just approximately
+	  
+	  <code>N * ln(N)</code>
+
+	  Because the sum is a lower Riemann sum (and ln(N) is an
+	  overestimate), and since we overestimated the original
+	  answer to begin with by adding in all those extra terms to
+	  the sum, this estimate of N*ln(N) is actually still slightly
+	  larger than the real number of steps.  A more careful
+	  analysis would show that a better estimate is N*ln(ln(N))
+	  
+	  <p>So how many steps should it take, approximately, to get the
+	  primes up to a million?
+
+	  <code>(1 million) * ln(1 million) = (1 million) * 13.82</code>
+
+	  So approximately 14 million.  By our back-of-the-envelope
+	  calculation above, this should take about 7 seconds.  A vast
+	  improvement on our optimistic estimate of 500 seconds for
+	  the previous algorithm.</p>
+	  </aside>
+	  
+
+	  <p>For those who skipped the aside, the upshot was that the
+	  code should take only about 7 seconds to compute the primes
+	  up to 1 million.  This presents another example of a
+	  trade-off: The code implementing this algorithm is kind of
+	  crunchy and hard to read.  However, it is far superior in
+	  speed to the previous algorithm.  One way to help this would
+	  be to put the code into a module function--maybe
+	  <icode>math.get_primes</icode>--so that while the code is
+	  there and hard to read, it is clear what it does, and most
+	  of the time we can use it, getting the full advantage of its
+	  speed, without ever having to look at it.</p>
 	</text>
       </section>
     </section>
@@ -1646,11 +2022,184 @@ print(ns)</python>
       </text>
       <section>
 	<title>Search Engine</title>
-	<text></text>
+	<text>
+
+	  <p>Documentation for the file module:
+
+	  
+	<table>
+	  <tr><td>Function</td><td>Arguments</td><td>Return
+	  value</td></tr>
+	  
+	  <tr><td><icode>file.list()</icode></td><td>No
+	  arguments</td><td>Returns an array containing a list of
+	  filenames for files that exist.</td></tr>
+	  
+	  <tr><td><icode>file.readline(filename,
+	  line_num)</icode></td><td><icode>filename</icode> is a
+	  string specifying which file you want to read.
+	  <icode>line_num</icode> is a number specifying which line
+	  you want to read from that file.  </td><td>Returns a string
+	  which is the requested line from the specified
+	  file.</td></tr>
+	  
+	  <tr><td><icode>file.length(filename)</icode></td><td><icode>filename</icode>
+	  is a string specifying which file you want to ask
+	  about.</td><td>Returns a number which is the number of lines
+	  in the specified file.  Returns -1 if the file does not exist.</td></tr>
+
+
+	  <tr><td><icode>file.write(filename,text)</icode></td><td><icode>filename</icode>
+	  is a string specifying which file you want to append to.
+	  <icode>text</icode> is the text you want to
+	  write</td><td>Writes <icode>text</icode> to the file with
+	  name equal to <icode>filename</icode>, overwriting any data
+	  previously stored there.  Returns 1 if the write was
+	  successful and -1 otherwise (for example, if the file does
+	  not exist).</td></tr>
+	  
+	  <tr><td><icode>file.append(filename,text)</icode></td><td><icode>filename</icode>
+	  is a string specifying which file you want to append to.
+	  <icode>text</icode> is the text you want to
+	  append</td><td>Appends <icode>text</icode> to the file with
+	  name equal to <icode>filename</icode>.  Returns 1 if the
+	  append was successful and -1 otherwise (for example, if the
+	  file does not exist)</td></tr>
+	  
+	  <tr><td><icode>file.create(filename)</icode></td><td><icode>filename</icode>
+	  is a string specifying which file you want
+	  make.</td><td>Creates a new file with name
+	  <icode>filename</icode> and returns 1.  If a file with that
+	  name already exists, it does nothing and returns -1.</td></tr>
+
+	  <tr><td><icode>file.delete(filename)</icode></td><td><icode>filename</icode>
+	  is a string specifying which file you want to
+	  delete.</td><td>Deletes the file with name
+	  <icode>filename</icode> and returns 1.  If no such file
+	  exists, does nothing and returns -1..</td></tr>
+	  
+	</table>
+
+	  </p>
+	  
+	</text>
       </section>
       <section>
 	<title>Game Console</title>
-	<text></text>
+	<text>
+	  <p>
+	    Documentation for lb module: 
+	<table>
+	  <tr><td>Function</td><td>Arguments</td><td>Return
+	  value</td></tr>
+
+	  <tr><td><icode>lb.set_color(x,y,color)</icode></td><td><icode>x</icode>
+	  is the x-coordinate of the button to set, <icode>y</icode>
+	  is the y-coordinate of the button to set, and
+	  <icode>color</icode> is a string describing the color to set
+	  for in the button.</td><td>Sets the button at coordinates
+	  x,y to have color described in the <icode>color</icode>
+	  argument.  Returns 1 if the setting was successful, and -1
+	  if it failed (e.g. if x or y was too large).</td></tr>
+	  
+	  <tr><td><icode>lb.set_text(x,y,text)</icode></td><td><icode>x</icode>
+	  is the x-coordinate of the button to set, <icode>y</icode>
+	  is the y-coordinate of the button to set, and
+	  <icode>text</icode> is the text to put in the
+	  button.</td><td>Sets the button at coordinates x,y to have
+	  text equal to the first character of the string
+	  <icode>text</icode>.  Returns 1 if the setting was
+	  successful, and -1 if it failed (e.g. if x or y was too
+	  large).</td></tr>
+	  
+	  <tr><td><icode>lb.get_click()</icode></td><td>No
+	  arguments</td><td>Waits for the user to click the
+	  lightboard.  When they do, this function returns an array
+	  containing, in order, the x coordinate of the click, the y
+	  coordinate of the click, the text of the button clicked, and
+	  the color of the button clicked.</td></tr>
+	  
+	  
+	</table>
+
+	    <python>import lb
+import math
+user_x = 0
+user_y = 0
+lb.set_color(user_x,user_y,"red")
+ok = 1
+while(ok == 1):
+   a = lb.get_click()
+   x = a[0]
+   y = a[1]
+   t = a[2]
+   c = a[3]
+   if(math.distance(x,y,user_x,user_y) &lt;= 1):
+      lb.set_color(user_x,user_y,"gray")
+      lb.set_color(x,y,"red")
+      user_x = x
+      user_y = y</python>
+	  </p>
+	</text>
+      </section>
+      <section>
+	<title>Mobile Phone</title>
+	<text>
+
+	<p>For one final example of using Python  example of a Python module that performs a very
+	complicated task, we introduce the <icode>googlemaps</icode>
+	module, which provides a function that gives directions from a
+	starting address to a destination address.</p>
+
+	<table>
+	  <tr><td>Function</td><td>Arguments</td><td>Return
+	  value</td></tr>
+	  
+	  <tr><td><icode>googlemaps.init()</icode></td><td>No
+	  arguments</td><td>This function does the work needed to set
+	  up communication with the Google Maps server.  It must be
+	  called only once in the program, and must be before any
+	  other googlemaps functions are called.</td></tr>
+	  
+	  <tr><td><icode>googlemaps.directions(start,
+	  end)</icode></td><td><icode>start</icode> is a string with
+	  the address from which navigation should start, and
+	  <icode>end</icode> is a string with the destination
+	  address</td><td>The function returns an array whose entries
+	  are the steps in navigating from the starting address to the
+	  ending address.</td></tr>
+	</table>	
+
+	<p>
+	For example:
+	
+	  <python>import googlemaps
+googlemaps.init()
+dirs = googlemaps.directions("North/Clyburn, Chicago, IL","Centrailia, PA")
+i = 0
+while(i &lt; len(dirs)):
+   print(dirs[i])
+   i = i+1</python>
+
+        If you run this program, it should output the directions from
+        The North and Clyburn Red Line station in Chicago to
+        Centrailia, Pennsylvania.  You can even combine the two
+	libraries we've learned so far to let the user provide the
+	start and end addresses:
+
+	
+	<python>import googlemaps
+import input
+googlemaps.init()
+start = input.get_string("Enter the starting address")
+end = input.get_string("Enter the ending address")
+dirs = googlemaps.directions(start, end)
+i = 0
+while(i &lt; len(dirs)):
+   print(dirs[i])
+   i = i+1</python>
+	</p>
+ </text>
       </section>
     </section>
     <section>
