@@ -2024,7 +2024,38 @@ print(ns)</python>
 	<title>Search Engine</title>
 	<text>
 
-	  <p>Documentation for the file module:
+	  <p>Now that we know about libraries, we can start working
+	  toward a slightly more realistic search-engine application.
+	  Before we get into details of an algorithm, we will find it
+	  useful to write down a slightly higher-level design for this
+	  program, specifying how it stores the data that is
+	  searchable, how it gets queries from the user, and what it
+	  gives back to the user.  </p>
+
+	  <p><b>Search engine design: </b>For a start, we might try
+	  something like the following:
+
+	  <ul>
+	    <li>The files that the search engine allows the user to
+	    search through are stored somewhere</li>
+	    <li>When the search engine starts, it reads these files
+	    and constructs arrays of all the words in the files</li>
+	    <li>Then it is ready for user queries, and it asks the
+	    user to input a query word</li>
+	    <li>It then prints out the names of the files that contain
+	    that word and asks the user for another query word.</li>
+	    <li>If the user enters "EXIT" as their query, then the
+	    program quits.</li>
+	  </ul></p>
+
+	  <p>At a high level, we know how to do some of these tasks:
+	  Asking the user for input is the job of the input module.
+	  However, there are a few pieces we haven't learned yet.  For
+	  example, how do we read files?</p>
+	  
+	  <p>In our version of Python, we have a <icode>file</icode>
+	  module, with all the functions we could ever ask for
+	  pertaining to files: 
 
 	  
 	<table>
@@ -2079,6 +2110,26 @@ print(ns)</python>
 	  exists, does nothing and returns -1..</td></tr>
 	  
 	</table>
+
+	So, for example, we can write some code that reads all the files:
+	
+	<python>import file
+filenames = file.list()
+counter = 0
+files = []
+while(counter &lt; len(filenames)):
+   name = filenames[counter]
+   file_length = file.length(name)
+   line_counter = 0
+   file_contents = ""
+   files = files + [""]
+   while(line_counter &lt; file_length):
+      files[counter] = files[counter]+file.readline(name,line_counter)+"\n"
+      line_counter = line_counter + 1
+   counter = counter + 1
+print(files)</python>
+
+
 
 	  </p>
 	  

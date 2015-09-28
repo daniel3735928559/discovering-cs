@@ -288,30 +288,19 @@ app.controller("PySimController", ['$scope','$timeout',function($scope, $timeout
 		}
 	    }
 	],
-,
 	"string":[
 	    {
 		"name":"simplify",
 		"arg_names":["text"],
 		"run":function(args){
-		}
-	    },
-	    {
-		"name":"lower",
-		"arg_names":["text"],
-		"run":function(args){
-		}
-	    },
-	    {
-		"name":"upper",
-		"arg_names":["text"],
-		"run":function(args){
+		    return args[0].toLowerCase().replace(/[\t\n]/g," ").replace(/[^a-z ]/g,"").replace(/ +/g," "); 
 		}
 	    },
 	    {
 		"name":"split",
 		"arg_names":["text","char"],
 		"run":function(args){
+		    return args[0].split(args[1]);
 		}
 	    }
 	],
