@@ -2629,69 +2629,296 @@ while(query != "EXIT"):
       <section>
 	<title>Game Console</title>
 	<text>
-	  <p>
-	    Documentation for lb module: 
-	<table>
-	  <tr><td>Function</td><td>Arguments</td><td>Return
-	  value</td></tr>
+	  <p>Suppose now we want to write a game using Python.  Now,
+	  there are plenty of games we could write with only text
+	  input and output--"guess a number", "hangman", "nethack",
+	  and "colossal cave adventure" are some classic examples.
+	  Colossal cave adventure in particular presents some very
+	  interesting programming challenges.  </p>
+	  
+	  <p>Modern games, however, have access to advanced graphics
+	  technology and don't have to rely quite as much on the
+	  user's imagination.  These advanced technologies require
+	  correspondingly complex programming to take full advantage
+	  of, which is well outside the scope of this text.</p>
+	  
+	  <p>For our game example, then, we'll meet somewhere in the
+	  middle with a very limited graphics display: a 10x10 grid of
+	  squares that can change color, display text, and are
+	  clickable.  We call this arrangement our "lightboard", and
+	  it can be controlled by functions from the <icode>lb</icode>
+	  module:</p>
+	  
+	    <table>
+	      <tr><td>Function</td><td>Arguments</td><td>Return
+	      value</td></tr>
+	      
+	      <tr><td><icode>lb.set_color(x,y,color)</icode></td><td><icode>x</icode>
+	      is the x-coordinate of the button to set, <icode>y</icode>
+	      is the y-coordinate of the button to set, and
+	      <icode>color</icode> is a string describing the color to set
+	      for in the button.</td><td>Sets the button at coordinates
+	      x,y to have color described in the <icode>color</icode>
+	      argument.  Returns 1 if the setting was successful, and -1
+	      if it failed (e.g. if x or y was too large).</td></tr>
+	  
+	      <tr><td><icode>lb.set_text(x,y,text)</icode></td><td><icode>x</icode>
+	      is the x-coordinate of the button to set, <icode>y</icode>
+	      is the y-coordinate of the button to set, and
+	      <icode>text</icode> is the text to put in the
+	      button.</td><td>Sets the button at coordinates x,y to have
+	      text equal to the first character of the string
+	      <icode>text</icode>.  Returns 1 if the setting was
+	      successful, and -1 if it failed (e.g. if x or y was too
+	      large).</td></tr>
+	      
+	      <tr><td><icode>lb.get_click()</icode></td><td>No
+	      arguments</td><td>Waits for the user to click the
+	      lightboard.  When they do, this function returns an array
+	      containing, in order, the x coordinate of the click, the y
+	      coordinate of the click, the text of the button clicked, and
+	      the color of the button clicked.</td></tr>
+	    </table>
 
-	  <tr><td><icode>lb.set_color(x,y,color)</icode></td><td><icode>x</icode>
-	  is the x-coordinate of the button to set, <icode>y</icode>
-	  is the y-coordinate of the button to set, and
-	  <icode>color</icode> is a string describing the color to set
-	  for in the button.</td><td>Sets the button at coordinates
-	  x,y to have color described in the <icode>color</icode>
-	  argument.  Returns 1 if the setting was successful, and -1
-	  if it failed (e.g. if x or y was too large).</td></tr>
-	  
-	  <tr><td><icode>lb.set_text(x,y,text)</icode></td><td><icode>x</icode>
-	  is the x-coordinate of the button to set, <icode>y</icode>
-	  is the y-coordinate of the button to set, and
-	  <icode>text</icode> is the text to put in the
-	  button.</td><td>Sets the button at coordinates x,y to have
-	  text equal to the first character of the string
-	  <icode>text</icode>.  Returns 1 if the setting was
-	  successful, and -1 if it failed (e.g. if x or y was too
-	  large).</td></tr>
-	  
-	  <tr><td><icode>lb.get_click()</icode></td><td>No
-	  arguments</td><td>Waits for the user to click the
-	  lightboard.  When they do, this function returns an array
-	  containing, in order, the x coordinate of the click, the y
-	  coordinate of the click, the text of the button clicked, and
-	  the color of the button clicked.</td></tr>
-	  
-	  
-	</table>
+	    <p>For example, we can easily write a program that allows
+	    the user to turn a box red by clicking on it: 
+	      
+	    <python>import lb
+a = lb.get_click()
+x = a[0]
+y = a[1]
+lb.set_color(x,y,"red")</python>
 
+            Or a program that allows them to turn as many boxes as
+	    they want red:
+	    
+	    <python>import lb
+while(1 == 1):
+   a = lb.get_click()
+   x = a[0]
+   y = a[1]
+   lb.set_color(x,y,"red")</python>
+	    
+            (To get the full effect, change the number of steps to
+            1000 before pressing "step".)  This is kind of like a
+            really simple paint program.  It is interesting, actually:
+            previously we described infinite loops as a likely logic
+            error, but now here we are writing one and it seems to
+            behave sensibly.  We could break the loop, however, by
+            having a winning condition or a button we can press to
+            exit or similar.  For example, if we want the top right
+            button to be the "quit" button, we can, instead of looping
+            forever, loop as long as a variable (say we call it
+            <icode>done</icode>) is set to 0.  Then, when the right
+            button is clicked, we'll set it to 1, which will cause the
+            loop to stop looping:
+
+	    <python>import lb
+done = 0
+while(done == 0):
+   a = lb.get_click()
+   x = a[0]
+   y = a[1]
+   if(x == 9 and y == 0):
+      done = 1
+   else:
+      lb.set_color(x,y,"red")</python>
+
+            Interesting to note about this is that the top-left button
+            has x coordinate 9 and y coordinate 0.  This is a common
+            feature of graphics programs, where the top left is the
+            origin in the coordinate system and the x-coordinate
+            describes how many steps you take to the right, and the
+            y-coordinate describes how many steps you take down.
+
+	    </p>
+	    
+	    <p><b>Simple game, version 1: </b>We could go down the
+	    route of improving our paint program by allowing the user
+	    to select a color or something, but suppose that instead
+	    we want to make a game with a character that we can move
+	    around the screen.  In this case, gray will represent the
+	    background and red will represent the player's location.
+	    Let us say the goal is to get to the bottom right corner
+	    of the screen.</p>
+	    
+	    <p><b>Algorithm: </b>To start programming this, we need to
+	    think about what data describes the current situation in
+	    the game.  Since right now all that happens is a single
+	    player moving around with no obstacles, the situation can
+	    be summarised with two pieces of information: Where is the
+	    player, and have they made it to the destination corner
+	    yet?  </p>
+	    
+	    <p>The location of the player can in turn be described by
+	    their x- and y-coordiantes, so the situation of the game
+	    at any point in time can be stored in three variables,
+	    which we shall call <icode>user_x</icode>,
+	    <icode>user_y</icode> and <icode>done</icode>.  <def
+	    term="model">These variables comprise what is called the
+	    game's <b>model</b>--that is, the information that
+	    describes competely the game's current setup (positions of
+	    all objects, scores, whatever), independently of how this
+	    data is displayed to the user.</def> For example, if our
+	    game had a "save" feature, the variables that are part of
+	    the model would be the only values we needed to store,
+	    since we can recreate the entire setup from that
+	    information.</p>
+	    
+	    <p>Now, just like before, we'll have a loop that continues
+	    until <icode>done</icode> changes, where we get the user's
+	    clicks.  But this time, rather than blithely setting
+	    wherever they clicked to be red, now we'll test whether
+	    they clicked next to the player's current position or
+	    not.  If they did, then we'll move the player to the spot
+	    they clicked.  Specifically:
+
+	    <ul>
+	      <li>Change the player's current position to gray.</li>
+	      <li>Update the player's position (<icode>user_x</icode>
+	      and <icode>user_y</icode>) to the location of the
+	      click.</li>
+	      <li>Change the player's new position to red.</li>
+	      <li>If the player has reached the bottom right corner,
+	      set <icode>done</icode> to be 1.</li>
+	    </ul>
+
+	    So how do we check whether the click was next to the
+	    player?  We can use the <icode>math</icode> library, which
+	    includes a function for measuring distance:
+	    <icode>math.distance</icode>.  If the distance between the
+	    click point and the player's position is exactly 1, then
+	    the user clicked one of the four adjacent spots.  
+      
 	    <python>import lb
 import math
 user_x = 0
 user_y = 0
+done = 0
 lb.set_color(user_x,user_y,"red")
-ok = 1
-while(ok == 1):
+while(done == 0):
    a = lb.get_click()
    x = a[0]
    y = a[1]
-   t = a[2]
-   c = a[3]
-   if(math.distance(x,y,user_x,user_y) &lt;= 1):
+   if(math.distance(x,y,user_x,user_y) == 1):
       lb.set_color(user_x,user_y,"gray")
-      lb.set_color(x,y,"red")
       user_x = x
-      user_y = y</python>
-	  </p>
+      user_y = y
+      lb.set_color(user_x,user_y,"red")
+   if(user_x == 9 and user_y == 9):
+      done = 1</python>
+
+	    Note that if we want the player to be able to move
+	    diagonally, then those diagonal clicks will be a distance
+	    of sqrt(2) (or about 1.4) away, so we could enable this
+	    behavior by changing the test:
+	    	    <python>import lb
+import math
+user_x = 0
+user_y = 0
+done = 0
+lb.set_color(user_x,user_y,"red")
+while(done == 0):
+   a = lb.get_click()
+   x = a[0]
+   y = a[1]
+   if(math.distance(x,y,user_x,user_y) &lt;= 1.5):
+      lb.set_color(user_x,user_y,"gray")
+      user_x = x
+      user_y = y
+      lb.set_color(user_x,user_y,"red")
+   if(user_x == 9 and user_y == 9):
+      done = 1</python>
+
+	    </p>
+	    
+	    <p>At this point, we can start adding things to the model:
+	    we can store an array of walls that the player cannot step
+	    through, of enemies that if the player touches they lose,
+	    of teleport locations, of horses the player can mount and
+	    get to move faster, of whatever we can think of!  We'll
+	    include here a simple example with some walls the player
+	    has to navigate around: 
+
+<python>import lb
+import math
+
+# Initialize model: 
+user_x = 0
+user_y = 0
+wall_xs = [0,0,0,1,1,2,2,2,3,3,3,3,3,4,4,4,5,4,6,6,6,7,8,8,8,8,8,8,8,9,2,3,4,5,4,1,6,6]
+wall_ys = [3,8,9,0,5,0,1,2,1,2,3,4,5,1,1,4,1,5,7,8,3,4,7,4,3,2,6,8,6,8,7,8,8,8,6,8,6,5]
+done = 0
+
+# Initial lightboard setup: 
+lb.set_color(user_x,user_y,"red")
+lb.set_color(9,9,"green")
+i = 0
+while(i &lt; len(wall_xs)):
+   lb.set_color(wall_xs[i],wall_ys[i],"blue")
+   i = i+1
+
+# Play loop: 
+while(done == 0):
+   a = lb.get_click()
+   x = a[0]
+   y = a[1]
+   color = a[3]
+   if(math.distance(x,y,user_x,user_y) == 1 and color != "blue"):
+      lb.set_color(user_x,user_y,"gray")
+      user_x = x
+      user_y = y
+      lb.set_color(user_x,user_y,"red")
+   if(user_x == 9 and user_y == 9):
+      done = 1</python>
+
+</p>
 	</text>
       </section>
       <section>
 	<title>Mobile Phone</title>
 	<text>
 
-	<p>For one final example of using Python  example of a Python module that performs a very
-	complicated task, we introduce the <icode>googlemaps</icode>
-	module, which provides a function that gives directions from a
-	starting address to a destination address.</p>
+	<p>For our final example of using Python to construct a
+	realistically useful program, we turn to a common function
+	performed by many mobile phones today: Giving directions.
+	Specifically, we want to write a program which will ask the
+	user for a starting street address and a destination address
+	and will provide a list of directions between the two
+	locations.</p>
+	
+	<p>This is a rather daunting problem.  Even if we had the raw
+	map data for where all buildings and roads are located, it
+	would still be an enormous challenge to locate the start and
+	end addresses within this massive amount of data, let alone
+	search all roads and paths and compare combinations of them to
+	find the optimal routes.  The algorithms that do this quickly
+	are interesting and surprisingly accessible and may well
+	appear in your later computer science study.  For now, though,
+	we will take advantage of the fact that Google has actually
+	solved this problem already with Google maps.</p>
+	
+	<p>When a person or a company creates an application such as
+	Google maps, they of course also have to provide a way to use
+	it.  So you can take advantage of all their mapping work by
+	going to google.com/maps.  But maybe you're walking and just
+	want to be able to speak your start and endpoint addresses
+	into the phone, rather than go to a website and type it in.
+	This would be using another program, different from the
+	website, to access the same data.  If our goal is to write
+	that program, we have to have a way of accessing Google's map
+	data from within a program, rather than by going to the
+	website.  <def term="API">Such a mechanism that allows not
+	just people using a web browser, but other programs to access
+	data and functionality contained in a given program (such as
+	Google maps, in this case) is called an <b>application
+	programming interface</b>, or <b>API</b>.</def></p>
+	
+	<p>So Google maps has an API that we can use from our program
+	to get directions from one address to another.  In fact, it is
+	better than that, as there already exists a Python module that
+	performs the task of using this API: the
+	<icode>googlemaps</icode> module.  </p>
 
 	<table>
 	  <tr><td>Function</td><td>Arguments</td><td>Return
@@ -2713,7 +2940,12 @@ while(ok == 1):
 	</table>	
 
 	<p>
-	For example:
+	For a simple example of using this, we call the
+	<icode>googlemaps.init</icode> function first (as we always
+	must).  Then we call the <icode>googlemaps.directions</icode>
+	function with whatever two arguments we please.  This returns
+	an array, which we loop through to print out each element,
+	thereby supplying the directions:
 	
 	  <python>import googlemaps
 googlemaps.init()
@@ -2723,12 +2955,31 @@ while(i &lt; len(dirs)):
    print(dirs[i])
    i = i+1</python>
 
+
         If you run this program, it should output the directions from
         The North and Clyburn Red Line station in Chicago to
-        Centrailia, Pennsylvania.  You can even combine the two
-	libraries we've learned so far to let the user provide the
-	start and end addresses:
+        Centrailia, Pennsylvania.  
+	</p>
 
+	<p>We note in the above example that the <icode>init</icode>
+	function didn't appear to really do anything.  It didn't set
+	any variables and it didn't output anything.  However, as per
+	the documentation, it is actually necessary--if we call the
+	<icode>directions</icode> function without first calling
+	<icode>init</icode>, we will get a runtime error.  What this
+	function does is actually I/O, but not keyboard input or
+	screen output.  Rather, it outputs the appropriate thing on
+	the computer's network interface (wireless card or whatever)
+	to set up a connection with Google's map service so that we
+	can communicate with it with future calls.  If we just call
+	the <icode>directions</icode> function immediately without
+	first calling <icode>init</icode>, then this will send our
+	request to Google who will promptly respond with the computer
+	equivalent of "Uh...who are you again?"</p>
+	
+	<p>It is now a rather simple exercise to combine this with the
+	input library to let the user provide the start and end
+	addresses:
 	
 	<python>import googlemaps
 import input
@@ -2744,10 +2995,10 @@ while(i &lt; len(dirs)):
  </text>
       </section>
     </section>
-    <section>
-      <title>Real-life Python versus Simulator Python</title>
-      <text>
-      </text>
-    </section>
+    <!-- <section> -->
+    <!--   <title>Real-life Python versus Simulator Python</title> -->
+    <!--   <text> -->
+    <!--   </text> -->
+    <!-- </section> -->
     
 </section>    
