@@ -2055,7 +2055,7 @@ print(ns)</python>
 	  
 	  <p>In our version of Python, we have a <icode>file</icode>
 	  module, with all the functions we could ever ask for
-	  pertaining to files: 
+	  pertaining to files:</p>
 
 	  
 	<table>
@@ -2111,7 +2111,7 @@ print(ns)</python>
 	  
 	</table>
 
-	So, for example, we can write some code that reads all the files:
+	<p>So, for example, we can write some code that reads all the files:
 	
 	<python>import file
 filenames = file.list()
@@ -2128,11 +2128,502 @@ while(counter &lt; len(filenames)):
       line_counter = line_counter + 1
    counter = counter + 1
 print(files)</python>
+</p>
 
+        <p>We could proceed exactly in this fashion, writing fragments
+        of code all day that do a piece of the task, and then at the
+        end of the day work to string them together into one big
+        program that behaves as specified.  However, now that the task
+        is getting a little complex, we may want to get a little more
+        organized about it.  One strategy to writing the large program
+        is to start by subdividing the task into smaller tasks, as we
+        have done.  Then, rather than just writing code that solves
+        these tasks, we imagine that we have functions that solve the
+        tasks, and then write the program assuming we have these
+        functions, and then proceed to actually write the
+	functions.</p>
 
+	<p>For example, the first concrete task that we can get from
+	our rough outline above is that we have to read all the files
+	into an array.  We will imagine a function that does this job
+	called <icode>read_lines</icode>.  Let's say we feed this
+	function an argument containing a list of filenames to read
+	and it returns an array of strings, each containing the
+	contents of the corresponding file.  </p>
 
-	  </p>
+	<p>Naturally, this function will be somehow constructed using
+	the above code, but for now we'll write a function that
+	mimics this behaviour in a more obvious way: it will just
+	return an array of what could be file contents.
+
+	<python>def read_files(names):
+   return ["file1 words","file2 words","file3 has more words"]</python>
+
+        Eventually we will replace this function with something that
+        really reads the files (probably using a method based on the
+        earlier file reading code), but for now, this function returns
+        something of the same shape as the actual thing will, so we
+        can use it in our later code.  <def term="mock up">This idea
+        of creating a function with the correct kind of behaviour that
+        simulates the actual function's behaviour in a much simpler
+        way is called creating a <b>mock up</b> (or sometimes just
+        <b>mock</b>) of the function in question</def>.</p>
+	
+	<p>Now that we have got the file contents, the next task is to
+	construct arrays of the words in the files.  If we're going to
+	search through the files for matching words, we would like it
+	if the we had an array of all the words in the file so we
+	could take our query word and simply compare it to all the
+	elements of that array, and thereby determine whether the file
+	contains the query word.</p>
+
+	<p>This will be the job of another function, say called
+	<icode>file_to_array</icode> that will take in a file's text
+	as a string and will somehow return an array consisting of all
+	the words in the file.  A mock of this function, then, might
+	look like:
+
+	
+	<python>def file_to_array(text):
+   return ["words","from","one","of","the","files"]</python>
+
+	</p>
+
+	<p>The next apparent task will be to actually get a query word
+	from the user.  We could write a function to do this, but we
+	actually have a pretty obvious library function to do this
+	already: <icode>input.get_string</icode>.  So rather than
+	mocking this out, we'll just use this in constructing our
+	actual code.</p>
+	
+	<p>The final task that we might extract from our outline is the
+	business of actually searching through one of these arrays of
+	words for a given word.  This could be accomplished by a
+	function called <icode>search_file</icode> which takes two
+	arguments: One containing the array of words to search through
+	and the other containing the word to search for.  We have to
+	have some way of letting this function indicate whether the
+	word is actually in the file.  One way would be to have it
+	return 1 if the word is present, and 0 if not.  For one
+	possible mock up, we could then write:
+
+	<python>def search_file(word,word_list):
+   if(word == "words" or word == "from" or word == "one"):
+      return 1
+   else:
+      return 0</python>
+	</p>
+	<p><b>Search Engine Algortihm: </b>With all that preliminary
+	organization in place, we can start designing the actual
+	search engine algorithm.  From a somewhat high-level
+	perspective, this would look something like: 
+	
+	<ol>
+	  <li>Get a list of filenames from <icode>file.list</icode>.</li>
+	  <li>Get a list of file contents from <icode>read_files</icode>.</li>
+	  <li>Turn the list of file contents into lists of words
+	  using <icode>file_to_array</icode>.</li>
+	  <li>Get a user query using <icode>input.get_string</icode></li>
+	  <li>Use <icode>search_file</icode> to search through each
+	  of the lists of words that we got in step 3.</li>
+	</ol>
+	
+	There are details missing from here: Step 3 and step 5 are
+	probably going to be while loops, but we'll get to those
+	details when we come to those steps.  </p>
+	
+	<p><b>Search Engine Programming: </b>Let's start with some
+	code that includes all our mocks and steps 1 and 2:
+
+	<python>import file
+
+def read_files(names):
+   return ["file1 words","file2 words","file3 has more words"]
+
+def file_to_array(text):
+   return ["words","from","one","of","the","files"]
+
+def search_file(word,word_list):
+   if(word == "words" or word == "from" or word == "one"):
+      return 1
+   else:
+      return 0
+
+# Step 1: 
+filenames = file.list()
+
+# Step 2: 
+file_contents = read_files(filenames)</python>
+	</p>
+	<p>For step 3, we're going to have to loop through each of the
+	strings in <icode>file_contents</icode> and use file_to_array
+	to turn each of those strings into a list of words.  We can
+	store those lists of words in one big list called
+	<icode>index</icode>, which will be the repository of words
+	that we'll search later.</p>
+
+	<p>This entire procedure is an essentially familiar while loop
+	pattern.  The algorithm would look like:
+
+	<ol>
+	  <li>Create <icode>index</icode> as an empty array</li>
+	  <li>Set a counter, (say for simplicity we shall call it
+	  <icode>i</icode>) to 0</li>
+	  <li>
+	    As long as <icode>i</icode> is less than then length of
+	    the list of file contents, do the following:
+	    <ol>
+	      <li>Call <icode>file_to_array</icode> on
+	      <icode>file_contents[i]</icode> and add the resulting
+	      list as another element of <icode>index</icode>.</li>
+	      <li>Increment <icode>i</icode>.</li>
+	    </ol>
+	  </li>
+	</ol>
+
+	This algorithm for step 3 translates pretty neatly into code: 
+
+	<python>import file
+
+def read_files(names):
+   return ["file1 words","file2 words","file3 has more words"]
+
+def file_to_array(text):
+   return ["words","from","one","of","the","files"]
+
+def search_file(word,word_list):
+   if(word == "words" or word == "from" or word == "one"):
+      return 1
+   else:
+      return 0
+
+# Step 1: 
+filenames = file.list()
+
+# Step 2: 
+file_contents = read_files(filenames)
+
+# Step 3: 
+index = []
+i = 0
+while(i &lt; len(file_contents)):
+   index = index + [file_to_array(file_contents[i])]
+   i = i+1</python>
+</p>
+	<p>From here, step 4 is a pretty clear application of the
+	input module:
+
+		<python>import file
+import input
+
+def read_files(names):
+   return ["file1 words","file2 words","file3 has more words"]
+
+def file_to_array(text):
+   return ["words","from","one","of","the","files"]
+
+def search_file(word,word_list):
+   if(word == "words" or word == "from" or word == "one"):
+      return 1
+   else:
+      return 0
+
+# Step 1: 
+filenames = file.list()
+
+# Step 2: 
+file_contents = read_files(filenames)
+
+# Step 3: 
+index = []
+i = 0
+while(i &lt; len(file_contents)):
+   index = index + [file_to_array(file_contents[i])]
+   i = i+1
+
+# Step 4: 
+query = input.get_string("Enter your query: ")</python>
+	</p>
+	
+	<p>Finally, step 5 will be another while loop, which we
+	outline in algorithm form here:
+	
+	<ol>
+	  <li>Set a counter, (again just call it <icode>i</icode>) to
+	  0</li>
+	  <li>
+	    As long as <icode>i</icode> is less than then length of
+	    the index, do the following:
+	    <ol>
+	      <li>Call <icode>search_file</icode> with arguments being
+	      the query word and the list of words in the
+	      <icode>i</icode>th file, i.e.,
+	      <icode>index[i]</icode>.</li>
+	      <li>If the result is 1, print the filename:
+	      <icode>filenames[i]</icode>.  </li>
+	      <li>Increment <icode>i</icode>.</li>
+	    </ol>
+	  </li>
+	</ol>
+
+	Thus we get:
+
+			<python>import file
+import input
+
+def read_files(names):
+   return ["file1 words","file2 words","file3 has more words"]
+
+def file_to_array(text):
+   return ["words","from","one","of","the","files"]
+
+def search_file(word,word_list):
+   if(word == "words" or word == "from" or word == "one"):
+      return 1
+   else:
+      return 0
+
+# Step 1: 
+filenames = file.list()
+
+# Step 2: 
+file_contents = read_files(filenames)
+
+# Step 3: 
+index = []
+i = 0
+while(i &lt; len(file_contents)):
+   index = index + [file_to_array(file_contents[i])]
+   i = i+1
+
+# Step 4: 
+query = input.get_string("Enter your query: ")
+
+# Step 5: 
+i = 0
+while(i &lt; len(index)):
+   print("Search for " + query)
+   if(search_file(query, index[i]) == 1):
+      print(filenames[i])
+   i = i+1</python>
+	</p>
+	
+	<p>We did also want to loop back and ask for another query
+	word, but we'll add that feature later.  For now, we have the
+	more pressing task of implementing our mocked functions for
+	real.  </p>
+
+	<p><b><icode>read_files</icode>: </b>The
+	<icode>read_files</icode> function we can implement by
+	transplanting with only very minor changes the code from
+	earlier that used the <icode>file</icode> module:
+	
+<python>import file
+import input
+
+def read_files(names):
+   counter = 0
+   files = []
+   while(counter &lt; len(names)):
+      name = names[counter]
+      file_length = file.length(name)
+      line_counter = 0
+      files = files + [""]
+      while(line_counter &lt; file_length):
+         files[counter] = files[counter]+file.readline(name,line_counter)+"\\n"
+         line_counter = line_counter + 1
+      counter = counter + 1
+   return files
+
+def file_to_array(text):
+   return ["words","from","one","of","the","files"]
+
+def search_file(word,word_list):
+   if(word == "words" or word == "from" or word == "one"):
+      return 1
+   else:
+      return 0
+
+# Step 1: 
+filenames = file.list()
+
+# Step 2: 
+file_contents = read_files(filenames)
+
+# Step 3: 
+index = []
+i = 0
+while(i &lt; len(file_contents)):
+   index = index + [file_to_array(file_contents[i])]
+   i = i+1
+
+# Step 4: 
+query = input.get_string("Enter your query: ")
+
+# Step 5: 
+i = 0
+while(i &lt; len(index)):
+   print("Search for " + query)
+   if(search_file(query, index[i]) == 1):
+      print(filenames[i])
+   i = i+1</python>
+	</p>
+
+	<p><b><icode>file_to_array</icode>: </b>The
+	<icode>file_to_array</icode> function is a little tricker.  It
+	will require taking these large strings consisting of the
+	whole contents of a file and splitting them into words.  We
+	haven't talked much about complex operations on strings yet,
+	but of course there is a module for this.  Real-life Python
+	(as well as just about every other programming language) has a
+	very extensive library of string functions.  In our version of
+	Python, these are found in the <icode>string</icode> module,
+	two of whose functions we will find very useful: </p>
+
+		<table>
+	  <tr><td>Function</td><td>Arguments</td><td>Return
+	  value</td></tr>
 	  
+	  <tr><td><icode>string.simplify(text)</icode></td><td><icode>text</icode>
+	  is the string to be simplified.</td><td>Returns a new string
+	  with all characters that aren't letters or spaces removed,
+	  all space characters (tabs, newlines, multiple spaces)
+	  turned into a single space character " ", and all letters
+	  converted to lower case.</td></tr>
+	  
+	  <tr><td><icode>string.split(text,char)</icode></td><td><icode>text</icode>
+	  is the string to be split, and <icode>char</icode> is the
+	  string to use as the separator.  </td><td>Returns an array
+	  of all strings taken from <icode>text</icode> separated by
+	  instances of the string <icode>char</icode>.  For example,
+	  <icode>string.split("babacathe","a")</icode> returns the array
+	  <icode>["b","b","c","the"]</icode>.</td></tr>
+
+		</table>
+
+	<p>So in fact we can implement the
+	<icode>file_to_array</icode> function as simply a call to the
+	string module's functions:
+
+	<code>string.split(string.simplify(file_text)," ")</code>
+	
+	Thus:
+<python>import file
+import input
+
+def read_files(names):
+   counter = 0
+   files = []
+   while(counter &lt; len(names)):
+      name = names[counter]
+      file_length = file.length(name)
+      line_counter = 0
+      files = files + [""]
+      while(line_counter &lt; file_length):
+         files[counter] = files[counter]+file.readline(name,line_counter)+"\\n"
+         line_counter = line_counter + 1
+      counter = counter + 1
+   return files
+
+def file_to_array(text):
+   return string.split(string.simplify(file_text)," ")
+
+def search_file(word,word_list):
+   if(word == "words" or word == "from" or word == "one"):
+      return 1
+   else:
+      return 0
+
+# Step 1: 
+filenames = file.list()
+
+# Step 2: 
+file_contents = read_files(filenames)
+
+# Step 3: 
+index = []
+i = 0
+while(i &lt; len(file_contents)):
+   index = index + [file_to_array(file_contents[i])]
+   i = i+1
+
+# Step 4: 
+query = input.get_string("Enter your query: ")
+
+# Step 5: 
+i = 0
+while(i &lt; len(index)):
+   print("Search for " + query)
+   if(search_file(query, index[i]) == 1):
+      print(filenames[i])
+   i = i+1</python>
+
+	</p>
+	
+	<p><b><icode>search_file: </icode></b>Finally, the
+	<icode>search_file</icode> function is a simple while loop
+	remiscient of our many other examples of this to date.  We
+	also add in a while loop to keep asking for a new query until
+	we get the "EXIT" query in this version of the code, making it
+	our first complete search engine example: 
+	
+	<python>import file
+import string
+import input
+
+def read_files(names):
+   counter = 0
+   files = []
+   while(counter &lt; len(names)):
+      name = names[counter]
+      file_length = file.length(name)
+      line_counter = 0
+      files = files + [""]
+      while(line_counter &lt; file_length):
+         files[counter] = files[counter]+file.readline(name,line_counter)+"\\n"
+         line_counter = line_counter + 1
+      counter = counter + 1
+   return files
+
+def file_to_array(file_text):
+   return string.split(string.simplify(file_text)," ")
+
+def search_file(word,word_list):
+   i = 0
+   while(i &lt; len(word_list)):
+      if(word_list[i] == word):
+         return 1
+      i = i+1
+   return 0
+
+# Step 1: 
+filenames = file.list()
+
+# Step 2: 
+file_contents = read_files(filenames)
+
+# Step 3: 
+index = []
+i = 0
+while(i &lt; len(file_contents)):
+   index = index + [file_to_array(file_contents[i])]
+   i = i+1
+
+query = ""
+while(query != "EXIT"):
+   i = 0
+
+   # Step 4:
+   query = input.get_string("Enter a word to search for, or EXIT to exit the program")
+   print("Searching for: "+query)
+
+   # Step 5: 
+   while(i &lt; len(files)):
+      if(search_file(query,files[i]) == 1):
+         print(filenames[i])
+      i = i+1
+</python>
+	  </p>
 	</text>
       </section>
       <section>
