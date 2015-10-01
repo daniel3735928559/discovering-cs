@@ -284,6 +284,8 @@ app.controller("AvrSimController", function($scope){
 	"nop":{"format":"n", "c": 0, "exec":function(c, r, s, i){
 	    $scope.PC++;
 	    $scope.updated = ["PC"];}}
+	"halt":{"format":"n", "c": 0, "exec":function(c, r, s, i){
+	    $scope.die();}}
     };
     $scope.reset(true);
     setTimeout($scope.cm_setup, 50);
