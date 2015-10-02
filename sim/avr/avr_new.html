@@ -13,8 +13,7 @@
   </head>
   <body ng-app="app">
     <div class="quest" ng-controller="QuestController">
-      <div class="quest_main" ng-include="'/sim/quest/quest_new.html'" ng-repeat="quest_name in ['/sim/quest/avrquest.xml']">
-      </div>
+      <exploration template="/sim/quest/quest_new.html" quest_name="/sim/quest/avrquest.xml"></exploration>
     </div>
   </body>
 </html>

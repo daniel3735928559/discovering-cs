@@ -77,20 +77,32 @@ app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$doc
 		console.log("QS",$scope.quests);
 		$scope.quest = $scope.quests[0];
 		$scope.$emit('set_hwid',$scope.quest.id);
-		if($scope.quest.problems[$scope.userdata.current_problem].type == "python")
-		    $scope.pycontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
-		if($scope.quest.problems[$scope.userdata.current_problem].type == "avr")
-		    $scope.avrcontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
+		console.log("sending it down");
+		$scope.update_sim();
 	    }).
 	    error(function(data, status, headers, config) {
 		console.log(status);
 	    });
     }
-    $scope.wait_for($scope.getstuff);
+    $scope.update_sim = function(){
+	if($scope.pycontrol && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "python")
+	    $scope.pycontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
+	if($scope.avrcontrol && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "avr")
+	    $scope.avrcontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
+    }
+    //$scope.wait_for($scope.getstuff);
     $scope.$on('set_programs',function(event, data){
 	console.log("CHANGE",data,data[$scope.userdata.current_problem]);
 	$scope.quest.programs = data;
 	$scope.userdata.programs = data;
+    });
+    $scope.$on('spy_linked',function(event, data){
+	console.log("LALALALAA",data);
+	$scope.update_sim();
+    });
+    $scope.$on('jsavr_linked',function(event, data){
+	console.log("LALALALAA",data);
+	$scope.update_sim();
     });
     $scope.$on('change_quest',function(event, data){
 	console.log("CHANGE",data);
@@ -100,5 +112,22 @@ app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$doc
     });
 //    $timeout($scope.getstuff, $scope.wf_timeout);
     console.log($scope.problems);
-}]);
+}])
+    .directive('exploration',function(){
+	return {
+	    restrict: 'E',
+	    scope:{
+		control: '='
+	    },
+	    templateUrl: function(element,attrs){
+		return attrs.template;
+	    },
+	    controller: 'QuestController',
+	    link: function(scope,element,attrs){
+		scope.quest_name = attrs.questName;
+		console.log("LINKY",scope,element,attrs);
+		scope.getstuff(scope.quest_name);
+	    }
+	}
+    });
 
