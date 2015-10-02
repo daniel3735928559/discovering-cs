@@ -290,7 +290,7 @@
   <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/codemirror.js"></script> <!-- v5.6 -->
   <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/mode/python/python.js"></script>
   <script type="text/javascript" src="/sim/py/MiniPy/libs/jQuery/jquery.min.js"></script> <!-- v2.1.4 -->
-  <script type="text/javascript" src="/sim/py/MiniPy/libs/minipy_v1.2.0.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/libs/minipy_v1.3.0.js"></script>
 
   <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/miniPyController.js"></script>
   <script type="text/javascript" src="/sim/py/MiniPy/js/banner.js"></script>
