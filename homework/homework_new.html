@@ -1,18 +1,18 @@
 <html>
   <head>
     <title>Homeworks</title>
-    <link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
+    <link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
     <link rel="stylesheet" type="text/css" href="/sim/quest/quest.css" />
     <link rel="stylesheet" type="text/css" href="/homework/homework.css" />
-    <link rel="stylesheet" href="/sim/cm/codemirror.css" />
-    <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
+    <link rel="stylesheet" href="/lib/codemirror/codemirror.css" />
+    <link rel="stylesheet" href="/lib/codemirror/theme/paraiso-light.css" />
     <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
     <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
     <script type="text/javascript" src="/homework/homework.js"></script>
-    <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
-    <script type="text/javascript" src="/sim/quest/quest.js"></script>
-    <script type="text/javascript" src="/sim/py/expr_ng.js"></script>
-    <script type="text/javascript" src="/sim/py/sim.js"></script>
+    <script type="text/javascript" src="/lib/codemirror/codemirror.js"></script>
+    <script type="text/javascript" src="/sim/quest/quest_new.js"></script>
+    <script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
+    <script type="text/javascript" src="/lib/spy/sim.js"></script>
   </head>
   <body ng-app="app">
     <div class="quest" ng-controller="HomeworkController">
@@ -26,7 +26,7 @@
 	  submission.</span></div>
 	<div class="homework_status">Status: {{hw_status}}</div>
       </div>
-      <div class="quest_main" ng-include="'/sim/quest/quest.html'" ng-repeat="quest_name in [homeworks[homework_id].file]">
+      <div class="quest_main" ng-include="'/sim/quest/quest_new.html'" ng-repeat="quest_name in [homeworks[homework_id].file]">
       </div>
       <!-- Lightbox for verification --> 
       <div class="lightbox_background" ng-if="verify_submission == true" ng-click="exit_verify()">

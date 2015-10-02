@@ -1,17 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?><quest name="HW 3" id="3">
-  <q type="python" id="Basics">
-<program>x = 2
-y = 4</program>
-<text>What is 1+1?
+
+<q type="python" id="Problem 6a">
+  <program></program>
+  <text>
+    Suppose I want to write a block of code that outputs the word
+    "positive" if the value of the variable number is greater than 0,
+    and output the words "not positive" if the value of number is less
+    than or equal to 0. The block of code should print to a single
+    line. There are 3 methods below that may or may not work. Fix it
+    so that all 3 methods work. If they work without editing required,
+    submit the method as is. You can initialize the variable number to
+    whatever you want.
+
+    <b>Method 1: </b>
+    <pre>if(number > 0):
+   print("positive")
+else:
+   if(number &lt; 0):
+      print("negative")
+    </pre>
+  </text>
+</q>
+
+<q type="python" id="Problem 6b">
+  <program></program>
+  <text>
+    Suppose I want to write a block of code that outputs the word
+    "positive" if the value of the variable number is greater than 0,
+    and output the words "not positive" if the value of number is less
+    than or equal to 0. The block of code should print to a single
+    line. There are 3 methods below that may or may not work. Fix it
+    so that all 3 methods work. If they work without editing required,
+    submit the method as is. You can initialize the variable number to
+    whatever you want.
+
+    <b>Method 2: </b>
+    <pre>if(number &lt;= 0):
+   print("not ")
+print("positive")
+    </pre>
+  </text>
+</q>
+
+<q type="python" id="Problem 6c">
+  <program></program>
+  <text>
+    Suppose I want to write a block of code that outputs the word
+    "positive" if the value of the variable number is greater than 0,
+    and output the words "not positive" if the value of number is less
+    than or equal to 0. The block of code should print to a single
+    line. There are 3 methods below that may or may not work. Fix it
+    so that all 3 methods work. If they work without editing required,
+    submit the method as is. You can initialize the variable number to
+    whatever you want.
+
+    <b>Method 3: </b>
+    <pre>
+if(number > 0):
+   print("positive")
+else:
+   print("not positive")
+    </pre>
+  </text>
+</q>
+
+<q type="python" id="Problem 7">
+  <program></program>
+  <text>
+    Fix all the Python syntax errors below without deleting any lines
+    of code. It does not matter what the code is trying to do, so
+    <b>ignore the logic errors</b> and <b>just focus on the syntax
+    errors</b> that exist. Assume there was no code before this.
+
+<pre>
+h3110W0RlD = "Hello World"
+_ = "h3110W0RlD"
+weAreTheChampions = 1
+# infinite loop to fight ‘til the end
+while(weAreTheCampions = 1)
+   print("f1gh71ng \’til the end")
+int fahrenhype = -40
+celsius = (9 / 5) * (fahrenhype + 32
+print(Celsius)
+</pre>
+  </text>
+</q>
+
+<q type="python" id="Problem 8">
+  <program></program>
+  <text>Use while loops and nested loops to print patterns of asterisks on the screen. Use the sample starter code at the end of this question to begin. The code should accept an input with the following prompt:
+
+<pre>Enter an positive odd number: </pre>
+
+and then (for example, if the user enters 9) draw the following patterns:
+
+<pre>begin printing horizontal line
+*********
+end printing horizontal line
+begin printing vertical line
+*
+*
+*
+*
+*
+*
+*
+*
+*
+end printing vertical line
+begin printing triangle 1
+*
+**
+***
+****
+*****
+******
+*******
+********
+*********
+end printing triangle 1
+begin printing triangle 2
+    *
+   ***
+  *****
+ *******
+*********
+end printing triangle 2</pre>
+
+
+
+Sample starting code (the horizontal line pattern has been done for you):
+
+<pre>import input
+positiveOddNumberInput = input.get_num("Enter a number: ")
+
+print("begin printing horizontal line")
+lineToPrint = ""
+i = 0
+while(i &lt; positiveOddNumberInput):
+    lineToPrint = lineToPrint + "*"
+    i = i + 1
+print(lineToPrint)
+print("end printing horizontal line")
+
+print("begin printing vertical line")
+<b># your code here</b>
+print("end printing vertical line")
+
+print("begin printing triangle 1")
+<b># your code here</b>
+print("end printing triangle 1")
+
+print("begin printing triangle 2")
+<b># your code here</b>
+print("end printing triangle 2")</pre>
 </text>
 </q>
 
-<q type="python" id="Variables">
-  <program>x = 3+2
-y = 1+x*(-1)
-hello = (x+2*y)/y
-x = x + 1
-y = y - x</program>
-  <text>What is 1+2?</text>
+<q type="python" id="Problem 9">
+  <program></program>
+  <text>Repeat Homework 2 Question 11, but this time store the
+  Fibonacci numbers into an array and then print out the array at the
+  end.
+<p>For reference, here is one possible answer to homework 2 question
+11: 
+</p>
+<pre>
+n = 15
+counter = 1
+a = 0
+b = 1
+print(a)
+while(counter &lt; n):
+   print(b)
+   temp = b
+   b = b + a
+   a = temp
+   counter = counter + 1
+</pre>
+  </text>
+</q>
+<q type="python" id="Problem 10">
+  <program></program>
+  <text>Repeat Homework 2 Question 12, but use a function to convert
+  Fahrenheit to Celsius.
+
+  <p>For reference, here is one possible answer to homework 2 question
+  12:
+  </p>
+  <pre>
+F = -50
+while(F &lt;= 50):
+   C = (F - 32) * 5 / 9
+   if(F == C):
+      print("Fahrenheit and Celsius are equal at -40 degrees!")
+   else:
+      print("F=" + F + ", " + "C=" + C)
+   F = F + 1
+  </pre>
+  </text>
 </q>
 </quest>

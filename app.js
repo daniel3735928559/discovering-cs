@@ -60,7 +60,7 @@ app.get('/homework', function(req, res){
 });
 
 app.post('/homework/saveall', function(req, res){
-    console.log("AAAAXXX",req.body);
+    console.log("AAAAXXX",get_user_data(req),req.body);
     var tried = 0;
     var saved = 0;
     var total = req.body.total;
@@ -108,7 +108,11 @@ var get_homework_data = function(req){
 
 var get_user_data = function(req){
     return {'ip':get_ip(req),
+            //*/
 	    'username':req.headers['proxy-user']};
+            /*/
+	    'username':'test_user'};
+            //*/
 }
 
 server = http.createServer(app).listen(61453);
