@@ -1,0 +1,9 @@
+for x in {1..8}; do xsltproc --stringparam print yes text/box.xsl text/ch"$x".xml> text/print/ch"$x".html; done
+p=64774
+python -m http.server $p &
+SERVER_PID=$!
+sleep 5
+for x in {1..8}; do 
+wkhtmltopdf -s Letter -T 1in -B 1in -L 1in -R 1in localhost:"$p"/text/print/ch"$x".html text/print/ch"$x".pdf; 
+done
+kill $SERVER_PID

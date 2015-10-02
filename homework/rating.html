@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <title>Rate today's lecture!</title>
+  </head>
+  <body>
+    <h3>Rate the current lecture!  </h3> Your netid is not stored with
+    your responses.  Honour system--Please rate only once per lecture:<br /><br />
+    
+    <form action="/homework/rate" method="post">
+      <div style="width:800px;display:inline-block;">We want to understand whether you felt this lecture contributed
+      to your understanding of the material presented. Please indicate
+      how well it has done so on a scale of 1 to 5 (1 being "poorly",
+	and 5 being "extremely well"): </div><br /><br />
+      <input type="radio" name="r" value="1">1</input>
+      <input type="radio" name="r" value="2">2</input>
+      <input type="radio" name="r" value="3">3</input>
+      <input type="radio" name="r" value="4">4</input>
+      <input type="radio" name="r" value="5">5</input><br /><br />
+      <div style="width:800px;display:inline-block;">If there are any
+      items in lecture you found confusing or did not understand,
+	please mention them here:</div><br /><br />
+      <textarea name="comments" id="comments" rows="15" cols="80"></textarea>
+      <br /><br />
+      <input type="Submit"></input></form>
+        <script type="text/javascript">
+      var lectures = {
+      "9/2":"Lecture 1",
+      "9/4":"Lecture 2",
+      "9/7":"Lecture 3",
+      "9/11":"Lecture 4",
+      "9/14":"Lecture 5",
+      "9/16":"Lecture 6",
+      "9/18":"Lecture 7",
+      "9/21":"Lecture 8",
+      "9/23":"Lecture 9",
+      "9/25":"Discussion 1",
+      "9/28":"Exam 1",
+      "9/30":"Lecture 10",
+      "10/2":"Lecture 11",
+      "10/5":"Lecture 12",
+      "10/7":"Lecture 13",
+      "10/9":"Lecture 14",
+      "10/12":"Lecture 15",
+      "10/14":"Lecture 16",
+      "10/16":"Lecture 17",
+      "10/19":"Lecture 18",
+      "10/21":"Lecture 19",
+      "10/23":"Discussion 2",
+      "10/26":"Exam 2",
+      "10/28":"Lecture 20",
+      "10/30":"Lecture 21",
+      "11/2":"Lecture 22",
+      "11/4":"Lecture 23",
+      "11/6":"Lecture 24",
+      "11/9":"Lecture 25",
+      "11/11":"Lecture 26",
+      "11/13":"Lecture 27",
+      "11/16":"Lecture 28",
+      "11/18":"Lecture 29",
+      "11/20":"Discussion 3",
+      "11/23":"Exam 3",
+      "11/25":"Lecture 30",
+      "11/30":"Lecture 31",
+      "12/2":"Lecture 32",
+      "12/4":"Lecture 33",
+      "12/6":"Lecture 34",
+      "12/9":"Lecture 35",
+      "12/11":"Discussion 4",
+      "12/14":"Exam 4"
+      };
+      var d = new Date();
+      var s = (d.getMonth()+1) + "/" + d.getDate();
+      document.getElementsByTagName("h3")[0].innerHTML = s +
+      ": Rate " + lectures[s];
+      console.log(s);
+    </script>
+  </body>
+</html>
