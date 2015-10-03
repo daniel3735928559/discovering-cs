@@ -186,6 +186,22 @@ var defaultPythonGlobals = {
 				},
 			};
 
+			var runGlobals = defaultPythonGlobals;
+			runGlobals.print = function() {
+				var printArguments = [];
+
+				// build array of print arguments
+				for (var i = 0, l = arguments.length; i < l; i++) {
+					printArguments.push(arguments[i]);
+				}
+
+				StateHandler.printOut({
+					arguments: printArguments,
+					from: this.line,
+					announceMutation: false,
+				});
+			};
+
 			try {
 				MiniPy.run(getScript(), {
 					globals: defaultPythonGlobals,
@@ -257,6 +273,22 @@ var defaultPythonGlobals = {
 				when('step', startStepping);
 				alert('Program finished');
 			},
+		};
+
+		var interpretGlobals = defaultPythonGlobals;
+		interpretGlobals.print = function() {
+			var printArguments = [];
+
+			// build array of print arguments
+			for (var i = 0, l = arguments.length; i < l; i++) {
+				printArguments.push(arguments[i]);
+			}
+
+			StateHandler.printOut({
+				arguments: printArguments,
+				from: this.line,
+				announceMutation: true,
+			});
 		};
 
 		var inspector = MiniPy.inspect(getScript(), {
