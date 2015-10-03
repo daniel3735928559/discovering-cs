@@ -276,8 +276,14 @@
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
 	<script type="text/javascript" src="/text/box.js"></script>
-	<script type="text/javascript" src="/sim/py/expr_ng.js"></script>
-	<script type="text/javascript" src="/sim/avr/sim.js"></script>
+	<script type="text/javascript" src="/sim/cm/codemirror.js"></script>
+	<!-- <script type="text/javascript" src="/sim/py/expr_ng.js"></script> -->
+	<!-- <script type="text/javascript" src="/sim/py/sim.js"></script> -->
+	<link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
+	<script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
+	<script type="text/javascript" src="/lib/spy/sim.js"></script>
+	
+	<!-- <script type="text/javascript" src="/sim/avr/sim.js"></script> -->
 	<script type="text/javascript" src="/sim/bin/sim.js"></script>
 
   <!-- MiniPy stylesheets -->

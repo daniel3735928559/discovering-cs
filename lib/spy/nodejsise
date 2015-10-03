@@ -1,0 +1,4 @@
+cat $1
+echo ''
+echo 'module.exports.parser = parser;'
+

@@ -9,12 +9,11 @@
     <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
     <script type="text/javascript" src="/lib/codemirror/codemirror.js"></script>
     <script type="text/javascript" src="/lib/jsavr/sim.js"></script>
-    <script type="text/javascript" src="/sim/quest/quest_new.js"></script>
+    <script type="text/javascript" src="/sim/quest/quest.js"></script>
   </head>
   <body ng-app="app">
     <div class="quest" ng-controller="QuestController">
-      <div class="quest_main" ng-include="'/sim/quest/quest_new.html'" ng-repeat="quest_name in ['/sim/quest/avrquest.xml']">
-      </div>
+      <exploration template="/sim/quest/quest.html" quest_name="/sim/quest/avrquest.xml"></exploration>
     </div>
   </body>
 </html>

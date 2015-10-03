@@ -1,11 +1,11 @@
-if(!app) var app = angular.module('app',['ngCookies']);
+if(!app) var app = angular.module('app');
 
-app.controller("QuestController", ['$scope','$http','$cookies', '$window', '$timeout', '$document', '$sce', function($scope, $http, $cookies, $window, $timeout, $document, $sce){
-    $cookies.put('cookie','pbj');
-    console.log($scope.quest_manifest);
-    $scope.wf_timeout = 0;
+app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$document', '$sce', function($scope, $http, $window, $timeout, $document, $sce){
     $scope.pycontrol = {};
     $scope.avrcontrol = {};
+    $scope.show_tutorial = true;
+    console.log($scope.quest_manifest);
+    $scope.wf_timeout = 0;
     console.log("AAAAAA",$scope.a);
     $scope.quests = []
     $scope.quest_id = 0;
@@ -15,19 +15,24 @@ app.controller("QuestController", ['$scope','$http','$cookies', '$window', '$tim
     $scope.userdata.programs = [];
     $scope.p = {"type":"python"};
     $scope.userdata.current_problem = 0;
-    $document.bind('keypress', function(e) {
-	console.log("kp",e.which);
-	if(e.which == 83){
-            $scope.$broadcast('step_key', e);
-	}
-	else if(e.which == 69){
-            $scope.$broadcast('end_key', e);
-	}
-    });
     $scope.set_problem = function(x){
 	if($scope.userdata.current_problem == x) return;
-	$scope.$broadcast('change_problem',[$scope.userdata.current_problem, x]);
-	$scope.userdata.current_problem = x;
+	if($scope.quest.problems[$scope.userdata.current_problem].type == "python"){
+	    console.log("PPP",$scope.pycontrol.get_program(),$scope.quest.programs[$scope.userdata.current_problem]);
+	    $scope.quest.programs[$scope.userdata.current_problem] = $scope.pycontrol.get_program();
+	    $scope.userdata.current_problem = x;
+	    $scope.pycontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
+	}
+	else if($scope.quest.problems[$scope.userdata.current_problem].type == "avr"){
+	    console.log("PPP",$scope.avrcontrol.get_program(),$scope.quest.programs[$scope.userdata.current_problem]);
+	    $scope.quest.programs[$scope.userdata.current_problem] = $scope.avrcontrol.get_program();
+	    $scope.userdata.current_problem = x;
+	    $scope.avrcontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
+	}
+    }
+    $scope.toggle_tutorial = function(){
+	console.log("STSTS",$scope.show_tutorial);
+	$scope.show_tutorial = !($scope.show_tutorial);
     }
     $scope.get_html = function(){
 	//console.log($scope.problems[$scope.userdata.current_problem].text);
@@ -72,29 +77,60 @@ app.controller("QuestController", ['$scope','$http','$cookies', '$window', '$tim
 		console.log("QS",$scope.quests);
 		$scope.quest = $scope.quests[0];
 		$scope.$emit('set_hwid',$scope.quest.id);
+		console.log("sending it down");
+		$scope.update_sim();
 	    }).
 	    error(function(data, status, headers, config) {
 		console.log(status);
 	    });
     }
-    $scope.wait_for($scope.getstuff);
+    $scope.update_sim = function(){
+	console.log($scope.pycontrol);
+	if($scope.pycontrol.set_program && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "python")
+	    $scope.pycontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
+	if($scope.avrcontrol.set_program && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "avr")
+	    $scope.avrcontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
+    }
+    //$scope.wait_for($scope.getstuff);
     $scope.$on('set_programs',function(event, data){
 	console.log("CHANGE",data,data[$scope.userdata.current_problem]);
 	$scope.quest.programs = data;
 	$scope.userdata.programs = data;
-	$scope.$broadcast("set_the_program",data[$scope.userdata.current_problem]);
+	$scope.update_sim();
+    });
+    $scope.$on('spy_linked',function(event, data){
+	console.log("LALALALAA",data);
+	$scope.update_sim();
+    });
+    $scope.$on('jsavr_linked',function(event, data){
+	console.log("LALALALAA",data);
+	$scope.update_sim();
     });
     $scope.$on('change_quest',function(event, data){
 	console.log("CHANGE",data);
+	$scope.update_sim();
     });
     $scope.$on('get_program_data',function(event, data){
-	console.log("GETDATA",data);
-	$scope.$broadcast('save_program',$scope.userdata.current_problem);
-    });
-    $scope.$on('program_saved',function(event,data){
 	$scope.$emit('program_data',{'problems':$scope.quest.problems,'programs':$scope.quest.programs});
     });
 //    $timeout($scope.getstuff, $scope.wf_timeout);
     console.log($scope.problems);
-}]);
+}])
+    .directive('exploration',function(){
+	return {
+	    restrict: 'E',
+	    scope:{
+		control: '='
+	    },
+	    templateUrl: function(element,attrs){
+		return attrs.template;
+	    },
+	    controller: 'QuestController',
+	    link: function(scope,element,attrs){
+		scope.quest_name = attrs.questName;
+		console.log("LINKY",scope,element,attrs);
+		scope.getstuff(scope.quest_name);
+	    }
+	}
+    });
 
