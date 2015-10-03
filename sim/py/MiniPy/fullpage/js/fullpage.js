@@ -13,6 +13,15 @@ var cm = CodeMirror(document.querySelector('.mp-editor'), {
 });
 
 var defaultPythonGlobals = {
+	len: {
+		args: {
+			0: ['array', 'string'],
+		},
+		fn: function(value) {
+			return value.length;
+		},
+	},
+
 	prompt_number: function() {
 		var possibleNumber = parseFloat(prompt('Enter a number:'));
 
