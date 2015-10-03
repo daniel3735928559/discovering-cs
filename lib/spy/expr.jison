@@ -42,11 +42,9 @@
 
 expressions
     : e EOF
-        { typeof console !== 'undefined' ? console.log($1) : print($1);
-          return $1; }
+        { return $1; }
     | test EOF
-        { typeof console !== 'undefined' ? console.log($1) : print($1);
-          return $1; }
+        { return $1; }
     ;
 
 e
@@ -102,8 +100,7 @@ test
     | '(' test ')'
         {$$ = $2;}
     | test KEYWORD test
-        {console.log($2);
-	if($2 == "and") $$ = ['bool_and',$1, $3];
+        {if($2 == "and") $$ = ['bool_and',$1, $3];
 	else if($2 == "or") $$ = ['bool_or',$1, $3];
 	else $$ = {};}
     ;

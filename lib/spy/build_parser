@@ -1,1 +1,1 @@
-jison expr.jison && ./angularise expr.js > expr_ng.js
+jison expr.jison && ./angularise expr.js > expr_ng.js && ./nodejsise expr_ng.js > expr_node.js
