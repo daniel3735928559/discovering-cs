@@ -273,6 +273,7 @@
 	height: 24px;
 	margin: 0 8px;
 	padding: 0;
+	position: relative;
 	list-style: none;
 	font: 13px/24px "Source Code Pro", monospace;
 }
@@ -280,6 +281,24 @@
 .mp-debugger .mp-runtime ul li.mutating {
 	background-color: #e0e0e0;
 	border-radius: 4px;
+}
+
+.mp-debugger .mp-runtime ul li .value {
+	position: absolute;
+	top: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.mp-debugger .mp-runtime .mp-stdout ul li .value {
+	right: 70px;
+	left: 0;
+}
+
+.mp-debugger .mp-runtime .mp-scope ul li .value {
+	left: 70px;
+	right: 0;
+	text-align: right;
 }
 
 .mp-debugger .mp-runtime ul li .value span {
