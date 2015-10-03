@@ -315,7 +315,7 @@ var defaultPythonGlobals = {
 		}
 
 		if (expression !== null) {
-			highlightLine(expression.line);
+			highlightLine(expression.range.start.line);
 		}
 	}
 
