@@ -174,11 +174,10 @@ var defaultPythonGlobals = {
 			lockEditor();
 
 			var runHooks = {
-				scope: function(scope) {
-					StateHandler.update(scope, false);
-				},
+				exit: function(scope) {
+					// after execution is done, display final scope state
+					StateHandler.update(scope);
 
-				exit: function() {
 					BannerHandler.show({
 						type: BannerHandler.GENERIC,
 						message: 'Program finished',
