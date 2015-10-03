@@ -312,7 +312,7 @@ var defaultPythonGlobals = {
 			expression = inspector.next();
 		} catch (err) {
 			// script has syntax, logic, or runtime errors
-			ErrorHandler.post(error);
+			ErrorHandler.post(err);
 		}
 
 		if (expression !== null) {
