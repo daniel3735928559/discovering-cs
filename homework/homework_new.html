@@ -26,8 +26,8 @@
 	  submission.</span></div>
 	<div class="homework_status">Status: {{hw_status}}</div>
       </div>
-      <div class="quest_main" ng-include="'/sim/quest/quest_new.html'" ng-repeat="quest_name in [homeworks[homework_id].file]">
-      </div>
+      <exploration template="/sim/quest/quest_new.html" quest_name="{{homeworks[homework_id].file}}">
+      </exploration>
       <!-- Lightbox for verification --> 
       <div class="lightbox_background" ng-if="verify_submission == true" ng-click="exit_verify()">
 	<div class="lightbox_foreground" ng-click="$event.stopPropagation()">

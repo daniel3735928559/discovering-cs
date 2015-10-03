@@ -154,8 +154,10 @@
 
   <xsl:template match="python">
     <xsl:if test="$print!='yes'">
-      <div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}">
-      </div>
+      <xsl:variable name="prog" select="text()" />
+      <sim-py text="'{$prog}'" reset="yes" simid="{count(preceding::python)}" template="/lib/spy/simpy.html"><xsl:apply-templates /></sim-py>
+      <!-- <div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}"> -->
+      <!-- </div> -->
     </xsl:if>
     <xsl:if test="$print='yes'">
       <div class="code"><pre><xsl:apply-templates /></pre></div>
@@ -270,7 +272,7 @@
       <head>
 	<title><xsl:value-of select="chapter/title" /></title>
 	<link rel="stylesheet" type="text/css" href="/text/box.css" />
-	<link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="/sim/py/sim.css" /> -->
 	<link rel="stylesheet" type="text/css" href="/sim/avr/sim.css" />
 	<link rel="stylesheet" type="text/css" href="/sim/bin/sim.css" />
 	<link rel="stylesheet" href="/sim/cm/codemirror.css" />
@@ -279,9 +281,13 @@
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
 	<script type="text/javascript" src="/text/box.js"></script>
 	<script type="text/javascript" src="/sim/cm/codemirror.js"></script>
-	<script type="text/javascript" src="/sim/py/expr_ng.js"></script>
-	<script type="text/javascript" src="/sim/py/sim.js"></script>
-	<script type="text/javascript" src="/sim/avr/sim.js"></script>
+	<!-- <script type="text/javascript" src="/sim/py/expr_ng.js"></script> -->
+	<!-- <script type="text/javascript" src="/sim/py/sim.js"></script> -->
+	<link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
+	<script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
+	<script type="text/javascript" src="/lib/spy/sim.js"></script>
+	
+	<!-- <script type="text/javascript" src="/sim/avr/sim.js"></script> -->
 	<script type="text/javascript" src="/sim/bin/sim.js"></script>
       </head>
       <body ng-app="app">	

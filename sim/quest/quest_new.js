@@ -85,9 +85,10 @@ app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$doc
 	    });
     }
     $scope.update_sim = function(){
-	if($scope.pycontrol && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "python")
+	console.log($scope.pycontrol);
+	if($scope.pycontrol.set_program && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "python")
 	    $scope.pycontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
-	if($scope.avrcontrol && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "avr")
+	if($scope.avrcontrol.set_program && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "avr")
 	    $scope.avrcontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
     }
     //$scope.wait_for($scope.getstuff);
@@ -95,6 +96,7 @@ app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$doc
 	console.log("CHANGE",data,data[$scope.userdata.current_problem]);
 	$scope.quest.programs = data;
 	$scope.userdata.programs = data;
+	$scope.update_sim();
     });
     $scope.$on('spy_linked',function(event, data){
 	console.log("LALALALAA",data);
@@ -106,6 +108,7 @@ app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$doc
     });
     $scope.$on('change_quest',function(event, data){
 	console.log("CHANGE",data);
+	$scope.update_sim();
     });
     $scope.$on('get_program_data',function(event, data){
 	$scope.$emit('program_data',{'problems':$scope.quest.problems,'programs':$scope.quest.programs});
