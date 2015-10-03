@@ -1,21 +1,22 @@
 <html>
   <head>
-    <title>Python</title>
-    <link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
+    <title>Spy demo</title>
+    <link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
     <link rel="stylesheet" type="text/css" href="/sim/quest/quest.css" />
-    <link rel="stylesheet" href="/sim/cm/codemirror.css" />
-    <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
+    <link rel="stylesheet" href="/lib/codemirror/codemirror.css" />
+    <link rel="stylesheet" href="/lib/codemirror/theme/paraiso-light.css" />
     <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
     <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
-    <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
+    <script type="text/javascript" src="/lib/codemirror/codemirror.js"></script>
+    <script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
+    <script type="text/javascript" src="/lib/spy/sim.js"></script>
     <script type="text/javascript" src="/sim/quest/quest.js"></script>
-    <script type="text/javascript" src="/sim/py/expr_ng.js"></script>
-    <script type="text/javascript" src="/sim/py/sim.js"></script>
   </head>
   <body ng-app="app">
     <div class="quest" ng-controller="QuestController">
-      <div class="quest_main" ng-include="'/sim/quest/quest.html'" ng-repeat="quest_name in ['/sim/quest/quest.xml']">
-      </div>
+      <exploration template="/sim/quest/quest.html" quest_name="/sim/quest/pyquest.xml">
+      </exploration>
     </div>
   </body>
 </html>
+
