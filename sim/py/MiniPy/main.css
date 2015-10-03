@@ -257,7 +257,7 @@
 	left: 8px;
 }
 
-.mp-debugger .mp-runtime ul {
+.mp-debugger .mp-runtime .mp-scope > ul, .mp-stdout > ul {
 	margin: 0;
 	padding: 44px 0 8px 0;
 	position: absolute;
@@ -282,23 +282,27 @@
 	border-radius: 4px;
 }
 
-.mp-debugger .mp-runtime ul li .value.number {
+.mp-debugger .mp-runtime ul li .value span {
+	padding-right: 8px;
+}
+
+.mp-debugger .mp-runtime ul li .value .number {
 	color: #33AA33;
 }
 
-.mp-debugger .mp-runtime ul li .value.string {
+.mp-debugger .mp-runtime ul li .value .string {
 	color: #AA2222;
 }
 
-.mp-debugger .mp-runtime ul li .value.string::before {
+.mp-debugger .mp-runtime ul li .value .string::before {
 	content: "\"";
 }
 
-.mp-debugger .mp-runtime ul li .value.string::after {
+.mp-debugger .mp-runtime ul li .value .string::after {
 	content: "\"";
 }
 
-.mp-debugger .mp-runtime ul li .value.boolean {
+.mp-debugger .mp-runtime ul li .value .boolean {
 	color: #007777;
 	text-transform: capitalize;
 }
@@ -338,8 +342,31 @@
 }
 
 .mp-debugger .mp-runtime .mp-scope li .value {
-	margin-right: 8px;
 	float: right;
+}
+
+.mp-debugger .mp-runtime .mp-scope li.scope {
+	height: auto;
+	margin: 8px 16px;
+	padding-top: 4px;
+	display: block;
+	border: 1px solid silver;
+	border-radius: 4px;
+}
+
+.mp-debugger .mp-runtime .mp-scope li.scope .function-declaration {
+	margin-left: 15px;
+	font-weight: bold;
+	color: gray;
+}
+
+.mp-debugger .mp-runtime .mp-scope li.scope > ul {
+	margin-bottom: 8px;
+	padding: 0;
+}
+
+.mp-debugger .mp-runtime .mp-scope li.scope > ul li {
+	/* ... */
 }
 
 .mp-debugger .mp-runtime .mp-stdout {

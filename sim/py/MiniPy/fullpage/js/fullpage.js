@@ -194,6 +194,8 @@ var defaultPythonGlobals = {
 							announceMutation: false,
 						});
 					}
+				scope: function(scope) {
+					StateHandler.update(scope, false);
 				},
 
 				exit: function() {
@@ -280,6 +282,8 @@ var defaultPythonGlobals = {
 						value: value,
 					});
 				}
+			scope: function(scope) {
+				StateHandler.update(scope, false);
 			},
 
 			exit: function() {

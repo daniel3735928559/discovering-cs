@@ -3,91 +3,73 @@
 var State = (function(scopeElementList, stdoutElementList) {
 	var knownVariables = {};
 
-	var variableTemplate = '<li data-identifier={identifier}><span class="identifier">{identifier}</span>{value}</li>';
 	var printTemplate = '<li>{value}<span class="origin">{line}</span></li>';
+	var variableTemplate = '<li data-identifier="{identifier}"><span class="identifier">{identifier}</span>{value}</li>';
+	var valueTemplate = '<span class="{type}">{value}</span>';
+	var punctuationTemplate = '<span class="punctuation">{symbol}</span>';
+	var scopeTemplate = '<li class="scope"><span class="function-declaration">{declaration}</span><ul>{variables}</ul></li>';
 
-	var valueTemplate = '<span class="value {type}">{value}</span>';
+	function renderPunctuation(symbol) {
+		return punctuationTemplate.replace('{symbol}', symbol);
+	}
 
-	function valueToHTML(value, reverse) {
-		// defaults to `false`
-		reverse = (reverse === true);
-
+	function renderValue(value) {
 		if (value instanceof Array) {
-			// arrays
-			var rightBracket = '<span class="value punctuation">]</span>';
+			// array
+			var leftBracket = renderPunctuation('[');
+			var rightBracket = renderPunctuation(']');
+			var comma = renderPunctuation(',');
 
-			var elements = value.map(function (element) {
-				return valueToHTML(element.value);
+			// convert array of values into array of HTML strings
+			var elementsHtmlStrings = value.map(function(elementValue) {
+				return renderValue(elementValue);
 			});
 
-			if (reverse === true) {
-				elements.reverse();
-			}
-
-			var elementsHTML = elements.join('<span class="value punctuation">,</span>');
-
-			var leftBracket = '<span class="value punctuation">[</span>';
-
-			if (reverse === true) {
-				// elements are reversed in order so that when CSS property `float: right`
-				// is applied they will be in the correct order
-				var html = rightBracket + elementsHTML + leftBracket;
-			} else {
-				var html = leftBracket + elementsHTML + rightBracket;
-			}
+			// join array element HTML strings into large string separated
+			// by commas
+			return leftBracket + elementsHtmlStrings.join(comma) + rightBracket;
 		} else {
-			// single values
-			var html = valueTemplate
-				.replace('{type}', typeof value)
-				.replace('{value}', value.toString());
+			// literal value
+			return valueTemplate.replace('{type}', typeof value).replace('{value}', value.toString());
 		}
-
-		return html;
 	}
 
-	function hasVariable(identifier) {
-		return (knownVariables[identifier] === true);
+	function renderFunctionDeclaration(name, args) {
+		return 'def ' + name + '(' + args.join(', ') + ')';
 	}
 
-	function updateVariable(variable) {
-		var variableElem = scopeElementList.children('[data-identifier="' + variable.identifier.toString() + '"]');
+	function renderScope(scope) {
+		var variablesHtml = Object.keys(scope.variables || {}).reduce(function(html, identifier) {
+			var value = scope.variables[identifier];
 
-		if (variable.announceMutation !== false) {
-			// give modified variable element a mutation halo
-			scopeElementList.children('.mutating').removeClass('mutating');
-			variableElem.addClass('mutating');
+			if (value.args instanceof Array) {
+				// function, ignore
+				return html;
+			} else {
+				return html + variableTemplate
+					.replace('{identifier}', identifier)
+					.replace('{identifier}', identifier)
+					.replace('{value}', '<span class="value">' + renderValue(value) + '</span>');
+			}
+		}, '');
+
+		if (scope.subscope !== undefined) {
+			var subscopeHtml = renderScope(scope.subscope);
+		} else {
+			var subscopeHtml = '';
 		}
 
-		var newType = typeof variable.value;
-		var newValue = variable.value.toString();
-
-		// update DOM with new values
-		variableElem
-			.removeClass('number string boolean')
-			.addClass(newType)
-			.children('.value').text(newValue);
+		if (scope.name !== undefined && scope.args instanceof Array) {
+			return scopeTemplate
+				.replace('{declaration}', renderFunctionDeclaration(scope.name, scope.args))
+				.replace('{variables}', variablesHtml + subscopeHtml);
+		} else {
+			return variablesHtml + subscopeHtml;
+		}
 	}
 
-	function createVariable(variable) {
-		// add identifier to list of known variables
-		knownVariables[variable.identifier.toString()] = true;
-
-		var reverse = true;
-		var valueHTML = valueToHTML(variable.value.value, reverse);
-
-		var html = variableTemplate
-			.replace('{identifier}', variable.identifier)
-			.replace('{identifier}', variable.identifier)
-			.replace('{value}', valueHTML);
-
-		// add to DOM
-		var variableElem = $(html).appendTo(scopeElementList);
-
-		if (variable.announceMutation !== false) {
-			// give new variable element a mutation halo
-			scopeElementList.children('.mutating').removeClass('mutating');
-			variableElem.addClass('mutating');
-		}
+	function update(scope) {
+		$('.mp-scope ul').html(renderScope(scope));
 	}
 
 	function clearMutationHalo() {
@@ -96,12 +78,11 @@ var State = (function(scopeElementList, stdoutElementList) {
 	}
 
 	function printOut(results) {
-		console.log(results);
-		var valueHTML = valueToHTML(results.arguments[0]);
+		var valueHTML = renderValue(results.arguments[0]);
 
 		var html = printTemplate
 			.replace('{type}', 'line')
-			.replace('{value}', valueHTML)
+			.replace('{value}', '<span class="value">' + valueHTML + '</span>')
 			// switch from 0-based line count (MiniPy) to 1-based (visual editor)
 			.replace('{line}', results.from + 1);
 
@@ -121,9 +102,7 @@ var State = (function(scopeElementList, stdoutElementList) {
 	}
 
 	return {
-		hasVariable: hasVariable,
-		updateVariable: updateVariable,
-		createVariable: createVariable,
+		update: update,
 		clearMutationHalo: clearMutationHalo,
 		printOut: printOut,
 		reset: reset,
