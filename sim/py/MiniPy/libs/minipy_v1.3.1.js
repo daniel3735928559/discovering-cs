@@ -1,4 +1,4 @@
-// MiniPy.js v1.3.0
+// MiniPy.js v1.3.1
 
 (function(root) {
 	var exports = {};
@@ -55,6 +55,7 @@
 			UNKNOWN_OPERATION: 13,
 			OUT_OF_BOUNDS: 14,
 			DIVIDE_BY_ZERO: 15,
+			ILLEGAL_STATEMENT: 16,
 		},
 
 		TokenType: {
@@ -1221,7 +1222,7 @@
 								var elifKeywordToken = self.next(TokenType.KEYWORD, 'elif');
 								var elifCondition = self.parseExpression();
 
-								self.next(TokenType.PUNCTUATOR, ':');
+								var colon = self.next(TokenType.PUNCTUATOR, ':');
 								self.next(TokenType.NEWLINE);
 
 								var elifBlock = self.parseBlock();
@@ -1230,7 +1231,7 @@
 									type: 'ElifStatement',
 									condition: elifCondition,
 									block: elifBlock,
-									range: elifBlock.range,
+									range: elifKeywordToken.range.union(colon.range),
 								});
 							}
 
@@ -1252,10 +1253,8 @@
 								elseBlock = {
 									type: 'ElseStatement',
 									block: block,
-									range: block.range,
+									range: elseKeywordToken.range,
 								};
-
-							// TODO: bundle elseKeywordToken line/column data with IfStatement
 							}
 
 							return new self.nodes.expressions.If(ifKeywordToken, condition, ifBlock, elifStatements, elseBlock);
@@ -1966,9 +1965,10 @@
 			}
 		};
 
-		function FunctionValue(blocking, exec) {
+		function FunctionValue(blocking, args, exec) {
 			// defaults to `false`
 			this.type = 'Function';
+			this.args = args;
 			this.blocking = (blocking === true);
 			this.exec = exec;
 		}
@@ -1992,6 +1992,7 @@
 
 	exports.Scope = (function() {
 		var ErrorType = require('../enums').enums.ErrorType;
+		var ValueType = require('../enums').enums.ValueType;
 
 		function simplifyValue(value) {
 			switch (value.type) {
@@ -2008,16 +2009,19 @@
 
 					return simplification;
 				case 'Function':
-					return 'def (' + value.args.map(function(arg) {
+					return {
+						args: value.args.map(function(arg) {
 							return arg.value;
-						}).join(', ') + ')';
+						}),
+					};
 				default:
 					return undefined;
 			}
 		}
 
-		function Scope(parent) {
+		function Scope(parent, details) {
 			this.parent = parent;
+			this.details = details || null;
 
 			if (this.parent === null) {
 				this.globals = {};
@@ -2058,7 +2062,7 @@
 				// this scope doesn't own the variable, check with the parent scope
 				// or throw an error if it doesn't exist
 				if (this.parent instanceof Scope) {
-					return this.parent.get(name);
+					return this.parent.get(node);
 				} else {
 					throw node.error({
 						type: ErrorType.UNDEFINED_VARIABLE,
@@ -2109,13 +2113,38 @@
 				variables: {},
 			};
 
+			if (this.details !== null) {
+				// include extra info about function scopes
+				scope.name = this.details.name;
+				scope.args = this.details.args;
+			}
+
 			if (subscope !== undefined) {
 				scope.subscope = subscope;
 			}
 
-			for (var name in this.local) {
-				if (this.local.hasOwnProperty(name)) {
-					scope.variables[name] = simplifyValue(this.local[name]);
+			// collect variables into JSON scope representation
+			if (this.parent === null) {
+				for (var name in this.globals) {
+					if (this.globals.hasOwnProperty(name)) {
+						if (this.globals[name].type === ValueType.FUNCTION && this.globals[name].blocking === false) {
+							// skip built in functions
+							continue;
+						}
+
+						scope.variables[name] = simplifyValue(this.globals[name]);
+					}
+				}
+			} else {
+				for (var name in this.locals) {
+					if (this.locals.hasOwnProperty(name)) {
+						if (this.locals[name].type === ValueType.FUNCTION && this.locals[name].blocking === false) {
+							// skip built in functions
+							continue;
+						}
+
+						scope.variables[name] = simplifyValue(this.locals[name]);
+					}
 				}
 			}
 
@@ -2160,12 +2189,14 @@
 
 			// load passed global variables into scope
 			Object.keys(globals || {}).forEach(function(globalIdentifier) {
-				scope.set(globalIdentifier, new Type.Function(false, function(argNodes, complexArgs, simpleArgs) {
+				scope.set(globalIdentifier, new Type.Function(false, [], function(calleeNode, argsNodes, complexArgs, simpleArgs) {
 					var builtin = globals[globalIdentifier];
 
 					if (typeof builtin === 'function') {
 						// no argument validation given, just pass the arguments in
-						return builtin.apply({}, simpleArgs);
+						return builtin.apply({
+							line: calleeNode.range.start.line,
+						}, simpleArgs);
 					} else {
 						// method configuration specified
 
@@ -2351,6 +2382,7 @@
 				events = events || {};
 
 				this.statements = statements;
+				this.before = events.before || null;
 				this.done = events.done || null;
 				this.return = events.return || null;
 				this.returnTo = returnTo || null;
@@ -2358,6 +2390,7 @@
 
 			ExecutionBlock.prototype.slice = function() {
 				return new ExecutionBlock(this.statements.slice(1), {
+					before: this.before,
 					done: this.done,
 					return: this.return,
 				}, this.returnTo);
@@ -2380,6 +2413,11 @@
 
 					return null;
 				} else {
+					if (typeof poppedBlock.before === 'function') {
+						poppedBlock.before();
+						poppedBlock.before = null;
+					}
+
 					if (poppedBlock.statements.length > 0) {
 						var node = poppedBlock.statements[0];
 						loadedBlocks.push(poppedBlock.slice());
@@ -2427,6 +2465,11 @@
 								type: ErrorType.TYPE_VIOLATION,
 								message: 'Functions cannot be passed as arguments or stored in arrays',
 							});
+						} else if (element.type === ValueType.NONE) {
+							throw remaining[0].error({
+								type: ErrorType.TYPE_VIOLATION,
+								message: 'Cannot collect a value from a function which has returned nothing',
+							});
 						}
 
 						accumulated.push(element);
@@ -2437,6 +2480,10 @@
 
 			function exec(node, done) {
 				if (node.execute === false) {
+					if (typeof node.script === 'function') {
+						node.script();
+					}
+
 					done();
 					return;
 				}
@@ -2492,8 +2539,7 @@
 											if (subscriptValue.value >= rootValue.value.length || -subscriptValue > rootValue.value.length) {
 												throw assignee.subscript.error({
 													type: ErrorType.OUT_OF_BOUNDS,
-													message: 'Index ' + indexToChange.value
-														+ ' is out of bounds of array with length ' + root.value.length,
+													message: 'Index ' + indexToChange.value + ' is out of bounds of array with length ' + root.value.length,
 												});
 											} else {
 												// negative index (index telative to end of array)
@@ -2683,7 +2729,7 @@
 						break;
 
 					case 'FunctionStatement':
-						scope.set(node.name, new Type.Function(true, function(callArgValues, callingNode, done) {
+						scope.set(node.name, new Type.Function(true, node.args, function(callArgValues, callingNode, done) {
 							// new level of scope
 							scope = new Scope(scope);
 
@@ -2708,20 +2754,38 @@
 							};
 
 							var block = new ExecutionBlock(node.block.statements.slice(0), {
+								before: function() {
+									// new level of scope
+									scope = new Scope(scope, {
+										name: node.name.value,
+										args: node.args.map(function(arg) {
+											return arg.value;
+										}),
+									});
+
+									// create function argument variables
+									for (var i = 0, l = Math.min(node.args.length, callArgValues.value.length); i < l; i++) {
+										var forceLocal = true;
+										scope.set(node.args[i], callArgValues.value[i], forceLocal);
+									}
+
+									// update scope listeners
+									event('scope', scope.toJSON());
+								},
+
 								done: function() {
 									// return to old scope
 									scope = scope.parent;
 
+									event('scope', scope.toJSON());
+
 									// no returned expression, pass nothing
-									done(undefined);
+									done(new Type.None());
 								},
 
 								return: function(output) {
-									// return to old scope
-									scope = scope.parent;
-
 									// pass any returned expression
-									done(output || undefined);
+									done(output || new Type.None());
 								},
 							}, returnTo);
 
@@ -2733,6 +2797,8 @@
 							};
 						}));
 
+						event('scope', [scope.toJSON()]);
+
 						break;
 
 					case 'ReturnStatement':
@@ -2742,19 +2808,28 @@
 									var popped = loadedBlocks.pop();
 
 									if (typeof popped.return === 'function') {
-										popped.return(returnValue);
-
-										done();
-
 										if (popped.returnTo !== null) {
+											// pop scope
+											scope = scope.parent;
+
+											popped.returnTo.script = function() {
+												// return data once interpreter has returned to the calling expression
+												popped.return(returnValue);
+												event('scope', [scope.toJSON()]);
+											};
+
 											loadedBlocks[loadedBlocks.length - 1].statements.unshift(popped.returnTo);
 										}
 
+										done();
 										return;
 									}
 								}
 
-								throw new Error('Can only return from inside a function');
+								throw node.error({
+									type: ErrorType.ILLEGAL_STATEMENT,
+									message: 'Can only return from inside a function',
+								});
 							});
 						} else {
 							while (loadedBlocks.length > 0) {
@@ -2768,7 +2843,10 @@
 								}
 							}
 
-							throw new Error('Can only return from inside a function');
+							throw node.error({
+								type: ErrorType.ILLEGAL_STATEMENT,
+								message: 'Can only return from inside a function',
+							});
 						}
 
 						break;
@@ -2782,13 +2860,11 @@
 								// functions defined in-program and thus debugging execution flow
 								// will pass to the function declaration to walk through
 								// the function's logic line-by-line
-								var declarationLine = functionValue.exec(callArgValues, node, function(returnValue) {
-									done(returnValue);
-								});
+								functionValue.exec(callArgValues, node, done);
 							} else {
 								// function is inline, probably build-in like `len()` or `print()` and should
 								// not effect the line-by-line debugger flow
-								var possibleReturnValue = functionValue.exec(node.args, callArgValues.value, simplifyValue(callArgValues));
+								var possibleReturnValue = functionValue.exec(node.callee, node.args, callArgValues.value, simplifyValue(callArgValues));
 
 								// convert the return value (if it exists) to an internal represented value object
 								// TODO: currently arrays are not supported
