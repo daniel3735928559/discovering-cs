@@ -55,7 +55,6 @@
 			UNKNOWN_OPERATION: 13,
 			OUT_OF_BOUNDS: 14,
 			DIVIDE_BY_ZERO: 15,
-			ILLEGAL_STATEMENT: 16,
 		},
 
 		TokenType: {
@@ -2127,7 +2126,7 @@
 			if (this.parent === null) {
 				for (var name in this.globals) {
 					if (this.globals.hasOwnProperty(name)) {
-						if (this.globals[name].type === ValueType.FUNCTION && this.globals[name].blocking === false) {
+						if (this.globals[name].type === ValueType.FUNCTION) {
 							// skip built in functions
 							continue;
 						}
@@ -2138,7 +2137,7 @@
 			} else {
 				for (var name in this.locals) {
 					if (this.locals.hasOwnProperty(name)) {
-						if (this.locals[name].type === ValueType.FUNCTION && this.locals[name].blocking === false) {
+						if (this.locals[name].type === ValueType.FUNCTION) {
 							// skip built in functions
 							continue;
 						}
@@ -2189,7 +2188,7 @@
 
 			// load passed global variables into scope
 			Object.keys(globals || {}).forEach(function(globalIdentifier) {
-				scope.set(globalIdentifier, new Type.Function(false, [], function(calleeNode, argsNodes, complexArgs, simpleArgs) {
+				scope.set(globalIdentifier, new Type.Function(false, [], function(calleeNode, argNodes, complexArgs, simpleArgs) {
 					var builtin = globals[globalIdentifier];
 
 					if (typeof builtin === 'function') {
@@ -2730,15 +2729,8 @@
 
 					case 'FunctionStatement':
 						scope.set(node.name, new Type.Function(true, node.args, function(callArgValues, callingNode, done) {
-							// new level of scope
-							scope = new Scope(scope);
-
-							// create function argument variables
-							for (var i = 0, l = Math.min(node.args.length, callArgValues.value.length); i < l; i++) {
-								var forceLocal = true;
-								scope.set(node.args[i], callArgValues.value[i], forceLocal);
-							}
-
+							// add debugger pointer to function declaration so that declaration
+							// line will be highlighted when stepping through the program
 							if (node.block.statements[0].type !== 'FunctionStatement' && node.block.statements[0].execute !== false) {
 								node.block.statements.unshift({
 									type: 'FunctionStatement',
@@ -2770,14 +2762,14 @@
 									}
 
 									// update scope listeners
-									event('scope', scope.toJSON());
+									event('scope', [scope.toJSON()]);
 								},
 
 								done: function() {
 									// return to old scope
 									scope = scope.parent;
 
-									event('scope', scope.toJSON());
+									event('scope', [scope.toJSON()]);
 
 									// no returned expression, pass nothing
 									done(new Type.None());
@@ -2826,10 +2818,7 @@
 									}
 								}
 
-								throw node.error({
-									type: ErrorType.ILLEGAL_STATEMENT,
-									message: 'Can only return from inside a function',
-								});
+								throw new Error('Can only return from inside a function');
 							});
 						} else {
 							while (loadedBlocks.length > 0) {
@@ -2843,10 +2832,7 @@
 								}
 							}
 
-							throw node.error({
-								type: ErrorType.ILLEGAL_STATEMENT,
-								message: 'Can only return from inside a function',
-							});
+							throw new Error('Can only return from inside a function');
 						}
 
 						break;
