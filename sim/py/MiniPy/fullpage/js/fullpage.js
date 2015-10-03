@@ -174,35 +174,6 @@ var defaultPythonGlobals = {
 			lockEditor();
 
 			var runHooks = {
-				print: function() {
-					var printExpression = this;
-					var printArguments = [];
-
-					for (var i = 0, l = arguments.length; i < l; i++) {
-						printArguments.push(arguments[i]);
-					}
-
-					StateHandler.printOut({
-						arguments: printArguments,
-						from: printExpression.line,
-						announceMutation: false,
-					});
-				},
-
-				assign: function(identifier, value) {
-					if (StateHandler.hasVariable(identifier) === true) {
-						StateHandler.updateVariable({
-							identifier: identifier,
-							value: value,
-							announceMutation: false,
-						});
-					} else {
-						StateHandler.createVariable({
-							identifier: identifier,
-							value: value,
-							announceMutation: false,
-						});
-					}
 				scope: function(scope) {
 					StateHandler.update(scope, false);
 				},
@@ -265,32 +236,6 @@ var defaultPythonGlobals = {
 		lockEditor();
 
 		var stepHooks = {
-			print: function() {
-				var printExpression = this;
-				var printArguments = [];
-
-				for (var i = 0, l = arguments.length; i < l; i++) {
-					printArguments.push(arguments[i]);
-				}
-
-				StateHandler.printOut({
-					arguments: printArguments,
-					from: printExpression.line,
-				});
-			},
-
-			assign: function(identifier, value) {
-				if (StateHandler.hasVariable(identifier) === true) {
-					StateHandler.updateVariable({
-						identifier: identifier,
-						value: value,
-					});
-				} else {
-					StateHandler.createVariable({
-						identifier: identifier,
-						value: value,
-					});
-				}
 			scope: function(scope) {
 				StateHandler.update(scope, false);
 			},
