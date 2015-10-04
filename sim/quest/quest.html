@@ -22,7 +22,10 @@
       <!-- ABC: {{userdata.programs[userdata.current_problem]}} -->
       <div class="quest_title">Workspace (<a href="#" ng-click="toggle_tutorial();alert('as');">Toggle questions</a>)</div>
       <div ng-if="quest.problems[userdata.current_problem].type == 'python'" id="super" ng-controller="PySimController">
-	<sim-py program="quest.programs[userdata.current_problem]" control="pycontrol" size="" lightboard="yes" reset="yes" simid="big" template="/lib/spy/simpy.html"></sim-py>
+	<sim-py program="quest.programs[userdata.current_problem]" control="pycontrol" size="" lightboard="yes" reset="yes" simid="big" template="/lib/spy/simpy.html" functions="no"></sim-py>
+      </div>
+      <div ng-if="quest.problems[userdata.current_problem].type == 'advpython'" id="super" ng-controller="PySimController">
+	<sim-py program="quest.programs[userdata.current_problem]" control="pycontrol" size="" lightboard="yes" reset="yes" simid="big" template="/lib/spy/simpy.html" functions="yes"></sim-py>
       </div>
       <div ng-if="quest.problems[userdata.current_problem].type == 'avr'" id="super" ng-controller="AvrSimController">
 	<sim-avr program="quest.programs[userdata.current_problem]" control="avrcontrol" simid="big" template="/lib/jsavr/simavr.html"></sim-avr>

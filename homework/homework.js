@@ -2,6 +2,7 @@ var app = angular.module('app',['ngCookies']);
 
 app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$timeout', '$document', '$sce', function($scope, $http, $cookies, $window, $timeout, $document, $sce){
     $scope.verify_submission = false;
+    $scope.qcontrol = {};
     console.log("HI");
     $scope.homework_id = 0;
     $scope.hwid = null;
@@ -12,9 +13,10 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
     }
     $scope.switch_hw = function(){
 	console.log("SMETHING",$scope.homework_id);
-	$scope.$broadcast('change_quest',$scope.homeworks[$scope.homework_id].file);
+	$scope.qcontrol.set_quest($scope.homework_id,$scope.homeworks[$scope.homework_id].file);
     }
     $scope.get_saved_homeworks = function(){
+	console.log("HWID",$scope.hwid);
 	get_data = {"hwid":$scope.hwid};
 	$http.post("/homework/get",get_data).then(function(response){
 	    console.log("Success",response.data.data);
@@ -28,7 +30,9 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
     $scope.submit_homework = function(){
 	console.log("hi");
 	$scope.verify_submission = true;
-	$scope.$broadcast('get_program_data',"stuff");
+	var data = $scope.qcontrol.get_program_data();
+	$scope.submission_problems = data.problems;
+	$scope.submission_programs = data.programs;
     }
     $scope.exit_verify = function(){
 	console.log("ASDA");
@@ -38,11 +42,6 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
 	$scope.hwid = data;
 	console.log("GETTING ASDHASDJHBASJDHB",data);
 	$scope.get_saved_homeworks();
-    });
-    $scope.$on('program_data',function(event,data){
-	console.log("GOT",data);
-	$scope.submission_problems = data.problems;
-	$scope.submission_programs = data.programs;
     });
     $scope.submit_homework_for_real = function(){
 	console.log("Aaaaas yooooooou wiiiiiiiiiiiiiiiiiiiiiiiiiish...");
