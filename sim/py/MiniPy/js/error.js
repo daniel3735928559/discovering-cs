@@ -2,7 +2,7 @@
 
 var ErrorControl = (function(mirror, BannerHandler) {
 	var markOptions = {
-		className: 'error-token',
+		className: 'mp-error-token',
 		clearOnEnter: true,
 	};
 
