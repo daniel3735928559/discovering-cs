@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><quest name="HW 3" id="3">
 
-<q type="python" id="Problem 6a">
+<q type="advpython" id="Problem 6a">
   <program></program>
   <text>
     Suppose I want to write a block of code that outputs the word
@@ -22,7 +22,7 @@ else:
   </text>
 </q>
 
-<q type="python" id="Problem 6b">
+<q type="advpython" id="Problem 6b">
   <program></program>
   <text>
     Suppose I want to write a block of code that outputs the word
@@ -42,7 +42,7 @@ print("positive")
   </text>
 </q>
 
-<q type="python" id="Problem 6c">
+<q type="advpython" id="Problem 6c">
   <program></program>
   <text>
     Suppose I want to write a block of code that outputs the word
@@ -64,7 +64,7 @@ else:
   </text>
 </q>
 
-<q type="python" id="Problem 7">
+<q type="advpython" id="Problem 7">
   <program></program>
   <text>
     Fix all the Python syntax errors below without deleting any lines
@@ -86,7 +86,7 @@ print(Celsius)
   </text>
 </q>
 
-<q type="python" id="Problem 8">
+<q type="advpython" id="Problem 8">
   <program></program>
   <text>Use while loops and nested loops to print patterns of asterisks on the screen. Use the sample starter code at the end of this question to begin. The code should accept an input with the following prompt:
 
@@ -157,7 +157,7 @@ print("end printing triangle 2")</pre>
 </text>
 </q>
 
-<q type="python" id="Problem 9">
+<q type="advpython" id="Problem 9">
   <program></program>
   <text>Repeat Homework 2 Question 11, but this time store the
   Fibonacci numbers into an array and then print out the array at the
@@ -180,7 +180,7 @@ while(counter &lt; n):
 </pre>
   </text>
 </q>
-<q type="python" id="Problem 10">
+<q type="advpython" id="Problem 10">
   <program></program>
   <text>Repeat Homework 2 Question 12, but use a function to convert
   Fahrenheit to Celsius.

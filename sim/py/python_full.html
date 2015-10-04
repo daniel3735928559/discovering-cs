@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Python</title>
+    <link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
+    <link rel="stylesheet" href="/sim/cm/codemirror.css" />
+    <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
+    <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
+    <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
+    <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
+    <script type="text/javascript" src="/sim/py/expr_ng.js"></script>
+    <script type="text/javascript" src="/sim/py/sim.js"></script>
+  </head>
+  <body ng-app="app">
+      <div style="width:100%;height:100%;" ng-controller="PySimController">
+	<div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {'big':''}">
+	</div>
+      </div>
+  </body>
+</html>

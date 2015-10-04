@@ -2,14 +2,13 @@
 
 
 <q type="python" id="Problem 10">
-  <program>a = 28
-b = -190</program>
+  <program></program>
   <text>Write a program to swap (exchange) the values of two variables
   a and b. You may create additional variables if needed.</text>
 </q>
 
 <q type="python" id="Problem 11">
-  <program>n = 15</program>
+  <program></program>
   <text>Write a program to print the first 15 Fibonacci numbers. Start
   with 0 and 1 as the first two numbers. The next number is created by
   adding the previous two numbers. Thus, the third number is the sum
