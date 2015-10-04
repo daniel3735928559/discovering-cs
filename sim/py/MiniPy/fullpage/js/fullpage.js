@@ -22,6 +22,25 @@ var defaultPythonGlobals = {
 		},
 	},
 
+	str: {
+		args: {
+			0: ['boolean', 'number', 'string'],
+		},
+		fn: function(value) {
+			if (typeof value === 'boolean') {
+				// handle special conversion of booleans to strings
+				// Python expects capitalization of first character
+				if (value === true) {
+					return 'True';
+				} else {
+					return 'False';
+				}
+			} else {
+				return value.toString();
+			}
+		},
+	},
+
 	prompt_number: function() {
 		var possibleNumber = parseFloat(prompt('Enter a number:'));
 
