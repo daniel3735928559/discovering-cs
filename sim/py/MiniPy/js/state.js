@@ -69,7 +69,7 @@ var State = (function(scopeElementList, stdoutElementList) {
 	}
 
 	function update(scope) {
-		$('.mp-scope ul').html(renderScope(scope));
+		scopeElementList.html(renderScope(scope));
 	}
 
 	function clearMutationHalo() {
