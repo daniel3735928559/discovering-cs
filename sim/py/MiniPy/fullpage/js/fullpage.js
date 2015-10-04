@@ -41,7 +41,7 @@ var defaultPythonGlobals = {
 		},
 	},
 
-	prompt_number: function() {
+	input_num: function() {
 		var possibleNumber = parseFloat(prompt('Enter a number:'));
 
 		if (isNaN(possibleNumber)) {
@@ -51,7 +51,7 @@ var defaultPythonGlobals = {
 		}
 	},
 
-	prompt_string: function() {
+	input_string: function() {
 		return prompt('Enter a string:');
 	},
 };

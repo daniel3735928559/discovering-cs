@@ -6,7 +6,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 	var jqLite = angular.element;
 
 	var defaultPythonGlobals = {
-		prompt_number: function() {
+		input_num: function() {
 			var possibleNumber = parseFloat(prompt('Enter a number:'));
 
 			if (isNaN(possibleNumber)) {
@@ -16,7 +16,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 			}
 		},
 
-		prompt_string: function() {
+		input_string: function() {
 			return prompt('Enter a string:');
 		},
 	};

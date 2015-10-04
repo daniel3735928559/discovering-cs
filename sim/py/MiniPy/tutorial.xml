@@ -71,9 +71,9 @@ print(hello)
 		</program>
 		<text>
 			<p>Programs are boring if you cannot do anything with them. Depending on whether you want a number or a string, there are ways to ask for user input and place it in a specified variable. To get a number, do:</p>
-			<p><pre>input_num(<i>variable name</i>)</pre></p>
+			<p><pre><i>variable name</i> = input_num()</pre></p>
 			<p>To get a string, do:</p>
-			<p><pre>input_string(<i>variable name</i>)</pre></p>
+			<p><pre><i>variable name</i> = input_string()</pre></p>
 			<p>Try to use this to make a simple calculator program that asks for two numbers and then outputs the product.</p>
 		</text>
 	</q>
@@ -158,7 +158,7 @@ while(guess != 4 * 5 - 2 - (4 + 37 * 4)):
 		print("Too big!")
 	else:
 		print("Too small!")
-	input_num(guess)
+	guess = input_num()
 
 print("VICTORY!!!")
 		</program>
