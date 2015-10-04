@@ -74,7 +74,7 @@ var defaultPythonGlobals = {
 			var enabled = options.enable || null;
 			var disabled = options.disable || null;
 		} else {
-			var enabled = ['run', 'validate', 'step'];
+			var enabled = ['run', 'validate', 'step', 'reset'];
 			var disabled = ['stop'];
 		}
 
@@ -116,11 +116,13 @@ var defaultPythonGlobals = {
 	buttons['validate'] = $('.mp-control-button[data-command="validate"]');
 	buttons['step'] = $('.mp-control-button[data-command="step"]');
 	buttons['stop'] = $('.mp-control-button[data-command="stop"]');
+	buttons['reset'] = $('.mp-control-button[data-command="reset"]');
 
 	buttons['run'].click(buttonCommand('run'));
 	buttons['validate'].click(buttonCommand('validate'));
 	buttons['step'].click(buttonCommand('step'));
 	buttons['stop'].click(buttonCommand('stop'));
+	buttons['reset'].click(buttonCommand('reset'));
 
 	var highlightLine = (function() {
 		var markedLine = null;
@@ -185,7 +187,7 @@ var defaultPythonGlobals = {
 		if (validity === true) {
 			// script SYNTAX is valid, enter run state
 			enableButtons({
-				enable: 'stop',
+				enable: ['stop', 'reset'],
 				disable: ['run', 'validate', 'step'],
 			});
 
@@ -241,7 +243,7 @@ var defaultPythonGlobals = {
 
 	when('validate', function() {
 		enableButtons({
-			disable: ['run', 'validate', 'step', 'stop'],
+			disable: ['run', 'validate', 'step', 'stop', 'reset'],
 		});
 
 		var validity = isValid(getScript());
@@ -255,14 +257,12 @@ var defaultPythonGlobals = {
 			ErrorHandler.post(validity);
 		}
 
-		enableButtons({
-			enable: ['run', 'validate', 'step'],
-		});
+		enableButtons();
 	});
 
 	function startStepping() {
 		enableButtons({
-			enable: ['step', 'stop'],
+			enable: ['step', 'stop', 'reset'],
 			disable: ['run', 'validate'],
 		});
 
@@ -275,10 +275,7 @@ var defaultPythonGlobals = {
 			},
 
 			exit: function() {
-				enableButtons({
-					enable: ['run', 'validate', 'step'],
-					disable: 'stop',
-				});
+				enableButtons();
 
 				unlockEditor();
 				highlightLine(null);
@@ -341,10 +338,7 @@ var defaultPythonGlobals = {
 	when('step', startStepping);
 
 	when('stop', function() {
-		enableButtons({
-			enable: ['run', 'validate', 'step'],
-			disable: 'stop',
-		});
+		enableButtons();
 
 		unlockEditor();
 		highlightLine(null);
@@ -357,6 +351,19 @@ var defaultPythonGlobals = {
 		when('step', startStepping);
 
 		StateHandler.clearMutationHalo();
+	});
+
+	when('reset', function() {
+		enableButtons();
+
+		StateHandler.reset();
+		unlockEditor();
+
+		if (typeof globalDefaultScript === 'undefined' || typeof globalDefaultScript !== 'string') {
+			mirror.setValue('');
+		} else {
+			mirror.setValue(globalDefaultScript);
+		}
 	});
 
 	// bind general shortcuts

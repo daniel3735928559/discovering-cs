@@ -72,7 +72,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 		// `data-command` attributes, save those elements in the `buttons`
 		// object and attach `click` event-handler functions from the
 		// `clickEvents` object
-		['run', 'validate', 'step', 'stop'].forEach(function(command) {
+		['run', 'validate', 'step', 'stop', 'reset'].forEach(function(command) {
 			buttons[command] = $element[0].querySelector('button[data-command="' + command + '"]');
 			jqLite(buttons[command]).on('click', buttonCommand(command));
 		});
@@ -99,7 +99,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 				var enabled = options.enable || null;
 				var disabled = options.disable || null;
 			} else {
-				var enabled = ['run', 'validate', 'step'];
+				var enabled = ['run', 'validate', 'step', 'reset'];
 				var disabled = ['stop'];
 			}
 
@@ -251,7 +251,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 
 		when('validate', function() {
 			enableButtons({
-				disable: ['run', 'validate', 'step', 'stop'],
+				disable: ['run', 'validate', 'step', 'stop', 'reset'],
 			});
 
 			var validity = isValid(getScript());
@@ -270,7 +270,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 
 		function startStepping() {
 			enableButtons({
-				enable: ['step', 'stop'],
+				enable: ['step', 'stop', 'reset'],
 				disable: ['run', 'validate'],
 			});
 
@@ -359,6 +359,21 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 			when('step', startStepping);
 
 			StateHandler.clearMutationHalo();
+		});
+
+		var defaultScript = mirror.getValue();
+
+		when('reset', function() {
+			enableButtons();
+
+			StateHandler.reset();
+			unlockEditor();
+
+			if (typeof defaultScript === 'undefined' || typeof defaultScript !== 'string') {
+				mirror.setValue('');
+			} else {
+				mirror.setValue(defaultScript);
+			}
 		});
 
 		// bind general shortcuts
