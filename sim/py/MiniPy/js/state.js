@@ -86,7 +86,7 @@ var State = (function(scopeElementList, stdoutElementList) {
 			// switch from 0-based line count (MiniPy) to 1-based (visual editor)
 			.replace('{line}', results.from + 1);
 
-		var println = $(html).prependTo(stdoutElementList);
+		var println = $(html).appendTo(stdoutElementList);
 
 		if (results.announceMutation !== false) {
 			// give printed line element a mutation halo
