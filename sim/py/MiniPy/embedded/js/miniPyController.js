@@ -294,7 +294,6 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 					});
 
 					when('step', startStepping);
-					alert('Program finished');
 				},
 			};
 

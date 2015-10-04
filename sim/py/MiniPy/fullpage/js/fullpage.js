@@ -286,7 +286,6 @@ var defaultPythonGlobals = {
 				});
 
 				when('step', startStepping);
-				alert('Program finished');
 			},
 		};
 
