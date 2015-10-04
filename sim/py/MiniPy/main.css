@@ -169,7 +169,9 @@
 }
 
 .mp-debugger .mp-editor .mp-error-token {
-	border-bottom: solid #e74c3c 2px;
+	background-color: #e74c3c;
+	color: white !important;
+	border-radius: 4px;
 }
 
 .mp-debugger .mp-editor .mp-banner {
