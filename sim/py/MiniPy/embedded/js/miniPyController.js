@@ -203,43 +203,31 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 				lockEditor();
 
 				var runHooks = {
-					print: function() {
-						var printExpression = this;
-						var printArguments = [];
+					exit: function(scope) {
+						// after execution is done, display final scope state
+						StateHandler.update(scope);
 
-						for (var i = 0, l = arguments.length; i < l; i++) {
-							printArguments.push(arguments[i]);
-						}
-
-						StateHandler.printOut({
-							arguments: printArguments,
-							from: printExpression.line,
-							announceMutation: false,
-						});
-					},
-
-					assign: function(identifier, value) {
-						if (StateHandler.hasVariable(identifier) === true) {
-							StateHandler.updateVariable({
-								identifier: identifier,
-								value: value,
-								announceMutation: false,
-							});
-						} else {
-							StateHandler.createVariable({
-								identifier: identifier,
-								value: value,
-								announceMutation: false,
-							});
-						}
-					},
-
-					exit: function() {
 						BannerHandler.show({
 							type: BannerHandler.GENERIC,
 							message: 'Program finished',
 						});
 					},
+				};
+
+				var runGlobals = defaultPythonGlobals;
+				runGlobals.print = function() {
+					var printArguments = [];
+
+					// build array of print arguments
+					for (var i = 0, l = arguments.length; i < l; i++) {
+						printArguments.push(arguments[i]);
+					}
+
+					StateHandler.printOut({
+						arguments: printArguments,
+						from: this.line,
+						announceMutation: false,
+					});
 				};
 
 				try {
@@ -277,9 +265,7 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 				ErrorHandler.post(validity);
 			}
 
-			enableButtons({
-				enable: ['run', 'validate', 'step'],
-			});
+			enableButtons();
 		});
 
 		function startStepping() {
@@ -292,39 +278,12 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 			lockEditor();
 
 			var stepHooks = {
-				print: function() {
-					var printExpression = this;
-					var printArguments = [];
-
-					for (var i = 0, l = arguments.length; i < l; i++) {
-						printArguments.push(arguments[i]);
-					}
-
-					StateHandler.printOut({
-						arguments: printArguments,
-						from: printExpression.line,
-					});
-				},
-
-				assign: function(identifier, value) {
-					if (StateHandler.hasVariable(identifier) === true) {
-						StateHandler.updateVariable({
-							identifier: identifier,
-							value: value,
-						});
-					} else {
-						StateHandler.createVariable({
-							identifier: identifier,
-							value: value,
-						});
-					}
+				scope: function(scope) {
+					StateHandler.update(scope, false);
 				},
 
 				exit: function() {
-					enableButtons({
-						enable: ['run', 'validate', 'step'],
-						disable: 'stop',
-					});
+					enableButtons();
 
 					unlockEditor();
 					highlightLine(null);
@@ -337,6 +296,22 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 					when('step', startStepping);
 					alert('Program finished');
 				},
+			};
+
+			var interpretGlobals = defaultPythonGlobals;
+			interpretGlobals.print = function() {
+				var printArguments = [];
+
+				// build array of print arguments
+				for (var i = 0, l = arguments.length; i < l; i++) {
+					printArguments.push(arguments[i]);
+				}
+
+				StateHandler.printOut({
+					arguments: printArguments,
+					from: this.line,
+					announceMutation: true,
+				});
 			};
 
 			var inspector = MiniPy.inspect(getScript(), {
@@ -364,17 +339,14 @@ app.controller('MiniPyEditorController', ['$timeout', '$element', function($time
 			}
 
 			if (expression !== null) {
-				highlightLine(expression.line);
+				highlightLine(expression.range.start.line);
 			}
 		}
 
 		when('step', startStepping);
 
 		when('stop', function() {
-			enableButtons({
-				enable: ['run', 'validate', 'step'],
-				disable: 'stop',
-			});
+			enableButtons();
 
 			unlockEditor();
 			highlightLine(null);
