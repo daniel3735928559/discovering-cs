@@ -153,6 +153,10 @@
 	cursor: text;
 }
 
+.mp-debugger .mp-editor .CodeMirror .CodeMirror-selected {
+	background-color: rgba(49, 51, 55, 0.2);
+}
+
 .mp-debugger .mp-editor .CodeMirror .CodeMirror-lines {
 	padding: 12px 0;
 }
@@ -214,7 +218,7 @@
 }
 
 .mp-debugger .mp-editor .mp-banner.mp-banner-type-generic {
-	background-color: #95a5a6;
+	background-color: #313337;
 	padding-left: 24px;
 }
 
