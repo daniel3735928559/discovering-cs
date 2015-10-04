@@ -1,4 +1,4 @@
-// MiniPy.js v1.3.1
+// MiniPy.js v1.4.0
 
 (function(root) {
 	var exports = {};
@@ -55,6 +55,7 @@
 			UNKNOWN_OPERATION: 13,
 			OUT_OF_BOUNDS: 14,
 			DIVIDE_BY_ZERO: 15,
+			ILLEGAL_STATEMENT: 16,
 		},
 
 		TokenType: {
@@ -989,6 +990,17 @@
 						};
 					},
 
+					Delete: function(delKeyword, variable) {
+						this.type = 'DeleteStatement';
+						this.variable = variable;
+
+						this.range = delKeyword.range.union(variable.range);
+
+						this.error = function(details) {
+							return this.range.error(details);
+						};
+					},
+
 					Block: function(statements) {
 						this.type = 'Block';
 						this.statements = statements;
@@ -1196,6 +1208,20 @@
 							var rightParenToken = self.next(TokenType.PUNCTUATOR, ')');
 
 							return new self.nodes.expressions.Call(calleeExpression, leftParenToken, args, rightParenToken);
+						};
+
+						this.getPrecedence = function() {
+							return precedence;
+						};
+					},
+
+					Delete: function() {
+						var precedence = 100;
+
+						this.parse = function(parser, delKeywordToken) {
+							var variable = self.parseExpression();
+
+							return new self.nodes.expressions.Delete(delKeywordToken, variable);
 						};
 
 						this.getPrecedence = function() {
@@ -1412,6 +1438,7 @@
 			infix('[', new self.nodes.parselets.Subscript());
 			infix('(', new self.nodes.parselets.Call());
 
+			prefix('del', new self.nodes.parselets.Delete());
 			prefix('if', new self.nodes.parselets.If());
 			prefix('while', new self.nodes.parselets.While());
 			prefix('def', new self.nodes.parselets.Function());
@@ -2271,8 +2298,8 @@
 				event('load');
 			});
 
-			var exitOnce = once(function() {
-				event('exit');
+			var exitOnce = once(function(scopeJSON) {
+				event('exit', scopeJSON);
 			});
 
 			// function for triggering an event with an optional payload
@@ -2405,7 +2432,7 @@
 				var poppedBlock = loadedBlocks.pop();
 
 				if (poppedBlock === undefined) {
-					exitOnce();
+					exitOnce([scope.toJSON()]);
 
 					// call hooks and pass line details
 					clearWaitingHooks();
@@ -2668,6 +2695,58 @@
 
 						break;
 
+					case 'DeleteStatement':
+						if (node.variable.type === 'Subscript') {
+							exec(node.variable.root, function(rootValue) {
+								if (rootValue.isType(ValueType.ARRAY)) {
+									exec(node.variable.subscript, function(subscriptValue) {
+										if (subscriptValue.isType(ValueType.NUMBER)) {
+											// check that removal index is in-bounds
+											var length = rootValue.value.length;
+											var givenIndex = subscriptValue.value;
+
+											if (givenIndex >= length || -givenIndex > length) {
+												throw node.variable.subscript.error({
+													type: ErrorType.OUT_OF_BOUNDS,
+													message: '"' + length + '" is out of bounds',
+												});
+											} else if (givenIndex < 0) {
+												// negative index
+												var index = length + givenIndex;
+											} else {
+												// positive index
+												var index = givenIndex
+											}
+
+											// remove element from `rootValue` array at index `subscriptValue`
+											rootValue.value.splice(index, 1);
+
+											event('scope', [scope.toJSON()]);
+
+											done();
+										} else {
+											throw node.variable.subscript.error({
+												type: ErrorType.TYPE_VIOLATION,
+												message: 'Expecting a Number, got a ' + subscriptValue.type,
+											});
+										}
+									});
+								} else {
+									throw node.variable.error({
+										type: ErrorType.ILLEGAL_STATEMENT,
+										message: 'Expecting a reference to an Array element',
+									});
+								}
+							})
+						} else {
+							throw node.variable.error({
+								type: ErrorType.ILLEGAL_STATEMENT,
+								message: 'Expecting an Array subscript',
+							});
+						}
+
+						break;
+
 					case 'IfStatement':
 						exec(node.condition, function(condition) {
 							if (condition.value === true) {
@@ -2818,7 +2897,10 @@
 									}
 								}
 
-								throw new Error('Can only return from inside a function');
+								throw node.error({
+									type: ErrorType.ILLEGAL_STATEMENT,
+									message: 'Can only return from inside a function',
+								});
 							});
 						} else {
 							while (loadedBlocks.length > 0) {
@@ -2832,7 +2914,10 @@
 								}
 							}
 
-							throw new Error('Can only return from inside a function');
+							throw node.error({
+								type: ErrorType.ILLEGAL_STATEMENT,
+								message: 'Can only return from inside a function',
+							});
 						}
 
 						break;
@@ -2876,7 +2961,10 @@
 						break;
 
 					default:
-						throw new Error('Unknown statement with type "' + node.type + '"');
+						throw node.error({
+							type: ErrorType.ILLEGAL_STATEMENT,
+							message: 'Unknown statement with type "' + node.type + '"',
+						});
 				}
 			}
 
