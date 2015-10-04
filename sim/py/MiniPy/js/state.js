@@ -30,7 +30,7 @@ var State = (function(scopeElementList, stdoutElementList) {
 			return leftBracket + elementsHtmlStrings.join(comma) + rightBracket;
 		} else {
 			// literal value
-			return valueTemplate.replace('{type}', typeof value).replace('{value}', value.toString());
+			return valueTemplate.replace('{type}', typeof value).replace('{value}', value.toString().replace(/\s/g, '&nbsp;'));
 		}
 	}
 
