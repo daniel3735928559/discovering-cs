@@ -12,6 +12,7 @@
 .homework_status{
     display:inline-block;
     height:22px;
+    width:25%;
     color:red;
     margin:5px;
     font:12px Sans-Serif;

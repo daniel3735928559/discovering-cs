@@ -74,7 +74,7 @@ app.post('/homework/saveall', function(req, res){
 	    console.log(saved,tried,total);
 	    if(tried == total){
 		console.log("DONE");
-		if(saved < tried) error = "OHNO";
+		if(saved < tried) error = "Did not save data: " + error;
 		console.log(error,result);
 		res.send({"error":error,"success":result});
 	    }
