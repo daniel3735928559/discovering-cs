@@ -138,8 +138,8 @@ print("begin printing horizontal line")
 lineToPrint = ""
 i = 0
 while(i &lt; positiveOddNumberInput):
-    lineToPrint = lineToPrint + "*"
-    i = i + 1
+   lineToPrint = lineToPrint + "*"
+   i = i + 1
 print(lineToPrint)
 print("end printing horizontal line")
 

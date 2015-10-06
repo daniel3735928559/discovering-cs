@@ -5,7 +5,7 @@ var fs = require('fs');
 
 SubsProvider = function(host, port) {
     this.MAX_FILE_SIZE = 33333;
-    this.ended = {2:true,3:false}; // Store homework endedness
+    this.ended = {2:true,3:true}; // Store homework endedness
     this.homeworks = {2:4,3:7}; // Store homework sizes
 };
 
@@ -71,7 +71,7 @@ SubsProvider.prototype.save = function(user_data, hw_data, callback) {
     var path = this.gen_path(user_data, hw_data);
     if(path == "" || this.ended[hw_data.hwid]){
 	console.log("Uh oh");
-	callback("Homework not saveable");
+	callback("Homework has ended");
 	return;
     }
     var text = hw_data.text;

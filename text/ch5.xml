@@ -435,13 +435,17 @@ computer.</caption></figure>
 
 <p><def term='status register'>Another memory in the architecture is
 the <b>status register</b>--or <b>sreg</b>.</def> This is a register
-of width 8--that is, it is a number 0-255, but unlike the other
-registers, we think of it as comprised of 8 different numbers, each of
-which can be only 0 or 1--called <b>flags</b> (we will see in the next
-chapter how a number 0-255 can be thought of as 8 flags--for now we
-take it for granted).  <def term='setting/clearing'>Storing a value of
-1 in a flag is called <b>setting</b> the flag, and storing a value of
-0 is called <b>clearing</b> it</def>.</p>
+of width 8--that is, it is comprised of 8 bits.  Unlike the other
+registers, we almost never think about the binary value of the sreg,
+but instead we think of each bit as a separate piece of information.
+For example, perhaps the 3rd bit represents whether some feature is
+active on the computer: the 3rd bit being 1 represents the feature
+being active and the 3rd bit being 0 represents that the feature is
+inactive.  <def term='flag'>Bits that are treated this was are
+generally referred to as <b>flags</b>.</def> <def
+term='setting/clearing'>Storing a value of 1 in a flag is called
+<b>setting</b> the flag, and storing a value of 0 is called
+<b>clearing</b> it</def>.</p>
 
 <p>The basic idea is that while we can add/subtract/etc. numbers in
 the general-purpose registers and store the results in registers,
@@ -449,17 +453,16 @@ there is further information about the result that cannot be
 communicated just by the result.  For example, if we have the values
 200 and 100 stored in general-purpose registers and we add them
 together, the result should be 300.  But this result cannot be stored
-in a register!  So what actually gets stored is the result modulo
-256--in this case, 44.  But the fact that we wrapped around like this
-is not lost--it is stored by setting one of the flags in the sreg.
-This situation, where the value we need to store is larger than the
-maximum value we are allowed to store, is called an <b>overflow</b>.
+in a register--it requires 9 bits to store it!  So what gets stored
+instead is the low 8 bits of the result, or in this case, 44.  But the
+missing 9th bit is not lost--it is stored in setting one of the flags
+in the sreg.  This particular situation, where the result of an
+operation requires more bits to store than we have available, is
+called an <b>overflow</b>.
 </p>
 
 <p>The 8 flags of the sreg are, in order, called I, T, H, S, V, N, Z,
-C, of which only three really come up in everyday use as important,
-and the other 5 of which we will not discuss here.  These three
-relevant flags are:
+C.  Of these, we shall only really consider three:
 
 <ul><li>The C flag, which generally gets set if there was an addition
 or subtraction operation involved with the instruction and that
@@ -476,13 +479,13 @@ the addition/subtraction was a negative number.  The above addition
 would clear the N flag.  </li>
 </ul>
 
-We use the word 'generally' in all of these descriptions, because
+We use the word "generally" in all of these descriptions, because
 there are exceptions, and when introducing each instruction, we'll
 explain precisely how it affects these three flags.</p>
 
 <p>In the event that an instruction doesn't perform an arithmetic
-operation, say, the flags to not get changed, but rather remain what
-they were before the instruction was executed.</p>
+operation, say, the flags do not get changed but rather remain as
+whatever they were before the instruction was executed.</p>
 
 </text>
 </section>

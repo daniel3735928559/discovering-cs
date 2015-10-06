@@ -74,6 +74,7 @@ app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$doc
 		    new_quest.problems.push(p);
 		    new_quest.programs.push(l[i].getElementsByTagName("program")[0].innerHTML.replace(/&gt;/g,">").replace(/&lt;/g,"<"));
 		}
+		$scope.userdata.current_problem = 0;
 		$scope.quests.push(new_quest);
 		console.log("QS",$scope.quests);
 		$scope.quest = new_quest;
@@ -88,6 +89,7 @@ app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$doc
     }
     $scope.update_sim = function(){
 	console.log($scope.pycontrol);
+	console.log($scope.quest);
 	if($scope.pycontrol.set_program && $scope.quest && ($scope.quest.problems[$scope.userdata.current_problem].type == "python" || $scope.quest.problems[$scope.userdata.current_problem].type == "advpython"))
 	    $scope.pycontrol.set_program($scope.quest.programs[$scope.userdata.current_problem]);
 	if($scope.avrcontrol.set_program && $scope.quest && $scope.quest.problems[$scope.userdata.current_problem].type == "avr")
