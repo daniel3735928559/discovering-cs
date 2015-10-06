@@ -2549,6 +2549,13 @@
 
 						if (assignee.type === 'Identifier') {
 							exec(node.right, function(rightValue) {
+								if (rightValue.isType(ValueType.NONE)) {
+									throw node.right.error({
+										type: ErrorType.TYPE_VIOLATION,
+										message: 'Cannot use value None in an assignment',
+									});
+								}
+
 								// normal assignment to identifier
 								scope.set(assignee, rightValue);
 
@@ -2570,6 +2577,13 @@
 											} else {
 												// negative index (index telative to end of array)
 												exec(node.right, function(rightValue) {
+													if (rightValue.isType(ValueType.NONE)) {
+														throw node.right.error({
+															type: ErrorType.TYPE_VIOLATION,
+															message: 'Cannot use value None in an assignment',
+														});
+													}
+
 													if (subscriptValue.value < 0) {
 														rootValue.value[rootValue.value.length + subscriptValue.value] = rightValue;
 													} else {
@@ -2907,7 +2921,18 @@
 								var popped = loadedBlocks.pop();
 
 								if (typeof popped.return === 'function') {
-									popped.return(null);
+									if (popped.returnTo !== null) {
+										// pop scope
+										scope = scope.parent;
+
+										popped.returnTo.script = function() {
+											// return data once interpreter has returned to the called expression
+											popped.return(new Type.None());
+											event('scope', [scope.toJSON()]);
+										};
+
+										loadedBlocks[loadedBlocks.length - 1].statements.unshift(popped.returnTo);
+									}
 
 									done();
 									return;
