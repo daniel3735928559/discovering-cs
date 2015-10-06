@@ -802,7 +802,7 @@ Thus d is assigned the value 2.</p>
 	  <python>def f(x):
    y = x*x
    return x + y*y
-print("I'm going to compute something!")
+print("I am going to compute something!")
 print(2*f(3))</python>
 
 	  Let us consider that last line and how it makes sense: it is
@@ -1528,6 +1528,11 @@ print(math.sqrt(input.get_num("Enter x")))</python>
 	  <tr><td><icode>math.sqrt(x)</icode></td><td><icode>x</icode>
 	  is a number whose square root we want to
 	  compute.</td><td>Returns the square root of the argument
+	  <icode>x</icode></td></tr>
+	  
+	  <tr><td><icode>math.floor(x)</icode></td><td><icode>x</icode>
+	  is a number whose floor we want to compute.</td><td>Returns
+	  the largest integer not greater than the argument
 	  <icode>x</icode></td></tr>
 	  
 	  <tr><td><icode>math.distance(x1,y1,x2,y2)</icode></td><td><icode>x1</icode>
@@ -2526,7 +2531,7 @@ def read_files(names):
    return files
 
 def file_to_array(text):
-   return string.split(string.simplify(file_text)," ")
+   return string.split(string.simplify(text)," ")
 
 def search_file(word,word_list):
    if(word == "words" or word == "from" or word == "one"):
@@ -2558,6 +2563,24 @@ while(i &lt; len(index)):
       print(filenames[i])
    i = i+1</python>
 
+	</p>
+
+	<p>As a note, if we were unsure about whether
+	<icode>file_to_array</icode> worked as intended, we could
+	always pull it out and test it separately with a small code
+	snippet like:
+
+	<python>import string
+def file_to_array(text):
+   return string.split(string.simplify(text)," ")
+
+print(file_to_array("Hello!  I am Bob, and this is my pet kangaroo."))</python>
+
+        and observe that what happens matches our expectations.  <def
+        term="testability">This is an element of maintainability
+        called <b>testability</b>: The ability to test that your code
+        works as intended not just by testing it all at once, but by
+        taking out pieces and testing them individually.</def>
 	</p>
 	
 	<p><b><icode>search_file: </icode></b>Finally, the
@@ -2995,10 +3018,68 @@ while(i &lt; len(dirs)):
  </text>
       </section>
     </section>
-    <!-- <section> -->
-    <!--   <title>Real-life Python versus Simulator Python</title> -->
-    <!--   <text> -->
-    <!--   </text> -->
-    <!-- </section> -->
+    <section>
+      <title>Real-life Python versus Simulator Python</title>
+      <text>
+	<p>We've provided the inline simulator in this text for the
+	ease of readers who are first getting into programming and/or
+	have no prior programming experience.  It is worth mentioning,
+	then, that some intentional simplifications have been made to
+	the Python language in the browser-simulated version compared
+	to Python as it exists in the wild.  </p>
+	
+	<p>There are many small examples--we have disallowed
+	multiplying integers and strings, whereas Python is very happy
+	to evaluate <icode>2+"hello"</icode> to mean
+	<icode>"hellohello"</icode>.  Python also includes a
+	<icode>//</icode> operator for performing integer
+	division.</p>
+
+	<p>There are also corner-cases where the simulated Python will
+	behave slightly differently than real-world Python regarding
+	scopes.</p>
+
+	<p>One of the largest features of actual Python that we
+	omitted is an organizational tool called "object-oriented
+	programming".  We talked some about the advantages of
+	splitting code into smaller functions earlier, and
+	object-oriented programming is one paradigm that takes this
+	modularization of code to the next level, with all the
+	advantages that it can bring.</p>
+	
+	<p>The largest actual difference (as opposed to ommision)
+	between our simplified version and Python as it is used in the
+	real world, however, is the modules we've provided.  Analogues
+	of these modules do exist in real-world Python, but they do
+	not all behave exactly as the ones we have included here.
+	Some of them, such as the module for accessing Google maps,
+	have many more features that make them more useful (for
+	example, if you want to get walking directions instead of just
+	driving directions), but also correspondingly more complex, so
+	we have created and presented simplified versions here to
+	avoid this complexity (as well as avoiding the sometimes
+	arcane procedures required to install some of these
+	modules).</p>
+	
+	<p>Otherwise, however, the language you have learned reflects
+	the basics of the actual Python language pretty closely, and
+	the programming concepts and techniques all very much apply to
+	all kinds of real-world programming, Python and otherwise.  So
+	go forth and write efficient, scalable, maintainable, readable
+	programs, making trade-offs where necessary and commenting
+	your code!</p>
+
+	<p>In the meanwhile, now that we've seen more convincing
+	examples of complex systems being built using Python, we are
+	ready to peer into the next levels of abstraction: How are
+	these complex commands we are writing actually being run by a
+	physical machine?  And what is happening inside these
+	mysterious modules?  We might believe that math.sqrt is just
+	another Python function we could have written, but what about
+	file.read?  What's actually happening there?  These questions
+	and more will be answered as we proceed onward down to the ISA
+	level in our tower of abstractions.</p>
+      </text>
+    </section>
     
 </section>    

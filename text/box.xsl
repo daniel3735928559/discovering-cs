@@ -155,7 +155,7 @@
   <xsl:template match="python">
     <xsl:if test="$print!='yes'">
       <xsl:variable name="prog" select="text()" />
-      <sim-py text="'{$prog}'" reset="yes" simid="{count(preceding::python)}" template="/lib/spy/simpy.html"><xsl:apply-templates /></sim-py>
+      <sim-py text="'{$prog}'" reset="yes" size="auto" simid="{count(preceding::python)}" template="/lib/spy/simpy.html"><xsl:apply-templates /></sim-py>
       <!-- <div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}"> -->
       <!-- </div> -->
     </xsl:if>
