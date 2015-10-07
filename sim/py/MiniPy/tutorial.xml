@@ -7,8 +7,8 @@ y = 4
 		</program>
 		<text>
 			<p>First things first, let's learn how to use this thing. Observe the code in the editor to the right.</p>
-			<p>Press [run] to start running the program. While the program is running, the program cannot be modified. Press [step] (or use Shift+S) to advance through the program. Note how the variables change as you do so.</p>
-			<p>The program will stop running either when you step through the last instruction or when you press [end] (or use Shift+E), at which point you can modify the program again.</p>
+			<p>Press [run] to start running the program. While the program is running, the program cannot be modified. Press [step] to advance through the program. Note how the variables change as you do so.</p>
+			<p>The program will stop running either when you step through the last instruction or when you press [end], at which point you can modify the program again.</p>
 			<p>To make the step button take more steps at once, enter a higher number in the box next to it.</p>
 		</text>
 	</q>
