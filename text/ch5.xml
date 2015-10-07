@@ -3373,12 +3373,12 @@ brne loop_start</code>
   <p><b>Introduction: </b></p>
   
   <p>Suppose we have two strings somewhere in RAM, say at addresses
-  200 and 650 respectively.  That is, RAM looks like:</p>
+  200 and 650 respectively.  
 
-  <figure><description>RAM with two strings at the specified
-  addresses</description><caption></caption></figure>
+  <!-- <figure><description>RAM with two strings at the specified -->
+  <!-- addresses</description><caption></caption></figure> -->
   
-  <p>Maybe the user typed one of them in and the other is a username, and
+  Maybe the user typed one of them in and the other is a username, and
   we want to see if they match in order to, say, authenticate the
   user as having that username.  In Python we could just do something
   like:
@@ -3603,17 +3603,17 @@ cpi
 
 </text></section>
 
-<section><title>Game console -- Integer overflow</title>
-<text>
-  <p><b>Introduction: </b></p>
+<!-- <section><title>Game console: Integer overflow</title> -->
+<!-- <text> -->
+<!--   <p><b>Introduction: </b></p> -->
 
   
 
-  <p><b>Algorithm: </b></p>
+<!--   <p><b>Algorithm: </b></p> -->
   
-  <p><b>Program: </b></p>
+<!--   <p><b>Program: </b></p> -->
 
-</text></section>
+<!-- </text></section> -->
 
 
 </section>
