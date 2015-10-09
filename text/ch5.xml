@@ -20,29 +20,28 @@
       </figure>
 
       <p>We have learned to program a computer using Python.  But the
-      computer is a machine, and for reasons we will get into in this
-      chapter, it is very hard to build a machine that understands
-      Python.  The language that the computer itself actually
-      understands is called the ISA.  </p>
+      computer is a machine, and it is very hard to build a machine
+      that understands Python.  So there is a simpler language, called
+      the ISA, that is well-suited to being understood by a machine,
+      which will be the language the computer actually understands.
+      That is, the ISA is the computer's true interface.
+      </p>
 
       <p>As such, the ISA will finally truly answer the question "How
       does one program a computer?".  We can program a computer in
       Python, but in a sense we're not programming the computer
       directly--we're letting a compiler program the computer by
       turning our program into an ISA program and handing that off to
-      the computer.</p>
+      the computer.  </p>
 
-      <p>The ISA consists of the actual commands that the computer can
-      execute, and as such is the computer's interface.  In this
-      chapter, we will explore it in detail and understand how to
-      program in the ISA directly.  </p>
-
-      <p>This will be critically important for our approach to the
-      second question about how to build a computer.  Since if we're
-      going to build a machine, we have to know what kinds of inputs
-      the machine should accept and what it should do with them--the
-      machine's interface.  So knowing the ISA will tell us exactly
-      how the machine we want to build should behave.</p>
+      <p>In this chapter, we will explore the ISA in detail and
+      understand how to program using it directly.  This will be
+      critically important for our approach to the second question
+      about how to build a computer, since if we're going to build a
+      machine, we have to know what kinds of inputs the machine should
+      accept and what it should do with them: the machine's interface.
+      So knowing the ISA will tell us exactly how the machine we want
+      to build should behave.</p>
     </text>
     </section>
     
@@ -50,24 +49,17 @@
         <title>What is an ISA?</title>
     <text>
 
-<p>As we come to the study of the computer itself, we intend to
-describe two things: The computer's interface and its implementation.
-We have already described one method for interacting with a
-computer--the Python programming language.  Up to now, this has been
-our interface to the computer.  However, as we said in chapter 1 and
-as the diagram suggests, Python is not the interface to the computer
-itself, but only to the compiler, which in turn interacts with the
-computer via its actual interface.  </p>
-
-<p>Indeed, Python has a number of features that make it inappropriate
-as an interface for an actual computer: A computer is a physical
-machine, with various actual physical components, like finite storage
-space and limited computation circuits.  In contrast, Python allowed
-us to assume things like: 
+<p>We have already described one method for interacting with a
+computer--the Python programming language.  So why couldn't Python be
+the computer's interface?  It turns out that Python has a number of
+features that make it inappropriate for this purpse: A computer is a
+physical machine, with various actual physical components, like finite
+storage space and limited computation circuits.  In contrast, Python
+allowed us to assume things like:
 
 <ul><li>We have essentially infinite memory that we can access at
 will: Python doesn't specify a limit on how many variables we can
-have or how large an array can be.  </li> 
+have, or how large an array can be.  </li> 
 
 <li>We can access memory using our chosen variable names without
 worrying about precisely which slots in memory we are using: In Python
@@ -82,7 +74,7 @@ computer are actually made up of bits, and that any memory slot in a
 computer tends to have a fixed number of bits, we cannot expect that
 storing small numbers requiring 8 bits to be the same as storing large
 numbers that require 100 bits.  Python, however, allowed us to ignore
-this subtlety.</li></ul></p>
+this distinction altogether.</li></ul></p>
 
 <p>So Python is not a suitable language to be understood directly by a
 physical machine.  In this chapter, we will introduce the native
@@ -97,11 +89,13 @@ infinite memory whose slots can be given names and can store huge
 numbers or even text, as Python might have us believe, but we'll have
 some finite memory whose slots can be accessed by a numerical address
 and which can store numbers up to some bound.  </def></li>
+
 <li>The <b>instruction set</b>--that is, the list of instructions the
 computer understands.  These will be specified in terms of the
 architecture.  For example, the computer will have several different
 memories, and there will be an instruction that takes the value from
 one memory and adds it to the value stored in another memory.</li>
+
 <li>The <b>encoding</b>.  In this chapter, we'll learn about the
 instructions using a human-readable notation.  For instance, the add
 instruction applied to certain memory slots could be written
@@ -114,8 +108,8 @@ computer reads its instructions, it cannot read them as mnemonics--it
 can't literally look at these letters and figure out what to do.
 Remember that computers deal only in numbers, and so our machine
 requires that the instructions be given to it as numbers.  The ISA
-also includes a scheme for corresponding instructions to numbers
-suitable for storage in a computer.  This scheme is called the
+therefore also includes a scheme for corresponding instructions to
+numbers suitable for storage in a computer.  This scheme is called the
 encoding of the instructions.  For example, we will see later that the
 above instruction corresponds to the number 3794, and what the
 computer actually stores in place of this add instruction as part of a
