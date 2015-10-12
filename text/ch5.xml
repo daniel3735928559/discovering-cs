@@ -264,7 +264,6 @@ the memories are used for: </p>
 <p>
 <table><tr><td><b>Memory: </b></td><td>RAM</td><td>Program Memory (PM)</td><td>Register file (RF)</td><td>PC</td><td>SREG</td><td>I/O registers</td></tr>
 <tr><td><b>Width: </b></td><td>8</td><td>16</td><td>8</td><td>16</td><td>8</td><td>8</td></tr>
-<tr><td><b>Allowed values: </b></td><td>0-255</td><td>0-65535</td><td>0-255</td><td>0-65535</td><td>0-255</td><td>0-255</td></tr>
 <tr><td><b>Size: </b></td><td>65536</td><td>65536</td><td>32</td><td>1</td><td>1</td><td>various</td></tr>
 <tr><td><b>Speed: </b></td><td>Slow</td><td>Slow</td><td>Very fast</td><td>Very fast</td><td>Very fast</td><td>various</td></tr>
 <tr><td><b>Editable by instructions: </b></td><td>Yes</td><td>No</td><td>Yes</td><td>Sort of</td><td>Sort of</td><td>Sometimes</td></tr>
@@ -301,13 +300,14 @@ This means that RAM is relatively slow (emphasis on the
 per second).</p>
 
 <p>In an AVR computer, RAM will be a memory of width 8 (that is, it
-can store numbers 0-255) and have size 65536--that is, it can store
-65536 of these numbers, with addresses 0-65535 (in practice, cheaper
-models of AVR chips will have less RAM available, but we'll proceed
-assuming we have the full-size RAM of size 65536).  There is a small
-caveat that in many AVR computers, the first 96 slots in RAM are given
-special meaning and reserved, so you should not use any of these slots
-for storing values.</p>
+can store numbers 0-255 (if viewed as non-negative representations) or
+-128-127 (if viewed as two's complement)) and have size 65536--that
+is, it can store 65536 of these numbers, with addresses 0-65535 (in
+practice, cheaper models of AVR chips will have less RAM available,
+but we'll proceed assuming we have the full-size RAM of size 65536).
+There is a small caveat that in many AVR computers, the first 96 slots
+in RAM are given special meaning and reserved, so you should not use
+any of these slots for storing values.</p>
 
 <p><def term='non-persistent'>RAM is a <b>non-persistent</b> memory,
 meaning that when you turn off power to the computer, anything stored
@@ -791,7 +791,7 @@ registers 16-31 (which is more arbitrary-sounding at this point and
 will be discussed when we talk about instruction encoding).  So the
 syntax is:
 
-<code>ldi [general purpose register r16-r31],[number 0-255]</code>
+<code>ldi [general purpose register r16-r31],[8-bit number]</code>
 
 And the semantic meaning of this instruction is what it does to the
 architecture:
@@ -818,9 +818,21 @@ are both not legal ISA instructions--the first because we said ldi can
 only load into registers 16-31, and the second because we said ldi can
 only load values 0-255 into those registers.  </p>
 
-<p>But say we want to put a value into r10--what then?  We cannot use
-ldi, but we can copy a value from one register into another using a
-second instruction--the "move" instruction, called mov.  This
+<p>ldi will accept any valid 8-bit number, so for example, -1 is valid
+(as it can be represented as 8-bit two's complement), and 255 is valid
+(as it can be represented with an 8-bit non-negative representation).
+In fact, the 8-bit representations for -1 and 255 are both 11111111 so
+the two instructions:
+
+<code>ldi r19,255
+ldi r19,-1</code>
+
+Do exactly the same thing.</p>
+
+<p>But say we want to put a value into r10.  ldi only lets us load
+into registers r16 and up, so what then?  We cannot use ldi, but we
+can copy a value from one register into another using a second
+instruction--the "move" instruction, called <icode>mov</icode>.  This
 instruction accepts any pair of general-purpose registers for its two
 operands, and will copy the value in the second operand register into
 the first.  So, for example, if we did want to get the number 9 into
@@ -856,7 +868,7 @@ r10 to 9.
 <td><pre>ldi</pre></td>
 <td>Load immediate</td>
 <td><pre>reg 16-31</pre></td>
-<td><pre>value 0-255</pre></td>
+<td><pre>8-bit value</pre></td>
 <td><pre>op1 = op2</pre></td>
 <td><pre>pc: increment
 sreg: unchanged</pre></td>
@@ -893,9 +905,10 @@ be used like, for example:
 This will load a value from RAM into the register r14.  But which
 value?  In AVR, 'X' is a notation which stands for the value
 
-<code>r26 + 256 * r27</code>
+<code>256 * r27 + r26</code>
 
-(Recall that in chapter 4 we had a notation for this value: r26:r27.)</p>
+with r26 adn r27 interpreted as non-negative integers.  (Recall that
+in chapter 4 we had a notation for this value: r27:r26.)</p>
 
 <p>Note that the biggest r26 and r27 can be is 255, so the biggest X
 can be is 255+256*255 = 65535.  This is good, since that is the
@@ -908,30 +921,42 @@ ldi r27, 255
 ld r10, X</code></p>
 
 <p>This scheme allows us to read from any of the addresses 0-65535 in
-RAM.  For example, to read from slot 10001, we can do
+RAM.  For example, to read from slot 10001, we first have to compute
+that 10001 = 39:17 (as 39 * 256 + 17 = 10001) and then we can do
 
 <code>ldi r26, 17
 ldi r27, 39
-ld r10, X</code>
+ld r10, X</code></p>
 
-since 
+<p>
+This notation for the combination of r26 and r27 has analogues for
+r28-r31 called Y and Z (not to be confused with the sreg's Z flag,
+which is different but sadly has the same name).  Specifically, Y =
+r29:r28, and Z = r31:r30.  So we could as well do:
 
-<code>17 + 256*39 = 10001</code></p>
+<avrasm>ldi r26, 17
+ldi r27, 39
+ldi r30, 17
+ldi r31, 39
+ld r10, X
+ld r11, Z</avrasm>
+</p>
 
-<p>Complementary to this is the st--or 'store into RAM' instruction.
-The first operand for this is again always X, and the second is the
-register whose value we want to store at address X.  Thus, to store
-the value 200 into RAM at address 999, we can do:
+<p>Complementary to ld is the st--or "store into RAM"--instruction.
+The first operand for this is again X, Y, or Z, and the second is the
+register whose value we want to store at the given address.  Thus, to store
+the value 200 into RAM at address 999, we compute that 999 = 3*256 +
+231 and can do, for example using Y this time:
 
-<code>ldi r26, 231
-ldi r27, 3
+<code>ldi r28, 231
+ldi r29, 3
 ldi r19, 200
-st X, r19</code>
+st Y, r19</code>
 
-The first two instructions will cause X to be 231 + 256*3 = 999.  The
+The first two instructions will cause Y to be 231 + 256*3 = 999.  The
 third instruction will cause r19 to hold the value 200.  Then the st
 instruction will store whatever's in r19 (in this case 200), into the
-slot with address X (in this case 999).  </p>
+slot in RAM with address Y (in this case 999).  </p>
 
 <table class='ISA_table'><tr>
 <td>Instruction</td>
@@ -961,6 +986,25 @@ sreg: unchanged</pre></td>
 </tr>
 </table>
 
+<p>To see all of these instructions working together to store some
+values in RAM and in various registers, we can walk through the
+following ISA program:
+
+<avrasm>ldi r30,-1
+ldi r31,-1
+ldi r19,112
+st Z,r19
+ldi r28,232
+ldi r29,3
+st Y,r28
+mov r26,r28
+mov r27,r29
+st X,r19
+ld r15,X
+ld r0,Y
+ld r31,Z</avrasm>
+</p>
+
 <p>One convention that we see in use in these instructions, and which
 will be common in the instructions that follow, is that when an
 instruction takes two operands, the first operand is the one that gets
@@ -969,18 +1013,19 @@ One could read
 
 <code>ldi r19,129</code>
 
-as 'load into r19 the value 129'.  Here, r19 is the value being
-modified, and 129 is the value we are using to modify it.  Likewise, 
+as "load into r19 the value 129".  Here, r19 is the value being
+modified, and 129 is the value we are using to modify it.  Likewise,
 
 <code>st X, r5</code>
 
-could be read 'store into RAM address X the value in r5'.  Once again,
+could be read "store into RAM address X the value in r5".  Once again,
 the first operand--X--describes what is being modified, and the second
 operand is where the modification comes from.  </p>
 
 <p><def term='destination'>For this reason, the first operand is often
-referred to as the instruction's <b>destination</b></def>, <def
-term='source'>and the second operand as the <b>source</b>.</def></p>
+referred to as the instruction's <b>destination operand</b></def>,
+<def term='source'>and the second operand as the
+<b>source operand</b>.</def></p>
 
 </text></section>
 <section><title>Computation</title>
@@ -1036,7 +1081,7 @@ the Z, C, and N flags.
   <li>Z flag: Most simply, the Z flag is set to 1 if the result of the
   operation is 0, and set to 0 otherwise.  Note that it is possible
   for the result of an add operation to be 0: If we do 255+1 where the
-  two values being added are 8-bit integers, then the result will be
+  two values being added are 8-bit non-negative integers, then the result will be
   256, which in binary is 100000000.  The value that gets stored as
   the result of this, then, is the last 8 bits, or 00000000,
   representing an answer of 0.  </li>
@@ -1044,7 +1089,9 @@ the Z, C, and N flags.
   carried over to the 9th bit.  There is no 9th bit in the destination
   register, of course, so this 9th bit is stored in the C flag.  So in
   the example of 255+1, the 9th bit is set to 1, i.e. the C flag will
-  be set to 1.</li>
+  be set to 1.  In general, the C flag gets set if the addition,
+  interpreted as non-negative integers, gave a result greater than
+  255.</li>
   <li>N flag: The N flag is set to 1 if the result of the operation
   would be a negative number if it is interpreted as an 8-bit two's
   complement number.  In other words, if in the result, the most
@@ -1067,7 +1114,7 @@ the Z, C, and N flags.
 <td><pre>reg</pre></td>
 <td><pre>op1 = op1 + op2</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: set if op1 + op2 &gt; 255</pre></td>
 </tr>
@@ -1078,7 +1125,7 @@ C: set if op1 + op2 &gt; 255</pre></td>
 <td><pre>reg</pre></td>
 <td><pre>op1 = op1 - op2</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: set if op1 - op2 &gt; 255</pre></td>
 </tr>
@@ -1131,9 +1178,9 @@ There is similarly a decrement instruction called dec for subtracting 1.  </p>
 <td><pre>[None]</pre></td>
 <td><pre>op1 = op1 + 1</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
-C: set if op1 + 1 &gt; 255</pre></td>
+C: unchanged</pre></td>
 </tr>
 <tr>
 <td><pre>dec</pre></td>
@@ -1142,19 +1189,21 @@ C: set if op1 + 1 &gt; 255</pre></td>
 <td><pre>[None]</pre></td>
 <td><pre>op1 = op1 - 1</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative 
 Z: set if result is 0
-C: set if op1 - 1 &gt; 255</pre></td>
+C: unchanged</pre></td>
 </tr>
 </table>
 
 <p>Similarly to add and sub for arithmetic operations, we have
-operations for performing the boolean operations we described at the
-end of chapter 4: and, or, xor, and not.  These behave entirely
-analogously except that they do not modify the C flag and the minor
-note that the operation performing the XOR operations is called "eor"
-instead (the AVR ISA designers preferred "eor" to stand for "exclusive
-or" than "xor").</p>
+operations for performing the bitwise boolean operations we described
+at the end of chapter 4: and, or, xor, not, and shifting.  These
+behave entirely analogously except that they do not modify the C flag
+and the minor note that some of them have different names: The
+operation performing the XOR operations is called "eor" instead (the
+AVR ISA designers preferred "eor" to stand for "exclusive or" than
+"xor"), the "NOT" operation is called "com" (short for "1's
+complement"), and the right-shift operation is called "asr":</p>
 
 <table class='ISA_table'><tr>
 <td>Instruction</td>
@@ -1171,7 +1220,7 @@ or" than "xor").</p>
 <td><pre>reg</pre></td>
 <td><pre>op1 = op1 &amp; op2</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: unchanged</pre></td>
 </tr>
@@ -1182,7 +1231,7 @@ C: unchanged</pre></td>
 <td><pre>reg</pre></td>
 <td><pre>op1 = op1 | op2</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: unchanged</pre></td>
 </tr>
@@ -1193,22 +1242,57 @@ C: unchanged</pre></td>
 <td><pre>reg</pre></td>
 <td><pre>op1 = op1 ^ op2</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: unchanged</pre></td>
 </tr>
 <tr>
-<td><pre>not</pre></td>
+<td><pre>com</pre></td>
 <td>Not</td>
 <td><pre>reg</pre></td>
 <td><pre>[none]</pre></td>
 <td><pre>op1 = ~op1</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: unchanged</pre></td>
 </tr>
+<tr>
+<td><pre>asr</pre></td>
+<td>Shift right by 1</td>
+<td><pre>reg</pre></td>
+<td><pre>[none]</pre></td>
+<td><pre>op1 = op1 >> 1</pre></td>
+<td><pre>pc: increment
+N: set if result is negative
+Z: set if result is 0
+C: set if op1 was odd</pre></td>
+</tr>
 </table>
+
+<p>Once again, we leave an example here for you walk through.  Pay
+particular attention to the evolution of the sreg flags: 
+
+<avrasm>ldi r31,-1
+mov r0,r31
+ldi r29,2
+ldi r28,1
+ldi r27,30
+ldi r16,10
+ldi r17,5
+eor r16,r17  ; Compute 10 ^ 5
+add r31,r29  ; Compute -1 + 2
+add r0,r28   ; Compute -1 + 1
+and r16,r27  ; Compute 15 &amp; 30
+ldi r31,255
+add r31,r28  ; Compute 255 + 1
+ldi r30,0
+ldi r31,1
+sub r30,r31  ; Compute 0 - 1
+ldi r20,127
+inc r20  ; Compute 127 + 1
+dec r20  ; Compute 128 - 1</avrasm>
+</p>
 
 <p>Worth noting is that all these computation instructions act only on
 registers.  This is standard--if we are going to be operating on some
@@ -1244,7 +1328,7 @@ instruction, whose first operand is the register into which we will
 store the value we read, and whose second operand is the number of the
 I/O register we want to read.  Recall there are 64 I/O registers, so
 this is any number 0-63, (though we are only interested in this text
-in I/O registers numbered 16, 17, and 18).  </p>
+in a small number of the I/O registers).  </p>
 
 <p>Thus, 
 
@@ -1290,14 +1374,14 @@ out 18, r30</code>
 Recall according to the architecture, this may not actually affect the
 output on all the port D pins, but only those that are set to output
 mode.  If we want to set all the pins to output mode, we have to write
-a number that is all 1s in binary--i.e. 255--to the DDRD I/O register,
-or I/O register 17.  Now that we have the out instruction, we can do
-this:
+a number that is all 1s in binary--i.e. 255 (or -1)--to the DDRD I/O
+register, or I/O register 17.  Now that we have the out instruction,
+we can do this:
 
-<code>ldi r30, 255
-out 26, r30
-ldi r30, 100
-out 27, r30</code>
+<code>ldi r30,255
+out 17,r30
+ldi r30,100
+out 18,r30</code>
 
 </p>
 
@@ -1328,6 +1412,14 @@ sreg: unchanged</pre></td>
 sreg: unchanged</pre></td>
 </tr>
 </table>
+
+<p>Now, what happens as a result of the output depends on what kind of
+device is connected to the pins.  For now, there are only two devices
+connected: The least significant 7 pins are connected to a screen that
+will output whatever number it sees (interpreted as a 7-bit
+non-negative integer), and the top pin is connected to a switch that
+can be either on or off.  </p>
+
 </text></section>
 <section><title>Flow-control</title>
 <text>
