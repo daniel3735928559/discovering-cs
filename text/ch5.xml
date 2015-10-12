@@ -139,7 +139,7 @@ still a modern processor with many features.</def> </p>
 which contains an ARM processor, as well as an accelerometer chip (as
 we've been describing) and several other modules for controlling the
 touch screen, accessing the internet, and connecting to the cellular
-network..</caption></figure>
+network.</caption></figure>
 
 <p>It turns out that while modern processors have way too many
 features for us to describe in this text, most of the advanced
@@ -168,14 +168,15 @@ instructions from mnemonics and have extra features that make writing
 the instructions a bit easier.  These extra features take the form of
 assembler <b>directives</b>.  For instance, if you want an instruction
 repeated 32 times, you don't have to write the instruction 32 times,
-but can write a directive preceding the instruction that will tell
-the assembler to make 32 copies of the instruction for you.</def> <def
+but can write a directive preceding the instruction that will tell the
+assembler to make 32 copies of the instruction for you.</def> <def
 term='assembly language'>The language that the assembler understands
 is a programming language called <b>assembly language</b>.  The ISA
 instructions are a huge part of assembly language, but as we
 mentioned, there are is a small part beyond that consisting of the
-assembler directives which make it slightly more concise than just
-using the ISA instructions themselves.</def></p>
+<b>assembler directives</b> which make assembly language very slightly
+more concise than just using the ISA instructions
+themselves.</def></p>
 
 <p>In this chapter, we will start by discussing the AVR architecture (5.1) and
 instruction set (5.2 for basic instructions, 5.3 for more complicated ones),
@@ -240,15 +241,13 @@ numbers, each of which is 8 bits, as in:
 <tr><td>Slot 65535: </td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </table>
 
-<p>This gives an idea of what RAM might look like at any given
-time--65536 slots, each of which consists of 8 bits, populated with
-some random values depending on what the computer is doing.  <def
-term="address">In this picture, we have numbered each of the 65536
-slots as 0-65535.  In general, we will use such a numbering to refer
-to which slot in a memory we are talking about.  The number
+<p><def term="address">In this picture, we have numbered each of the
+65536 slots as 0-65535.  In general, we will use such a numbering to
+refer to which slot in a memory we are talking about.  The number
 corresponding to a slot is called the slot's <b>address</b>.</def> In
 this example, address 1 in RAM contains the value 10100011,
-representing the number 163.</p>
+representing the number 163 (or, if it's being used as a two's
+complement representation, the number -93).</p>
 
 <p>Of course, like all parts to the computer, RAM is actually a
 physical thing, so slot 1 actually consists of 8 physical devices each
@@ -257,7 +256,7 @@ third, seventh, and eighth of these actually contain electrons
 (represented by 1s) and the rest do not (represented by 0s).</p>
 
 <p>The computer's architecture consists of several different memories,
-which we describe in terms of width and size, as well as how long
+which we describe in terms of width and size, as well as how much time
 storage operations on the memories take, whether the memories can be
 edited while the computer is running, and what, generally speaking,
 the memories are used for: </p>
@@ -590,24 +589,24 @@ values to I/O registers, etc.</p>
 program that runs the 3x+1 procedure on the number 20, this time using
 AVR instructions: </p> 
 
-<code>ldi r16,20
+<avrasm>ldi r16,20
 ldi r17,1
-out 26,255
-out 27,r16
+ldi r31,-1
+out 17,r31
+out 18,r16
 cp r16,r17
 breq 11
 mov r18,r16
 andi r18,1
 cp r18,r17
 breq 2
-shr r16,1
-rjmp -10
+asr r16
+rjmp -9
 mov r19,r16
 add r19,r19
 add r16,r19
 inc r16
-rjmp -15
-</code>
+rjmp -14</avrasm>
 
 <p>This program is rather opaque, with few clues to what lines of code
 are doing what, but even without entirely understanding what is going
@@ -762,7 +761,9 @@ summaries.</p>
 <p>Now, on to the actual operations.  Recall in Python we had
 essentially three functions each line could perform: Assignment,
 printing, and flow-control.  Here, we will split the ISA instructions
-into four broad categories: 
+into four broad categories (recall these the four types of things we
+claimed a computer can do):
+
 <ul><li><b>Storage</b>, which generalizes the aspect of Python assignment
 where we stored values in memory</li>
 <li><b>Computation</b>, which generalizes the aspect of Python

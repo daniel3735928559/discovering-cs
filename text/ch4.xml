@@ -474,8 +474,7 @@
 	<p><table>
 	  <tr><td>What's left?</td><td>71</td><td>7</td><td>7</td><td>7</td><td>7</td><td>3</td><td>1</td></tr>
 	  <tr><td>Place value</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
-	  <tr><td>Place value is at least as big as what's
-	  left?</td><td>Yes</td><td>No</td><td>No</td><td>No</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+	  <tr><td>Place value &lt; What's left?</td><td>Yes</td><td>No</td><td>No</td><td>No</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
 	  <tr><td>Digit</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
 	</table></p>
 	</answer>
@@ -619,8 +618,8 @@
 	  <tr><td>Digit</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
 	</table></p>
 
-	<p>This means that the number represented is -128 + 64 + 4 + 1
-	= -59.</p></answer>
+	<p>This means that the number represented is -128 + 32 + 4 + 1
+	= -91.</p></answer>
 	</exercise>
 	
 	<p><b>Representing a number using two's complement:</b> </p>
@@ -639,7 +638,7 @@
 	<p><table>
 	  <tr><td>What's left?</td><td>-56</td><td>72</td><td>8</td><td>8</td><td>8</td><td>0</td><td>0</td><td>0</td></tr>
 	  <tr><td>Place value</td><td>-128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
-	  <tr><td>Place value is at least as big as what's left?</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+	  <tr><td>Place value &lt; What's left?</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
 	  <tr><td>Digit</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 	</table></p>
 
@@ -659,7 +658,7 @@
 	<p><table>
 	  <tr><td>What's left?</td><td>-56</td><td>8</td><td>8</td><td>8</td><td>0</td><td>0</td><td>0</td></tr>
 	  <tr><td>Place value</td><td>-64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
-	  <tr><td>Place value is at least as big as what's left?</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+	  <tr><td>Place value &lt;= What's left?</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
 	  <tr><td>Digit</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 	</table></p>
 
@@ -736,27 +735,39 @@
       exponent, 2.  If we wanted a smaller number like .005329, all
       we have to do is change the exponent to, in this case, -3.</p>
 
-      <p><def term="floating point">In a floating point scheme, we
-      use 16 bits (though there are variants for larger numbers of
+      <p><def term="floating point">In a <b>floating point</b> scheme,
+      we use 16 bits (though there are variants for larger numbers of
       bits).  We use the first bit of these as a sign bit exactly as
-      in the sign bit scheme.  The next 5 will represent an integer
-      in two's complement between -16 and 15 that will serve as the
-      exponent.  And because we're working in binary, this exponent
-      will be the power of 2 to multiply by, rather than a power of
-      10.  The remaining 10 bits will represent a fixed-point binary
-      number, with the point after the first digit.</def></p>
+      in the sign bit scheme.  The next 5 will represent a
+      non-negative integer that will be called the exponent.  (And
+      because we're working in binary, this exponent will tell us the
+      power of 2 to multiply by, rather than a power of 10.)  The
+      remaining 10 bits will represent a fixed-point binary number,
+      called the "fraction", with the point just before the first
+      digit.  Then the formula is:
 
-      <p>This is all explained best, perhaps, in an example: </p>
+      <code>Number represented = (sign) * 2<sup>exponent - 15</sup> * (1+fraction)</code></def></p>
 
-      <figure width="400px"><caption>The number -.0015869140625 expressed in
-      floating point</caption></figure>
+      <p>This is all explained best, perhaps, in an example: We will
+      represent the number </p>
+      
+      <!-- <figure width="400px"><caption>The number -.0015869140625 expressed in -->
+      <!-- floating point</caption></figure> -->
 
+      <table>
+	<tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td><pre>sign = -1</pre></td><td colspan="5"><pre>exponent = 12</pre></td><td colspan="10"><pre>fraction = .0011 = .1875</pre></td></tr>
+      </table>
+      
       <p>The first bit is 1, so the number is negative.  The next 5
-      bits, treated as a two's complement integer, represent the
-      number -10, and the fixed-point number represented by the last
-      10 bits is, in binary, 1.101, (1.625 in decimal).  So the real
-      number represented is -(2<sup>-10</sup>)(1.625) =
-      -.0015869140625.  </p>
+      bits, treated as a non-negative integer, represent the number
+      12, and the fixed-point number represented by the last 10 bits
+      is, in binary, .0011, (.1875 in decimal).  So the decimal real
+      number being represented by this binary string is:
+      
+      <code>(-1) * (2<sup>12-15</sup>)(1 + .1875) = -.1484375</code>
+
+      </p>
 
       <p>This scheme being rather complicated means that the
       procedure for adding or multiplying two such numbers is also
@@ -765,60 +776,63 @@
       floating point unit (FPU) with circuitry especially for
       handling these operations.</p>
 
-      <warning><p>It also bears mention that the actual scheme that your
-      computer is likely using for floating point numbers differs
-      from the one we have presented here in some technical details.
-      Ours includes all important features of the representation but
-      bears some minor improvements that we do not wish to go into
-      in this text.</p></warning>
+      <p>It is rare to see 16-bit floating point numbers in the wild.
+      More common are 32-bit floating point numbers, which use (as the
+      name suggests) 32 bits instead of 16.  They follow a similar
+      formula:
+
+      <code>32-bit floating point number = (sign) * 2<sup>exponent - 127</sup> * (1+fraction)</code>
+      
+      and use different numbers of bits representing each of the
+      parts: The sign is still one bit, the exponent is now 8 bits, and
+      the fraction is now the remaining 23 bits.</p>
     </text>
     
     <section>
       <title>Worked examples</title>
       <text>
-	<p><b>Decoding a floating point representation:</b> </p>
+	<p><b>Decoding a 16-bit floating point representation:</b> </p>
 	
 	<exercise name="float_decode">
-	  <question>What real number does the word 0001000001100000
+	  <question>What real number does the word 0100001000000000
 	  represent?</question>
 	  <answer>
 
-	  <p>Recall the scheme is: First bit is sign bit; next 5 bit
-	  are two's complement exponent; last 10 bits are fixed-point
-	  base with the point after the first digit.  The represented
-	  number is then: </p>
+	  <p>Recall the scheme is: First bit is sign bit; next 5 bits
+	  are the exponent; last 10 bits are fixed-point fraction with
+	  the point before the first digit.  The represented number is
+	  then: </p>
 
-	  <code>(sign) * 2<sup>(exponent)</sup> * (base)</code>
+	  <code>(sign) * 2<sup>(exponent-15)</sup> * (1 + fraction)</code>
 
 	  <p>The sign bit is 0, so the answer is positive.  The next
-	  five bits represent the exponent in two's complement form.
-	  So we can decode them like any 5-bit two's complement
-	  number:</p>
+	  five bits represent the exponent in unsigned form.  So we
+	  can decode them like any non-negative binary representation:</p>
 	  
 	  <p><table>
-	    <tr><td>Place value</td><td>-16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
-	    <tr><td>Digit</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+	    <tr><td>Place value</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+	    <tr><td>Digit</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
 	  </table></p>
 	
-	  <p>So the exponential part is 2<sup>4</sup>.  </p>
+	  <p>So the exponent is 16.  </p>
 	  
-	  <p>Finally, the base is the fixed-point number 00011 with
+	  <p>Finally, the base is the fixed-point number .1 with
 	  the point after the first digit, i.e: </p>
 	  
 	  <p><table>
-	    <tr><td>Place value</td><td>1</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td></tr>
-	    <tr><td>Digit</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+	    <tr><td>Place value</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td><td>1/32</td></tr>
+	    <tr><td>Digit</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
 	  </table></p>
 
-	  <p>So this represents 1/8 + 1/16 = .1875.  Thus the answer
-	  is 1 * 16 * .1875 = 3</p>
+	  <p>So this represents 1/2 = .5.  Thus the answer
+	  is 1 * 2<sup>16-15</sup> * (1+.5) = 3</p>
 	  </answer>
 	</exercise>
 	
 	<p><b>Representing a number using floating point:</b> </p>
 	
 	<exercise name="float_encode_easy"><question>How to represent
-	the number 7.625 in floating point?</question>
+	the number 7.625 in 16-bit floating point?</question>
 
 	<answer>
 
@@ -827,88 +841,91 @@
 	  base with the point after the first digit.  The represented
 	  number is then: </p>
 
-	  <code>7.625 = (sign) * 2<sup>(exponent)</sup> * (base)</code>
+	  <code>7.625 = (sign) * 2<sup>(exponent-15)</sup> * (1+fraction)</code>
 
 	  <p>The sign bit is 0, as the number is positive.  Now we
-	  need to figure out the exponent and the base.  Because the
-	  base is a fixed point number with only one digit before the
-	  point, it is a number between 0 and 2.  So we are left with
-	  solving:
+	  need to figure out the exponent and the fraction.  Because
+	  the fraction is a fixed point number, it is a number between
+	  1 and 2.  So we are left with solving:
 	  
-	  <code>7.625 = 2<sup>(exponent)</sup> * (base)</code>
+	  <code>7.625 = 2<sup>(exponent-15)</sup> * (1+fraction)</code>
 	  
-	  But the base is between 0 and 2, so
+	  But 1+fraction is between 1 and 2, so
 
-	  <code>7.625 / 2<sup>(exponent)</sup></code>
+	  <code>7.625 / 2<sup>(exponent-15)</sup></code>
 
-	  must be between 0 and 2.  So we need to find an exponent
-	  that will make this true.  Certainly 7.625/8 will be between
-	  0 and 2, so 2<sup>(exponent)</sup> can be 8, i.e., the
-	  exponent is 3.  Writing this in two's complement, we get the
-	  exponent is 00011</p>
+	  must be between 1 and 2.  So we need to find an exponent
+	  that will make this true.  We quickly find that 7.625/4 will
+	  be between 1 and 2, so 2<sup>(exponent-15)</sup> must be 4,
+	  i.e., the exponent is 17.  Writing this in binary, we get
+	  the exponent is 10001.</p>
 
-	  <p>Finally, this means the base must be 7.625/8 = 0.953125
-	  represented using fixed-point with the point after the first
-	  digit.  </p>
+	  <p>Finally, this means the 1+fraction must be 7.625/4 =
+	  1.90625, meaning the fraction must be .90625 represented
+	  using fixed-point with the point before the first digit.
+	  </p>
 
 	  <p>To represent a number in fixed point, we simply work our
 	  way down the place values just as we do for non-negative
-	  integers.  The place values are 1, 1/2, 1/4, 1/8, 1/16, etc.
+	  integers.  The place values are 1/2, 1/4, 1/8, 1/16, etc.
 	  So we go through these in order, taking off that much if we
 	  can (we will not review the meaning of this table
 	  here--revisit the examples for non-negative integers if this
 	  table makes no sense):</p>
 	  
 	  <table>
-	    <tr><td>What's left?</td><td>0.953125</td><td>0.953125</td><td>0.453125</td><td>0.203125</td><td>0.078125</td><td>0.015625</td><td>0.015625</td><td>0</td></tr>
-	    <tr><td>Place value</td><td>1</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td><td>1/32</td><td>1/64</td><td>1/128</td></tr>
-	    <tr><td>Place value in decimal</td><td>1</td><td>0.5</td><td>0.25</td><td>0.125</td><td>0.0625</td><td>0.03125</td><td>0.015625</td><td>0.0078125</td></tr>
-	    <tr><td>Place value is at least as big as what's left?</td><td>No</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td></tr>
-	    <tr><td>Digit</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+	    <tr><td>What's left?</td><td>0.90625</td><td>0.40625</td><td>0.15625</td><td>0.03125</td><td>0.03125</td><td>0</td></tr>
+	    <tr><td>Place value</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td><td>1/32</td><td>1/64</td></tr>
+	    <tr><td>Place value in decimal</td><td>0.5</td><td>0.25</td><td>0.125</td><td>0.0625</td><td>0.03125</td><td>0.015625</td></tr>
+	    <tr><td>Place value &lt;= What's left?</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td></tr>
+	    <tr><td>Digit</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
 	  </table>
 	  
-	  <p>So our base is 0111101000, our exponent is 00011, and our
-	  sign bit is 0.  Thus one possible representation is
-	  0000110111101000.</p>
-
-	  <p>We remark that this is not the only representation.  The
-	  reader is invited to check that 0001000011110100 is another
-	  possible representation of the same fraction.</p>
+	  <p>So our fraction is 11101, our exponent is 10001, and our
+	  sign bit is 0.  Thus the representation is
+	  0100011110100000.</p>
 	  
 	</answer>
 	</exercise>
 	
-	<p><b>Representing a harder number using floating point:</b> </p>
+	<p><b>Representing a harder number using 16-bit floating point:</b> </p>
 	<exercise name="float_encode_hard"><question>How to represent
 	the number 1/3 in floating point?</question>
 
 	<answer>
 
-	  <p>As before, the sign bit is 0.  Because 1/3 is already
-	  between 0 and 2, we can represent it as the base, and the
-	  exponent can simply be 0.  </p>
+	  <p>As before, the sign bit is 0.  1/3 is not between 1 and
+	  2, so we need to multiply it by 2 until it is: 2 * 1/3 is
+	  still not in the range, but 2*2*1/3 = 4/3 is.  So 1+fraction
+	  will have to be 4/3 and the exponent part will have to be
+	  1/4, i.e. 2<sup>-2</sup>.  That is, 2<sup>exponent -
+	  15</sup> must be 2<sup>-2</sup>, so exponent must be 13.  As
+	  a 5-bit non-negative integer, the binary representation of
+	  13 is 01101</p>
 
-	  <p>Now we need to represent this number in fixed point.  We
-	  go through the same table as before:</p>
+	  <p>Now, 1+fraction is 4/3, so fraction is 1/3.  We need to
+	  number in fixed point.  We go through the same table as
+	  before:</p>
 	  
 	  <table>
-	    <tr><td>Place value</td><td>1</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td><td>1/32</td><td>1/64</td><td>1/128</td><td>1/256</td><td>1/512</td></tr>
-	    <tr><td>Place value in decimal</td><td>1</td><td>0.5</td><td>0.25</td><td>0.125</td><td>0.0625</td><td>0.03125</td><td>0.015625</td><td>0.0078125</td><td>.00390625</td><td>.001953125</td></tr>
-	    <tr><td>What's left?</td><td>0.333...</td><td>.333...</td><td>.08333...</td><td>.08333...</td><td>.0208333...</td><td>.0208333...</td><td>.005208333...</td><td>.005208333...</td><td>.00130208333</td><td>.00130208333</td></tr>
-	    <tr><td>Place value is bigger than what's left?</td><td>No</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td></tr>
-	    <tr><td>Digit</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+	    <tr><td>Place value</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td><td>1/32</td><td>1/64</td><td>1/128</td><td>1/256</td><td>1/512</td><td>1/1024</td></tr>
+	    <tr><td>Place value in decimal</td><td>0.5</td><td>0.25</td><td>0.125</td><td>0.0625</td><td>0.03125</td><td>0.015625</td><td>0.0078125</td><td>.00390625</td><td>.001953125</td><td>.0009765625</td></tr>
+	    <tr><td>What's left?</td><td>.333...</td><td>.333...</td><td>.08333...</td><td>.08333...</td><td>.0208333...</td><td>.0208333...</td><td>.005208333...</td><td>.005208333...</td><td>.00130208333...</td><td>.00130208333...</td></tr>
+	    <tr><td>Place value &lt;= What's left?</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+	    <tr><td>Digit</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
 	  </table>
 	  
 	  <p>But at this point we've got 10 digits already for the
-	  base, which is all we are allowed.  However, we didn't get
-	  what was left over all the way down to 0!  So the number we
-	  are representing isn't actually 1/3, but is simply as close
-	  as we can get to it using a 10-bit base.  </p>
+	  fraction, which is all we are allowed.  However, we didn't
+	  get what was left over all the way down to 0!  So the number
+	  we are representing isn't actually 1/3, but is simply as
+	  close as we can get to it using a 10-bit fraction part.  </p>
 	  
-	  <p>For this example, our base is 0010101010, our exponent is
-	  00000, and our sign bit is 0.  Thus one possible
-	  representation that is close to 1/3 is 0000000010101010.
-	  But the actual value of this is only .33203125, rather than
+	  <p>For this example, our fraction is 0010101010, our
+	  exponent is 01101, and our sign bit is 0.  Thus the binary
+	  representation for the 16-bit floating point number that is
+	  as close to 1/3 as we can get is 011010101010101.  But the
+	  actual value of this is only .3330078125, rather than
 	  0.3333333...  </p>
 
 	  <p>This might be a little unnerving, however it shouldn't

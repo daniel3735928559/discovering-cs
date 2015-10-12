@@ -178,7 +178,8 @@
       
   <xsl:template match="avrasm">
     <xsl:if test="$print!='yes'">
-      <div ng-include="'/sim/avr/simavr.html'" ng-repeat="program in ['{text()}']"></div>
+      <xsl:variable name="prog" select="text()" />
+      <sim-avr text="'{$prog}'" size="auto" reset="yes" simid="{count(preceding::avrasm)}" template="/lib/jsavr/simavr.html"></sim-avr>
     </xsl:if>
     <xsl:if test="$print='yes'">
       <div class="code"><pre><xsl:apply-templates /></pre></div>
@@ -283,12 +284,19 @@
 	<script type="text/javascript" src="/sim/cm/codemirror.js"></script>
 	<!-- <script type="text/javascript" src="/sim/py/expr_ng.js"></script> -->
 	<!-- <script type="text/javascript" src="/sim/py/sim.js"></script> -->
-	<link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
-	<script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
-	<script type="text/javascript" src="/lib/spy/sim.js"></script>
-	
+	<xsl:if test="count(//python) > 0">
+	  <link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
+	  <script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
+	  <script type="text/javascript" src="/lib/spy/sim.js"></script>
+	</xsl:if>
+
 	<!-- <script type="text/javascript" src="/sim/avr/sim.js"></script> -->
 	<script type="text/javascript" src="/sim/bin/sim.js"></script>
+
+	<xsl:if test="count(//avrasm) > 0">
+	  <link rel="stylesheet" type="text/css" href="/lib/jsavr/sim.css" />
+	  <script type="text/javascript" src="/lib/jsavr/sim.js"></script>
+	</xsl:if>
       </head>
       <body ng-app="app">	
 	<div id="super" ng-controller="BoxController">
