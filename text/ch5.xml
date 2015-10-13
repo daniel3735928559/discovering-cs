@@ -1413,12 +1413,31 @@ sreg: unchanged</pre></td>
 </tr>
 </table>
 
-<p>Now, what happens as a result of the output depends on what kind of
-device is connected to the pins.  For now, there are only two devices
-connected: The least significant 7 pins are connected to a screen that
-will output whatever number it sees (interpreted as a 7-bit
-non-negative integer), and the top pin is connected to a switch that
-can be either on or off.  </p>
+<p>What ultimately happens as a result of an input or output
+instruction depends on what kind of device is connected to the pins.
+For now, in the simulator, there are only two devices connected: The
+least significant 7 pins are connected to a screen that will output
+whatever number it sees (interpreted as a 7-bit non-negative integer),
+and the top pin is connected to a switch that can be either on or off.
+
+For example, take the following program:
+
+<avrasm>ldi r31,127
+out 17,r31
+ldi r31,255
+out 18,r31  ; Will output only 127 since the top bit of DDRD is in input mode
+dec r31
+out 18,r31
+dec r31
+out 18,r31
+dec r31
+out 18,r31
+in r0,16    ; Try toggling the switch before these instructions
+in r0,16
+in r0,16
+in r0,16
+</avrasm>
+</p>
 
 </text></section>
 <section><title>Flow-control</title>
@@ -1468,10 +1487,10 @@ itself forever, causing an infinite loop.  </p>
 <p>Play around a little with the following example to get a feel for
 this behavior: </p>
 
-<code>ldi r30,0
+<avrasm>ldi r30,0
 inc r30
 add r30, r30
-rjmp -2</code>
+rjmp -2</avrasm>
 
 <table class='ISA_table'><tr>
 <td>Instruction</td>
@@ -1493,7 +1512,7 @@ sreg: unchanged</pre></td>
 </tr>
 </table>
 
-<p>Now to actually see the 'conditional jump' functionality analogous
+<p>Now to actually see the "conditional jump" functionality analogous
 to Python's if statements, we introduce instructions that perform
 relative jumps exactly like rjmp, except only under certain conditions
 based on the flags in the sreg.  <def term='branch'>Instructions that
@@ -1534,8 +1553,8 @@ pc increment
 sreg: unchanged</pre></td>
 </tr>
 <tr>
-<td><pre>brsh</pre></td>
-<td>Branch if same or higher</td>
+<td><pre>brlo</pre></td>
+<td>Branch if lower</td>
 <td><pre>value -64-63</pre></td>
 <td><pre>none</pre></td>
 <td><pre>none</pre></td>
@@ -1544,8 +1563,8 @@ pc increment
 sreg: unchanged</pre></td>
 </tr>
 <tr>
-<td><pre>brlo</pre></td>
-<td>Branch if lower</td>
+<td><pre>brsh</pre></td>
+<td>Branch if same or higher</td>
 <td><pre>value -64-63</pre></td>
 <td><pre>none</pre></td>
 <td><pre>none</pre></td>
@@ -1555,57 +1574,116 @@ sreg: unchanged</pre></td>
 </tr>
 </table>
 
-<p>This is nice, but it is not literally the 'if statement'
-functionality we are used to.  That is, what we do not have is an
-instruction that compares two numbers and performs a specified
-relative jump if the two are equal.  </p>
+<p>This is nice, but it is not literally the "if" functionality we are
+used to.  That is, what we do not have is an instruction that compares
+two numbers and performs a specified relative jump if the two are
+equal.  However, breq (for example), performs a jump if the Z flag is
+set.  And we know that various arithmetic instructions can modify the
+Z flag.  For example, the sub instruction will set the Z flag if
+result of the subtraction was zero--i.e. if the two operands were
+equal.  So we can accomplish something similar to the if statement
+with a pattern like:
 
-<p>However, we do have an instruction that will perform a relative
-jump if the Z flag is set.  And we have another instruction--called
-cp--which takes two registers as its operands and sets the Z flag if
-the two numbers are equal, and clears it otherwise.  Thus 'jump ahead
-10 instructions if r10 and r11 are equal' can be accomplished by:
+<code><i>sub instruction</i>
+breq <i>amount to branch if the two things being subtracted were equal</i></code>
+
+Or even, to mimic the if/else pattern: 
+
+<code><i>sub instruction</i>
+breq <i>amount to branch if the two things being subtracted were equal</i>
+<i>instructions to execute if the two things were not equal</i></code>
+
+For example, the following code sets r30 and r31 to two different
+values and outputs "1" if they are equal and "2" if not: 
+
+<avrasm>ldi r31,-1
+out 17,r31  ; Set all pins to output mode
+ldi r31,14  ; Store r31 = 14
+ldi r30,6  ; Store r30 = 12
+sub r31,r30 ; Store r31 = r31 - r30.  This will set the Z flag if r31 == r30
+breq 3      ; If the Z flag is set, jump ahead 3 instructions to output 1
+ldi r31,2   
+out 18,r31  ; Output 2
+rjmp 2      ; Now that we have outputted 2, skip the code to output 1
+ldi r31,1   
+out 18,r31  ; Output 1</avrasm>
+
+Likewise, we can write a program that increments r30 until it is equal
+to r31: 
+
+<avrasm>ldi r31,-1
+out 17,r31  ; Set all pins to output mode
+ldi r31,14  ; Store r31 = 14
+ldi r30,6   ; Store r30 = 12
+mov r16,r30 ; Store r16 = r30 so that the next instruction does not overwrite r30
+sub r16,r31 ; Store r16 = r16 - r31.  This will set the Z flag if r31 == r16
+breq 2      ; If the Z flag is set, jump ahead 3 instructions to the end
+inc r30     ; Increment r30--if we got here, r30 was different from r31
+rjmp -5     ; Jump back to the mov instruction
+</avrasm>
+</p>
+<p>
+
+We can of course play a similar game with any other arithmetic
+instruction.  For example, here is some code that decrements r31 until
+it is equal to 0:
+
+<avrasm>ldi r31,14  ; Store r31 = 14
+dec r31     ; Decrement r31
+brne -2     ; If the Z flag is clear, jump back to the dec instruction
+</avrasm>
+</p>
+
+<p>One problem with the earlier example was that using a sub
+instruction to compare two numbers would overwrite the value of one of
+the registers.  We had this trick of saving the value into r16 so that
+the sub instruction wouldn't destroy the original value of r30, but
+that was kind of annoying.  It turns out there another
+instruction--called cp--which does the same exact thing as sub in
+every way except it doesn't modify either of its operands.  Thus,
+"compare r10 and r11 and jump ahead if they are equal" can be
+accomplished with instructions like: 
 
 <code>cp r10, r11
 breq 9</code>
 
-And 'jump ahead 10 instructions if r10 and r11 are not equal' can be
-done with
+And "jump ahead 10 instructions if r10 and r11 are not equal" can
+similarly be done with
 
 <code>cp r10, r11
 brne 9</code>
 </p>
 
-<p>cp also affects C: It sets the C flag if the second value is bigger
-than the first.  So
+<p>Like sub, cp also affects the C flag: It sets the C flag if the
+second value is bigger than the first.  So
 
 <code>cp r10, r11</code>
 
 will set the C flag if r10 &lt; r11, so we can get the functionality
-of 'jump ahead 20 instructions if than r10 is smaller than r11' by
-using the branch instruction that jumps if C is set--namely 'branch if
-lower', i.e. brlo:
+of "jump ahead 20 instructions if than r10 is smaller than r11" by
+using the branch instruction that jumps if C is set--namely "branch if
+lower", i.e. brlo:
 
 <code>cp r10, r11
 brlo 20</code>
 
-Finally, we can get 'jump ahead 5 instructions if r10 is greater than
-or equal to r11', since in this case 
+We can also get "jump ahead 5 instructions if r10 is greater than or
+equal to r11", since if r10 >= r11, then in this case
 
 <code>cp r10, r11</code>
 
-will clear the C flag, and we have an instruction--'branch if same or
-higher', i.e. brsh--which jumps if C is clear.  </p>
+will clear the C flag, and we have an instruction--"branch if same or
+higher", i.e. brsh--which jumps if C is clear.  </p>
 
-<p>Note that we haven't mentioned the case of 'jump 10 instructions
-ahead if r10 is greater than r11', but this is the same as 'r11 is
-smaller than r10', so we would do this test with brlo like:
+<p>Note that we haven't mentioned the case of "jump 10 instructions
+ahead if r10 is greater than r11", but this is the same as "r11 is
+smaller than r10", so we would do this test with brlo like:
 
 <code>cp r11, r10
 brlo 10</code>
 
-The final case that we have not explicitly addressed of 'jump if r10
-is less than or equal to r11', is an exercise for the reader.  </p>
+The final case that we have not explicitly addressed of "jump if r10
+is less than or equal to r11", is an exercise for the reader.  </p>
 
 <table class='ISA_table'><tr>
 <td>Instruction</td>
@@ -1628,9 +1706,23 @@ C: set if op1 - op2 &gt; 255</pre></td>
 </tr>
 </table>
 
-<p>So appropriate combinations of cp and various branch instructions
-allow us to perform conditional jumps corresponding to all of our
-comparison operators: 
+<p>The cp instruction lets us write our earlier "Increment r30 until
+it matches r31" program more succinctly: 
+
+<avrasm>ldi r31,-1
+out 17,r31  ; Set all pins to output mode
+ldi r31,14  ; Store r31 = 14
+ldi r30,6   ; Store r30 = 12
+cp r30,r31  ; Compare r30 and r31.  This will set the Z flag if r31 == r30
+breq 2      ; If the Z flag is set, jump ahead 3 instructions to the end
+inc r30     ; Increment r30--if we got here, r30 was different from r31
+rjmp -5     ; Jump back to the mov instruction
+</avrasm>
+</p>
+
+<p>In general, appropriate combinations of cp and various branch
+instructions allow us to perform conditional jumps corresponding to
+all of our comparison operators:
 
 <table>
 <tr><td>Comparison</td><td>ISA ops to jump 50 instructions if the
@@ -1743,10 +1835,10 @@ except that like cp, cpi does not modify any register values.  </p>
 <td><pre>subi</pre></td>
 <td>Subtract immediate</td>
 <td><pre>reg 16-31</pre></td>
-<td><pre>value 0-255</pre></td>
+<td><pre>8-bit value</pre></td>
 <td><pre>op1 = op1 - op2</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: set if op1 - op2 &gt; 255</pre></td>
 </tr>
@@ -1754,10 +1846,10 @@ C: set if op1 - op2 &gt; 255</pre></td>
 <td><pre>cpi</pre></td>
 <td>Compare with immediate</td>
 <td><pre>reg 16-31</pre></td>
-<td><pre>value 0-255</pre></td>
+<td><pre>8-bit value</pre></td>
 <td><pre>none</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: set if op1 - op2 &gt; 255</pre></td>
 </tr>
@@ -1765,10 +1857,10 @@ C: set if op1 - op2 &gt; 255</pre></td>
 <td><pre>andi</pre></td>
 <td>Subtract immediate</td>
 <td><pre>reg 16-31</pre></td>
-<td><pre>value 0-255</pre></td>
+<td><pre>8-bit value</pre></td>
 <td><pre>op1 = op1 &amp; op2</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: unchanged</pre></td>
 </tr>
@@ -1776,24 +1868,39 @@ C: unchanged</pre></td>
 <td><pre>ori</pre></td>
 <td>Subtract immediate</td>
 <td><pre>reg 16-31</pre></td>
-<td><pre>value 0-255</pre></td>
+<td><pre>8-bit value</pre></td>
 <td><pre>op1 = op1 | op2</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: unchanged</pre></td>
 </tr>
 </table>
+
+<p>Feel free to play around with these a little here:
+
+<avrasm>ldi r31,175
+subi r31,85
+cpi r31,5
+brne -3
+ldi r31,170
+andi r31,85
+ldi r31,99
+ori r31,-1</avrasm>
+
+</p>
 
 </text></section>
 
 <section><title>Add-with-carry</title>
 <summary>In Python we could operate on numbers as large as we want.
 So far, we have only see the ability to add registers, which can only
-store values 0-255.  To operate on larger numbers, we can use a scheme
-to use multiple registers to all represent one big number.  But then
-our basic add instruction isn't enough to add such numbers, so here we
-introduce instructions that will help us in this endeavour.</summary>
+store 8-bit values.  To operate on numbers larger than 255, then, we
+can use a scheme to use multiple registers to all together represent
+one big number.  But then our basic add instruction isn't enough to
+add such numbers, so here we introduce the instructions that will help
+us in this endeavour.</summary>
+
 <text>
 <p>In all the instructions we have described so far, we have only been
 able to operate on numbers in the range 0-255.  This may seem
@@ -1810,26 +1917,27 @@ the number
 
 <code>r19 + 256*r16</code>
 
-This is a lot like the "compound register" X that we learned about
-earlier.  But unlike X, which is a notation built into the AVR ISA,
-this compound number that we've contrived doesn't have any supported
-notation.  It is just two registers, which we can manipulate
-separately using all the usual instructions, but which we are thinking
-of as two parts of one big number.  </p>
+This is a lot like the "compound registers" X, Y, and Z that we
+learned about earlier.  But unlike X, Y, and Z, which are notations
+built into the AVR ISA, this compound that we've contrived doesn't
+have any supported notation.  It is just two registers, which we can
+manipulate separately using all the usual instructions, but which we
+are now thinking of as two parts of one big number.  </p>
 
-<p>Now how to we operate on this number?  For the simplest example,
+<p>Now how would we operate on this number?  For the simplest example,
 how do we add 1 to it?  Suppose r19 and r16 are both 0.  These
-represent the number 
+represent the number
 
 <code>0:0 = 0 + 256*0 = 0</code>
 
-If we simply add 1 to both registers, then r16 and r19 will both be 1,
-so will represent the number 
+If we tried simply adding 1 to both registers as a way of incrementing
+the compound, then r16 and r19 will both be 1, so will together
+represent the number
 
 <code>1:1 = 1 + 256*1 = 257</code>
 
-That's not right.  Clearly what we need to do is to add 1 to only
-r19.  Then we would get the number
+That's not what should happen when we increment 0.  Clearly what we
+need to do is to add 1 to only r19.  Then we would get the number
 
 <code>0:1 = 1 + 256*0 = 1</code>
 
@@ -1855,18 +1963,21 @@ r16 = r16 + C</code>
 </p>
 
 <p>Happily, there is an instruction which does this and more--adc.  It
-takes the same register operands as add and adds the two registers
-together, much as add did, but also adds C on to the result.  </p>
+takes the same register operands as <icode>add</icode> and adds the
+two registers together, much as add did, but also adds the C flag on
+to the result.  That is, it performs normal addition to if the C flag
+is 0, and if the C flag is instead 1, it performs normal addition and
+then increments the result by 1.  </p>
 
 <p>Thus we can use it to implement our increment operation by doing a
 normal add instruction to increment r19, and then using adc to add 0
 to r16.  This will leave r16 unchanged unless C is set, in which case
 it will add 1 to r16--exactly what we wanted: 
 
-<code>ldi r30, 1
-ldi r31, 0
-add r16, r30
-adc r19, r31</code>
+<code>ldi r31,0
+ldi r30,1
+add r16,r30
+adc r19,r31</code>
 
 This, finally, is ISA code that increments our combined number.  We
 will later write code to do more interesting operations to such
@@ -1894,7 +2005,7 @@ same 'wraparound' behavior at its maximum value of 65535.</p>
 <td><pre>reg</pre></td>
 <td><pre>op1 = op1 + op2 + C</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: set if op1 + op2 + C &gt; 255</pre></td>
 </tr>
@@ -1905,16 +2016,62 @@ C: set if op1 + op2 + C &gt; 255</pre></td>
 <td><pre>reg</pre></td>
 <td><pre>op1 = op1 - op2 - C</pre></td>
 <td><pre>pc: increment
-N: set if MSB of result is set
+N: set if result is negative
 Z: set if result is 0
 C: set if op1 - op2 &gt; 255</pre></td>
 </tr>
 </table>
+
+<p>For example, we can use these to implement code that increments and
+then decrements a 16-bit number represented by r21:r20, say:
+
+<avrasm>ldi r31,0
+ldi r30,1
+; We need a 0 and a 1 stored
+; for later use
+
+ldi r20,53
+ldi r21,9
+; Now r21:r20 = 9:53 = 2357
+
+add r20,r30
+adc r21,r31
+; Now r21:r20 = 9:54 = 2358
+
+ldi r20,255
+ldi r21,2
+; Now r21:r20 = 2:255 = 767
+
+add r20,r30
+adc r21,r31
+; Now r21:r20 = 3:0 = 768
+
+ldi r20,54
+ldi r21,9
+; Now r21:r20 = 9:54 = 2358
+
+sub r20,r30
+sbc r21,r31
+; Now r21:r20 = 9:53 = 2357
+
+ldi r20,0
+ldi r21,3
+; Now r21:r20 = 3:0 = 768
+
+sub r20,r30
+sbc r21,r31
+; Now r21:r20 = 2:255 = 767
+</avrasm>
+
+
+We'll see later how to use these to do more complicated things to
+larger numbers</p>
+
 </text></section>
 
-<section><title>Advanced addressing modes</title>
+<section><title>Sequential RAM operations</title>
 <summary>AVR has instructions for easily reading or writing a set of
-successive of addresses in RAM.</summary>
+successive addresses in RAM.</summary>
 
 <text>
 <p>Earlier we discussed instructions for reading from and storing to
@@ -1963,12 +2120,12 @@ combined number.  So to fix this, we could also add C to r27 as we
 discussed in the previous section.  However, it turns out that this
 operation of reading a sequence of values in memory is common enough
 that there is a modified version of the 'read from X' instruction
-which again reads from X, but then increments X correctly after it
-does so.  </p>
+which again reads from X, but then increments the combined register X
+correctly after it does so.  </p>
 
 <p>This instruction is again called ld, and its first operand is again
 a register in which to store the value read from RAM, but for its
-second operand we write X+, telling it to increment X after reading
+second operand we write "X+", telling it to increment X after reading
 the value.  </p>
 
 <p>With this instruction, our code becomes: 
@@ -2004,42 +2161,77 @@ These are all described in the table below: </p>
 <td><pre>ld</pre></td>
 <td>Load from RAM and increment address</td>
 <td><pre>reg</pre></td>
-<td><pre>X+</pre></td>
+<td><pre>X+ or Y+ or Z+</pre></td>
 <td><pre>op1 = RAM[r26 + 256*r27]
-X = X + 1</pre></td>
+X = X + 1 (or Y or Z, as appropriate)</pre></td>
 <td><pre>pc: increment
 sreg: unchanged</pre></td>
 </tr>
 <tr>
 <td><pre>st</pre></td>
 <td>Store to RAM and increment address</td>
-<td><pre>X+</pre></td>
+<td><pre>X+ or Y+ or Z+</pre></td>
 <td><pre>reg</pre></td>
-<td><pre>RAM[r26 + 256*r27] = op2
-X = X + 1</pre></td>
+<td><pre>RAM[X] = op2
+X = X + 1 (or Y or Z, as appropriate)</pre></td>
 <td><pre>pc: increment
 sreg: unchanged</pre></td>
 </tr><tr>
 <td><pre>ld</pre></td>
 <td>Decrement address and load from RAM</td>
 <td><pre>reg</pre></td>
-<td><pre>-X</pre></td>
+<td><pre>-X or -Y or -Z</pre></td>
 <td><pre>X = X - 1
-op1 = RAM[r26 + 256*r27]</pre></td>
+op1 = RAM[X]
+ (or Y or Z, as appropriate)</pre></td>
 <td><pre>pc: increment
 sreg: unchanged</pre></td>
 </tr>
 <tr>
 <td><pre>st</pre></td>
 <td>Decrement address and store to RAM</td>
-<td><pre>-X</pre></td>
+<td><pre>-X or -Y or -Z</pre></td>
 <td><pre>reg</pre></td>
 <td><pre>X = X - 1
-RAM[r26 + 256*r27] = op2</pre></td>
+RAM[X] = op2
+ (or Y or Z, as appropriate)</pre></td>
 <td><pre>pc: increment
 sreg: unchanged</pre></td>
 </tr>
 </table>
+
+<p>For example, consider this program, which stores numbers 1-20 in
+RAM starting at address 500:
+
+<avrasm>; Set X to be 500
+ldi r29,1
+ldi r28,244
+
+; Set r16 to be 1: 
+ldi r16,1
+
+; Store r16 at Y
+; and increment Y
+st Y+,r16
+
+; Then increment r16
+inc r16
+
+; If r16 &lt; 21 go back to the st line
+cpi r16,21
+brlo -4
+
+; Now go back through and
+; double all the odd numbers
+
+ld r20,-Y
+ld r20,-Y
+add r20,r20
+st Y,r20
+dec r16
+dec r16
+brne -7</avrasm></p>
+
 </text></section>
 
 <section><title>The stack</title>
@@ -2051,22 +2243,22 @@ those values to the actual registers.  </summary>
 <text>
 
 <p>This next ISA feature may seem oddly specific and unmotivated, but
-it exists in almost every ISA you'll come across.  The basic reason
-for this is that it is absolutely necessary for functions to work.  It
-can also be used more simply as a convenient way to stash some values
-in RAM for quick and easy retrieval later.  The feature that enables
-all this and more is called the "stack".  </p>
+it exists in almost every ISA you'll come across.  The basic reason is
+that it is absolutely necessary for functions to work.  It can also be
+used more simply as a convenient way to stash some values in RAM for
+quick and easy retrieval later.  The feature that enables all this and
+more is called the "stack".  </p>
 
-<p>The name comes from the reasonably obvious metaphor: A stack of
-plates, say.  If I have a stack of plates, there are only really two
-things I can do: I can place another plate at the top, or I can pull a
-plate off the top.  I cannot pull a plate out of the middle, nor can I
-insert a plate into the middle of the stack.</p>
+<p>The name comes from the natural metaphor: A stack of plates.  If I
+have a stack of plates, there are only really two things I can do: I
+can place another plate at the top, or I can pull a plate off the top.
+I cannot pull a plate out of the middle, nor can I insert a plate into
+the middle of the stack.</p>
 
 <p><def term="push">We will refer to the operation of putting a plate
-at the top as "pushing" a plate onto the stack, </def><def
-term="pop">and of taking a plate off the top as "popping" a plate off
-the stack.</def></p>
+at the top as <b>pushing</b> a plate onto the stack, </def><def
+term="pop">and of taking a plate off the top as <b>popping</b> a plate
+off the stack.</def></p>
 
 <p>In the AVR ISA, we have likewise two instructions called push and
 pop, both of which take just any one register for an operand.  When
@@ -2129,17 +2321,18 @@ value 99, and the stack will be empty.</p>
 what the push and pop instructions do, but what is the architectural
 reality behind this conceptual idea?  After all, we say that things we
 push get stored on the stack, but there wasn't a "stack" memory in the
-architecture.  So where does push actually store things?</p>
+architecture.  So where does <icode>push</icode> actually store
+things?</p>
 
-<p>The answer, as we mentioned very briefly, is in RAM.  But where in
-RAM?  <def term='stack pointer'>There is a 16-bit register called the
+<p>The answer is that it stores things in RAM.  But where in RAM?
+<def term='stack pointer'>There is a 16-bit register called the
 <b>stack pointer</b>, or often called <b>sp</b>, which stores the
 address in RAM of the top of the stack.</def> When we push a register,
 its value gets written to RAM at the address sp, and then sp gets
-decremented by 1 (you read that right--the top of the stack moves
-downward in RAM for some reason).  When you pop a register, the stack
-pointer gets incremented by 1 and then the register receives the value
-in RAM at the address sp.  </p>
+decremented by 1 (yes--the top of the stack moves downward in RAM when
+you push).  When you pop a register, the stack pointer gets
+incremented by 1 and then the register receives the value in RAM at
+the address sp.  </p>
 
 <p>Let us take the above example again, with r0 = 34, r1 = 99, r5 =
 18, and let us say that at the beginning, sp = 5000.  So before we do
@@ -2219,11 +2412,13 @@ instruction, so it no longer matters what it is specifically.</p>
 region in RAM to store the values.  But what, in turn, is this
 mysterious stack pointer?  We didn't see "sp" as a separate memory in
 the architecture either.  It turns out that the sp is actually stored
-in the I/O register file.  But sp was 16 bits, and we said the I/O
-register file has width 8, so in fact sp is a combined number from two
-I/O registers (much like X was made up of two general-purpose
-registers).  Specifically, sp is the combination of I/O registers 61
-and 62 as IO[62]:IO[61].  That is:
+in the I/O register file.  But sp is an address in RAM, and therefore
+must be 16 bits, and we said the I/O register file has width 8, so in
+fact sp is a combined number from two I/O registers (much like X was
+made up of two general-purpose registers).  Specifically, sp is the
+combination of I/O registers 61 and 62, which are known as SPL and SPH
+respectively (for "stack pointer, low 8 bits" and "stack pointer, high
+8 bits", respectively) as sp = SPH:SPL.  That is:
 
 <code>sp = IO[61] + 256*IO[62]</code>
 
@@ -2231,9 +2426,9 @@ In particular, if we are going to use push and pop instructions, we
 have to first set the sp to some sensible place in RAM where it
 doesn't get in the way of anything else we want to do with RAM.  For
 example, maybe we decide to set it to 5000 as in the above example.
-Then we compute: 
+We compute:
 
-<code>5000 = 136 + 12*256</code>
+<code>5000 = 136 + 19*256</code>
 
 we need to set I/O register 61 to store value 136 and I/O register 62
 to have value 12.  Remember that we write the I/O registers using the
@@ -2241,11 +2436,29 @@ to have value 12.  Remember that we write the I/O registers using the
 
 <code>ldi r31, 136
 out 61, r31
-ldi r31, 12
+ldi r31, 19
 out 62, r31</code>
 
 Now the stack is set up, and the first push will write to address 5000
-in RAM, the next push will write to address 4999, etc.  </p>
+in RAM, the next push will write to address 4999, etc.  We may step
+through the code from our earlier example here:
+
+<avrasm>ldi r31, 136
+out 61, r31
+ldi r31, 19
+out 62, r31
+ldi r31,99
+ldi r30,34
+ldi r29,18
+push r31
+push r31
+push r30
+push r29
+pop r1
+pop r2
+pop r0
+pop r1</avrasm>
+</p>
 
 <table class='ISA_table'><tr>
 <td>Instruction</td>
@@ -2375,9 +2588,9 @@ add r30, r30
 We need to put our code for outputting stuff somewhere, so maybe we'll
 put it at the beginning:
 
-<code>ldi 255, r31
-out 26, r31
-out 27, r30
+<code>ldi r31, 255
+out 17, r31
+out 18, r30
 ldi r30, 13
 [call to output code to output r30]
 add r30, r30
@@ -2395,9 +2608,9 @@ which skips over the output code to the first line of our computation
 code:
 
 <code>rjmp 3
-ldi 255, r31
-out 26, r31
-out 27, r30
+ldi r31, 255
+out 17, r31
+out 18, r30
 ldi r30, 13
 [call to output code to output r30]
 add r30, r30
@@ -2411,9 +2624,9 @@ instructions back, so it will be rcall -5, and the second call needs
 to call the code 8 instructions back, so it will be rcall -9: 
 
 <code>rjmp 3
-ldi 255, r31
-out 26, r31
-out 27, r30
+ldi r31, 255
+out 17, r31
+out 18, r30
 ldi r30, 13
 rcall -5
 add r30, r30
@@ -2431,9 +2644,9 @@ starting the program over.  Rather, we want our output code to use the
 ret instruction once it finishes:
 
 <code>rjmp 4
-ldi 255, r31
-out 26, r31
-out 27, r30
+ldi r31, 255
+out 17, r31
+out 18, r30
 ret
 ldi r30, 13
 rcall -6
@@ -2451,14 +2664,14 @@ that makes sense (remember that RAM addresses 0-92 are reserved, so if
 the sp defaults to address 0, then we may get unexpected behavior),
 since we never set it up.  So we do this as the first thing:
 
-<code>ldi r31, 136
+<avrasm>ldi r31, 136
 out 61, r31
-ldi r31, 12
+ldi r31, 19
 out 62, r31
 rjmp 4
-ldi 255, r31
-out 26, r31
-out 27, r30
+ldi r31, 255
+out 17, r31
+out 18, r30
 ret
 ldi r30, 13
 rcall -6
@@ -2466,7 +2679,7 @@ add r30, r30
 add r30, r30
 add r30, r30
 rcall -10
-</code>
+</avrasm>
 
 And now, finally, we've got things set up so that we can reuse the
 outputting code as we'd hoped.</p>
@@ -2497,14 +2710,14 @@ purposes, overwriting whatever value was in it before.  </p>
 wanted to add the number 41 to it two times, output r30, and then add
 41 to it three more times and output the result of that:
 
-<code>ldi r31, 136
+<avrasm>ldi r31, 136
 out 61, r31
 ldi r31, 12
 out 62, r31
 rjmp 4
-ldi 255, r31
-out 26, r31
-out 27, r30
+ldi r31, 255
+out 17, r31
+out 18, r30
 ret
 ldi r30, 13
 rcall -6
@@ -2516,7 +2729,7 @@ add r30, r31
 add r30, r31
 add r30, r31
 rcall -14
-</code>
+</avrasm>
 
 In this example, we use r31 to hold our value of 41 that we are adding
 to r30.  But after the line 
@@ -2531,15 +2744,15 @@ value 255!  </p>
 the previous value of r31 using the stack, and then restore it before
 it returns: </p>
 
-<code>ldi r31, 136
+<avrasm>ldi r31, 136
 out 61, r31
 ldi r31, 12
 out 62, r31
 rjmp 6
 push r31
-ldi 255, r31
-out 26, r31
-out 27, r30
+ldi r31, 255
+out 17, r31
+out 18, r30
 pop r31
 ret
 ldi r30, 13
@@ -2552,7 +2765,7 @@ add r30, r31
 add r30, r31
 add r30, r31
 rcall -16
-</code>
+</avrasm>
 
 <p>(Note again the need to adjust the operands to the jumps and
 calls.)</p>
@@ -2567,14 +2780,14 @@ as it had when it started.</def></p>
 that it will trash r31 and so we save it onto the stack before calling
 and then restore it after the code returns:
 
-<code>ldi r31, 136
+<avrasm>ldi r31, 136
 out 61, r31
 ldi r31, 12
 out 62, r31
 rjmp 4
-ldi 255, r31
-out 26, r31
-out 27, r30
+ldi r31, 255
+out 17, r31
+out 18, r30
 ret
 ldi r30, 13
 rcall -6
@@ -2588,7 +2801,7 @@ add r30, r31
 add r30, r31
 add r30, r31
 rcall -16
-</code>
+</avrasm>
 
 <def term='caller-saved'>In this case, the output code will happily
 trash r31, and it is the responsibility of any code that calls it to
