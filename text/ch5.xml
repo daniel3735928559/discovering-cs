@@ -2712,7 +2712,7 @@ wanted to add the number 41 to it two times, output r30, and then add
 
 <avrasm>ldi r31, 136
 out 61, r31
-ldi r31, 12
+ldi r31, 19
 out 62, r31
 rjmp 4
 ldi r31, 255
@@ -2746,7 +2746,7 @@ it returns: </p>
 
 <avrasm>ldi r31, 136
 out 61, r31
-ldi r31, 12
+ldi r31, 19
 out 62, r31
 rjmp 6
 push r31
@@ -2782,7 +2782,7 @@ and then restore it after the code returns:
 
 <avrasm>ldi r31, 136
 out 61, r31
-ldi r31, 12
+ldi r31, 19
 out 62, r31
 rjmp 4
 ldi r31, 255
@@ -2809,14 +2809,14 @@ save its value.  In this case, the register is known as a
 <b>caller-saved register</b>: Anyone who calls the code must save r31
 if they want its value preserved.</def></p>
 
-<aside title="Abusing rcall"><p>You'll have noted that most of our operations thus far only
-act on general-purpose registers.  However if we really wanted, we
-could make them act on sreg or sp by reading these from the
-appropriate I/O registers into the general-purpose registers,
-computing with these general-purpose registers, and then writing the
-results back to the relevant I/O registers.  However none of our
-instructions can take pc as an operand, and pc doesn't actually live
-in the I/O register file either.  </p>
+<aside title="Abusing rcall"><p>You'll have noted that most of our
+operations thus far only act on general-purpose registers.  However if
+we really wanted, we could make them act on sreg or sp by reading
+these from the appropriate I/O registers into the general-purpose
+registers, computing with these general-purpose registers, and then
+writing the results back to the relevant I/O registers.  However none
+of our instructions can take pc as an operand, and pc doesn't actually
+live in the I/O register file either.  </p>
 
 <p>So if we're merrily going through a program and for whatever reason
 we want to get the current pc in a register, there is not an
@@ -2826,14 +2826,16 @@ places the address after the current pc on the stack.  And we have an
 instruction that reads a value off the stack into a register--namely
 pop.  So we can do:
 
-<code>rcall 1
-pop r0</code>
+<code>rcall 0
+pop r0
+pop r1</code>
 
-and this will put the stored pc into register r0!  Note that this
-stored pc is the address of the pop instruction in program memory, but
-we can subsequently adjust r0 with arithmetic operations to get r0 to
-be the address of whatever instruction we're actually interested in.
-</p></aside>
+and this will put the stored pc into registers r1 and r0, placing the
+low 8 bits in r0 and the high 8 bits in r1, so PC = r1:r0.  Note that
+this stored pc is the address of the first pop instruction in program
+memory, but we can subsequently adjust r0 with arithmetic operations
+to get r0 to be the address of whatever instruction we're actually
+interested in.  </p></aside>
 
 </text></section>
 
@@ -2997,13 +2999,13 @@ where in memory those numbers are stored.  </p>
 	  </tr>
 	  <tr>
 	    <td>Assembler directive</td>
-	    <td>Either a <i>byte directive</i>, or a <i>string
-	    directive.</i></td>
-	    <td>Provides methods for easily getting data into RAM.</td>
+	    <td>Either a <i>byte directive</i>, a <i>word
+	    directive</i>, or a <i>string directive.</i></td>
+	    <td>Provides methods for easily placing data into RAM or PM.</td>
 	    <td>
-	      <pre>.byte(20881) 101</pre>
-	      <pre>.byte(106) 121,87,0,33</pre>
-	      <pre>.string(8782) "hello"</pre>
+	      <pre>.byte(my_bytes) 101,232,6,4</pre>
+	      <pre>.word 1212,87,0,33</pre>
+	      <pre>.string(stringOfCheese) "hello"</pre>
 	    </td>
 	  </tr>
 	  <tr>
@@ -3025,26 +3027,27 @@ my name</pre></td>
 
 	  <tr>
 	    <td>byte directive</td>
-	    <td><pre>.byte(<i>RAM address</i>) <i>comma-separated list of bytes</i></pre></td>
-	    <td>Instructs that these bytes should be inserted into the
-	    program at this point.  Note that a byte can either by a
-	    number 0-255 or a character.</td>
+	    <td><pre>.byte(<i>label name</i>) <i>comma-separated list of bytes</i></pre></td>
+	    <td>Instructs that these bytes should be inserted into
+	    RAM.  The label name will then refer to the address of the
+	    first of these bytes in RAM.</td>
 	    <td>
-	      <pre>.byte(1872) 42</pre>
-	      <pre>.byte(110) 0, 0, 0, 0, 0</pre>
-	      <pre>.byte(37373) 123, 'A', 1</pre>
+	      <pre>.byte(thing) 42</pre>
+	      <pre>.byte(other_thing) -1, -1, -1, -1, 58</pre>
+	      <pre>.byte(IAmALabel) 123, 7, 1</pre>
 	    </td>
 	  </tr>
 	  <tr>
 	    <td>string directive</td>
 	    <td>
-	      <pre>.string(<i>RAM address</i>) <i>string</i></pre>
+	      <pre>.string(<i>label name</i>) <i>string</i></pre>
 	    </td>
 	    <td>Translates each character in the string into a byte
-	    and inserts those bytes into the program at the location
-	    of the string directive in order.</td>
-	    <td><pre>.string(12345) "Hello world!"</pre>
-	    <pre>.string(919) "AAA&amp;AAAA!!"</pre></td>
+	    and inserts those bytes into RAM at some location.  The
+	    label name then refers to the starting address of the
+	    string in RAM.</td>
+	    <td><pre>.string(helloworld) "Hello world!"</pre>
+	    <pre>.string(Gibberish) "AAA&amp;AAAA!!"</pre></td>
 	  </tr>
 
 	  <tr>
@@ -3105,16 +3108,16 @@ ldi r31,40     ;loads value 40
 
     <p>For example, take the program:
 
-    <code>hello:
-ldi r31,0
+    <avrasm>ldi r31,0
+hello:
 cpi r31,8
 breq stuff
 inc r31
 rjmp hello
 stuff:
 dec r31
-cpi r31,8
-breq stuff</code>
+cpi r31,3
+brne stuff</avrasm>
 
 The label 'stuff' appears two instructions after the first 'breq
 stuff' instruction, so the assembler replaces the first 'breq stuff'
@@ -3124,14 +3127,14 @@ instructions before the second 'breq stuff', so this is replaced with
 the above program is equivalent to: 
 
 
-<code>ldi r31,0
-cpi r31,8
-breq 2
-inc r31
-rjmp -5
-dec r31
-cpi r31,8
-breq -3</code>
+<avrasm>ldi r31,0  
+cpi r31,8  
+breq 2  
+inc r31  
+rjmp -4  
+dec r31  
+cpi r31,3  
+breq -3</avrasm>
 
 Of course, writing the program using labels means we don't have to
 adjust all the offsets of our jumps and branches if we change the
@@ -3144,29 +3147,30 @@ program a little, so labels do indeed solve that problem.
     which bytes its characters corresponded to, and using those
     numbers in place of the actual string.  This would make the
     purpose of a program rather hard to divine, however.  Imagine:
-<code>ldi r30, 255
-out 26, r30
+
+    <avrasm>ldi r30, 255
+out 17, r30
 ldi r30, 72
-out 27, r30
+out 18, r30
 ldi r30, 255
-out 26, r30
+out 17, r30
 ldi r30, 105
-out 27, r30</code>
+out 18, r30</avrasm>
 
     We know from earlier that this is outputting the numbers 72 and
     105, but these numbers turn out to correspond to the characters
     'H' and 'i', respectively.  So this is outputting the text 'Hi',
     and we can make this more evident by replacing the numbers with
     the characters they correspond to:  
-<code>ldi r30, 255
-out 26, r30
-ldi r30, 'H'
-out 27, r30
-ldi r30, 255
-out 26, r30
-ldi r30, 'i'
-out 27, r30</code>
 
+    <avrasm>ldi r30, 255
+out 17, r30
+ldi r30, \'H\'
+out 18, r30
+ldi r30, 255
+out 18, r30
+ldi r30, \'i\'
+out 18, r30</avrasm>
     The assembler will turn this into the earlier program anyway,
     since ldi of course requires a number as its second operand, but
     we are free to use characters when they are more convenient than
@@ -3174,7 +3178,7 @@ out 27, r30</code>
     </li>
   </ul>
   </p>
-
+  
   <p>As we mentioned, the assembler's job is to put numbers into
   program memory corresponding to the specified instructions.  We've
   seen how to specify ISA operations, even using labels and characters
@@ -3183,7 +3187,7 @@ out 27, r30</code>
   chapter, and for now all we mention is that there is some
   correspondence.  For example, the instruction
 
-  <code>ori r22,0x58</code>
+  <code>ori r22,88</code>
 
   corresponds to the number 26725.  
   </p>
@@ -3206,27 +3210,27 @@ out 27, r30</code>
   the two programs below are identical in terms of the instructions
   that will be stored in program memory: 
 
-  <code>ldi r30, 255
+  <avrasm>ldi r30, 255
 out 26, r30
-ldi r30, 'H'
+ldi r30, \'H\'
 out 27, r30
 ldi r30, 255
 out 26, r30
-ldi r30, 'i'
-out 27, r30</code>
+ldi r30, \'i\'
+out 27, r30</avrasm>
 
 
-<code>hello:
+<avrasm>hello:
 ldi r30, 255
 out 26, r30
-ldi r30, 'H'
+ldi r30, \'H\'
 some_label: 
 out 27, r30
 ldi r30, 255
 babel: 
 out 26, r30
-ldi r30, 'i'
-out 27, r30</code>
+ldi r30, \'i\'
+out 27, r30</avrasm>
 
   </p>
 </text></section>
@@ -3234,53 +3238,7 @@ out 27, r30</code>
 <section><title>Assembler directives</title>
 <text>
 
-<p>We will discuss only two kinds of assembler directives here, which
-will serve the single purpose of helping us pre-populate RAM with
-data.  We should note that this task is not an easy one--</p>
-
-<!-- <p><b>Data directive: </b></p> -->
-
-<!-- <p>Every line of an assembly program gets translated into numbers: ISA -->
-<!-- operations get translated to numbers of width 16 according to the -->
-<!-- encoding, and label lines get translated to nothing (though their -->
-<!-- location in the program is used to help translate other ISA operations -->
-<!-- that refer to them), and all these numbers get stored into program -->
-<!-- memory.  Until, that is, the program reaches the data directive.  </p> -->
-
-<!-- <p><def term='data directive'>The <b>data directive</b> is a line in -->
-<!-- an assembly program that just contains the content:  -->
-
-<!-- <pre>.data</pre> -->
-
-<!-- It can show up at most once per program, and every line of the program -->
-<!-- that appears before this directive, when it gets translated into a -->
-<!-- number, gets stored in program memory.  Every line of the program -->
-<!-- following the data directive, when translated into a number, will -->
-<!-- be placed into RAM instead.  </def></p> -->
-
-<!-- <p>Of course, then we have to ask: What can we put after the data -->
-<!-- directive?  All the valid lines of assembly language we know about -->
-<!-- thus far are ISA operations, labels, and the data directive.  The only -->
-<!-- one of those that actually corresponds to numbers, are ISA -->
-<!-- operations.  For example, the ISA operation -->
-
-<!-- <pre>ldi r30, 255</pre> -->
-
-<!-- corresponds to the two numbers: -->
-
-<!-- <pre>239, 239</pre> -->
-
-<!-- So if we want two consecutive 239's stored into RAM, we can do: -->
-
-<!-- <pre>.data -->
-<!-- ldi r30, 255</pre> -->
-
-<!-- However this is hard: What if we want only one 239?  Or if we want a -->
-<!-- 238 instead?  Do we have to go find an instruction whose encoding -->
-<!-- includes the number 238?  Thankfully the answer is 'no', and there is -->
-<!-- a way of specifying precisely what numbers you want without having to -->
-<!-- reference the ISA's encoding.  This is the job of the byte directive. -->
-<!-- </p> -->
+<p>We will discuss only two kinds of assembler directives here.</p>
 
 <p><b>Byte directives</b></p>
 
