@@ -2503,7 +2503,7 @@ multiple places elsewhere in our code.  In the ISA, we have already
 seen code that would be useful to treat this way: Our code for
 outputting a number (say, the contents of r30): 
 
-<code>ldi 255, r31
+<code>ldi r31, 255
 out 26, r31
 out 27, r30</code>
 
@@ -2637,7 +2637,7 @@ rcall -9
 
 But this is no good still--once we rcall -5, we jump back to the line 
 
-<code>ldi 255, r31</code>
+<code>ldi r31, 255</code>
 
 and then the program continues execution from there--basically
 starting the program over.  Rather, we want our output code to use the
@@ -3091,6 +3091,132 @@ ldi r31,40     ;loads value 40
 	than the extra features of Python, and from this book we shall
 	elide them entirely.</p>
 </text>
+<section><title>Labels</title>
+<text>
+  <p>Label can be defined in three ways:
+
+  <ol>
+    <li><p>Labels can be inserted directly into the program as lines that
+    look like:
+
+    <code><i>label_name</i>: </code>
+    
+    Where a label name can be exactly what a variable name in Python
+    could be: Anything containing only letters, numbers, or underscores,
+    except it cannot start with a number.</p>
+  
+  <p>Labels are used to mark a place in the program to refer to in
+  actual instructions, as in the examples of the previous section.
+  They do not themselves constitute actual instructions.  For example,
+  the two programs below are identical in terms of the instructions
+  that will be stored in program memory: 
+
+  <avrasm>ldi r30, 255
+out 26, r30
+ldi r30, \'H\'
+out 27, r30
+ldi r30, 255
+out 26, r30
+ldi r30, \'i\'
+out 27, r30</avrasm>
+
+
+<avrasm>hello:
+ldi r30, 255
+out 26, r30
+ldi r30, \'H\'
+some_label: 
+out 27, r30
+ldi r30, 255
+babel: 
+out 26, r30
+ldi r30, \'i\'
+out 27, r30</avrasm>
+
+Any such label has a value, which is defined to be the address in
+program memory of the first instruction after the label.  So in the
+above example, the value of the label <icode>hello</icode> is 0, of
+<icode>some_label</icode> is 3, and of <icode>babel</icode> is 5.
+  
+    </p></li>
+    <li><p><def term="byte directive">Labels can also be defined by
+    byte or string directives.  A <b>byte directive</b> is a way of
+    pre-filling RAM with a given sequence of values, and giving the
+    address of those values a name.  Specifically, a byte directive
+    looks like:
+
+    
+    <code>.byte(<i>label name</i>) <i>[Comma-separated list of bytes]</i></code>
+    
+    It will write the given sequence of bytes (separated by commas) in
+    the list into RAM at some address and will create a label whose
+    value is that address.  </def></p>
+
+    <p>For example, the directive
+    
+    <code>.byte(hello) 12,189,200,0,0</code>
+    
+    might create the following situation in RAM:</p>
+    
+    <table>
+      <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+      <tr><td>1231</td><td>12</td></tr>
+      <tr><td>1232</td><td>189</td></tr>
+      <tr><td>1233</td><td>200</td></tr>
+      <tr><td>1234</td><td>0</td></tr>
+      <tr><td>1235</td><td>0</td></tr>
+    </table>
+
+    <p>In this case, the label <icode>hello</icode> will have the
+    value 1231.</p></li>
+    <li><p><def term="string directive">Finally, exactly analogous to
+    the byte directive is the <b>string directive</b>, which looks
+    like: 
+
+    <code>.string(<i>label name</i>) <i>[string]</i></code>
+
+    This will convert each character of the string into its
+    corresponding byte, place these bytes into RAM, and create a new
+    label whose value is the address of the first byte of this
+    string.  
+  </def></p>
+
+    <p>For example, the directive
+    
+    <code>.string(story) "Once upon a time"</code>
+    
+    might create the following situation in RAM:</p>
+    
+    <table>
+      <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+      <tr><td>1904</td><td>79</td></tr>
+      <tr><td>1905</td><td>110</td></tr>
+      <tr><td>1906</td><td>99</td></tr>
+      <tr><td>1907</td><td>101</td></tr>
+      <tr><td>1908</td><td>32</td></tr>
+      <tr><td>1909</td><td>117</td></tr>
+      <tr><td>1910</td><td>112</td></tr>
+      <tr><td>1911</td><td>111</td></tr>
+      <tr><td>1912</td><td>110</td></tr>
+      <tr><td>1913</td><td>32</td></tr>
+      <tr><td>1914</td><td>97</td></tr>
+      <tr><td>1915</td><td>32</td></tr>
+      <tr><td>1916</td><td>116</td></tr>
+      <tr><td>1917</td><td>105</td></tr>
+      <tr><td>1918</td><td>109</td></tr>
+      <tr><td>1919</td><td>101</td></tr>
+    </table>
+
+    <p>In this case, the label <icode>story</icode> will have the
+    value 1904.</p>
+  
+    </li>
+  </ol>
+  </p>
+  
+  
+</text></section>
+
 
 <section><title>ISA Operations</title>
 <text>
@@ -3100,11 +3226,11 @@ ldi r31,40     ;loads value 40
   labels.  Specifically:
   <ul>
     <li><p>Any operand designated above as an 'offset' can be replaced
-    with the name of a label.  This covers the operands to rjmp,
+    with the name of a label.  This includes the operands to rjmp,
     rcall, and all the branch instructions.  The assembler will then
-    compute the offset in the program between the jump/branch
-    instruction and the location in the code where the label appears
-    and will substitute that offset as the actual operand.  </p>
+    compute the difference between the address of the jump/branch
+    instruction and the value of the label, and will substitute that
+    difference as the actual operand.  </p>
 
     <p>For example, take the program:
 
@@ -3119,22 +3245,31 @@ dec r31
 cpi r31,3
 brne stuff</avrasm>
 
-The label 'stuff' appears two instructions after the first 'breq
-stuff' instruction, so the assembler replaces the first 'breq stuff'
-with 'breq 2'.  On the other hand, the stuff label appears three
-instructions before the second 'breq stuff', so this is replaced with
-'breq -3'.  Likewise, 'rjmp hello' gets replaced by 'rjmp -5'.  So
-the above program is equivalent to: 
+The label <icode>stuff</icode> in this program has value 5.  The
+<icode>breq stuff</icode> instruction occurs at address 2, so in order
+to jump from <icode>breq stuff</icode> to the instruction after the
+<icode>stuff</icode> label, the assembler computes that it has to jump
+ahead 3 instructions.  This is accomplished by replacing the first
+<icode>breq stuff</icode> with <icode>breq 2</icode> (as, remember,
+the PC will get incremented after the instruction runs).  </p>
+    
+    <p>On the other hand, the instruction <icode>brne stuff</icode>
+    has address 7, and so to jump back to the label stuff would
+    require a jump of -2.  Because (again) branch instructions
+    increment the PC, this is accomplished by replacing the
+    <icode>brne stuff</icode> line with <icode>breq -3</icode>.
+    Likewise, <icode>rjmp hello</icode> gets replaced by <icode>rjmp
+    -5</icode>.  So the above program is equivalent to:
 
 
 <avrasm>ldi r31,0  
 cpi r31,8  
 breq 2  
 inc r31  
-rjmp -4  
+rjmp -5  
 dec r31  
 cpi r31,3  
-breq -3</avrasm>
+brne -3</avrasm>
 
 Of course, writing the program using labels means we don't have to
 adjust all the offsets of our jumps and branches if we change the
@@ -3194,113 +3329,12 @@ out 18, r30</avrasm>
   
 </text></section>
 
-<section><title>Labels</title>
-<text>
-  <p>Labels are lines that look like:
-
-  <code><i>label_name</i>: </code>
-
-  Where a label name can be exactly what a variable name in Python
-  could be: Anything containing only letters, numbers, or underscores,
-  except it cannot start with a number.</p>
-  
-  <p>Labels are used to mark a place in the program to refer to in
-  actual instructions, as in the examples of the previous section.
-  They do not themselves constitute actual instructions.  For example,
-  the two programs below are identical in terms of the instructions
-  that will be stored in program memory: 
-
-  <avrasm>ldi r30, 255
-out 26, r30
-ldi r30, \'H\'
-out 27, r30
-ldi r30, 255
-out 26, r30
-ldi r30, \'i\'
-out 27, r30</avrasm>
-
-
-<avrasm>hello:
-ldi r30, 255
-out 26, r30
-ldi r30, \'H\'
-some_label: 
-out 27, r30
-ldi r30, 255
-babel: 
-out 26, r30
-ldi r30, \'i\'
-out 27, r30</avrasm>
-
-  </p>
-</text></section>
-
 <section><title>Assembler directives</title>
 <text>
 
-<p>We will discuss only two kinds of assembler directives here.</p>
-
-<p><b>Byte directives</b></p>
-
-<p><def term='byte directive'>A <b>byte directive</b> looks like:
-
-<code>.byte(1231) 12,189,200,0,0</code>
-
-It will write the sequence of bytes (separated by commas) in the list
-into RAM at the specified address.  </def></p>
-
-<p>For example, the above directive creates the following situation in
-RAM:</p>
-
-<table>
-  <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
-  <tr><td>1231</td><td>12</td></tr>
-  <tr><td>1232</td><td>189</td></tr>
-  <tr><td>1233</td><td>200</td></tr>
-  <tr><td>1234</td><td>0</td></tr>
-  <tr><td>1235</td><td>0</td></tr>
-</table>
-
-<p>In general, however, we don't write programs using the byte
-directive.  Instead, we use the byte directive to include data that we
-want to reference in our program.  For example, if we want to sum the
-first 10 Fibonacci numbers, we could write some code to compute these,
-or we could just place them into RAM directly with a byte directive:
-
-<code>.byte(1005) 1,1,2,3,5,8,13,21,35,56</code></p>
-
-<p>Another sort of data that we often want to manipulate is string
-data.  Using the byte directive, we can store the string 'Hello
-World!' in RAM like:
-
-<code>.byte(504) 'H','e','l','l','o',' ','W','o','r','l','d','!'</code>
-
-But what bytes does this store?  Consulting the ASCII table from the
-next chapter, which tells us how to encode characters as bytes, we see
-that this is equivalent to
-
-<code>.byte(504) 72,101,108,108,111,32,87,111,114,108,100,33</code>
-</p>
-
-<p><b>String directives</b></p>
-
-<p>That last example for including strings may have looked a little
-inconvenient, so assembly language provides a second directive that
-makes this easier: the <b>string directive</b>.
-
-<def term='string directive'>The string directive looks like:
-
-<code>.string <i>string</i></code>
-
-where a string is the same as it was in our description of Python--any
-sequence of characters enclosed in double quotes, where newlines,
-tabs, and double-quotes inside the string are all represented with
-escape sequences.</def></p>
-
-<p>For example, we can recover the 'Hello World!' example with the
-string directive simply thus:
-
-<code>.string(504) "Hello World!"</code></p>
+<p>We have discussed in the section on labels the byte and string
+directives.  There is one further directive that behaves slightly
+differently: The word directive.  </p>
 
 </text></section>
 
