@@ -3854,10 +3854,10 @@ end_loop:</code>
    calculation that the function does.  Suppose r16 is the register
    that stores x.  Then this might look like:
 
-   <code>mov r1,r0
-add r0,r0
-add r0,r1
-inc r0</code>
+   <code>mov r1,r31
+add r31,r31
+add r31,r1
+inc r31</code>
 
    Then, to place this in a function, we'll put a label at the start
    which we can use to call it later, and a <icode>ret</icode>
@@ -3865,42 +3865,25 @@ inc r0</code>
    from it to whatever we were doing before:
 
    <code>f:
-mov r1,r0
-add r0,r0
-add r0,r1
-inc r0
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
 ret</code>
 
-   This function assumes that r0 contains the number that we want to
-   triple and then increment.  However, a common pattern for supplying
-   arguments to function code in assembly is to simply push the
-   arguments onto the stack.  If we adopt this convention, then the
-   first thing the function code should do is pop r0 to get its
-   argument into r0:  
+   This function assumes that r31 contains the number that we want to
+   triple and then increment.  However notice that this code also
+   overwrites whatever was in r1.  In general, the fewer registers we
+   overwrite, the better, so we can have this code push r1 before it
+   runs (saving its original value) and then pop r1 before it returns
+   (restoring its original value):
 
    <code>f:
-pop r0
-mov r1,r0
-add r0,r0
-add r0,r1
-inc r0
-ret</code>
-   
-   This does guarantee that whatever was in r0 before is going to get
-   overwritten.  This might be acceptable, and we can just say that r0
-   is a callee-saved register for this functin.  However notice that
-   this code also overwrites whatever was in r1.  In general, the
-   fewer registers we overwrite, the better, so we can have this code
-   push r1 before it runs (saving its original value) and then pop r1
-   before it returns (restoring its original value):
-
-   <code>f:
-pop r0
 push r1
-mov r1,r0
-add r0,r0
-add r0,r1
-inc r0
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
 pop r1
 ret</code>
 
@@ -3918,44 +3901,70 @@ x = f(27)</code>
    might look like: 
 
    <code>f:
-pop r0
 push r1
-mov r1,r0
-add r0,r0
-add r0,r1
-inc r0
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
 pop r1
 ret
-ldi r16,27
-push r16
+ldi r31,27
 rcall f</code>
 
    But wait!  This way, the first thing this program does will be to
-   run the function's code.  We want the <icode>ldi r16,27</icode>
+   run the function's code.  We want the <icode>ldi r31,27</icode>
    instruction to be run first.  If we put our functions at the start
    of the program, then we have to make sure the first instruction in
    the program is one t jump over all the function code:
 
-   <avrasm>rjmp real_program_start
+   <code>rjmp real_program_start
 f:
-push r17
-mov r17,r16
-add r16,r16
-add r16,r17
-inc r16
-pop r17
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
 ret
 
 real_program_start:
-ldi r16,27
+ldi r31,27
+rcall f</code>
+
+   There is one more problem, though.  We're using the stack, so we
+   should set the stack pointer to have some sensible value.  Earlier,
+   we picked 5000 = 19:136, so we'll use this again.  Thus the program
+   will first set the stack pointer then it will jump over all the
+   function code, then getting to the real meat of the program.  Thus
+   our final functioning compiled version of the simple Python program
+   will be: 
+
+   <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; Set r31 back to 0
+rjmp real_program_start
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+real_program_start:
+ldi r31,27
 rcall f</avrasm>
+
 
    This way, we can have multiple functions at the beginning and can
    simply jump over them all.  For example, another piece of code that
    we've used a lot is the "output a number code":
 
-   <code>ldi r31,255
-out 17,r31
+   <code>ldi r30,255
+out 17,r30
 out 18,<i>value to be outputted</i></code>
 
    This kind of behaves like the print function did in Python, so if
@@ -3972,39 +3981,42 @@ print(f(27))</code>
 
    
    <code>print: 
-pop r0
-push r31     ; save r31, since we will use it
-ldi r31,255
-out 17,r31   ; set D to output mode
-out 18,r0    ; output the argument
+push r30      ; save r30, since we will use it
+ldi r30,255
+out 17,r30    ; set D to output mode
+out 18,r31    ; output the argument
 pop r31
 ret</code>
 
 
-   <avrasm>rjmp real_program_start
+   <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
 f:
-push r17
-mov r17,r16
-add r16,r16
-add r16,r17
-inc r16
-pop r17
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
 ret
 
 print: 
-pop r0
-push r31     ; save r31, since we will use it
-ldi r31,255
-out 17,r31   ; set D to output mode
-out 18,r0    ; output the argument
+push r30      ; save r30, since we will use it
+ldi r30,255
+out 17,r30    ; set D to output mode
+out 18,r31    ; output the argument
 pop r31
 ret
 
 real_program_start:
-ldi r16,27
-push r16     ; push the argument for f
-rcall f      ; this will make r0 be f(27)
-push r0      ; push the argument for print
+ldi r31,27
+rcall f      ; this will make r31 be f(27)
 rcall print</avrasm>
    
   </p>
