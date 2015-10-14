@@ -1285,10 +1285,12 @@ right-shift by 1.  So, for example, 83 in binary is 01010011, so if we
 shift it right by 1 bit, we get 00101001, or 41.  The fact that a 1
 fell off the end when we shifted is reflected by the C flag getting
 set as a result.  If we instead shifted 82, or 01010010, then a 0
-would fall off the end, and the C flag would be cleared.  </p>
+would fall off the end, and the C flag would be cleared.  So in either
+case, the asr instruction divides the operand by 2 and stores the
+remainder in the C flag.</p>
 
 <p>On the other hand, if we shifted 130, or 10000010, then the result
-we see is 129.  Try it: 
+we see is 193.  Try it: 
 
 <avrasm>ldi r31,83
 asr r31
@@ -1298,11 +1300,17 @@ ldi r31,130
 asr r31</avrasm>
 
 So what gives?  The idea is that asr treats its operand as a two's
-complement representation and only performs a shift on the
-non-negative digits.  In the case of 130, those are 0000010.  So they
-get shifted right for a result of 0000001, and the negative
-place-value digit gets left alone.  Thus the final answer is 10000001,
-or 129.  </p>
+complement representation and, when it performs performs a shift on
+the digits, it preserves the value of the negative place-value digit.
+In the case of 130, a naive right-shift gives a value of 01000001, but
+since asr keeps the value of the top bit, which was originally set, we
+get an answer of 11000001, or 193.  </p>
+
+<p>Note also that in two's complement, 10000010 is -126, and 11000001
+is -63, so in fact the asr instruction is still dividing by 2, but it
+is dividing the two's complement interpretation of its operand by 2,
+rather than the non-negative interpretation.  This is why it is called
+"arithmetic shift right" (as opposed to just "shift right").</p>
 
 <table>
   <tr>
@@ -1318,7 +1326,7 @@ C: set if op1 was odd</pre></td>
   </tr>
   <tr>
 <td><pre>asr</pre></td>
-<td>Shift right by 1</td>
+<td>Arithmetic shift right by 1</td>
 <td><pre>reg</pre></td>
 <td><pre>[none]</pre></td>
 <td><pre>op1 = op1 >> 1</pre></td>
