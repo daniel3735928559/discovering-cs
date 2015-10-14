@@ -1687,7 +1687,7 @@ f5 28 60 b8
 
 	<answer>
 	
-	  <p>The answer is 1001010, computed by replacing every 0 with
+	  <p>The answer is 10001010, computed by replacing every 0 with
 	  a 1 and every 1 with a 0.</p>
 	</answer>
 	</exercise>

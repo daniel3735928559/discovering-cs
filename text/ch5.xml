@@ -3836,6 +3836,178 @@ end_loop:</code>
 
 <section><title>Functions</title>
 <text>
+  <p>The basic idea of functions in Python was to have a chunk of code
+  that could be called on to execute at various times throughout the
+  program.  In pure ISA, we've seen that we could accomplish a similar
+  thing with rcall and ret.  Now that we have learned how to more
+  easily create the offsets for things like rcall using labels, we can
+  revisit functions using assembly language to come up with a reasonably
+  organized pattern for translating general Python functions to
+  machine code.</p>
+
+  <p>Consider, for example, a function in Python like this:
+
+  <code>def f(x):
+   return 3*x+1</code>
+
+   In assembly, we first need a piece of code that performs the
+   calculation that the function does.  Suppose r16 is the register
+   that stores x.  Then this might look like:
+
+   <code>mov r1,r0
+add r0,r0
+add r0,r1
+inc r0</code>
+
+   Then, to place this in a function, we'll put a label at the start
+   which we can use to call it later, and a <icode>ret</icode>
+   instruction at the end so that after we've called it, we can return
+   from it to whatever we were doing before:
+
+   <code>f:
+mov r1,r0
+add r0,r0
+add r0,r1
+inc r0
+ret</code>
+
+   This function assumes that r0 contains the number that we want to
+   triple and then increment.  However, a common pattern for supplying
+   arguments to function code in assembly is to simply push the
+   arguments onto the stack.  If we adopt this convention, then the
+   first thing the function code should do is pop r0 to get its
+   argument into r0:  
+
+   <code>f:
+pop r0
+mov r1,r0
+add r0,r0
+add r0,r1
+inc r0
+ret</code>
+   
+   This does guarantee that whatever was in r0 before is going to get
+   overwritten.  This might be acceptable, and we can just say that r0
+   is a callee-saved register for this functin.  However notice that
+   this code also overwrites whatever was in r1.  In general, the
+   fewer registers we overwrite, the better, so we can have this code
+   push r1 before it runs (saving its original value) and then pop r1
+   before it returns (restoring its original value):
+
+   <code>f:
+pop r0
+push r1
+mov r1,r0
+add r0,r0
+add r0,r1
+inc r0
+pop r1
+ret</code>
+
+  </p>
+  
+  <p>
+   Finally, this code has to go somewhere.  A common choice would be
+   at the beginning of our program.  So the full Python program
+
+  <code>def f(x):
+   return 3*x+1
+
+x = f(27)</code>
+ 
+   might look like: 
+
+   <code>f:
+pop r0
+push r1
+mov r1,r0
+add r0,r0
+add r0,r1
+inc r0
+pop r1
+ret
+ldi r16,27
+push r16
+rcall f</code>
+
+   But wait!  This way, the first thing this program does will be to
+   run the function's code.  We want the <icode>ldi r16,27</icode>
+   instruction to be run first.  If we put our functions at the start
+   of the program, then we have to make sure the first instruction in
+   the program is one t jump over all the function code:
+
+   <avrasm>rjmp real_program_start
+f:
+push r17
+mov r17,r16
+add r16,r16
+add r16,r17
+inc r16
+pop r17
+ret
+
+real_program_start:
+ldi r16,27
+rcall f</avrasm>
+
+   This way, we can have multiple functions at the beginning and can
+   simply jump over them all.  For example, another piece of code that
+   we've used a lot is the "output a number code":
+
+   <code>ldi r31,255
+out 17,r31
+out 18,<i>value to be outputted</i></code>
+
+   This kind of behaves like the print function did in Python, so if
+   we were trying to compile to assembly the Python program:
+
+   <code>def f(x):
+   return 3*x+1
+
+print(f(27))</code>
+ 
+   then we would need two functions: <icode>f</icode> (which we
+   compiled above) and <icode>print</icode>, which might be translated
+   similarly as:
+
+   
+   <code>print: 
+pop r0
+push r31     ; save r31, since we will use it
+ldi r31,255
+out 17,r31   ; set D to output mode
+out 18,r0    ; output the argument
+pop r31
+ret</code>
+
+
+   <avrasm>rjmp real_program_start
+f:
+push r17
+mov r17,r16
+add r16,r16
+add r16,r17
+inc r16
+pop r17
+ret
+
+print: 
+pop r0
+push r31     ; save r31, since we will use it
+ldi r31,255
+out 17,r31   ; set D to output mode
+out 18,r0    ; output the argument
+pop r31
+ret
+
+real_program_start:
+ldi r16,27
+push r16     ; push the argument for f
+rcall f      ; this will make r0 be f(27)
+push r0      ; push the argument for print
+rcall print</avrasm>
+   
+  </p>
 </text></section>
 
 <section><title>Strings and arrays</title>
@@ -4104,159 +4276,159 @@ If we've got here, then the strings differ
 
 </section>
 
-<section><title>Applications</title>
-<text>
-  <p>The large-scale systems we have been describing are largely
-  programmed using high-level languages like Python, with few to none
-  of the pieces constructed by doing actual ISA programming.  Having
-  said that, Python is an abstraction over the ISA layer, and like all
-  abstractions, this one sometimes leaks.  That is, to make decisions
-  about our Python programming, we need to understand what happens at
-  the ISA level.  We give some examples of that in this section.</p>
-</text>
+<!-- <section><title>Applications</title> -->
+<!-- <text> -->
+<!--   <p>The large-scale systems we have been describing are largely -->
+<!--   programmed using high-level languages like Python, with few to none -->
+<!--   of the pieces constructed by doing actual ISA programming.  Having -->
+<!--   said that, Python is an abstraction over the ISA layer, and like all -->
+<!--   abstractions, this one sometimes leaks.  That is, to make decisions -->
+<!--   about our Python programming, we need to understand what happens at -->
+<!--   the ISA level.  We give some examples of that in this section.</p> -->
+<!-- </text> -->
 
-<section><title>Search engine -- Searching for a word in a string</title>
-<text>
-  <p><b>Introduction: </b></p>
-  <p>In Python, we identified
+<!-- <section><title>Search engine - Searching for a word in a string</title> -->
+<!-- <text> -->
+<!--   <p><b>Introduction: </b></p> -->
+<!--   <p>In Python, we identified -->
 
-  <code>if("banana" in s):
-  <i>do stuff</i></code>
+<!--   <code>if("banana" in s): -->
+<!--   <i>do stuff</i></code> -->
 
-  So in Python, testing if "banana" is found somewhere in a given
-  string looks simple enough--it's just one command!  But its being
-  one command in Python doesn't mean that it takes the computer one
-  step.  Remember that the computer only runs ISA operations, and any
-  Python code we write has to be turned into ISA operations before it
-  can be run.  So to understand what this very simple-looking Python
-  is hiding, we need to understand what ISA operations this command
-  corresponds to.</p>
+<!--   So in Python, testing if "banana" is found somewhere in a given -->
+<!--   string looks simple enough-it's just one command!  But its being -->
+<!--   one command in Python doesn't mean that it takes the computer one -->
+<!--   step.  Remember that the computer only runs ISA operations, and any -->
+<!--   Python code we write has to be turned into ISA operations before it -->
+<!--   can be run.  So to understand what this very simple-looking Python -->
+<!--   is hiding, we need to understand what ISA operations this command -->
+<!--   corresponds to.</p> -->
 
-  <p>To this end, let us think about how to search for "banana" inside
-  another string using the ISA.  First, the strings have to be stored
-  somewhere, and RAM is a natural location for them.  So our first
-  step will be to store the strings into RAM.  Once all the strings
-  are in RAM, then we want to use ISA operations to search for
-  "banana" in the longer string.  </p>
+<!--   <p>To this end, let us think about how to search for "banana" inside -->
+<!--   another string using the ISA.  First, the strings have to be stored -->
+<!--   somewhere, and RAM is a natural location for them.  So our first -->
+<!--   step will be to store the strings into RAM.  Once all the strings -->
+<!--   are in RAM, then we want to use ISA operations to search for -->
+<!--   "banana" in the longer string.  </p> -->
   
-  <p><b>Algorithm: </b></p>
-  <p>As we discussed, the first step of our algorithm will be to put
-  the strings into RAM.  But having done that, we now need to search
-  for "banana".  Because we know how to compare two strings
-  already--that is, given two addresses, we know how to write ISA
-  operations that detect whether the string starting at the one
-  address is the same as the string starting at the other.  Searching
-  for one string inside another can be understood as doing this
-  repeatedly: </p>
+<!--   <p><b>Algorithm: </b></p> -->
+<!--   <p>As we discussed, the first step of our algorithm will be to put -->
+<!--   the strings into RAM.  But having done that, we now need to search -->
+<!--   for "banana".  Because we know how to compare two strings -->
+<!--   already- -that is, given two addresses, we know how to write ISA -->
+<!--   operations that detect whether the string starting at the one -->
+<!--   address is the same as the string starting at the other.  Searching -->
+<!--   for one string inside another can be understood as doing this -->
+<!--   repeatedly: </p> -->
 
-  <p>Let Y be the address of the string "banana" stored in RAM, and Z
-  be the address of the string we're searching through.  Then we can
-  search by comparing, byte-by-byte, the bytes from address Y to
-  address Y+6 with the bytes from address Z to address Z+6.  This will
-  determine whether "banana" appears at the start of the string.  Then
-  we can compare the string "banana" with the bytes at Z+1 to Z+7,
-  testing whether it appears one character after the start.  And we
-  can repeat this indefinitely until we reach the end of the string.  </p>
+<!--   <p>Let Y be the address of the string "banana" stored in RAM, and Z -->
+<!--   be the address of the string we're searching through.  Then we can -->
+<!--   search by comparing, byte-by-byte, the bytes from address Y to -->
+<!--   address Y+6 with the bytes from address Z to address Z+6.  This will -->
+<!--   determine whether "banana" appears at the start of the string.  Then -->
+<!--   we can compare the string "banana" with the bytes at Z+1 to Z+7, -->
+<!--   testing whether it appears one character after the start.  And we -->
+<!--   can repeat this indefinitely until we reach the end of the string.  </p> -->
 
-  <p>So our strategy--our algorithm--will be to take all the possible
-  places where "banana" might appear in the string, and to perform the
-  string comparison to check this.  In particular, if the string has
-  length L, then "banana" might appear starting anywhere from position 0
-  in the string to position L-6.  So we do: 
+<!--   <p>So our strategy- -our algorithm- -will be to take all the possible -->
+<!--   places where "banana" might appear in the string, and to perform the -->
+<!--   string comparison to check this.  In particular, if the string has -->
+<!--   length L, then "banana" might appear starting anywhere from position 0 -->
+<!--   in the string to position L-6.  So we do:  -->
   
-  <ol>
-    <li>Put the strings into RAM</li>
-    <li>Check whether "banana" occurs at offset 0 in the string</li>
-    <li>Check whether "banana" occurs at offset 1 in the string</li>
-    <li>...</li>
-    <li>Check whether "banana" occurs at offset L-6 in the string</li>
-  </ol>
+<!--   <ol> -->
+<!--     <li>Put the strings into RAM</li> -->
+<!--     <li>Check whether "banana" occurs at offset 0 in the string</li> -->
+<!--     <li>Check whether "banana" occurs at offset 1 in the string</li> -->
+<!--     <li>...</li> -->
+<!--     <li>Check whether "banana" occurs at offset L-6 in the string</li> -->
+<!--   </ol> -->
 
-  Phrased without ellipsis:
+<!--   Phrased without ellipsis: -->
   
-  <ol>
-    <li>Put the strings into RAM</li>
-    <li>Set a counter to 0</li>
-    <li>
-      As long as the counter is less than L-6, do the following:
-      <ol>
-	<li>Check whether "banana" occurs at address Z+counter</li>
-	<li>If so, the answer is yes and we're done</li>
-	<li>If not, then increment the counter</li>
-      </ol>
-    </li>
-  </ol>
+<!--   <ol> -->
+<!--     <li>Put the strings into RAM</li> -->
+<!--     <li>Set a counter to 0</li> -->
+<!--     <li> -->
+<!--       As long as the counter is less than L-6, do the following: -->
+<!--       <ol> -->
+<!-- 	<li>Check whether "banana" occurs at address Z+counter</li> -->
+<!-- 	<li>If so, the answer is yes and we're done</li> -->
+<!-- 	<li>If not, then increment the counter</li> -->
+<!--       </ol> -->
+<!--     </li> -->
+<!--   </ol> -->
 
-  </p>
+<!--   </p> -->
   
-  <p><b>Program: </b>
+<!--   <p><b>Program: </b> -->
 
-<code>
-rjmp start
-target:
-.ascii "banana"
-src:
-.ascii "I like watermelons, kiwis, and bananas"
-start:
-...[move data into RAM]
-ldi r17,0
-ldi r20,0
-loop_start:
-cpi r17,32
-breq loop_end
-ldi r18,0
-inner_loop_start:
-cpi r18,6
-breq inner_loop_end_found
-ld r0,Y+
-ld r1,Z+
-cp r0,r1
-brne inner_loop_end_not_found
-inc r18
-rjmp inner_loop_start
-inner_loop_end_found:
-ldi r20,1
-rjmp loop_end
-inner_loop_end_not_found:
-inc r17
-rjmp loop_start
-loop_end:
-cpi 
-</code>
+<!-- <code> -->
+<!-- rjmp start -->
+<!-- target: -->
+<!-- .ascii "banana" -->
+<!-- src: -->
+<!-- .ascii "I like watermelons, kiwis, and bananas" -->
+<!-- start: -->
+<!-- ...[move data into RAM] -->
+<!-- ldi r17,0 -->
+<!-- ldi r20,0 -->
+<!-- loop_start: -->
+<!-- cpi r17,32 -->
+<!-- breq loop_end -->
+<!-- ldi r18,0 -->
+<!-- inner_loop_start: -->
+<!-- cpi r18,6 -->
+<!-- breq inner_loop_end_found -->
+<!-- ld r0,Y+ -->
+<!-- ld r1,Z+ -->
+<!-- cp r0,r1 -->
+<!-- brne inner_loop_end_not_found -->
+<!-- inc r18 -->
+<!-- rjmp inner_loop_start -->
+<!-- inner_loop_end_found: -->
+<!-- ldi r20,1 -->
+<!-- rjmp loop_end -->
+<!-- inner_loop_end_not_found: -->
+<!-- inc r17 -->
+<!-- rjmp loop_start -->
+<!-- loop_end: -->
+<!-- cpi  -->
+<!-- </code> -->
 
-</p>
+<!-- </p> -->
 
-<aside>
-  <p>It is worth doing a back-of-the-envelope calculation to see whether
-  the search-engine code we built in chapter 3 could function in an
-  environment like the Google search engine.  This program is going to
-  perform at least 6 ISA operations for every character in the target
-  string.  As of 2014, Google had collected 200 trillion bytes of data
-  from the internet.  So to search all of these for "banana", we would
-  have to perform 200*6 = 1200 trillion ISA operations in total.  The
-  fastest computer could perform maybe 4 billion of these a second,
-  meaning it would take such a computer 300000 seconds--or over 3
-  days--to perform this search.  </p>
+<!-- <aside> -->
+<!--   <p>It is worth doing a back-of-the-envelope calculation to see whether -->
+<!--   the search-engine code we built in chapter 3 could function in an -->
+<!--   environment like the Google search engine.  This program is going to -->
+<!--   perform at least 6 ISA operations for every character in the target -->
+<!--   string.  As of 2014, Google had collected 200 trillion bytes of data -->
+<!--   from the internet.  So to search all of these for "banana", we would -->
+<!--   have to perform 200*6 = 1200 trillion ISA operations in total.  The -->
+<!--   fastest computer could perform maybe 4 billion of these a second, -->
+<!--   meaning it would take such a computer 300000 seconds- -or over 3 -->
+<!--   days- -to perform this search.  </p> -->
 
-  <p>In contrast, an actual Google search for "banana" claims to
-  complete in .25 seconds.  Of course, Google has a lot of computers,
-  but to go from 300000 seconds to .25 seconds, they would have to use
-  300000/.25 = 1200000 computers--all that just for a single search.
-  In practice, they're handling well into the thousands of searches
-  per second, so it is clear rather than simply needing more
-  computers, they need a better algorithm.  Just using the Python 'in'
-  test, it is not immediately obvious what the ramifications are until
-  we think of the operation in terms of the ISA.  </p>
+<!--   <p>In contrast, an actual Google search for "banana" claims to -->
+<!--   complete in .25 seconds.  Of course, Google has a lot of computers, -->
+<!--   but to go from 300000 seconds to .25 seconds, they would have to use -->
+<!--   300000/.25 = 1200000 computers- -all that just for a single search. -->
+<!--   In practice, they're handling well into the thousands of searches -->
+<!--   per second, so it is clear rather than simply needing more -->
+<!--   computers, they need a better algorithm.  Just using the Python 'in' -->
+<!--   test, it is not immediately obvious what the ramifications are until -->
+<!--   we think of the operation in terms of the ISA.  </p> -->
 
-  <p>In fact, the ISA code that Python uses to run the 'in' operation
-  is quite sophisticated and substantially faster than the code
-  described above, and does have a decent running time.  The point is
-  that the operation hides exactly what is happening and hence
-  judging its use as appropriate based on the fact that the code
-  looks simple can be quite misleading.  </p>
-</aside>
+<!--   <p>In fact, the ISA code that Python uses to run the 'in' operation -->
+<!--   is quite sophisticated and substantially faster than the code -->
+<!--   described above, and does have a decent running time.  The point is -->
+<!--   that the operation hides exactly what is happening and hence -->
+<!--   judging its use as appropriate based on the fact that the code -->
+<!--   looks simple can be quite misleading.  </p> -->
+<!-- </aside> -->
 
-</text></section>
+<!-- </text></section> -->
 
 <!-- <section><title>Game console: Integer overflow</title> -->
 <!-- <text> -->
@@ -4271,7 +4443,7 @@ cpi
 <!-- </text></section> -->
 
 
-</section>
+<!-- </section> -->
 
 
 <section>
