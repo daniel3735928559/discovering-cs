@@ -8,9 +8,9 @@ div.definition {
     display:inline;
 }
 
-div.icode {
+span.icode {
     display:inline;
-    font-face: monospace;
+    font-family: monospace;
 }
 
 div.caption {

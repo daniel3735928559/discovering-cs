@@ -149,7 +149,7 @@
   </xsl:template>
 
   <xsl:template match="icode">
-    <div class="icode"><xsl:apply-templates /></div>
+    <span class="icode"><xsl:apply-templates /></span>
   </xsl:template>
 
   <xsl:template match="python">
@@ -273,29 +273,31 @@
       <head>
 	<title><xsl:value-of select="chapter/title" /></title>
 	<link rel="stylesheet" type="text/css" href="/text/box.css" />
-	<!-- <link rel="stylesheet" type="text/css" href="/sim/py/sim.css" /> -->
-	<link rel="stylesheet" type="text/css" href="/sim/avr/sim.css" />
-	<link rel="stylesheet" type="text/css" href="/sim/bin/sim.css" />
-	<link rel="stylesheet" href="/sim/cm/codemirror.css" />
-	<link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
-	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
-	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
-	<script type="text/javascript" src="/text/box.js"></script>
-	<script type="text/javascript" src="/sim/cm/codemirror.js"></script>
-	<!-- <script type="text/javascript" src="/sim/py/expr_ng.js"></script> -->
-	<!-- <script type="text/javascript" src="/sim/py/sim.js"></script> -->
-	<xsl:if test="count(//python) > 0">
-	  <link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
-	  <script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
-	  <script type="text/javascript" src="/lib/spy/sim.js"></script>
-	</xsl:if>
 
-	<!-- <script type="text/javascript" src="/sim/avr/sim.js"></script> -->
-	<script type="text/javascript" src="/sim/bin/sim.js"></script>
-
-	<xsl:if test="count(//avrasm) > 0">
-	  <link rel="stylesheet" type="text/css" href="/lib/jsavr/sim.css" />
-	  <script type="text/javascript" src="/lib/jsavr/sim.js"></script>
+	
+	<xsl:if test="$print!='yes'">
+	  <link rel="stylesheet" href="/sim/cm/codemirror.css" />
+	  <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
+	  <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
+	  <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
+	  <script type="text/javascript" src="/text/box.js"></script>
+	  <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
+	  
+	  <xsl:if test="count(//python) > 0">
+	    <link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
+	    <script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
+	    <script type="text/javascript" src="/lib/spy/sim.js"></script>
+	  </xsl:if>
+	  
+	  <xsl:if test="count(//binsim) > 0">
+	    <link rel="stylesheet" type="text/css" href="/sim/bin/sim.css" />
+	    <script type="text/javascript" src="/sim/bin/sim.js"></script>
+	  </xsl:if>
+	  
+	  <xsl:if test="count(//avrasm) > 0">
+	    <link rel="stylesheet" type="text/css" href="/lib/jsavr/sim.css" />
+	    <script type="text/javascript" src="/lib/jsavr/sim.js"></script>
+	  </xsl:if>
 	</xsl:if>
       </head>
       <body ng-app="app">	
