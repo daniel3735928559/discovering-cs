@@ -4024,7 +4024,235 @@ rcall print</avrasm>
 
 <section><title>Strings and arrays</title>
 <text>
-</text></section>
+
+  <p>While registers are often used for storing single values that are
+  being used in computation, the entire register file can only store
+  32 bytes in total.  So if we want to perform the kinds of work that
+  we ultimately wanted to do in Python, with longer sections of text
+  and with arrays, we will need more storage than that.  For strings
+  and arrays, then, we use RAM.  </p>
+
+  <p>We've already seen how to get a string or a sequence of bytes
+  into RAM using the <icode>.string</icode> and <icode>.byte</icode>
+  directives.  But we will want to do more than just store strings and
+  arrays.  We want to be able to concatenate them, find their lengths,
+  test if two of them are the same, find values inside them, and so
+  on.  We'll save some of these for the next section, but we'll
+  discuss lengths and concatenation in this section to get a feel for
+  working with data stored in RAM.</p>
+
+  <p><b>String length</b>: Let's start by writing a string length
+  function.  That is, say we placed have the string "Mangoes are yummy." in
+  RAM:
+
+  <code>.string(fact) "Mangoes are yummy."</code>
+
+  Then the value of the label <icode>fact</icode> will be the address
+  of the start of this string in RAM.  Remember that the string
+  directive also appends a 0 byte to the end of the string, so if we
+  want to find the length of the string, we can start at the beginning
+  and walk through until we see a 0.</p>
+  
+  <p>In Python, this would be done with a while loop--something like:
+
+<code>while(<i>character</i> != 0):
+   <i>go to the next character</i></code>
+
+   And we just learned how to translate while loops into assembly.  In
+   this case, it will look like:
+
+<code><i>get the first character</i>
+search_loop:
+cp <i>first character</i>,0
+breq end_of_search_loop
+<i>get the next character</i>
+rjmp search_loop
+end_of_search_loop:  </code>
+
+   So: 
+
+  <avrasm>.string(fact) "Mangoes are yummy."
+ldi r30,lo8(fact)
+ldi r31,hi8(fact)   ; Now the start of the string is stored in Z
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  </avrasm>
+
+Once we're at the end of the loop, Z will hopefully be the address of
+the end of the string.  Sadly, because of the post-incrementing, it
+will actually 1 greater than that, so we should subtract 1 from it
+immediately after.  Recall we can do this with:
+
+<code>ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29</code>
+
+After this, Z will actually be the address of the end of the string.
+So now what?  Since the length of the string should be the difference
+between the start and end addresses, we want to compute <icode>Z -
+fact</icode> to get the length of the string.
+</p>
+  
+  <p>To begin with, we'd need to get the value of <icode>fact</icode>
+  into registers so that we can begin to compute with it:
+
+  <code>ldi r28,lo8(fact)
+ldi r29,hi8(fact)</code>
+
+   Then we need to subtract r29:r28 from r31:r30.  Analogously to how
+   we added large numbers comprised of several registers, we can
+   subtract them:
+
+   <code>sub r30,r28
+sbc r31,r29</code>
+
+leaving us with the code:
+
+  <avrasm>.string(fact) "Mangoes are yummy."
+ldi r30,lo8(fact)
+ldi r31,hi8(fact)   ; Now the start of the string is stored in Z
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  
+ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29
+ldi r28,lo8(fact)
+ldi r29,hi8(fact)
+sub r30,r28
+sbc r31,r29</avrasm>
+
+At the end of this, Z will store the length of the string.
+
+We can wrap this as a function that takes now both r31 and r30 as
+arguments and modifies them so that r31:r30 is the length of the
+string at the provided address:
+
+<code>string_length:
+push r16
+push r28
+push r29
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  
+ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29
+ldi r28,lo8(fact)
+ldi r29,hi8(fact)
+sub r30,r28
+sbc r31,r29
+pop r29
+pop r28
+pop r16
+ret</code>
+
+  </p>
+
+  <p>
+    <b>Array length: </b>OK, so we could get the lengths of strings.
+    What about more general arrays, such as:
+
+    <code>.byte(fibonacci) 1,1,2,3,5,8,13,21,34,55</code>
+
+    Unlike the .string directive, the .byte directive does not store a
+    0 at the end of the bytes.  The reason is that this would not
+    necessarily be meaningful: It is perfectly valid to store an array
+    with 0s in it:
+    
+    <code>.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</code>
+
+    So how can we find the end of an array if there's no way to tell
+    if we're at the end of the array?  The answer is that we cannot:
+    Unlike strings, simply the starting address of an array is not
+    enough to let us find its length.  So for an array, we would need
+    to somehow store the length or the ending address as well.  One
+    way to do this would be to simply put it in RAM: 
+    
+    <code>.byte(length_of_digits_of_aperys_constant) 16
+.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</code>
+
+One feature of this technique is that if we ever want to modify the
+array--deleting or adding an element--we also have to update the
+stored length.  This is fine, but it does cause us to worry: what if
+we add so many elements that we cannot fit the length in a single
+byte?  We could protect against this case by storing two bytes for the
+length:
+  
+    <code>.byte(length_of_digits_of_aperys_constant) 0,16
+.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</code>
+
+where now for the purpose of updating the array we'll treat these two
+  bytes as a 16-bit number.</p>
+
+  <warning title="Strings need metadata too"><p>Now that we did all
+  that work to compute the lengths of strings and then we simply
+  cheated our way out of doing the same for arrays we could ask: Why
+  can't we just also store the length of a string?  The answer is that
+  we actually can!  Moreover, it is almost uniformly more efficient to
+  do so.  </p>
+
+  <p>We introduce both techniques because there are programming
+  languages (most notably, one called C), in which strings are
+  actually stored as sequences of characters followed by a 0 byte.
+  When working with such languages, it can be important to realize
+  that something as simple as asking for the length of the string may
+  actually involve a large number of operations to walk the entire
+  length of the string looking for the 0 byte.  </p>
+  
+  <p>This is one famous example of where the abstraction of a
+  high-level programming language can leak very badly.  Doing
+  <icode>len(my_string)</icode> in Python (which does separately store
+  the lengths of its strings), and <icode>strlen(my_string)</icode> in
+  C, while they look very similar and do the same thing, will actually
+  take very different amounts of time.</p></warning>
+
+  <p><b>Deleting an element from an array</b>: Say we've got an array
+  like <icode>2,3,5,7,0,11,13,0,17</icode> and we want to remove the
+  first 0 from it.  </p>
+  
+  <p>Well, what does this actually look like in RAM?  We are starting
+  with the situation like: </p>
+
+  <table><tr><td>Address:</td><td>1024</td><td>1025</td><td>1026</td><td>1027</td><td>1028</td><td>1029</td><td>1030</td><td>1031</td><td>1032</td></tr>
+  <tr><td>Value:</td><td>2</td><td>3</td><td>5</td><td>7</td><td>0</td><td>11</td><td>13</td><td>0</td><td>17</td></tr>
+  </table>
+
+  <p>and end up with the situation: </p>
+  
+  <table><tr><td>Address:</td><td>1024</td><td>1025</td><td>1026</td><td>1027</td><td>1028</td><td>1029</td><td>1030</td><td>1031</td></tr>
+  <tr><td>Value:</td><td>2</td><td>3</td><td>5</td><td>7</td><td>11</td><td>13</td><td>0</td><td>17</td></tr>
+  </table>
+
+  <p>so while it seems like a small operation, what we see is that the
+  value at RAM address 1029 has to be moved to RAM address 1028, the
+  value at 1030 has to be moved to 1029, and so on.  So actually, this
+  simple operation requires us to shuffle around half the elements of
+  the list.  (And then, of course, we have to decrement its length.)</p>
+
+  <p>So let's suppose we are writing a function to do this.  It will
+  take as input r31 and r30 giving the address of the start of the
+  array, and also r29,r28 the address where the length is stored, and
+  finally r16 will be the index we wish to delete.  </p>
+
+  <p>Then the algorithm will be: </p>
+  
+  </text></section>
 
 </section>
 
