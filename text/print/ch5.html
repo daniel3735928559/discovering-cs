@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><link rel="stylesheet" type="text/css" href="/sim/avr/sim.css"><link rel="stylesheet" type="text/css" href="/sim/bin/sim.css"><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><script type="text/javascript" src="/sim/cm/codemirror.js"></script><script type="text/javascript" src="/sim/bin/sim.js"></script><link rel="stylesheet" type="text/css" href="/lib/jsavr/sim.css"><script type="text/javascript" src="/lib/jsavr/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5')">5: The ISA -- The Computer's Native Language</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_1')">5.1: Where are we now?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_2')">5.2: What is an ISA?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3')">5.3: Computer architecture</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_3_1')">5.3.1: What is a memory?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_2')">5.3.2: RAM</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_3')">5.3.3: Program memory</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_4')">5.3.4: Register file</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_5')">5.3.5: Program counter</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_6')">5.3.6: Status register</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_7')">5.3.7: I/O registers</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_4')">5.4: The Instructions</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_4_1')">5.4.1: A simple example</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_2')">5.4.2: Introduction to ISA instructions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_3')">5.4.3: Storage</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_4')">5.4.4: Computation</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_5')">5.4.5: Input/Output</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_6')">5.4.6: Flow-control</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_7')">5.4.7: Debrief</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_5')">5.5: Advanced ISA features</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_5_1')">5.5.1: Immediate operands</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_2')">5.5.2: Add-with-carry</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_3')">5.5.3: Sequential RAM operations</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_4')">5.5.4: The stack</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_5')">5.5.5: Functions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_6')">5.5.6: Further ISA features</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_6')">5.6: Assembly language</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_6_1')">5.6.1: ISA Operations</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_6_2')">5.6.2: Labels</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_6_3')">5.6.3: Assembler directives</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_7')">5.7: Python-to-assembly recipes</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_7_1')">5.7.1: Large numbers</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_7_2')">5.7.2: if statements</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_7_3')">5.7.3: while loops</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_8')">5.8: Simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_8_1')">5.8.1: Summing the first n integers</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_8_2')">5.8.2: Multiplication</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_8_3')">5.8.3: Comparing two strings</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_9')">5.9: Applications</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_9_1')">5.9.1: Search engine -- Searching for a word in a string</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_10')">5.10: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_architecture')">architecture</a><br><a href="#" ng-click="goto_loc('def_mnemonic')">mnemonic</a><br><a href="#" ng-click="goto_loc('def_x86 architecture')">x86 architecture</a><br><a href="#" ng-click="goto_loc('def_ARM architecture')">ARM architecture</a><br><a href="#" ng-click="goto_loc('def_AVR architecture')">AVR architecture</a><br><a href="#" ng-click="goto_loc('def_assembler')">assembler</a><br><a href="#" ng-click="goto_loc('def_assembler directives')">assembler directives</a><br><a href="#" ng-click="goto_loc('def_assembly language')">assembly language</a><br><a href="#" ng-click="goto_loc('def_memory')">memory</a><br><a href="#" ng-click="goto_loc('def_size')">size</a><br><a href="#" ng-click="goto_loc('def_width')">width</a><br><a href="#" ng-click="goto_loc('def_address')">address</a><br><a href="#" ng-click="goto_loc('def_RAM')">RAM</a><br><a href="#" ng-click="goto_loc('def_non-persistent')">non-persistent</a><br><a href="#" ng-click="goto_loc('def_program memory')">program memory</a><br><a href="#" ng-click="goto_loc('def_persistent')">persistent</a><br><a href="#" ng-click="goto_loc('def_register file')">register file</a><br><a href="#" ng-click="goto_loc('def_program counter')">program counter</a><br><a href="#" ng-click="goto_loc('def_status register')">status register</a><br><a href="#" ng-click="goto_loc('def_flag')">flag</a><br><a href="#" ng-click="goto_loc('def_setting/clearing')">setting/clearing</a><br><a href="#" ng-click="goto_loc('def_destination')">destination</a><br><a href="#" ng-click="goto_loc('def_source')">source</a><br><a href="#" ng-click="goto_loc('def_branch')">branch</a><br><a href="#" ng-click="goto_loc('def_push')">push</a><br><a href="#" ng-click="goto_loc('def_pop')">pop</a><br><a href="#" ng-click="goto_loc('def_stack pointer')">stack pointer</a><br><a href="#" ng-click="goto_loc('def_callee-saved')">callee-saved</a><br><a href="#" ng-click="goto_loc('def_caller-saved')">caller-saved</a><br><a href="#" ng-click="goto_loc('def_datasheet')">datasheet</a><br><a href="#" ng-click="goto_loc('def_assembly language')">assembly language</a><br><a href="#" ng-click="goto_loc('def_assembler')">assembler</a><br><a href="#" ng-click="goto_loc('def_byte directive')">byte directive</a><br><a href="#" ng-click="goto_loc('def_string directive')">string directive</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_5"></div><div class="text"><div class="header">5: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5')">5: The ISA -- The Computer's Native Language</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_1')">5.1: Where are we now?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_2')">5.2: What is an ISA?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3')">5.3: Computer architecture</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_3_1')">5.3.1: What is a memory?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_2')">5.3.2: RAM</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_3')">5.3.3: Program memory</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_4')">5.3.4: Register file</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_5')">5.3.5: Program counter</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_6')">5.3.6: Status register</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_7')">5.3.7: I/O registers</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_4')">5.4: The Instructions</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_4_1')">5.4.1: A simple example</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_2')">5.4.2: Introduction to ISA instructions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_3')">5.4.3: Storage</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_4')">5.4.4: Computation</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_5')">5.4.5: Input/Output</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_6')">5.4.6: Flow-control</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_7')">5.4.7: Debrief</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_5')">5.5: Advanced ISA features</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_5_1')">5.5.1: Immediate operands</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_2')">5.5.2: Add-with-carry</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_3')">5.5.3: Sequential RAM operations</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_4')">5.5.4: The stack</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_5')">5.5.5: Functions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_6')">5.5.6: Further ISA features</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_6')">5.6: Assembly language</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_6_1')">5.6.1: Labels</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_6_2')">5.6.2: ISA Operations</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_6_3')">5.6.3: Word directives</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_7')">5.7: Python-to-assembly recipes</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_7_1')">5.7.1: Assignment</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_7_2')">5.7.2: Large numbers</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_7_3')">5.7.3: if statements</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_7_4')">5.7.4: while loops</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_7_5')">5.7.5: Functions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_7_6')">5.7.6: Strings and arrays</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_8')">5.8: Simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_8_1')">5.8.1: Summing the first n integers</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_8_2')">5.8.2: Multiplication</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_8_3')">5.8.3: Comparing two strings</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_9')">5.9: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_architecture')">architecture</a><br><a href="#" ng-click="goto_loc('def_mnemonic')">mnemonic</a><br><a href="#" ng-click="goto_loc('def_x86 architecture')">x86 architecture</a><br><a href="#" ng-click="goto_loc('def_ARM architecture')">ARM architecture</a><br><a href="#" ng-click="goto_loc('def_AVR architecture')">AVR architecture</a><br><a href="#" ng-click="goto_loc('def_assembler directives')">assembler directives</a><br><a href="#" ng-click="goto_loc('def_memory')">memory</a><br><a href="#" ng-click="goto_loc('def_size')">size</a><br><a href="#" ng-click="goto_loc('def_width')">width</a><br><a href="#" ng-click="goto_loc('def_address')">address</a><br><a href="#" ng-click="goto_loc('def_RAM')">RAM</a><br><a href="#" ng-click="goto_loc('def_non-persistent')">non-persistent</a><br><a href="#" ng-click="goto_loc('def_program memory')">program memory</a><br><a href="#" ng-click="goto_loc('def_persistent')">persistent</a><br><a href="#" ng-click="goto_loc('def_register file')">register file</a><br><a href="#" ng-click="goto_loc('def_program counter')">program counter</a><br><a href="#" ng-click="goto_loc('def_status register')">status register</a><br><a href="#" ng-click="goto_loc('def_flag')">flag</a><br><a href="#" ng-click="goto_loc('def_setting/clearing')">setting/clearing</a><br><a href="#" ng-click="goto_loc('def_destination')">destination</a><br><a href="#" ng-click="goto_loc('def_source')">source</a><br><a href="#" ng-click="goto_loc('def_branch')">branch</a><br><a href="#" ng-click="goto_loc('def_push')">push</a><br><a href="#" ng-click="goto_loc('def_pop')">pop</a><br><a href="#" ng-click="goto_loc('def_stack pointer')">stack pointer</a><br><a href="#" ng-click="goto_loc('def_callee-saved')">callee-saved</a><br><a href="#" ng-click="goto_loc('def_caller-saved')">caller-saved</a><br><a href="#" ng-click="goto_loc('def_datasheet')">datasheet</a><br><a href="#" ng-click="goto_loc('def_assembly language')">assembly language</a><br><a href="#" ng-click="goto_loc('def_assembler')">assembler</a><br><a href="#" ng-click="goto_loc('def_byte directive')">byte directive</a><br><a href="#" ng-click="goto_loc('def_string directive')">string directive</a><br><a href="#" ng-click="goto_loc('def_word directive')">word directive</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_5"></div><div class="text"><div class="header">5: 
 	  The ISA -- The Computer's Native Language</div><div class="summary"><b>Summary: </b>In this chapter, we'll start to move toward how to build a
     computer.  This involves a substantial change in tack because building a
     physical machine that understands Python code turns out to be very
@@ -118,24 +118,22 @@ and phones as fast as they are. Actual AVR computers in the wild
 tend to be used for simpler things like the processor in charge of
 your thermostat or blender or car.  They are also the computer used in
 the Arduino boards, which have become popular among hobbyists.</p><div class="figure"><img src="/text/figures/5.2.fig3.png" width="800px"><div class="caption">Figure 5.2.3: </div></div><p>Once we understand the AVR ISA, we will want to actually program an
-AVR computer using it.  <div id="def_assembler" class="definition"></div>We are able to simply
-write mnemonics for instructions from the ISA and have a program
-translate these to the encoded form--a sequence of numbers--that the
-computer will understand.  This program is called an
-<b>assembler</b>. <div id="def_assembler directives" class="definition"></div>Most
-assemblers are a little more sophisticated than just encoding
-instructions from mnemonics and have extra features that make writing
-the instructions a bit easier.  These extra features take the form of
-assembler <b>directives</b>.  For instance, if you want an instruction
-repeated 32 times, you don't have to write the instruction 32 times,
-but can write a directive preceding the instruction that will tell the
-assembler to make 32 copies of the instruction for you. <div id="def_assembly language" class="definition"></div>The language that the assembler understands
-is a programming language called <b>assembly language</b>.  The ISA
+AVR computer using it.  We are able to simply write mnemonics for
+instructions from the ISA and have a program translate these to the
+encoded form--a sequence of numbers--that the computer will
+understand.  This program is called an "assembler". <div id="def_assembler directives" class="definition"></div>Most assemblers are a little more
+sophisticated than just encoding instructions from mnemonics and have
+extra features that make writing the instructions a bit easier.  These
+extra features take the form of assembler <b>directives</b>.  For
+instance, if you want an instruction repeated 32 times, you don't have
+to write the instruction 32 times, but can write a directive preceding
+the instruction that will tell the assembler to make 32 copies of the
+instruction for you. The language that the assembler understands
+is a programming language called "assembly language".  The ISA
 instructions are a huge part of assembly language, but as we
 mentioned, there are is a small part beyond that consisting of the
-<b>assembler directives</b> which make assembly language very slightly
-more concise than just using the ISA instructions
-themselves.</p><p>In this chapter, we will start by discussing the AVR architecture (5.1) and
+"assembler directives" which make assembly language very slightly more
+concise than just using the ISA instructions themselves.</p><p>In this chapter, we will start by discussing the AVR architecture (5.1) and
 instruction set (5.2 for basic instructions, 5.3 for more complicated ones),
 electing to leave all discussion of the encoding to chapter 6.  We will then
 introduce the assembler and explain some features of assembly language that
@@ -307,8 +305,9 @@ C.  Of these, we shall only really consider three:
 
 <ul><li>The C flag, which generally gets set if there was an addition
 or subtraction operation involved with the instruction and that
-instruction and this operation overflowed.  In our above example, the
-addition would produce a result of 44 and would set the C flag.  </li>
+instruction and this operation overflowed.  In our above example of
+100 + 200, the addition would produce a result of 44 and would set the
+C flag.  </li>
 
 <li>The Z flag, which generally gets set if the result of the previous
 operation was 0, and cleared otherwise.  Since the above addition did
@@ -316,15 +315,22 @@ not result in an answer of 0, the Z flag would be cleared.  </li>
 
 <li>The N flag, which generally gets set if there was an addition or
 subtraction operation involved with the instruction and the result of
-the addition/subtraction was a negative number.  The above addition
-would clear the N flag.  </li>
+the addition/subtraction was a negative number (when interpreted as an
+8-bit two's complement number).  The above addition has a result of 44
+or, in binary, 00101100, which, as a two's complement number, is not
+negative (as the most significant bit is clear).  This addition would
+therefore clear the N flag.  </li>
 </ul>
 
 We use the word "generally" in all of these descriptions, because
 there are exceptions, and when introducing each instruction, we'll
 explain precisely how it affects these three flags.</p><p>In the event that an instruction doesn't perform an arithmetic
 operation, say, the flags do not get changed but rather remain as
-whatever they were before the instruction was executed.</p></div></div><div class="section"><div id="sec_5_3_7"></div><div class="text"><div class="header">5.3.7: 
+whatever they were before the instruction was executed.  So if we
+perform a subtraction whose result is 0, then the Z flag will get set.
+If we then perform a bunch of non-arithmetic operations that don't
+affect the sreg at all, then the Z flag will remain set through all of
+them.</p></div></div><div class="section"><div id="sec_5_3_7"></div><div class="text"><div class="header">5.3.7: 
 	  I/O registers</div><div class="figure"><img src="/text/figures/5.3.7.fig1.png" width="800px"><div class="caption">Figure 5.3.7.1: The many memories of an AVR
   computer.</div></div><p>There is one final piece to the architecture, which will not play a
 huge role in what follows, but which is very important for practical
@@ -597,7 +603,7 @@ ldi r19,-1</pre></div>
 Do exactly the same thing.</p><p>But say we want to put a value into r10.  ldi only lets us load
 into registers r16 and up, so what then?  We cannot use ldi, but we
 can copy a value from one register into another using a second
-instruction--the "move" instruction, called <div class="icode">mov</div>.  This
+instruction--the "move" instruction, called <span class="icode">mov</span>.  This
 instruction accepts any pair of general-purpose registers for its two
 operands, and will copy the value in the second operand register into
 the first.  So, for example, if we did want to get the number 9 into
@@ -915,13 +921,13 @@ C: unchanged</pre></td>
 </tr>
 </table><p>Similarly to add and sub for arithmetic operations, we have
 operations for performing the bitwise boolean operations we described
-at the end of chapter 4: and, or, xor, not, and shifting.  These
+at the end of chapter 4: and, or, xor, and not.  These
 behave entirely analogously except that they do not modify the C flag
 and the minor note that some of them have different names: The
 operation performing the XOR operations is called "eor" instead (the
 AVR ISA designers preferred "eor" to stand for "exclusive or" than
-"xor"), the "NOT" operation is called "com" (short for "1's
-complement"), and the right-shift operation is called "asr":</p><table class="ISA_table"><tr>
+"xor"), the "NOT" operation is called "com" (short for "one's
+complement").  </p><table class="ISA_table"><tr>
 <td>Instruction</td>
 <td>Description</td>
 <td>Operand 1</td>
@@ -973,9 +979,60 @@ N: set if result is negative
 Z: set if result is 0
 C: unchanged</pre></td>
 </tr>
-<tr>
+</table><p>All the operations thus far treat their operands as non-negative
+representations of numbers.  However there are operations that do not.
+For example, the <span class="icode">neg</span> operation takes a single register
+as its operand, treats it as a two's complement representation, and
+computes the representation of the negative of that number.  For
+example, 3 in binary is 00000011, and the negative of this byte
+treated as a two's complement representation is 11111101.  Thus
+
+<div class="code"><pre>ldi r31,3
+neg r31</pre></div>
+
+will end up with r31 storing the bits 11111101, which will be
+displayed as "253" in decimal.</p><p>In the bitwise operations vein, there is the <span class="icode">asr</span>
+instruction which takes a single register and will perform a
+right-shift by 1.  So, for example, 83 in binary is 01010011, so if we
+shift it right by 1 bit, we get 00101001, or 41.  The fact that a 1
+fell off the end when we shifted is reflected by the C flag getting
+set as a result.  If we instead shifted 82, or 01010010, then a 0
+would fall off the end, and the C flag would be cleared.  So in either
+case, the asr instruction divides the operand by 2 and stores the
+remainder in the C flag.</p><p>On the other hand, if we shifted 130, or 10000010, then the result
+we see is 193.  Try it: 
+
+<div class="code"><pre>ldi r31,83
+asr r31
+ldi r31,82
+asr r31
+ldi r31,130
+asr r31</pre></div>
+
+So what gives?  The idea is that asr treats its operand as a two's
+complement representation and, when it performs performs a shift on
+the digits, it preserves the value of the negative place-value digit.
+In the case of 130, a naive right-shift gives a value of 01000001, but
+since asr keeps the value of the top bit, which was originally set, we
+get an answer of 11000001, or 193.  </p><p>Note also that in two's complement, 10000010 is -126, and 11000001
+is -63, so in fact the asr instruction is still dividing by 2, but it
+is dividing the two's complement interpretation of its operand by 2,
+rather than the non-negative interpretation.  This is why it is called
+"arithmetic shift right" (as opposed to just "shift right").</p><table>
+  <tr>
+<td><pre>neg</pre></td>
+<td>Negate</td>
+<td><pre>reg</pre></td>
+<td><pre>[none]</pre></td>
+<td><pre>op1 = -op1</pre></td>
+<td><pre>pc: increment
+N: set if result is negative
+Z: set if result is 0
+C: set if op1 was odd</pre></td>
+  </tr>
+  <tr>
 <td><pre>asr</pre></td>
-<td>Shift right by 1</td>
+<td>Arithmetic shift right by 1</td>
 <td><pre>reg</pre></td>
 <td><pre>[none]</pre></td>
 <td><pre>op1 = op1 &gt;&gt; 1</pre></td>
@@ -1582,7 +1639,7 @@ but rather
 <div class="code"><pre>r19 = r19 + 1
 r16 = r16 + C</pre></div>
 </p><p>Happily, there is an instruction which does this and more--adc.  It
-takes the same register operands as <div class="icode">add</div> and adds the
+takes the same register operands as <span class="icode">add</span> and adds the
 two registers together, much as add did, but also adds the C flag on
 to the result.  That is, it performs normal addition to if the C flag
 is 0, and if the C flag is instead 1, it performs normal addition and
@@ -1885,7 +1942,7 @@ value 99, and the stack will be empty.</p><p><b>How it actually works: </b></p><
 what the push and pop instructions do, but what is the architectural
 reality behind this conceptual idea?  After all, we say that things we
 push get stored on the stack, but there wasn't a "stack" memory in the
-architecture.  So where does <div class="icode">push</div> actually store
+architecture.  So where does <span class="icode">push</span> actually store
 things?</p><p>The answer is that it stores things in RAM.  But where in RAM?
 <div id="def_stack pointer" class="definition"></div>There is a 16-bit register called the
 <b>stack pointer</b>, or often called <b>sp</b>, which stores the
@@ -2030,7 +2087,7 @@ multiple places elsewhere in our code.  In the ISA, we have already
 seen code that would be useful to treat this way: Our code for
 outputting a number (say, the contents of r30): 
 
-<div class="code"><pre>ldi 255, r31
+<div class="code"><pre>ldi r31, 255
 out 26, r31
 out 27, r30</pre></div>
 
@@ -2154,7 +2211,7 @@ rcall -9
 
 But this is no good still--once we rcall -5, we jump back to the line 
 
-<div class="code"><pre>ldi 255, r31</pre></div>
+<div class="code"><pre>ldi r31, 255</pre></div>
 
 and then the program continues execution from there--basically
 starting the program over.  Rather, we want our output code to use the
@@ -2446,8 +2503,9 @@ where in memory those numbers are stored.  </p><table>
 	    <td>An ISA operation can be any of the above operations we
 	    described.  The added features in assembly language are:
 	    <ul><li>In place of any operand that represents an offset,
-	    you may use a label name</li><li>In place of a number you may
-	    use a character</li></ul></td>
+	    you may use a label name</li><li>In place of an immediate
+	    operand you may use a character or lo8(labelname) or
+	    hi8(labelname)</li></ul></td>
 	    <td>Performs the specified ISA operation.</td>
 	    <td>
 	      <pre>ldi r31, 51</pre>
@@ -2457,7 +2515,7 @@ where in memory those numbers are stored.  </p><table>
 	    </td>
 	  </tr>
 	  <tr>
-	    <td>Label</td>
+	    <td>Label line</td>
 	    <td><pre><i>label_name</i>:</pre></td>
 	    <td>Marks this offset in the program as being named by the
 	    given label name.</td>
@@ -2477,26 +2535,10 @@ where in memory those numbers are stored.  </p><table>
 	      <pre>.string(stringOfCheese) "hello"</pre>
 	    </td>
 	  </tr>
-	  <tr>
-	    <td>Label name</td>
-	    <td>Any combination of letters, numbers, and underscores
-	    (no spaces),
-	    except that a variable name cannot begin with a number.</td>
-	    <td>Specifies the name of a label.</td>
-	    <td><pre>helo
-hellow_world
-abc1DEF0__0GHIJ</pre><br>
-
-Non-examples: 
-
-<pre>2hello
-7
-my name</pre></td>
-	  </tr>
 
 	  <tr>
 	    <td>byte directive</td>
-	    <td><pre>.byte(<i>label name</i>) <i>comma-separated list of bytes</i></pre></td>
+	    <td><pre>.byte(<i>label name</i>) <i>bytes</i></pre></td>
 	    <td>Instructs that these bytes should be inserted into
 	    RAM.  The label name will then refer to the address of the
 	    first of these bytes in RAM.</td>
@@ -2519,6 +2561,22 @@ my name</pre></td>
 	    <pre>.string(Gibberish) "AAA&amp;AAAA!!"</pre></td>
 	  </tr>
 
+	  <tr>
+	    <td>Label name</td>
+	    <td>Any combination of letters, numbers, and underscores
+	    (no spaces),
+	    except that a variable name cannot begin with a number.</td>
+	    <td>Specifies the name of a label.</td>
+	    <td><pre>helo
+hellow_world
+abc1DEF0__0GHIJ</pre><br>
+
+Non-examples: 
+
+<pre>2hello
+7
+my name</pre></td>
+	  </tr>
 	  <tr>
 	    <td>Character</td>
 	    <td>Any single character enclosed in single quotes.</td>
@@ -2557,17 +2615,137 @@ ldi r31,40     ;loads value 40
 	beyond those explained here, but they are much less powerful
 	than the extra features of Python, and from this book we shall
 	elide them entirely.</p></div></div><div class="section"><div id="sec_5_6_1"></div><div class="text"><div class="header">5.6.1: 
+	  Labels</div><p>Labels can be defined in three ways:
+
+  <ol>
+    <li><p>Labels can be inserted directly into the program as lines that
+    look like:
+
+    <div class="code"><pre><i>label_name</i>: </pre></div>
+    
+    Where a label name can be exactly what a variable name in Python
+    could be: Anything containing only letters, numbers, or underscores,
+    except it cannot start with a number.</p>
+  
+  <p>Labels are used to mark a place in the program to refer to in
+  actual instructions, as in the examples of the previous section.
+  They do not themselves constitute actual instructions.  For example,
+  the two programs below are identical in terms of the instructions
+  that will be stored in program memory: 
+
+  <div class="code"><pre>ldi r30, 255
+out 26, r30
+ldi r30, \'H\'
+out 27, r30
+ldi r30, 255
+out 26, r30
+ldi r30, \'i\'
+out 27, r30</pre></div>
+
+
+<div class="code"><pre>hello:
+ldi r30, 255
+out 26, r30
+ldi r30, \'H\'
+some_label: 
+out 27, r30
+ldi r30, 255
+babel: 
+out 26, r30
+ldi r30, \'i\'
+out 27, r30</pre></div>
+
+Any such label has a value, which is defined to be the address in
+program memory of the first instruction after the label.  So in the
+above example, the value of the label <span class="icode">hello</span> is 0, of
+<span class="icode">some_label</span> is 3, and of <span class="icode">babel</span> is 5.
+  
+    </p></li>
+    <li><p><div id="def_byte directive" class="definition"></div>Labels can also be defined by
+    byte or string directives.  A <b>byte directive</b> is a way of
+    pre-filling RAM with a given sequence of values, and giving the
+    address of those values a name.  Specifically, a byte directive
+    looks like:
+
+    
+    <div class="code"><pre>.byte(<i>label name</i>) <i>[Comma-separated list of bytes]</i></pre></div>
+    
+    It will write the given sequence of bytes (separated by commas) in
+    the list into RAM at some address and will create a label whose
+    value is that address.  </p>
+
+    <p>For example, the directive
+    
+    <div class="code"><pre>.byte(hello) 12,189,200,0,0</pre></div>
+    
+    might create the following situation in RAM:</p>
+    
+    <table>
+      <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+      <tr><td>1231</td><td>12</td></tr>
+      <tr><td>1232</td><td>189</td></tr>
+      <tr><td>1233</td><td>200</td></tr>
+      <tr><td>1234</td><td>0</td></tr>
+      <tr><td>1235</td><td>0</td></tr>
+    </table>
+
+    <p>In this case, the label <span class="icode">hello</span> will have the
+    value 1231.</p></li>
+    <li><p><div id="def_string directive" class="definition"></div>Finally, exactly analogous to
+    the byte directive is the <b>string directive</b>, which looks
+    like: 
+
+    <div class="code"><pre>.string(<i>label name</i>) <i>[string]</i></pre></div>
+
+    This will convert each character of the string into its
+    corresponding byte, place these bytes into RAM, and create a new
+    label whose value is the address of the first byte of this
+    string.  
+  </p>
+
+    <p>For example, the directive
+    
+    <div class="code"><pre>.string(story) "Once upon a time"</pre></div>
+    
+    might create the following situation in RAM:</p>
+    
+    <table>
+      <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+      <tr><td>1904</td><td>79</td></tr>
+      <tr><td>1905</td><td>110</td></tr>
+      <tr><td>1906</td><td>99</td></tr>
+      <tr><td>1907</td><td>101</td></tr>
+      <tr><td>1908</td><td>32</td></tr>
+      <tr><td>1909</td><td>117</td></tr>
+      <tr><td>1910</td><td>112</td></tr>
+      <tr><td>1911</td><td>111</td></tr>
+      <tr><td>1912</td><td>110</td></tr>
+      <tr><td>1913</td><td>32</td></tr>
+      <tr><td>1914</td><td>97</td></tr>
+      <tr><td>1915</td><td>32</td></tr>
+      <tr><td>1916</td><td>116</td></tr>
+      <tr><td>1917</td><td>105</td></tr>
+      <tr><td>1918</td><td>109</td></tr>
+      <tr><td>1919</td><td>101</td></tr>
+    </table>
+
+    <p>In this case, the label <span class="icode">story</span> will have the
+    value 1904.</p>
+  
+    </li>
+  </ol>
+  </p></div></div><div class="section"><div id="sec_5_6_2"></div><div class="text"><div class="header">5.6.2: 
 	  ISA Operations</div><p>We have already discussed in detail the syntax and semantics of
   the various ISA operations.  The only thing new in assembly language
   is the ability to replace certain operands with characters or
   labels.  Specifically:
   <ul>
     <li><p>Any operand designated above as an 'offset' can be replaced
-    with the name of a label.  This covers the operands to rjmp,
+    with the name of a label.  This includes the operands to rjmp,
     rcall, and all the branch instructions.  The assembler will then
-    compute the offset in the program between the jump/branch
-    instruction and the location in the code where the label appears
-    and will substitute that offset as the actual operand.  </p>
+    compute the difference between the address of the jump/branch
+    instruction and the value of the label, and will substitute that
+    difference as the actual operand.  </p>
 
     <p>For example, take the program:
 
@@ -2582,22 +2760,31 @@ dec r31
 cpi r31,3
 brne stuff</pre></div>
 
-The label 'stuff' appears two instructions after the first 'breq
-stuff' instruction, so the assembler replaces the first 'breq stuff'
-with 'breq 2'.  On the other hand, the stuff label appears three
-instructions before the second 'breq stuff', so this is replaced with
-'breq -3'.  Likewise, 'rjmp hello' gets replaced by 'rjmp -5'.  So
-the above program is equivalent to: 
+The label <span class="icode">stuff</span> in this program has value 5.  The
+<span class="icode">breq stuff</span> instruction occurs at address 2, so in order
+to jump from <span class="icode">breq stuff</span> to the instruction after the
+<span class="icode">stuff</span> label, the assembler computes that it has to jump
+ahead 3 instructions.  This is accomplished by replacing the first
+<span class="icode">breq stuff</span> with <span class="icode">breq 2</span> (as, remember,
+the PC will get incremented after the instruction runs).  </p>
+    
+    <p>On the other hand, the instruction <span class="icode">brne stuff</span>
+    has address 7, and so to jump back to the label stuff would
+    require a jump of -2.  Because (again) branch instructions
+    increment the PC, this is accomplished by replacing the
+    <span class="icode">brne stuff</span> line with <span class="icode">breq -3</span>.
+    Likewise, <span class="icode">rjmp hello</span> gets replaced by <span class="icode">rjmp
+    -5</span>.  So the above program is equivalent to:
 
 
 <div class="code"><pre>ldi r31,0  
 cpi r31,8  
 breq 2  
 inc r31  
-rjmp -4  
+rjmp -5  
 dec r31  
 cpi r31,3  
-breq -3</pre></div>
+brne -3</pre></div>
 
 Of course, writing the program using labels means we don't have to
 adjust all the offsets of our jumps and branches if we change the
@@ -2637,7 +2824,69 @@ out 18, r30</pre></div>
     The assembler will turn this into the earlier program anyway,
     since ldi of course requires a number as its second operand, but
     we are free to use characters when they are more convenient than
-    the raw numbers and let the assembler take care of the conversion.
+    the raw numbers and let the assembler take care of the
+    conversion.</li>
+    
+    <li>
+      <p>Finally, there is one further syntax that the assembler allows.
+      Imagine we've stored some data in RAM with a directive such as:
+      
+      <div class="code"><pre>.byte(fibonacci) 1,1,2,3,5,8,13,21,34,55</pre></div>
+
+      And say we want to add add up all these numbers (for whatever
+      reason--maybe we really want to know what is the sum of the
+      first 10 fibonacci numbers).  The value of the label
+      <span class="icode">fibonacci</span> is the address in RAM of the first byte
+      in this sequence.  If we want to load from this address, then
+      remember that this will involve using the <span class="icode">ld</span>
+      instruction to load from address X (or Y or Z) into a register.
+      So we need to get the value of <span class="icode">fibonacci</span> into,
+      say, X.  But we don't have instructions for loading into X
+      directly.  We can only use <span class="icode">ldi</span> to load one
+      register at a time.  Since X = r27:r26, we'll need two ldi
+      instructions: one to get the right value into r26 and one to get
+      the right value into r27.  </p>
+      
+      <p>But what is the right value?  The value of
+      <span class="icode">fibonacci</span> is an address in RAM, so is a 16-bit
+      number.  We cannot load it into a register directly, then.
+      Rather, we want to load the low 8-bits into r26, and the high
+      8-bits into r27.  This can be accomplished with the final piece
+      of syntax for ISA operations:
+
+      <div class="code"><pre>lo8(<i>label name</i>)</pre></div>
+
+      will refer to the lower 8 bits of the value of a label that
+      refers to a RAM address, and
+
+      <div class="code"><pre>hi8(<i>label name</i>)</pre></div> will refer to the high 8
+      bits.  </p>
+      
+      <p>These two can be used in place of any immediate operand.
+      Specifically, they can be used as the second operands to ldi,
+      ori, cpi, andi, or subi.</p>
+      
+      <p>Thus:
+
+      <div class="code"><pre>ldi r26,lo8(fibonacci)
+ldi r27,hi8(fibonacci)</pre></div>
+
+      will together load the value of <span class="icode">fibonacci</span> into
+      X.  </p>
+      
+      <p>
+      For example, if <span class="icode">fibonacci</span> is RAM address 1000,
+      then we first compute that 1000 = 3:232.  Or equivalently: As a
+      16-bit binary number, 1000 = 0000001111101000, so the high 8
+      bits are 00000011 = 3, and the low 8 bits are 11101000 = 232.
+      So <span class="icode">lo8(fibonacci)</span> will be 232 and
+      <span class="icode">hi8(fibonacci)</span> will be 3, and so the instructions
+      
+      <div class="code"><pre>ldi r26,lo8(fibonacci)
+ldi r27,hi8(fibonacci)</pre></div>
+      
+will indeed store 1000 into X.
+      </p>
     </li>
   </ul>
   </p><p>As we mentioned, the assembler's job is to put numbers into
@@ -2651,137 +2900,183 @@ out 18, r30</pre></div>
   <div class="code"><pre>ori r22,88</pre></div>
 
   corresponds to the number 26725.  
-  </p></div></div><div class="section"><div id="sec_5_6_2"></div><div class="text"><div class="header">5.6.2: 
-	  Labels</div><p>Labels are lines that look like:
-
-  <div class="code"><pre><i>label_name</i>: </pre></div>
-
-  Where a label name can be exactly what a variable name in Python
-  could be: Anything containing only letters, numbers, or underscores,
-  except it cannot start with a number.</p><p>Labels are used to mark a place in the program to refer to in
-  actual instructions, as in the examples of the previous section.
-  They do not themselves constitute actual instructions.  For example,
-  the two programs below are identical in terms of the instructions
-  that will be stored in program memory: 
-
-  <div class="code"><pre>ldi r30, 255
-out 26, r30
-ldi r30, \'H\'
-out 27, r30
-ldi r30, 255
-out 26, r30
-ldi r30, \'i\'
-out 27, r30</pre></div>
-
-
-<div class="code"><pre>hello:
-ldi r30, 255
-out 26, r30
-ldi r30, \'H\'
-some_label: 
-out 27, r30
-ldi r30, 255
-babel: 
-out 26, r30
-ldi r30, \'i\'
-out 27, r30</pre></div>
-
   </p></div></div><div class="section"><div id="sec_5_6_3"></div><div class="text"><div class="header">5.6.3: 
-	  Assembler directives</div><p>We will discuss only two kinds of assembler directives here.</p><p><b>Byte directives</b></p><p><div id="def_byte directive" class="definition"></div>A <b>byte directive</b> looks like:
+	  Word directives</div><p>We have seen how to get values into RAM using byte and string
+directives.  <div id="def_word directive" class="definition"></div>There is a further directive,
+called a <b>word directive</b>, which has the form
 
-<div class="code"><pre>.byte(1231) 12,189,200,0,0</pre></div>
+<div class="code"><pre>.word <i>comma-separated list of numbers</i></pre></div>
 
-It will write the sequence of bytes (separated by commas) in the list
-into RAM at the specified address.  </p><p>For example, the above directive creates the following situation in
-RAM:</p><table>
-  <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
-  <tr><td>1231</td><td>12</td></tr>
-  <tr><td>1232</td><td>189</td></tr>
-  <tr><td>1233</td><td>200</td></tr>
-  <tr><td>1234</td><td>0</td></tr>
-  <tr><td>1235</td><td>0</td></tr>
-</table><p>In general, however, we don't write programs using the byte
-directive.  Instead, we use the byte directive to include data that we
-want to reference in our program.  For example, if we want to sum the
-first 10 Fibonacci numbers, we could write some code to compute these,
-or we could just place them into RAM directly with a byte directive:
+and is used not to write bytes into RAM, but to write words into
+program memory directly.</p><p>Remember that program memory is at the end of the day just a normal
+width-16 memory, meaning all it stores are numbers 0-65535.  When we
+write ISA operations these do not get stored directly in program
+memory, but are first converted to numbers and stored.  The computer
+then is designed to interpret these numbers as tasks that it should
+perform.  In the next chapter, we will learn precisely how
+instructions correspond to numbers by learning what is called the
+ISA's "encoding".  However, for now, we can at least see what numbers
+correspond to various instructions by using the simulator's "decimal"
+view of program memory.  </p><p>For example, let us look back to the 3x+1 program from earlier:
 
-<div class="code"><pre>.byte(1005) 1,1,2,3,5,8,13,21,35,56</pre></div></p><p>Another sort of data that we often want to manipulate is string
-data.  Using the byte directive, we can store the string 'Hello
-World!' in RAM like:
+<div class="code"><pre>ldi r16,20
+ldi r17,1
+ldi r31,-1
+out 17,r31
+out 18,r16
+cp r16,r17
+breq 11
+mov r18,r16
+andi r18,1
+cp r18,r17
+breq 2
+asr r16
+rjmp -9
+mov r19,r16
+add r19,r19
+add r16,r19
+inc r16
+rjmp -14</pre></div>
 
-<div class="code"><pre>.byte(504) 'H','e','l','l','o',' ','W','o','r','l','d','!'</pre></div>
+If you run this example and then, in the box for the program memory,
+click the "[dec]" button, you will see the actual numbers that gets
+stored in program memory for these instructions.  In this case, we see
+the following sequence of numbers stored: 
 
-But what bytes does this store?  Consulting the ASCII table from the
-next chapter, which tells us how to encode characters as bytes, we see
-that this is equivalent to
+<div class="code"><pre>57604  
+57361  
+61439  
+47903  
+47904  
+5889  
+61529  
+12064  
+28705  
+5921  
+61457  
+38149  
+53239  
+12080  
+3891  
+3843
+38147  
+53234</pre></div>
 
-<div class="code"><pre>.byte(504) 72,101,108,108,111,32,87,111,114,108,100,33</pre></div>
-</p><p><b>String directives</b></p><p>That last example for including strings may have looked a little
-inconvenient, so assembly language provides a second directive that
-makes this easier: the <b>string directive</b>.
+The word directive lets us simply insert these numbers into the
+program memory directly rather than writing mnemonics for the
+instructions.  For example, the following is another way of writing
+the 3x+1 program:
 
-<div id="def_string directive" class="definition"></div>The string directive looks like:
-
-<div class="code"><pre>.string <i>string</i></pre></div>
-
-where a string is the same as it was in our description of Python--any
-sequence of characters enclosed in double quotes, where newlines,
-tabs, and double-quotes inside the string are all represented with
-escape sequences.</p><p>For example, we can recover the 'Hello World!' example with the
-string directive simply thus:
-
-<div class="code"><pre>.string(504) "Hello World!"</pre></div></p></div></div><div class="section"><div id="sec_5_7"></div><div class="text"><div class="header">5.7: 
-	  Python-to-assembly recipes</div><p>Our claim is that everything we could do in Python, we can do
-in the ISA.  Since assembly translates directly to the ISA, we only
-need to substantiate the claim that everything we can do in Python, we
-could instead do in assembly language.  To this end, we take a few
-constructs from Python and see how they can be realized using assembly
-language.  </p></div></div><div class="section"><div id="sec_5_7_1"></div><div class="text"><div class="header">5.7.1: 
-	  Large numbers</div><p>One of the most constraining features of the ISA is its apparent
-  inability to manipulate numbers above 255.  For instance, the add
-  instruction only acts on registers, and registers can only store
-  numbers 0-255.  The method for handling larger numbers is to view a
-  collection of registers as all together holding a single number.  We
-  have introduced this concept informally before in cases where two
-  registers r30 and r31 were said to together represent the number
-
-  <div class="code"><pre>r30:r31 = 256*r30 + r31</pre></div>
+<div class="code"><pre>.word 57604,57361,61439,47903,47904,5889,61529,12064,28705,5921,61457,38149,53239,12080,3891,3843,38147,53234</pre></div>
 
 
-  To this, we can tack on more registers if we so choose: The largest
-  number the two-register scheme can store is 255 + 256*255 = 65535,
-  so if we add on, say, r29 to the mix, so now the three registers
-  r31, r30, and r29 will all represent a number, then the formula for
-  the number they collectively represent will be:
+</p></div></div><div class="section"><div id="sec_5_7"></div><div class="text"><div class="header">5.7: 
+	  Python-to-assembly recipes</div><p>Since Python never actually runs on a computer, but is simply
+translated into the ISA, it must be true that everything we could do
+in Python, we can do in the ISA.  Since assembly translates directly
+to the ISA, we only need to substantiate the claim that everything we
+can do in Python, we could instead do in assembly language.  To this
+end, we shall take a few constructs from Python and see how they can
+be realized using AVR assembly language in this section.  </p></div></div><div class="section"><div id="sec_5_7_1"></div><div class="text"><div class="header">5.7.1: 
+	  Assignment</div><p>Recall that assignment lines in Python were our principal means
+  for performing storage and computation operations.  For example
 
-  <div class="code"><pre>r29:r30:r31 = 65536*r29 + 256*r30 + r31</pre></div>
+  <div class="code"><pre>x = 18-(5+1)</pre></div>
 
-  Likewise, if we want four registers, since the largest number three
-  can represent is
+  In the ISA, we have two choices for where to store values like this:
+  we can use registers or we can use RAM.  But remember that to store
+  something in RAM, we had to first have it in a register anyway, and
+  then we would use a <span class="icode">st</span> instruction to get it into
+  RAM.  </p><p>To store a value in a register, we have the <span class="icode">ldi</span>
+  instruction, but we cannot do, for example,
 
-  <div class="code"><pre>65535*255 + 256*255 + 255 = 16777215</pre></div>
+  <div class="code"><pre>ldi r16,18-(5+1)</pre></div>
 
-  Thus the four-register scheme should represent
+  since ldi accepts only numbers -127 through 128 as its operands and
+  not sums or any complex expression of any kind.  Rather, these
+  expressions need to be computed with further ISA operations.
+  Typically, we would start by storing something from the inner-most
+  part of the expression.  In this case, that might be 5:
 
-  <div class="code"><pre>r28:r29:r30:r31 = 16777216*r28 + 65536*r29 + 256*r30 + r31</pre></div>
+  <div class="code"><pre>ldi r16,5</pre></div>
 
-  We could of course repeat this until we run out of registers to use,
-  but for many purposes, four registers worth of number is adequate.
+  and then performing various further operations on this to execute
+  the steps outlined by the expression.  For example, the next thing
+  is to add 1 to this value, which we can do with the
+  <span class="icode">inc</span> instruction:
+
+  <div class="code"><pre>ldi r16,5
+inc r16</pre></div>
+
+Then we need to negate what we have:
+
+  <div class="code"><pre>ldi r16,5
+inc r16
+neg r16</pre></div>
+
+  Finally, we need to add 18 to it.  Since the add instruction
+  requires its second operand to be a register, we need to put 18 in
+  another register first, and then we can add it to r16:
+  
+  <div class="code"><pre>ldi r16,5
+inc r16
+neg r16
+ldi r17,18
+add r16,r17</pre></div>
+
+This seems like a lot of work for the same result, and indeed it is a
+lot more code.  High-level languages exist to prevent programmers from
+having to write such tedious lists of operations to get even simple
+things done.  However, the point of the ISA isn't to actually write
+large programs using it (though one can, and indeed, historically many
+people have).  Rather, the point of the ISA is that it can both
+express all the computations we want to be able to do (however
+clumsily) <i>and</i> it can be actually run by a physical machine.
+After all, what good is a high-level programming langauge if the
+programmer has to manually walk through the steps of running it?  </p></div></div><div class="section"><div id="sec_5_7_2"></div><div class="text"><div class="header">5.7.2: 
+	  Large numbers</div><p>We've seen how to take assignment lines in Python and break up
+  their expressions into computational steps performed by the ISA.
+  However, sometimes in Python, these computations would yield very
+  large numbers.  In the simplest case,
+
+  <div class="code"><pre>x = 999999999</pre></div>
+
+  is a perfectly valid line of Python code that will work as you would
+  expect.  By contrast, all ISA operations only act on registers,
+  which, in turn, only store numbers up to 255.  So how can we
+  possibly turn a line like the above into ISA operations?</p><p>In fact we've already see some hints of this: RAM addresses were
+  numbers larger than 255 sometimes, and so we used combinations of
+  registers such as Z = r31:r30 to deal with these.  In general, the
+  method for handling larger numbers is to use a collection of
+  registers as all together to store the various parts of a single
+  large number.  For example, in binary:
+
+  <div class="code"><pre>999999999 = 111011100110101100100111111111</pre></div>
+
+  We can break this up into bytes:
+  
+  <div class="code"><pre>00111011:10011010:11001001:11111111 = 59:154:201:255</pre></div>
+
+  and we can store each of these bytes in separate registers, say r16
+  through r19, where r16 stores the least significant bits and r19 the
+  most:
+
+  <div class="code"><pre>ldi r16,255
+ldi r17,201
+ldi r18,154
+  ldi r19,59</pre></div>
   </p><p>However, just being able to store a large number is not
   enough--we want to be able to do things like add two such numbers.
-  Say r28-r31 are being used to store one such number, and r24-r27 are
+  Say r16-r19 are being used to store one such number, and r20-r23 are
   being used to store another.  We have an ISA instruction to add a
   register to a register, but not one to add a four-register number to
   another four-register number.  </p><p>One first guess might be that we can add the constituent
   registers individually using the add instruction:
 
-  <div class="code"><pre>
-    add r31,r27
-    add r30,r26
-    add r29,r25
-    add r28,r24
-  </pre></div>
+  <div class="code"><pre>add r16,r20
+add r17,r21
+add r18,r22
+add r19,r23</pre></div>
 
   This actually works in certain cases: for instance, for adding the
   numbers 1:1:1:1 = 16843009 and 4:3:2:1 = 67305985, if we simply add
@@ -2792,40 +3087,24 @@ language.  </p></div></div><div class="section"><div id="sec_5_7_1"></div><div c
   registers individually yields and answer of 0:0:0:0 = 0, rather than
   the desired answer of 256 = 0:0:1:0.  </p><p>The solution reflects the addition procedure many people are
   taught in grade school: To add two numbers, you don't just add their
-  digits blindly, but you add the digits and you 'carry the 1' over to
+  digits blindly, but you add the digits and you "carry the 1" over to
   the next pair of digits if need be.  In our case, when we add two
   registers, if there is a carry, the C flag in the sreg gets set, and
   in that case, the sum of the next two registers also needs a 1 added
   to it.  But this is precisely what the adc instruction does!  So all
   we have to do is:
 
-  <div class="code"><pre>
-    add r31,r27
-    adc r30,r26
-    adc r29,r25
-    adc r28,r24
-  </pre></div></p><p>This whole scheme might easily seem a little uncomfortable--we're
-  not actually storing the large numbers we claim to be, but simply
-  storing pieces and 'understanding' those pieces to collectively
-  'represent' the big numbers.  In a sense, though, this isn't unlike
-  how we don't actually write down the number 3889, we write the four
-  'pieces' ('digits', we call them) '3', '8', '8', and '9' next to
-  each other and somehow that represents the number three-thousand
-  eight-hundred eighty-nine.  </p><p>Nevertheless, one thing that might be ultimately convincing that
-  what we have done isn't fake is if we can receive from the user a
-  two big numbers as input (so we'll get them in string form), add
-  them, and then output their sum in string form.  This should make it
-  believable that what we've implemented is actually arithmetic on
-  numbers larger than 255.  </p><p>To accomplish this, we'll ensconce the addition routine above
-  into a function:
-
-  <div class="code"><pre>add_big_nums:
-add r31,r27
-adc r30,r26
-adc r29,r25
-adc r28,r24</pre></div>
-
-  </p></div></div><div class="section"><div id="sec_5_7_2"></div><div class="text"><div class="header">5.7.2: 
+  <div class="code"><pre>add r16,r20
+adc r17,r21
+adc r18,r22
+adc r19,r23</pre></div></p><p>This whole scheme might seem a little uncomfortable--we're not
+  actually storing the large numbers we claim to be, but simply
+  storing pieces and somehow "understanding" those pieces to
+  collectively represent the big numbers.  In a sense, though, this
+  isn't unlike how we when we write down the number "3889", we write
+  it as four separate parts: "3", "8", "8", and "9", and somehow that
+  represents the number three-thousand eight-hundred eighty-nine.
+  </p></div></div><div class="section"><div id="sec_5_7_3"></div><div class="text"><div class="header">5.7.3: 
 	  if statements</div><p>In Python, we had an easy way of executing certain chunks of code
   conditionally using the if/else construct.  For example, if we have
   two variables x and y and we want one chunk of code to run if they
@@ -2862,36 +3141,512 @@ or
 
 <div class="code"><pre>if(x &lt; y)</pre></div>
 
-by changing the branch to, say, brge, or brlo.</p></div></div><div class="section"><div id="sec_5_7_3"></div><div class="text"><div class="header">5.7.3: 
+by changing the branch to, say, brge, or brlo, as we shall see in our
+examples section.</p></div></div><div class="section"><div id="sec_5_7_4"></div><div class="text"><div class="header">5.7.4: 
 	  while loops</div><p>Similarly, the Python while loop construct allowed us to repeat a
   chunk of code for as long as a given condition remained true.  For
   example, to do some things as long as two variables x and y have the
-  same values: </p><div class="code"><pre>while (x == y):
+  same values: </p><div class="code"><pre>while(x == y):
    <i>do stuff</i></pre></div><p>To do this in assembly (again supposing that the two numbers we wish
 to compare are stored in registers r0 and r1), we can use branches and
 jumps again.  For example, we could say "First test if r0 and r1
 are different.  If not, the continue on to the 'do stuff' code, after
 which we should jump back to the comparison at we started with.  If
 they were different, on the other hand, we should branch to the end of
-the whole thing."</p><p>In code: </p><div class="code"><pre>
-begin_while:
+the whole thing."</p><p>In code: </p><div class="code"><pre>begin_loop:
 cp r0,r1
-brne end_while
+brne end_loop
 <i>do stuff</i>
-rjmp begin_while
-end_while:
-</pre></div></div></div><div class="section"><div id="sec_5_8"></div><div class="text"><div class="header">5.8: 
-	  Simple examples</div></div></div><div class="section"><div id="sec_5_8_1"></div><div class="text"><div class="header">5.8.1: 
+rjmp begin_loop
+end_loop:</pre></div><p>In general, if we have a while loop like:
+
+  
+  <div class="code"><pre>while(<i>test</i>):
+   <i>do stuff</i></pre></div>
+
+   then the translation to assembly will look like:
+
+   
+<div class="code"><pre>begin_loop:
+<i>run the test</i>
+<i>branch to end_while if the test failed</i>
+<i>do stuff</i>
+rjmp begin_loop
+end_loop:</pre></div>
+
+So, for example, if our loop is:
+
+<div class="code"><pre>while(x &gt; y):
+   <i>do stuff</i></pre></div>
+
+then in assembly, (supposing we've stored x in r16 and y in r17) we
+would compare x and y with <span class="icode">cp</span> instruction.  Now, we
+want to skip to the end of the loop if x is not greater than y.  That
+is, if y &gt;= x.  Recall from the table at the end of section 5.4.6 that
+we can test if r17 &gt;= r16 by
+
+<div class="code"><pre>cp r17,r16
+brsh ...</pre></div>
+
+thus our loop should look like:
+
+<div class="code"><pre>begin_loop:
+cp r17,r16
+brsh end_loop
+<i>do stuff</i>
+rjmp begin_loop
+end_loop:</pre></div>
+
+</p></div></div><div class="section"><div id="sec_5_7_5"></div><div class="text"><div class="header">5.7.5: 
+	  Functions</div><p>The basic idea of functions in Python was to have a chunk of code
+  that could be called on to execute at various times throughout the
+  program.  In pure ISA, we've seen that we could accomplish a similar
+  thing with rcall and ret.  Now that we have learned how to more
+  easily create the offsets for things like rcall using labels, we can
+  revisit functions using assembly language to come up with a reasonably
+  organized pattern for translating general Python functions to
+  machine code.</p><p>Consider, for example, a function in Python like this:
+
+  <div class="code"><pre>def f(x):
+   return 3*x+1</pre></div>
+
+   In assembly, we first need a piece of code that performs the
+   calculation that the function does.  Suppose r16 is the register
+   that stores x.  Then this might look like:
+
+   <div class="code"><pre>mov r1,r31
+add r31,r31
+add r31,r1
+inc r31</pre></div>
+
+   Then, to place this in a function, we'll put a label at the start
+   which we can use to call it later, and a <span class="icode">ret</span>
+   instruction at the end so that after we've called it, we can return
+   from it to whatever we were doing before:
+
+   <div class="code"><pre>f:
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+ret</pre></div>
+
+   This function assumes that r31 contains the number that we want to
+   triple and then increment.  However notice that this code also
+   overwrites whatever was in r1.  In general, the fewer registers we
+   overwrite, the better, so we can have this code push r1 before it
+   runs (saving its original value) and then pop r1 before it returns
+   (restoring its original value):
+
+   <div class="code"><pre>f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret</pre></div>
+
+  </p><p>
+   Finally, this code has to go somewhere.  A common choice would be
+   at the beginning of our program.  So the full Python program
+
+  <div class="code"><pre>def f(x):
+   return 3*x+1
+
+x = f(27)</pre></div>
+ 
+   might look like: 
+
+   <div class="code"><pre>f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+ldi r31,27
+rcall f</pre></div>
+
+   But wait!  This way, the first thing this program does will be to
+   run the function's code.  We want the <span class="icode">ldi r31,27</span>
+   instruction to be run first.  If we put our functions at the start
+   of the program, then we have to make sure the first instruction in
+   the program is one t jump over all the function code:
+
+   <div class="code"><pre>rjmp real_program_start
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+real_program_start:
+ldi r31,27
+rcall f</pre></div>
+
+   There is one more problem, though.  We're using the stack, so we
+   should set the stack pointer to have some sensible value.  Earlier,
+   we picked 5000 = 19:136, so we'll use this again.  Thus the program
+   will first set the stack pointer then it will jump over all the
+   function code, then getting to the real meat of the program.  Thus
+   our final functioning compiled version of the simple Python program
+   will be: 
+
+   <div class="code"><pre>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; Set r31 back to 0
+rjmp real_program_start
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+real_program_start:
+ldi r31,27
+rcall f</pre></div>
+
+
+   This way, we can have multiple functions at the beginning and can
+   simply jump over them all.  For example, another piece of code that
+   we've used a lot is the "output a number code":
+
+   <div class="code"><pre>ldi r30,255
+out 17,r30
+out 18,<i>value to be outputted</i></pre></div>
+
+   This kind of behaves like the print function did in Python, so if
+   we were trying to compile to assembly the Python program:
+
+   <div class="code"><pre>def f(x):
+   return 3*x+1
+
+print(f(27))</pre></div>
+ 
+   then we would need two functions: <span class="icode">f</span> (which we
+   compiled above) and <span class="icode">print</span>, which might be translated
+   similarly as:
+
+   
+   <div class="code"><pre>print: 
+push r30      ; save r30, since we will use it
+ldi r30,255
+out 17,r30    ; set D to output mode
+out 18,r31    ; output the argument
+pop r31
+ret</pre></div>
+
+
+   <div class="code"><pre>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+print: 
+push r30      ; save r30, since we will use it
+ldi r30,255
+out 17,r30    ; set D to output mode
+out 18,r31    ; output the argument
+pop r31
+ret
+
+real_program_start:
+ldi r31,27
+rcall f      ; this will make r31 be f(27)
+rcall print</pre></div>
+   
+  </p></div></div><div class="section"><div id="sec_5_7_6"></div><div class="text"><div class="header">5.7.6: 
+	  Strings and arrays</div><p>While registers are often used for storing single values that are
+  being used in computation, the entire register file can only store
+  32 bytes in total.  So if we want to perform the kinds of work that
+  we ultimately wanted to do in Python, with longer sections of text
+  and with arrays, we will need more storage than that.  For strings
+  and arrays, then, we use RAM.  </p><p>We've already seen how to get a string or a sequence of bytes
+  into RAM using the <span class="icode">.string</span> and <span class="icode">.byte</span>
+  directives.  But we will want to do more than just store strings and
+  arrays.  We want to be able to concatenate them, find their lengths,
+  test if two of them are the same, find values inside them, and so
+  on.  We'll save some of these for the next section, but we'll
+  discuss lengths and concatenation in this section to get a feel for
+  working with data stored in RAM.</p><p><b>String length</b>: Let's start by writing a string length
+  function.  That is, say we placed have the string "Mangoes are yummy." in
+  RAM:
+
+  <div class="code"><pre>.string(fact) "Mangoes are yummy."</pre></div>
+
+  Then the value of the label <span class="icode">fact</span> will be the address
+  of the start of this string in RAM.  Remember that the string
+  directive also appends a 0 byte to the end of the string, so if we
+  want to find the length of the string, we can start at the beginning
+  and walk through until we see a 0.</p><p>In Python, this would be done with a while loop--something like:
+
+<div class="code"><pre>while(<i>character</i> != 0):
+   <i>go to the next character</i></pre></div>
+
+   And we just learned how to translate while loops into assembly.  In
+   this case, it will look like:
+
+<div class="code"><pre><i>get the first character</i>
+search_loop:
+cp <i>first character</i>,0
+breq end_of_search_loop
+<i>get the next character</i>
+rjmp search_loop
+end_of_search_loop:  </pre></div>
+
+   So: 
+
+  <div class="code"><pre>.string(fact) "Mangoes are yummy."
+ldi r30,lo8(fact)
+ldi r31,hi8(fact)   ; Now the start of the string is stored in Z
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  </pre></div>
+
+Once we're at the end of the loop, Z will hopefully be the address of
+the end of the string.  Sadly, because of the post-incrementing, it
+will actually 1 greater than that, so we should subtract 1 from it
+immediately after.  Recall we can do this with:
+
+<div class="code"><pre>ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29</pre></div>
+
+After this, Z will actually be the address of the end of the string.
+So now what?  Since the length of the string should be the difference
+between the start and end addresses, we want to compute <span class="icode">Z -
+fact</span> to get the length of the string.
+</p><p>To begin with, we'd need to get the value of <span class="icode">fact</span>
+  into registers so that we can begin to compute with it:
+
+  <div class="code"><pre>ldi r28,lo8(fact)
+ldi r29,hi8(fact)</pre></div>
+
+   Then we need to subtract r29:r28 from r31:r30.  Analogously to how
+   we added large numbers comprised of several registers, we can
+   subtract them:
+
+   <div class="code"><pre>sub r30,r28
+sbc r31,r29</pre></div>
+
+leaving us with the code:
+
+  <div class="code"><pre>.string(fact) "Mangoes are yummy."
+ldi r30,lo8(fact)
+ldi r31,hi8(fact)   ; Now the start of the string is stored in Z
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  
+ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29
+ldi r28,lo8(fact)
+ldi r29,hi8(fact)
+sub r30,r28
+sbc r31,r29</pre></div>
+
+At the end of this, Z will store the length of the string.
+
+We can wrap this as a function that takes now both r31 and r30 as
+arguments and modifies them so that r31:r30 is the length of the
+string at the provided address:
+
+<div class="code"><pre>string_length:
+push r16
+push r28
+push r29
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  
+ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29
+ldi r28,lo8(fact)
+ldi r29,hi8(fact)
+sub r30,r28
+sbc r31,r29
+pop r29
+pop r28
+pop r16
+ret</pre></div>
+
+  </p><p>
+    <b>Array length: </b>OK, so we could get the lengths of strings.
+    What about more general arrays, such as:
+
+    <div class="code"><pre>.byte(fibonacci) 1,1,2,3,5,8,13,21,34,55</pre></div>
+
+    Unlike the .string directive, the .byte directive does not store a
+    0 at the end of the bytes.  The reason is that this would not
+    necessarily be meaningful: It is perfectly valid to store an array
+    with 0s in it:
+    
+    <div class="code"><pre>.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</pre></div>
+
+    So how can we find the end of an array if there's no way to tell
+    if we're at the end of the array?  The answer is that we cannot:
+    Unlike strings, simply the starting address of an array is not
+    enough to let us find its length.  So for an array, we would need
+    to somehow store the length or the ending address as well.  One
+    way to do this would be to simply put it in RAM: 
+    
+    <div class="code"><pre>.byte(length_of_digits_of_aperys_constant) 16
+.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</pre></div>
+
+One feature of this technique is that if we ever want to modify the
+array--deleting or adding an element--we also have to update the
+stored length.  This is fine, but it does cause us to worry: what if
+we add so many elements that we cannot fit the length in a single
+byte?  We could protect against this case by storing two bytes for the
+length:
+  
+    <div class="code"><pre>.byte(length_of_digits_of_aperys_constant) 0,16
+.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</pre></div>
+
+where now for the purpose of updating the array we'll treat these two
+  bytes as a 16-bit number.</p><div class="warning"><b>Warning: Strings need metadata too</b><p>Now that we did all
+  that work to compute the lengths of strings and then we simply
+  cheated our way out of doing the same for arrays we could ask: Why
+  can't we just also store the length of a string?  The answer is that
+  we actually can!  Moreover, it is almost uniformly more efficient to
+  do so.  </p>
+
+  <p>We introduce both techniques because there are programming
+  languages (most notably, one called C), in which strings are
+  actually stored as sequences of characters followed by a 0 byte.
+  When working with such languages, it can be important to realize
+  that something as simple as asking for the length of the string may
+  actually involve a large number of operations to walk the entire
+  length of the string looking for the 0 byte.  </p>
+  
+  <p>This is one famous example of where the abstraction of a
+  high-level programming language can leak very badly.  Doing
+  <span class="icode">len(my_string)</span> in Python (which does separately store
+  the lengths of its strings), and <span class="icode">strlen(my_string)</span> in
+  C, while they look very similar and do the same thing, will actually
+  take very different amounts of time.</p></div><p><b>Deleting an element from an array</b>: Say we've got an array
+  like <span class="icode">2,3,5,7,0,11,13,0,17</span> and we want to remove the
+  first 0 from it.  </p><p>Well, what does this actually look like in RAM?  We are starting
+  with the situation like: </p><table><tr><td>Address:</td><td>1024</td><td>1025</td><td>1026</td><td>1027</td><td>1028</td><td>1029</td><td>1030</td><td>1031</td><td>1032</td></tr>
+  <tr><td>Value:</td><td>2</td><td>3</td><td>5</td><td>7</td><td>0</td><td>11</td><td>13</td><td>0</td><td>17</td></tr>
+  </table><p>and end up with the situation: </p><table><tr><td>Address:</td><td>1024</td><td>1025</td><td>1026</td><td>1027</td><td>1028</td><td>1029</td><td>1030</td><td>1031</td></tr>
+  <tr><td>Value:</td><td>2</td><td>3</td><td>5</td><td>7</td><td>11</td><td>13</td><td>0</td><td>17</td></tr>
+  </table><p>so while it seems like a small operation, what we see is that the
+  value at RAM address 1029 has to be moved to RAM address 1028, the
+  value at 1030 has to be moved to 1029, and so on.  So actually, this
+  simple operation requires us to shuffle around half the elements of
+  the list.  (And then, of course, we have to decrement its length.)</p><p>So let's suppose we are writing a function to do this.  It will
+  take as input r31 and r30 giving the address of the start of the
+  array, and also r29,r28 the address where the length is stored, and
+  finally r16 will be the index we wish to delete.  </p><p>Then the algorithm will be: </p></div></div><div class="section"><div id="sec_5_8"></div><div class="text"><div class="header">5.8: 
+	  Simple examples</div><p>We'll now revisit versions of our simple examples from chapter 2,
+  but this time attempt them in assembly language.  We'll approach
+  this by first writing Python programs to do the job, and then using
+  the above recipes to convert them to assembly.  </p></div></div><div class="section"><div id="sec_5_8_1"></div><div class="text"><div class="header">5.8.1: 
 	  Summing the first n integers</div><p><b>Introduction: </b></p><p>In the earlier factorial example, we wrote a program to receive
   as input a positive integer n and to output the product 1*2*3*...*n.
   In this section, we'll discuss how to do this in ISA, except because
   we lack a multiplication instruction (there is one on certain AVR
   processors, but not on all), we'll do the problem with addition
-  instead: Given an n, compute 1+2+3+...+n.  </p><p><b>Algorithm: </b></p><p>We now have to describe a sequence of operations that performs
-  this calculation.  Once again, for a human, just saying, 1+2+3+...+n
-  is likely enough, but for a computer, remember that all it
-  understands are ISA operations, and 'compute the sum of the first n
-  positive integers' was not one of them.</p><p>We can, however, draw inspiration from our Python approach:
+  instead: Given an n, compute 1+2+3+...+n.  </p><p><b>Python program: </b></p><p>Having done the factorial example earlier, we can quite readily
+  imagine a Python program doing this task.  We would have a variable
+  storing n, a counter variable that starts at 1, and a variable for
+  storing the sum.  We could then use a while loop that increments the
+  counter until it reaches n, and on each iteration of the loop it
+  adds the counter to the variable storing the sum.  To wit:
+
+  <div class="code"><pre>n = 20
+counter = 1
+sum = 0
+while(counter &lt;= n):
+   sum = sum + counter
+   counter = counter + 1
+print(sum)</pre></div>
+
+  </p><p><b>Converting to assembly: </b> The first three lines are
+  assignment lines that store numbers.  This directly translates to
+  ldi instructions as long as we pick some registers to play the roles
+  of <span class="icode">n</span>, <span class="icode">counter</span>, and
+  <span class="icode">sum</span>.  Since ldi can only load into registers r16 and
+  up, we'll pick r16, r17, and r18 for these:
+
+  <div class="code"><pre>ldi r16,20
+ldi r17,1
+ldi r18,0</pre></div>
+
+  </p><p>Now, the next portion is a while loop.  We've seen that we can
+  get this behavior using the ISA with a structure like:
+
+<div class="code"><pre>begin_while:
+<i>do comparison</i>
+<i>[appropriate branch instruction]</i> end_while
+<i>do stuff</i>
+rjmp begin_while
+end_while:</pre></div>
+
+  Here, the condition is <span class="icode">counter &lt;= n</span>.  This means
+  that the comparison we'll perform is between r16 and r17.  We saw
+  earlier that the comparison <span class="icode">r16 &lt;= r17</span> could be
+  tested with:
+
+  <div class="code"><pre>cpi r17,r16
+brsh ...</pre></div>
+
+  (This is testing "is r17 the same as or higher than r16", i.e. <span class="icode">r17 &gt;= r16</span> which
+  is equivalent to the condition in question.)
+
+</p><p>Thus our code now looks like:
+
+<div class="code"><pre>ldi r16,20
+ldi r17,1
+ldi r18,0
+begin_while:
+cp r17,r16
+brsh end_while
+<i>do stuff</i>
+rjmp begin_while
+end_while:</pre></div>
+
+  
+
+  </p><p>We can, however, draw inspiration from our Python approach:
   There, we had a loop with a variable counting up from 1 to n, and
   another variable that started at 0 and got the counter variable
   added to it each time.  These are all things we can do once again,
@@ -2923,7 +3678,7 @@ end_while:
   ourselves.</p><p>One issue that arises is that multiplying numbers is a good way
   to get large numbers, so it is likely that when we do
   multiplication, even if we're only multiplying two registers, we'll
-  have to store the result in more than one register.</p><p><b>Algorithm: </b></p><p>We'll arrange our registers so that the numbers being multiplied
+  have to store the result in more than one register.</p><p><b>Python program: </b></p><p>We'll arrange our registers so that the numbers being multiplied
   are stored in r30 and r31, and the answer will be stored in the two
   registers r16 and r17, with r16 being the low byte and r17 the
   high.  </p><p><b>Program: </b></p><div class="code"><pre>ldi r31,13
@@ -2996,137 +3751,6 @@ If we've got here, then the strings differ
     <i>Whatever we want to do if they are equal</i>
     end_comparison:
   </pre></div></div></div><div class="section"><div id="sec_5_9"></div><div class="text"><div class="header">5.9: 
-	  Applications</div><p>The large-scale systems we have been describing are largely
-  programmed using high-level languages like Python, with few to none
-  of the pieces constructed by doing actual ISA programming.  Having
-  said that, Python is an abstraction over the ISA layer, and like all
-  abstractions, this one sometimes leaks.  That is, to make decisions
-  about our Python programming, we need to understand what happens at
-  the ISA level.  We give some examples of that in this section.</p></div></div><div class="section"><div id="sec_5_9_1"></div><div class="text"><div class="header">5.9.1: 
-	  Search engine -- Searching for a word in a string</div><p><b>Introduction: </b></p><p>In Python, we identified
-
-  <div class="code"><pre>if("banana" in s):
-  <i>do stuff</i></pre></div>
-
-  So in Python, testing if "banana" is found somewhere in a given
-  string looks simple enough--it's just one command!  But its being
-  one command in Python doesn't mean that it takes the computer one
-  step.  Remember that the computer only runs ISA operations, and any
-  Python code we write has to be turned into ISA operations before it
-  can be run.  So to understand what this very simple-looking Python
-  is hiding, we need to understand what ISA operations this command
-  corresponds to.</p><p>To this end, let us think about how to search for "banana" inside
-  another string using the ISA.  First, the strings have to be stored
-  somewhere, and RAM is a natural location for them.  So our first
-  step will be to store the strings into RAM.  Once all the strings
-  are in RAM, then we want to use ISA operations to search for
-  "banana" in the longer string.  </p><p><b>Algorithm: </b></p><p>As we discussed, the first step of our algorithm will be to put
-  the strings into RAM.  But having done that, we now need to search
-  for "banana".  Because we know how to compare two strings
-  already--that is, given two addresses, we know how to write ISA
-  operations that detect whether the string starting at the one
-  address is the same as the string starting at the other.  Searching
-  for one string inside another can be understood as doing this
-  repeatedly: </p><p>Let Y be the address of the string "banana" stored in RAM, and Z
-  be the address of the string we're searching through.  Then we can
-  search by comparing, byte-by-byte, the bytes from address Y to
-  address Y+6 with the bytes from address Z to address Z+6.  This will
-  determine whether "banana" appears at the start of the string.  Then
-  we can compare the string "banana" with the bytes at Z+1 to Z+7,
-  testing whether it appears one character after the start.  And we
-  can repeat this indefinitely until we reach the end of the string.  </p><p>So our strategy--our algorithm--will be to take all the possible
-  places where "banana" might appear in the string, and to perform the
-  string comparison to check this.  In particular, if the string has
-  length L, then "banana" might appear starting anywhere from position 0
-  in the string to position L-6.  So we do: 
-  
-  <ol>
-    <li>Put the strings into RAM</li>
-    <li>Check whether "banana" occurs at offset 0 in the string</li>
-    <li>Check whether "banana" occurs at offset 1 in the string</li>
-    <li>...</li>
-    <li>Check whether "banana" occurs at offset L-6 in the string</li>
-  </ol>
-
-  Phrased without ellipsis:
-  
-  <ol>
-    <li>Put the strings into RAM</li>
-    <li>Set a counter to 0</li>
-    <li>
-      As long as the counter is less than L-6, do the following:
-      <ol>
-	<li>Check whether "banana" occurs at address Z+counter</li>
-	<li>If so, the answer is yes and we're done</li>
-	<li>If not, then increment the counter</li>
-      </ol>
-    </li>
-  </ol>
-
-  </p><p><b>Program: </b>
-
-<div class="code"><pre>
-rjmp start
-target:
-.ascii "banana"
-src:
-.ascii "I like watermelons, kiwis, and bananas"
-start:
-...[move data into RAM]
-ldi r17,0
-ldi r20,0
-loop_start:
-cpi r17,32
-breq loop_end
-ldi r18,0
-inner_loop_start:
-cpi r18,6
-breq inner_loop_end_found
-ld r0,Y+
-ld r1,Z+
-cp r0,r1
-brne inner_loop_end_not_found
-inc r18
-rjmp inner_loop_start
-inner_loop_end_found:
-ldi r20,1
-rjmp loop_end
-inner_loop_end_not_found:
-inc r17
-rjmp loop_start
-loop_end:
-cpi 
-</pre></div>
-
-</p><div class="aside"><b>Aside: </b>
-  <p>It is worth doing a back-of-the-envelope calculation to see whether
-  the search-engine code we built in chapter 3 could function in an
-  environment like the Google search engine.  This program is going to
-  perform at least 6 ISA operations for every character in the target
-  string.  As of 2014, Google had collected 200 trillion bytes of data
-  from the internet.  So to search all of these for "banana", we would
-  have to perform 200*6 = 1200 trillion ISA operations in total.  The
-  fastest computer could perform maybe 4 billion of these a second,
-  meaning it would take such a computer 300000 seconds--or over 3
-  days--to perform this search.  </p>
-
-  <p>In contrast, an actual Google search for "banana" claims to
-  complete in .25 seconds.  Of course, Google has a lot of computers,
-  but to go from 300000 seconds to .25 seconds, they would have to use
-  300000/.25 = 1200000 computers--all that just for a single search.
-  In practice, they're handling well into the thousands of searches
-  per second, so it is clear rather than simply needing more
-  computers, they need a better algorithm.  Just using the Python 'in'
-  test, it is not immediately obvious what the ramifications are until
-  we think of the operation in terms of the ISA.  </p>
-
-  <p>In fact, the ISA code that Python uses to run the 'in' operation
-  is quite sophisticated and substantially faster than the code
-  described above, and does have a decent running time.  The point is
-  that the operation hides exactly what is happening and hence
-  judging its use as appropriate based on the fact that the code
-  looks simple can be quite misleading.  </p>
-</div></div></div><div class="section"><div id="sec_5_10"></div><div class="text"><div class="header">5.10: 
 	  Exercises</div><div class="hwq"><div class="hwnum"><b>5.1: </b></div><div class="hwcontent">In what ways is programming in a high level language different than programming in ISA?
 </div></div><div class="hwq"><div class="hwnum"><b>5.2: </b></div><div class="hwcontent">What does an ISA consist of? Explain the different parts.
 </div></div><div class="hwq"><div class="hwnum"><b>5.3: </b></div><div class="hwcontent">List some different types of memory on the AVR chip as discussed in this text.

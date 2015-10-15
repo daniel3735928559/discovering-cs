@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><link rel="stylesheet" type="text/css" href="/sim/avr/sim.css"><link rel="stylesheet" type="text/css" href="/sim/bin/sim.css"><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><script type="text/javascript" src="/sim/cm/codemirror.js"></script><link rel="stylesheet" type="text/css" href="/lib/spy/sim.css"><script type="text/javascript" src="/lib/spy/expr_ng.js"></script><script type="text/javascript" src="/lib/spy/sim.js"></script><script type="text/javascript" src="/sim/bin/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3')">3: Advanced Programming</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_1')">3.1: Practical Programming</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_2')">3.2: Running actual Python code</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_3')">3.3: Arrays</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_3_1')">3.3.1: Strings as read-only arrays</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_3_2')">3.3.2: Search engine, revisited</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_4')">3.4: Logical operators</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_5')">3.5: Functions</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_5_1')">3.5.1: Composition</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_5_2')">3.5.2: Scope</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_6')">3.6: Library functions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7')">3.7: More simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_7_1')">3.7.1: Square Roots</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7_2')">3.7.2: Factorial</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7_3')">3.7.3: List of prime numbers</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_8')">3.8: Applications</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_8_1')">3.8.1: Search Engine</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_8_2')">3.8.2: Game Console</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_8_3')">3.8.3: Mobile Phone</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_9')">3.9: Real-life Python versus Simulator Python</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_readability')">readability</a><br><a href="#" ng-click="goto_loc('def_maintainability')">maintainability</a><br><a href="#" ng-click="goto_loc('def_subscript')">subscript</a><br><a href="#" ng-click="goto_loc('def_input (function)')">input (function)</a><br><a href="#" ng-click="goto_loc('def_body (function)')">body (function)</a><br><a href="#" ng-click="goto_loc('def_return value (function)')">return value (function)</a><br><a href="#" ng-click="goto_loc('def_library function')">library function</a><br><a href="#" ng-click="goto_loc('def_module')">module</a><br><a href="#" ng-click="goto_loc('def_recursive (definition)')">recursive (definition)</a><br><a href="#" ng-click="goto_loc('def_recursive (function)')">recursive (function)</a><br><a href="#" ng-click="goto_loc('def_mock up')">mock up</a><br><a href="#" ng-click="goto_loc('def_testability')">testability</a><br><a href="#" ng-click="goto_loc('def_model')">model</a><br><a href="#" ng-click="goto_loc('def_API')">API</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_3"></div><div class="text"><div class="header">3: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3')">3: Advanced Programming</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_1')">3.1: Practical Programming</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_2')">3.2: Running actual Python code</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_3')">3.3: Arrays</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_3_1')">3.3.1: Strings as read-only arrays</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_3_2')">3.3.2: Search engine, revisited</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_4')">3.4: Logical operators</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_5')">3.5: Functions</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_5_1')">3.5.1: Composition</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_5_2')">3.5.2: Scope</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_6')">3.6: Library functions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7')">3.7: More simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_7_1')">3.7.1: Square Roots</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7_2')">3.7.2: Factorial</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7_3')">3.7.3: List of prime numbers</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_8')">3.8: Applications</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_8_1')">3.8.1: Search Engine</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_8_2')">3.8.2: Game Console</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_8_3')">3.8.3: Mobile Phone</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_9')">3.9: Real-life Python versus Simulator Python</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_readability')">readability</a><br><a href="#" ng-click="goto_loc('def_maintainability')">maintainability</a><br><a href="#" ng-click="goto_loc('def_subscript')">subscript</a><br><a href="#" ng-click="goto_loc('def_input (function)')">input (function)</a><br><a href="#" ng-click="goto_loc('def_body (function)')">body (function)</a><br><a href="#" ng-click="goto_loc('def_return value (function)')">return value (function)</a><br><a href="#" ng-click="goto_loc('def_library function')">library function</a><br><a href="#" ng-click="goto_loc('def_module')">module</a><br><a href="#" ng-click="goto_loc('def_recursive (definition)')">recursive (definition)</a><br><a href="#" ng-click="goto_loc('def_recursive (function)')">recursive (function)</a><br><a href="#" ng-click="goto_loc('def_mock up')">mock up</a><br><a href="#" ng-click="goto_loc('def_testability')">testability</a><br><a href="#" ng-click="goto_loc('def_model')">model</a><br><a href="#" ng-click="goto_loc('def_API')">API</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_3"></div><div class="text"><div class="header">3: 
 	  Advanced Programming</div></div></div><div class="section"><div id="sec_3_1"></div><div class="text"><div class="header">3.1: 
 	  Practical Programming</div><div class="summary"><b>Summary: </b>In the previous chapter, we introduced a simplified
     version of Python in order to communicate the fundamental ideas of
@@ -219,7 +219,7 @@ means "start at the first value in the array and go 4 to the right".
 So, if instead you want the first word, you would start at the first
 word and go 0 to the right, i.e.:
 
-<div class="code"><pre>an_array[0]</pre></div></p><p>An array element such as <div class="icode">an_array[0]</div> is a variable
+<div class="code"><pre>an_array[0]</pre></div></p><p>An array element such as <span class="icode">an_array[0]</span> is a variable
 like any other, so you can use them in expressions or assignments just
 like any other variable:
 
@@ -505,7 +505,7 @@ else:
 This program is meant to accept any integer above 10, but also any odd
 number 1-9 as well.  However, this program will actually even accept
 -1 as a valid input.  The reason is that ands are grouped together
-before <div class="icode">or</div>s.  Put another way, the test could
+before <span class="icode">or</span>s.  Put another way, the test could
 equivalently have been written:
 
 <div class="code"><pre>(x &gt; 0 and x &gt; 10) or x%2 == 1</pre></div>
@@ -620,10 +620,10 @@ which does as described above:
 
 <ol><li>It sets the input variable to the expression specified (in
 this case, 2).  So since the input variable was called
-<div class="icode">x</div>, it sets x to be 2.  </li>
+<span class="icode">x</span>, it sets x to be 2.  </li>
 
 <li>Then it runs the code in the function body.  In this case, it runs
-the line <div class="icode">y = x + 1</div>.  Since x was 2, this sets y to be
+the line <span class="icode">y = x + 1</span>.  Since x was 2, this sets y to be
 3.</li>
 
 <li> Finally, when it reaches the a return line, the return value will
@@ -631,7 +631,7 @@ be used as the value of this function call.  The line z = mogrify(2)
 is an assignment.  So the return value of mogrify(2) is getting
 assigned to the variable z.  Which value is it?  According to step 2,
 it is the return value of the function call--in this case,
-<div class="icode">5*y+9*x*x</div>, or just 51.
+<span class="icode">5*y+9*x*x</span>, or just 51.
 </li></ol>
 
 So the program above will print 51.  </p><p>Some bits of code require more than one value as input.  To turn
@@ -652,7 +652,7 @@ if(point1 &lt; point2):
    answer = point2-point1
 else:
    answer = point1-point2
-print(answer)</pre></div></p><p>But if we're going to be doing this often, maybe we want it in a function.  Once again, the inputs are relatively clear--point1 and point2--and the output is once again perspicuously called <div class="icode">answer</div>.  
+print(answer)</pre></div></p><p>But if we're going to be doing this often, maybe we want it in a function.  Once again, the inputs are relatively clear--point1 and point2--and the output is once again perspicuously called <span class="icode">answer</span>.  
 
 <div class="code"><pre>def line_distance(point1,point2):
    if(point1 &lt; point2): 
@@ -671,7 +671,7 @@ to 3 and point2 set to 5.  Then, because point1 is less than point2,
 the if block will be executed, setting answer to point2-point1,
 i.e., 2, and the else block will be ignored.  Finally the return value
 of the function will be set to answer, i.e., to 2.  And so when we say
-<div class="icode">d = line_distance(3,5)</div>, as we stated earlier, the function call
+<span class="icode">d = line_distance(3,5)</span>, as we stated earlier, the function call
 itself--i.e., the line_distance(3,5) bit--is equal to the return value.
 Thus d is assigned the value 2.</p></div></div><div class="section"><div id="sec_3_5_1"></div><div class="text"><div class="header">3.5.1: 
 	  Composition</div><div class="summary"><b>Summary: </b>Since a function call is an expression, and the input
@@ -705,7 +705,7 @@ print(2*f(3))</pre></div>
 	    <tr><td>Current line</td><td>Why we went to this line</td><td>Variables after current line runs</td><td>Output so far</td></tr>
 
 	    <tr>
-	      <td><div class="icode">def f(x):</div></td>
+	      <td><span class="icode">def f(x):</span></td>
 	      <td>
 		It was the first line of the program
 	      </td>
@@ -718,7 +718,7 @@ print(2*f(3))</pre></div>
 	    </tr>
 
 	    <tr>
-	      <td><div class="icode">print("I'm going to compute something!")</div></td>
+	      <td><span class="icode">print("I'm going to compute something!")</span></td>
 	      <td>
 		The previous lines just defined the function.  Now
 		that the function has been defined, we advance to the
@@ -727,64 +727,64 @@ print(2*f(3))</pre></div>
 	      <td>(none)
 	      </td>
 	      <td>
-		<div class="icode">"I'm going to compute something!"</div>
+		<span class="icode">"I'm going to compute something!"</span>
 	      </td>
 	    </tr>
 	    <tr>
 	      <td>
-		<div class="icode">print(2*f(3))</div>
+		<span class="icode">print(2*f(3))</span>
 	      </td>
 	      <td>
 		It was the next line
 	      </td>
 	      <td>
-		<div class="icode">x = 3</div>
+		<span class="icode">x = 3</span>
 	      </td>
 	      <td>
-		  <div class="icode">"I'm going to compute something!"</div>
+		  <span class="icode">"I'm going to compute something!"</span>
 	      </td>
 	    </tr>
 	    <tr>
-	    <td><div class="icode">   y = x*x</div></td>
+	    <td><span class="icode">   y = x*x</span></td>
 	    <td>
 	      We just called the function f, so we go to its first line
 	    </td>
 	    <td>
-	      <div class="icode">x = 3, y = 9</div>
+	      <span class="icode">x = 3, y = 9</span>
 	    </td>
 	    <td>
-	      <div class="icode">"I'm going to compute something!"</div>
+	      <span class="icode">"I'm going to compute something!"</span>
 	    </td>
 	  </tr>
 	  <tr>
 	    <td>
-	      <div class="icode">return x + y*y</div>
+	      <span class="icode">return x + y*y</span>
 	    </td>
 	    <td>
 	      It was the next line
 	    </td>
 	    <td>
-	      <div class="icode">x = 3, y = 9</div>
+	      <span class="icode">x = 3, y = 9</span>
 	    </td>
 	    <td>
 	      
-	      <div class="icode">"I'm going to compute something!"</div>
+	      <span class="icode">"I'm going to compute something!"</span>
 	    </td>
 	  </tr>
 	  <tr>
 	    <td>
-	      <div class="icode">print(2*f(3))</div>
+	      <span class="icode">print(2*f(3))</span>
 	    </td>
 	    <td>
-	      Now that we know the value of <div class="icode">f(3)</div>, we
+	      Now that we know the value of <span class="icode">f(3)</span>, we
 	      return to the line that called it, fresh with the
-	      knowledge that (in this case), <div class="icode">f(3) = 84</div>
+	      knowledge that (in this case), <span class="icode">f(3) = 84</span>
 	    </td>
 	    <td>
 	      (none)
 	    </td>
 	    <td>
-	      <div class="icode">"I'm going to compute something!"<br>84</div>
+	      <span class="icode">"I'm going to compute something!"<br>84</span>
 	    </td>
 	  </tr>
 	  </table><p>In this example the single-stepping was especially simple,
@@ -852,67 +852,67 @@ print(y)</pre></div>
 	  variable y with value 1.  Then, when we go to print y on
 	  line 5, we should merrily see the value 1 as we expect.
 	  Instead, what we see is a logic error that the variable
-	  <div class="icode">y</div> was not defined.  The issue, most
+	  <span class="icode">y</span> was not defined.  The issue, most
 	  basically, is that variables that were created inside
 	  functions don't continue to exist once the function
 	  finishes.</p><p>So our expectation was:</p><table><tr><td>Current line</td><td>
 	  Why we went to this line</td><td>
 	  Variables after current line runs</td><td>
 	  Output so far</td></tr><tr>
-	  <td><div class="icode">print(f(2))</div></td>
+	  <td><span class="icode">print(f(2))</span></td>
 	  <td>It was the first line (after the definition of the function)</td>
-	  <td><div class="icode">x = 2</div> (x is the input variable of the function f, and so
+	  <td><span class="icode">x = 2</span> (x is the input variable of the function f, and so
 	  when we call f(2), this sets the input variable to 2)</td>
 	  <td>
 	  </td>
 	</tr><tr><td>  
-	  <div class="icode">y = 1</div></td><td>
+	  <span class="icode">y = 1</span></td><td>
 	  We just called the function f, so we go to its first line</td><td>
-	  <div class="icode">x = 2<br>y = 1</div></td><td></td></tr><tr>
+	  <span class="icode">x = 2<br>y = 1</span></td><td></td></tr><tr>
 
 
-	  <td><div class="icode">return x + y</div></td>
+	  <td><span class="icode">return x + y</span></td>
 	  <td>
 	  It was the next line
 	  </td>
 	  <td>
 	  
-	  <div class="icode">x = 2<br>y = 1</div>
+	  <span class="icode">x = 2<br>y = 1</span>
 	  </td><td></td></tr><tr>
 
-	  <td><div class="icode">print(f(2))</div></td>
+	  <td><span class="icode">print(f(2))</span></td>
 	  <td>
 	  We've finished running f, so now we come back here
 	  </td>
 	  <td>
 	  
-	  <div class="icode">x = 2<br>y = 1</div>
+	  <span class="icode">x = 2<br>y = 1</span>
 	  </td>
 	  <td>
 	  
-	  <div class="icode">3</div>
+	  <span class="icode">3</span>
 	  </td></tr><tr><td>
-	  <div class="icode">print(y)</div></td><td>
+	  <span class="icode">print(y)</span></td><td>
 	  It was the next line</td><td>
-	  <div class="icode">x = 2<br>
-	  y = 1</div></td><td>
-	  <div class="icode">3<br>1</div></td></tr></table><p>Whereas what actually happens is:</p><table><tr><td>Current line</td><td>
+	  <span class="icode">x = 2<br>
+	  y = 1</span></td><td>
+	  <span class="icode">3<br>1</span></td></tr></table><p>Whereas what actually happens is:</p><table><tr><td>Current line</td><td>
 	  Why we went to this line</td><td>
 	  Variables after current line runs</td><td>
 	  Output so far</td></tr><tr>
-	  <td><div class="icode">print(f(2))</div></td>
+	  <td><span class="icode">print(f(2))</span></td>
 	  <td>It was the first line (after the definition of the function)</td>
-	  <td><div class="icode">x = 2</div> (x is the input variable of the function f, and so
+	  <td><span class="icode">x = 2</span> (x is the input variable of the function f, and so
 	  when we call f(2), this sets the input variable to 2)</td>
 	  <td>
 	  </td>
 	</tr><tr><td>  
-	  <div class="icode">y = 1</div></td><td>
+	  <span class="icode">y = 1</span></td><td>
 	  We just called the function f, so we go to its first line</td><td>
-	  <div class="icode">x = 2<br>y = 1</div></td><td></td></tr><tr>
+	  <span class="icode">x = 2<br>y = 1</span></td><td></td></tr><tr>
 
 
-	  <td><div class="icode">return x + y</div></td>
+	  <td><span class="icode">return x + y</span></td>
 	  <td>
 	  It was the next line
 	  </td>
@@ -921,7 +921,7 @@ print(y)</pre></div>
 	  (Variables from inside the function body no longer exist)
 	  </td><td></td></tr><tr>
 
-	  <td><div class="icode">print(f(2))</div></td>
+	  <td><span class="icode">print(f(2))</span></td>
 	  <td>
 	  We've finished running f, so now we come back here
 	  </td>
@@ -929,12 +929,12 @@ print(y)</pre></div>
 	  </td>
 	  <td>
 	  
-	  <div class="icode">3</div>
+	  <span class="icode">3</span>
 	  </td></tr><tr><td>
-	  <div class="icode">print(y)</div></td><td>
+	  <span class="icode">print(y)</span></td><td>
 	  It was the next line</td><td>
 	  (none)</td><td>
-	  <div class="icode">3<br>[error message]</div></td></tr></table><p>But what if the variable existed before the function was
+	  <span class="icode">3<br>[error message]</span></td></tr></table><p>But what if the variable existed before the function was
 	  called?</p><div class="code"><pre>def f(x):
    y = 1
    return x + y
@@ -960,7 +960,7 @@ print(y)</pre></div><p>It turns out that this prints</p><div class="code"><pre>4
 	  <td>
 	  </td>
 	</tr><tr>
-	  <td><div class="icode">print(f(3))</div></td>
+	  <td><span class="icode">print(f(3))</span></td>
 	  <td>
 	  It was the next line
 	  </td>
@@ -972,12 +972,12 @@ print(y)</pre></div><p>It turns out that this prints</p><div class="code"><pre>4
 	  <td>
 	    </td></tr><tr><td colspan="4">Call to the function f with
 	    argument value 3</td></tr><tr>
-	  <td><div class="icode">y = 1</div></td><td>
+	  <td><span class="icode">y = 1</span></td><td>
 	  We just called the function f, so we go to its first line</td><td>
 	  x = 3
 	  y = 1</td><td></td></tr>
 	<tr>
-	  <td><div class="icode">return x + y</div></td><td>
+	  <td><span class="icode">return x + y</span></td><td>
 	  It was the next line</td><td>
 	  x = 3
 	  y = 1</td><td></td></tr>
@@ -985,18 +985,18 @@ print(y)</pre></div><p>It turns out that this prints</p><div class="code"><pre>4
 	  4</td></tr>
 	  
 	<tr>
-	  <td><div class="icode">print(f(3))</div></td><td>
+	  <td><span class="icode">print(f(3))</span></td><td>
 	  We now return to the line that called the function with the
 	  return value of the function</td><td>
 	  y = 2 (The function is over, so any changes it made to any
 	  variables are discarded and any variables that existed
-	  before the function call retain their previous values</td><td><div class="icode">4</div></td>
+	  before the function call retain their previous values</td><td><span class="icode">4</span></td>
 	</tr>
 	<tr>
-	  <td><div class="icode">print(y)</div></td><td>
+	  <td><span class="icode">print(y)</span></td><td>
 	  It was the next line</td><td>
-	  y = 2</td><td><div class="icode">4
-2</div></td>
+	  y = 2</td><td><span class="icode">4
+2</span></td>
 	</tr>
 
 	  </table><p>This behaviour also stacks when we call functions from
@@ -1014,15 +1014,15 @@ y = 2
 print(g(3))
 print(y)</pre></div>
 
-          Here, <div class="icode">y</div> is initially set to 2.  Then we call
-          the function <div class="icode">g</div>, which sets <div class="icode">y</div>
-          (in this case to 9) and in turn calls <div class="icode">f</div>,
-          which sets <div class="icode">y</div> yet again, this time to 1.  But
-          when <div class="icode">f</div> returns and we go back to
-          <div class="icode">g</div>, then the value of <div class="icode">y</div> that
-          <div class="icode">g</div> set is restored.  And finally, when
-          <div class="icode">g</div> returns, the value of <div class="icode">y</div> that
-          was set before the call to <div class="icode">g</div> is again
+          Here, <span class="icode">y</span> is initially set to 2.  Then we call
+          the function <span class="icode">g</span>, which sets <span class="icode">y</span>
+          (in this case to 9) and in turn calls <span class="icode">f</span>,
+          which sets <span class="icode">y</span> yet again, this time to 1.  But
+          when <span class="icode">f</span> returns and we go back to
+          <span class="icode">g</span>, then the value of <span class="icode">y</span> that
+          <span class="icode">g</span> set is restored.  And finally, when
+          <span class="icode">g</span> returns, the value of <span class="icode">y</span> that
+          was set before the call to <span class="icode">g</span> is again
           restored.</p></div></div><div class="section"><div id="sec_3_6"></div><div class="text"><div class="header">3.6: 
 	  Library functions</div><div class="summary"><b>Summary: </b>Now that we know about functions, we can use some
       functions that come pre-packaged with Python (or otherwise).
@@ -1041,7 +1041,7 @@ print(y)</pre></div>
 	contained in <b>modules</b>--separate pieces of code that can
 	be loaded into our programs and that contain functions that
 	can be used from those programs. In Python, the way to
-	load a module is with an <div class="icode">import</div> line:
+	load a module is with an <span class="icode">import</span> line:
 
 	<div class="code"><pre>import <i>module_name</i></pre></div>
 
@@ -1051,10 +1051,10 @@ print(y)</pre></div>
 	<div class="code"><pre><i>module_name</i>.<i>function_name</i></pre></div>
 
 	For example, the module that deals with input is called
-	<div class="icode">input</div>.  So if we import it, get notice that
+	<span class="icode">input</span>.  So if we import it, get notice that
 	this adds two new functions:
-	<div class="icode">input.get_num(prompt)</div> and
-	<div class="icode">input.get_string(prompt)</div>.  These functions will
+	<span class="icode">input.get_num(prompt)</span> and
+	<span class="icode">input.get_string(prompt)</span>.  These functions will
 	display a window asking the user to input a number or a string
 	(respectively) and prompting them with whatever string was
 	supplied in the argument.  They return the value that was
@@ -1070,16 +1070,16 @@ if(age % 2 == 0):
 else:
    print("Your age is odd!")
 </pre></div>
-	</p><div class="icode">input</div><table>
+	</p><span class="icode">input</span><table>
 	  <tr><td>Function</td><td>Arguments</td><td>Return
 	  value</td></tr>
 	  
-	  <tr><td><div class="icode">input.get_num(prompt)</div></td><td><div class="icode">prompt</div>
+	  <tr><td><span class="icode">input.get_num(prompt)</span></td><td><span class="icode">prompt</span>
 	  is a string that will be displayed in the prompt where the
 	  user may enter a number</td><td>The number that the user
 	  entered will be returned by the function</td></tr>
 	  
-	  <tr><td><div class="icode">input.get_string(prompt)</div></td><td><div class="icode">prompt</div>
+	  <tr><td><span class="icode">input.get_string(prompt)</span></td><td><span class="icode">prompt</span>
 	  is a string that will be displayed in the prompt where the
 	  user may enter a string</td><td>The string that the user
 	  entered will be returned by the function</td></tr>
@@ -1121,9 +1121,9 @@ else:
 
 
 	  <ol>
-	    <li><div class="icode">s = x/2</div></li>
-	    <li><div class="icode">s = s + x/s</div></li>
-	    <li><div class="icode">s = s/2</div></li>
+	    <li><span class="icode">s = x/2</span></li>
+	    <li><span class="icode">s = s + x/s</span></li>
+	    <li><span class="icode">s = s/2</span></li>
 	    <li>If s*s is not yet as close as we want it to be to x,
 	    return to step 2 and continue from there.</li>
 	  </ol>
@@ -1145,19 +1145,19 @@ else:
 	  want the first 5 digits after the decimal to be correct.
 	  This means that we need s*s and x to be within 0.000001 of
 	  each other.  </p><p>But how, in turn, do we test this?  A good first guess
-	  would be <div class="icode">s*s-x &lt; 0.000001</div>.  The problem is
+	  would be <span class="icode">s*s-x &lt; 0.000001</span>.  The problem is
 	  that if somehow s*s is 4 and x is 8, then
 	  
-	  <div class="icode">s*s - x</div> will be -4, which is definitely less
+	  <span class="icode">s*s - x</span> will be -4, which is definitely less
 	  than 0.000001.  Of course, what we want is not just for
-	  <div class="icode">s*s-x</div> to be small (negative numbers count as
+	  <span class="icode">s*s-x</span> to be small (negative numbers count as
 	  very small indeed), but for the <i>absolute value</i> of
-	  this quantity to be small.  </p><p>But we cannot simply write <div class="icode">|s*s-x|</div> to get
+	  this quantity to be small.  </p><p>But we cannot simply write <span class="icode">|s*s-x|</span> to get
 	  the absolute value in a Python program, as this is not valid
 	  syntax (check the syntax tree and behold the absence of any
-	  "|" operator).  </p><p>However, if we had a function, say <div class="icode">abs_val(x)</div>,
+	  "|" operator).  </p><p>However, if we had a function, say <span class="icode">abs_val(x)</span>,
 	  that computed the absolute value, then we could instead
-	  write <div class="icode">abs_val(s*s-x)</div> for this absolute value, and
+	  write <span class="icode">abs_val(s*s-x)</span> for this absolute value, and
 	  then our function would become:
 	  <div class="code"><pre>def square_root(x):
    s = x/s
@@ -1166,16 +1166,16 @@ else:
       s = s/2
    return s</pre></div>
 
-          Of course, we don't have any <div class="icode">abs_val</div> function,
+          Of course, we don't have any <span class="icode">abs_val</span> function,
 	  but that's OK--now that we've solved the problem at hand
 	  supposing we had one, now we can go ahead and try to write
-	  that as a sub-problem.  </p><p><b>The <div class="icode">abs_val(x)</div> function: </b> The absolute
+	  that as a sub-problem.  </p><p><b>The <span class="icode">abs_val(x)</span> function: </b> The absolute
 	  value function should receive an argument x and return just
 	  x unchanged if x is positive.  But if x is negative, we want
 	  to return "x, but made positive".  And how do we make a
 	  negative number positive?  Negate it!  So it should return
-	  <div class="icode">x</div> if <div class="icode">x</div> is positive, and
-	  <div class="icode">-x</div> if <div class="icode">x</div> is negative.  To wit:
+	  <span class="icode">x</span> if <span class="icode">x</span> is positive, and
+	  <span class="icode">-x</span> if <span class="icode">x</span> is negative.  To wit:
 
 	  <div class="code"><pre>def abs_val(x):
    if(x &lt; 0):
@@ -1187,8 +1187,8 @@ else:
           neither, so we should make sure our function behaves
           properly when the argument is 0.  But in fact it does return
 	  0 in this case, so all is well.
-	  </p><p>Now that we have our <div class="icode">abs_val</div> function and our
-	  <div class="icode">square_root</div> function, we can put them all
+	  </p><p>Now that we have our <span class="icode">abs_val</span> function and our
+	  <span class="icode">square_root</span> function, we can put them all
 	  together into a square root calculating program: 
 	  
 <div class="code"><pre>import input
@@ -1241,10 +1241,10 @@ print(square_root(x))</pre></div>
 	  even cleaner.</p><p><b>Square root, Mark II: </b>ur absolute value function
 	  was pretty simple and surely someone else both needed it and
 	  wrote it before us, right?  Indeed it is so: Python has a
-	  <div class="icode">math</div> library that includes many common (and
+	  <span class="icode">math</span> library that includes many common (and
 	  some less common) mathematics-related functions ready to
 	  use.  The one that computes absolute values is called
-	  <div class="icode">math.abs(x)</div>.  So instead we could have
+	  <span class="icode">math.abs(x)</span>.  So instead we could have
 	  written our square root program using it:
 
 	  <div class="code"><pre>import input
@@ -1261,9 +1261,9 @@ x = input.get_num("Enter x")
 print(square_root(x))</pre></div>
 	  </p><p><b>Square root, Mark III: </b>But wait!  If you ran the
 	  above program you might have noticed that there is a
-	  <div class="icode">math.sqrt</div> function.  It turns out that "sqrt"
+	  <span class="icode">math.sqrt</span> function.  It turns out that "sqrt"
 	  is the common abbreviation for "square root".  So in fact
-	  the <div class="icode">math</div> module already came with a function
+	  the <span class="icode">math</span> module already came with a function
 	  for computing square roots, and we could simply have done: 	  
 <div class="code"><pre>import input
 import math
@@ -1282,40 +1282,40 @@ print(math.sqrt(input.get_num("Enter x")))</pre></div>
 	  <tr><td>Function</td><td>Arguments</td><td>Return
 	  value</td></tr>
 	  
-	  <tr><td><div class="icode">math.abs(x)</div></td><td><div class="icode">x</div>
+	  <tr><td><span class="icode">math.abs(x)</span></td><td><span class="icode">x</span>
 	  is a number whose absolute value we want to
 	  compute.</td><td>Returns the absolute value of the argument
-	  <div class="icode">x</div></td></tr>
+	  <span class="icode">x</span></td></tr>
 	  
-	  <tr><td><div class="icode">math.sqrt(x)</div></td><td><div class="icode">x</div>
+	  <tr><td><span class="icode">math.sqrt(x)</span></td><td><span class="icode">x</span>
 	  is a number whose square root we want to
 	  compute.</td><td>Returns the square root of the argument
-	  <div class="icode">x</div></td></tr>
+	  <span class="icode">x</span></td></tr>
 	  
-	  <tr><td><div class="icode">math.floor(x)</div></td><td><div class="icode">x</div>
+	  <tr><td><span class="icode">math.floor(x)</span></td><td><span class="icode">x</span>
 	  is a number whose floor we want to compute.</td><td>Returns
 	  the largest integer not greater than the argument
-	  <div class="icode">x</div></td></tr>
+	  <span class="icode">x</span></td></tr>
 	  
-	  <tr><td><div class="icode">math.distance(x1,y1,x2,y2)</div></td><td><div class="icode">x1</div>
-	  and <div class="icode">y1</div> are the coordinates of one point in 2D
-	  space, and <div class="icode">x2</div> and <div class="icode">y2</div> are the
+	  <tr><td><span class="icode">math.distance(x1,y1,x2,y2)</span></td><td><span class="icode">x1</span>
+	  and <span class="icode">y1</span> are the coordinates of one point in 2D
+	  space, and <span class="icode">x2</span> and <span class="icode">y2</span> are the
 	  coordinates of a second point.</td><td>Returns the distance
 	  in 2D space between the points (x1,y1) and
 	  (x2,y2). </td></tr>
 	  
-	  <tr><td><div class="icode">math.range(start,end)</div></td><td><div class="icode">start</div>
-	  and <div class="icode">end</div> are numbers indicating the bounds of
+	  <tr><td><span class="icode">math.range(start,end)</span></td><td><span class="icode">start</span>
+	  and <span class="icode">end</span> are numbers indicating the bounds of
 	  the array to be returned.</td><td>Returns an array of
-	  numbers, counting up by 1, between <div class="icode">start</div> and
-	  <div class="icode">end</div>.  By convention, this array excludes
-	  <div class="icode">end</div> so that <div class="icode">range(0,N)</div> is an
-	  array with <div class="icode">N</div> elements.</td></tr>
+	  numbers, counting up by 1, between <span class="icode">start</span> and
+	  <span class="icode">end</span>.  By convention, this array excludes
+	  <span class="icode">end</span> so that <span class="icode">range(0,N)</span> is an
+	  array with <span class="icode">N</span> elements.</td></tr>
 	  
-	  <tr><td><div class="icode">math.solve_quadratic(a,b,c)</div></td><td>The
+	  <tr><td><span class="icode">math.solve_quadratic(a,b,c)</span></td><td>The
 	  three arguments are treated as the coefficients of a
-	  quadratic polynomial <div class="icode">a*x^2 + b*x + c</div></td><td>Returns an array containing all the
-	  solutions of the equation <div class="icode">a*x^2 + b*x + c = 0</div></td></tr>
+	  quadratic polynomial <span class="icode">a*x^2 + b*x + c</span></td><td>Returns an array containing all the
+	  solutions of the equation <span class="icode">a*x^2 + b*x + c = 0</span></td></tr>
 	</table>
 	  </p></div></div><div class="section"><div id="sec_3_7_2"></div><div class="text"><div class="header">3.7.2: 
 	  Factorial</div><p>OK, so we have a bunch of mathematics functions already
@@ -1344,14 +1344,14 @@ print(factorial(input.get_num("Enter a number")))</pre></div>
 	  multiplying a bunch of numbers together.  This is a rather
 	  general operation: We can imagine wanting to be able to take
 	  any list of numbers and multiply all of them--not just the
-	  list from <div class="icode">1</div> to <div class="icode">N</div>, which
-	  multiply to give <div class="icode">N!</div>.  </p><p>To this end, we can write a more general function that
+	  list from <span class="icode">1</span> to <span class="icode">N</span>, which
+	  multiply to give <span class="icode">N!</span>.  </p><p>To this end, we can write a more general function that
 	  takes in an array of numbers and returns the product of all
 	  its elements.  This will look broadly similar to the
-	  factorial function: We maintain a <div class="icode">counter</div> and
-	  an <div class="icode">answer</div> variable, but instead of
-	  multiplying the answer by <div class="icode">counter</div> each time,
-	  we multiply it by <div class="icode">numbers[counter]</div>:
+	  factorial function: We maintain a <span class="icode">counter</span> and
+	  an <span class="icode">answer</span> variable, but instead of
+	  multiplying the answer by <span class="icode">counter</span> each time,
+	  we multiply it by <span class="icode">numbers[counter]</span>:
 
 	  
 	  <div class="code"><pre>def multiply(numbers):
@@ -1366,9 +1366,9 @@ print(multiply([2,4,6]))</pre></div>
 
           This has an off-by-one type of error.  See if you can fix
           it!  (Answer will be given later.)  </p><p>This would allow us to very easily compute factorials if
-	  we could get an array of the numbers <div class="icode">1</div> to
-	  <div class="icode">N</div> easily.  In fact, the <div class="icode">math</div>
-	  module has such a function: <div class="icode">math.range</div>.  So
+	  we could get an array of the numbers <span class="icode">1</span> to
+	  <span class="icode">N</span> easily.  In fact, the <span class="icode">math</span>
+	  module has such a function: <span class="icode">math.range</span>.  So
 	  we can easily do the following (this version has the
 	  off-by-one error fixed too):
 
@@ -1399,7 +1399,7 @@ print(factorial(5))</pre></div>
 	  <div class="code"><pre>n! = n*(n-1)!, where we define 0! = 1</pre></div>
 
 	  This is a somewhat odd definition, since to define the
-	  factoral of <div class="icode">n</div>, i.e., <div class="icode">n!</div>, it
+	  factoral of <span class="icode">n</span>, i.e., <span class="icode">n!</span>, it
 	  uses the factorial in the definition.  This actually plays
 	  out just fine, however: Let's try to compute 4! just by
 	  using this definition and not any of our foregoing knowledge
@@ -1428,7 +1428,7 @@ print(factorial(5))</pre></div>
 	  function itself in the definition.  Such a definition is
 	  called <b>recursive</b>. Obviously such definitions
 	  can fail to make sense.  Suppose I try to define a new
-	  operator <div class="icode">@</div> with a recursive definition like:
+	  operator <span class="icode">@</span> with a recursive definition like:
 
 	  <div class="code"><pre>n@ = n * (n+1)@</pre></div>
 	    
@@ -1480,7 +1480,7 @@ print(factorial(input.get_num("Factorial of: ")))</pre></div>
 	  integers 2 through N, test each one to see if it is prime,
 	  and delete the elements that are not prime.  To do this, we
 	  first have to package up our code from the previous chapter
-	  into an <div class="icode">is_prime</div> function.  We'll say it
+	  into an <span class="icode">is_prime</span> function.  We'll say it
 	  should return 0 if the number is non-prime, and 1 if it is
 	  prime.
 
@@ -1497,9 +1497,9 @@ def is_prime(n):
 
 print(is_prime(input.get_num("Enter a number")))</pre></div>
 
-          Then we can use <div class="icode">math.range</div> to make a list of
+          Then we can use <span class="icode">math.range</span> to make a list of
           integers 2 through N and then use a while loop call out
-          <div class="icode">is_prime</div> function on each element:
+          <span class="icode">is_prime</span> function on each element:
 
 	  <div class="code"><pre>import input
 import math
@@ -1528,16 +1528,16 @@ print(nums)</pre></div>
 	  it.
 
 	  <font color="blue"><u>Show answer</u></font><br>
-	      Say the <div class="icode">nums</div> is
-	      <div class="icode">[2,3,5,7,8,9,10]</div> and
-	      <div class="icode">counter</div> is currently 4.  Then we're
-	      testing <div class="icode">nums[counter]</div> for primality.
-	      Since <div class="icode">nums[counter] = 8</div> in this case, it
+	      Say the <span class="icode">nums</span> is
+	      <span class="icode">[2,3,5,7,8,9,10]</span> and
+	      <span class="icode">counter</span> is currently 4.  Then we're
+	      testing <span class="icode">nums[counter]</span> for primality.
+	      Since <span class="icode">nums[counter] = 8</span> in this case, it
 	      isn't prime, so we delete it from the list, leaving
-	      <div class="icode">nums</div> as <div class="icode">[2,3,5,7,9,10]</div> and
-	      <div class="icode">counter</div> is still 4.  Then we increment
+	      <span class="icode">nums</span> as <span class="icode">[2,3,5,7,9,10]</span> and
+	      <span class="icode">counter</span> is still 4.  Then we increment
 	      counter so it becomes 5.  This meanqs
-	      <div class="icode">nums[counter]</div> is now 10, and we've
+	      <span class="icode">nums[counter]</span> is now 10, and we've
 	      skipped testing 9 entirely.This mean we will leave 9 in
 	      the list of numbers without ever testing it!
 
@@ -1571,11 +1571,11 @@ print(nums)</pre></div>
 	  </p><p>Even once we get this working, however, there is a
 	  question of this program's efficiency.  The algorithm runs
 	  by checking first if 2 is prime, then if 3 is prime, all the
-	  way up to <div class="icode">N</div>.  For a given <div class="icode">x</div>,
+	  way up to <span class="icode">N</span>.  For a given <span class="icode">x</span>,
 	  how many steps does it take to check whether
-	  <div class="icode">x</div> is prime?  We run through all possible
-	  divisors of <div class="icode">x</div>, of which there are about
-	  <div class="icode">x</div> (precisely, there are <div class="icode">x-2</div>,
+	  <span class="icode">x</span> is prime?  We run through all possible
+	  divisors of <span class="icode">x</span>, of which there are about
+	  <span class="icode">x</span> (precisely, there are <span class="icode">x-2</span>,
 	  but we can be approximate).</p><p>To count the total number of steps we take, we can count
 	  the approximate number of steps needed for each number
 	  between 2 and N:
@@ -1588,10 +1588,10 @@ print(nums)</pre></div>
 	    <li>Check if N is prime: N steps</li>
 	  </ul>
 
-	  This gives us a total of <div class="icode">2+3+4+...+N</div> steps.
+	  This gives us a total of <span class="icode">2+3+4+...+N</span> steps.
 	  We can simplify this to
 
-	  <div class="icode">(1/2)*N<sup>2</sup> + (1/2)*N - 1</div>.  When N is
+	  <span class="icode">(1/2)*N<sup>2</sup> + (1/2)*N - 1</span>.  When N is
 	  large, N<sup>2</sup> is the only part of this expression
 	  that really matters (think: if N is around 1000, then
 	  (1/2)*N<sup>2</sup> is 500000, while (1/2)*N-1 is only
@@ -1725,7 +1725,7 @@ print(ns)</pre></div>
 	  crunchy and hard to read.  However, it is far superior in
 	  speed to the previous algorithm.  One way to help this would
 	  be to put the code into a module function--maybe
-	  <div class="icode">math.get_primes</div>--so that while the code is
+	  <span class="icode">math.get_primes</span>--so that while the code is
 	  there and hard to read, it is clear what it does, and most
 	  of the time we can use it, getting the full advantage of its
 	  speed, without ever having to look at it.</p></div></div><div class="section"><div id="sec_3_8"></div><div class="text"><div class="header">3.8: 
@@ -1753,57 +1753,57 @@ print(ns)</pre></div>
 	  </ul></p><p>At a high level, we know how to do some of these tasks:
 	  Asking the user for input is the job of the input module.
 	  However, there are a few pieces we haven't learned yet.  For
-	  example, how do we read files?</p><p>In our version of Python, we have a <div class="icode">file</div>
+	  example, how do we read files?</p><p>In our version of Python, we have a <span class="icode">file</span>
 	  module, with all the functions we could ever ask for
 	  pertaining to files:</p><table>
 	  <tr><td>Function</td><td>Arguments</td><td>Return
 	  value</td></tr>
 	  
-	  <tr><td><div class="icode">file.list()</div></td><td>No
+	  <tr><td><span class="icode">file.list()</span></td><td>No
 	  arguments</td><td>Returns an array containing a list of
 	  filenames for files that exist.</td></tr>
 	  
-	  <tr><td><div class="icode">file.readline(filename,
-	  line_num)</div></td><td><div class="icode">filename</div> is a
+	  <tr><td><span class="icode">file.readline(filename,
+	  line_num)</span></td><td><span class="icode">filename</span> is a
 	  string specifying which file you want to read.
-	  <div class="icode">line_num</div> is a number specifying which line
+	  <span class="icode">line_num</span> is a number specifying which line
 	  you want to read from that file.  </td><td>Returns a string
 	  which is the requested line from the specified
 	  file.</td></tr>
 	  
-	  <tr><td><div class="icode">file.length(filename)</div></td><td><div class="icode">filename</div>
+	  <tr><td><span class="icode">file.length(filename)</span></td><td><span class="icode">filename</span>
 	  is a string specifying which file you want to ask
 	  about.</td><td>Returns a number which is the number of lines
 	  in the specified file.  Returns -1 if the file does not exist.</td></tr>
 
 
-	  <tr><td><div class="icode">file.write(filename,text)</div></td><td><div class="icode">filename</div>
+	  <tr><td><span class="icode">file.write(filename,text)</span></td><td><span class="icode">filename</span>
 	  is a string specifying which file you want to append to.
-	  <div class="icode">text</div> is the text you want to
-	  write</td><td>Writes <div class="icode">text</div> to the file with
-	  name equal to <div class="icode">filename</div>, overwriting any data
+	  <span class="icode">text</span> is the text you want to
+	  write</td><td>Writes <span class="icode">text</span> to the file with
+	  name equal to <span class="icode">filename</span>, overwriting any data
 	  previously stored there.  Returns 1 if the write was
 	  successful and -1 otherwise (for example, if the file does
 	  not exist).</td></tr>
 	  
-	  <tr><td><div class="icode">file.append(filename,text)</div></td><td><div class="icode">filename</div>
+	  <tr><td><span class="icode">file.append(filename,text)</span></td><td><span class="icode">filename</span>
 	  is a string specifying which file you want to append to.
-	  <div class="icode">text</div> is the text you want to
-	  append</td><td>Appends <div class="icode">text</div> to the file with
-	  name equal to <div class="icode">filename</div>.  Returns 1 if the
+	  <span class="icode">text</span> is the text you want to
+	  append</td><td>Appends <span class="icode">text</span> to the file with
+	  name equal to <span class="icode">filename</span>.  Returns 1 if the
 	  append was successful and -1 otherwise (for example, if the
 	  file does not exist)</td></tr>
 	  
-	  <tr><td><div class="icode">file.create(filename)</div></td><td><div class="icode">filename</div>
+	  <tr><td><span class="icode">file.create(filename)</span></td><td><span class="icode">filename</span>
 	  is a string specifying which file you want
 	  make.</td><td>Creates a new file with name
-	  <div class="icode">filename</div> and returns 1.  If a file with that
+	  <span class="icode">filename</span> and returns 1.  If a file with that
 	  name already exists, it does nothing and returns -1.</td></tr>
 
-	  <tr><td><div class="icode">file.delete(filename)</div></td><td><div class="icode">filename</div>
+	  <tr><td><span class="icode">file.delete(filename)</span></td><td><span class="icode">filename</span>
 	  is a string specifying which file you want to
 	  delete.</td><td>Deletes the file with name
-	  <div class="icode">filename</div> and returns 1.  If no such file
+	  <span class="icode">filename</span> and returns 1.  If no such file
 	  exists, does nothing and returns -1..</td></tr>
 	  
 	</table><p>So, for example, we can write some code that reads all the files:
@@ -1837,7 +1837,7 @@ print(files)</pre></div>
 	functions.</p><p>For example, the first concrete task that we can get from
 	our rough outline above is that we have to read all the files
 	into an array.  We will imagine a function that does this job
-	called <div class="icode">read_lines</div>.  Let's say we feed this
+	called <span class="icode">read_lines</span>.  Let's say we feed this
 	function an argument containing a list of filenames to read
 	and it returns an array of strings, each containing the
 	contents of the corresponding file.  </p><p>Naturally, this function will be somehow constructed using
@@ -1863,7 +1863,7 @@ print(files)</pre></div>
 	could take our query word and simply compare it to all the
 	elements of that array, and thereby determine whether the file
 	contains the query word.</p><p>This will be the job of another function, say called
-	<div class="icode">file_to_array</div> that will take in a file's text
+	<span class="icode">file_to_array</span> that will take in a file's text
 	as a string and will somehow return an array consisting of all
 	the words in the file.  A mock of this function, then, might
 	look like:
@@ -1875,12 +1875,12 @@ print(files)</pre></div>
 	</p><p>The next apparent task will be to actually get a query word
 	from the user.  We could write a function to do this, but we
 	actually have a pretty obvious library function to do this
-	already: <div class="icode">input.get_string</div>.  So rather than
+	already: <span class="icode">input.get_string</span>.  So rather than
 	mocking this out, we'll just use this in constructing our
 	actual code.</p><p>The final task that we might extract from our outline is the
 	business of actually searching through one of these arrays of
 	words for a given word.  This could be accomplished by a
-	function called <div class="icode">search_file</div> which takes two
+	function called <span class="icode">search_file</span> which takes two
 	arguments: One containing the array of words to search through
 	and the other containing the word to search for.  We have to
 	have some way of letting this function indicate whether the
@@ -1899,12 +1899,12 @@ print(files)</pre></div>
 	perspective, this would look something like: 
 	
 	<ol>
-	  <li>Get a list of filenames from <div class="icode">file.list</div>.</li>
-	  <li>Get a list of file contents from <div class="icode">read_files</div>.</li>
+	  <li>Get a list of filenames from <span class="icode">file.list</span>.</li>
+	  <li>Get a list of file contents from <span class="icode">read_files</span>.</li>
 	  <li>Turn the list of file contents into lists of words
-	  using <div class="icode">file_to_array</div>.</li>
-	  <li>Get a user query using <div class="icode">input.get_string</div></li>
-	  <li>Use <div class="icode">search_file</div> to search through each
+	  using <span class="icode">file_to_array</span>.</li>
+	  <li>Get a user query using <span class="icode">input.get_string</span></li>
+	  <li>Use <span class="icode">search_file</span> to search through each
 	  of the lists of words that we got in step 3.</li>
 	</ol>
 	
@@ -1933,25 +1933,25 @@ filenames = file.list()
 # Step 2: 
 file_contents = read_files(filenames)</pre></div>
 	</p><p>For step 3, we're going to have to loop through each of the
-	strings in <div class="icode">file_contents</div> and use file_to_array
+	strings in <span class="icode">file_contents</span> and use file_to_array
 	to turn each of those strings into a list of words.  We can
 	store those lists of words in one big list called
-	<div class="icode">index</div>, which will be the repository of words
+	<span class="icode">index</span>, which will be the repository of words
 	that we'll search later.</p><p>This entire procedure is an essentially familiar while loop
 	pattern.  The algorithm would look like:
 
 	<ol>
-	  <li>Create <div class="icode">index</div> as an empty array</li>
+	  <li>Create <span class="icode">index</span> as an empty array</li>
 	  <li>Set a counter, (say for simplicity we shall call it
-	  <div class="icode">i</div>) to 0</li>
+	  <span class="icode">i</span>) to 0</li>
 	  <li>
-	    As long as <div class="icode">i</div> is less than then length of
+	    As long as <span class="icode">i</span> is less than then length of
 	    the list of file contents, do the following:
 	    <ol>
-	      <li>Call <div class="icode">file_to_array</div> on
-	      <div class="icode">file_contents[i]</div> and add the resulting
-	      list as another element of <div class="icode">index</div>.</li>
-	      <li>Increment <div class="icode">i</div>.</li>
+	      <li>Call <span class="icode">file_to_array</span> on
+	      <span class="icode">file_contents[i]</span> and add the resulting
+	      list as another element of <span class="icode">index</span>.</li>
+	      <li>Increment <span class="icode">i</span>.</li>
 	    </ol>
 	  </li>
 	</ol>
@@ -2021,19 +2021,19 @@ query = input.get_string("Enter your query: ")</pre></div>
 	outline in algorithm form here:
 	
 	<ol>
-	  <li>Set a counter, (again just call it <div class="icode">i</div>) to
+	  <li>Set a counter, (again just call it <span class="icode">i</span>) to
 	  0</li>
 	  <li>
-	    As long as <div class="icode">i</div> is less than then length of
+	    As long as <span class="icode">i</span> is less than then length of
 	    the index, do the following:
 	    <ol>
-	      <li>Call <div class="icode">search_file</div> with arguments being
+	      <li>Call <span class="icode">search_file</span> with arguments being
 	      the query word and the list of words in the
-	      <div class="icode">i</div>th file, i.e.,
-	      <div class="icode">index[i]</div>.</li>
+	      <span class="icode">i</span>th file, i.e.,
+	      <span class="icode">index[i]</span>.</li>
 	      <li>If the result is 1, print the filename:
-	      <div class="icode">filenames[i]</div>.  </li>
-	      <li>Increment <div class="icode">i</div>.</li>
+	      <span class="icode">filenames[i]</span>.  </li>
+	      <li>Increment <span class="icode">i</span>.</li>
 	    </ol>
 	  </li>
 	</ol>
@@ -2081,10 +2081,10 @@ while(i &lt; len(index)):
 	</p><p>We did also want to loop back and ask for another query
 	word, but we'll add that feature later.  For now, we have the
 	more pressing task of implementing our mocked functions for
-	real.  </p><p><b><div class="icode">read_files</div>: </b>The
-	<div class="icode">read_files</div> function we can implement by
+	real.  </p><p><b><span class="icode">read_files</span>: </b>The
+	<span class="icode">read_files</span> function we can implement by
 	transplanting with only very minor changes the code from
-	earlier that used the <div class="icode">file</div> module:
+	earlier that used the <span class="icode">file</span> module:
 	
 <div class="code"><pre>import file
 import input
@@ -2135,36 +2135,36 @@ while(i &lt; len(index)):
    if(search_file(query, index[i]) == 1):
       print(filenames[i])
    i = i+1</pre></div>
-	</p><p><b><div class="icode">file_to_array</div>: </b>The
-	<div class="icode">file_to_array</div> function is a little tricker.  It
+	</p><p><b><span class="icode">file_to_array</span>: </b>The
+	<span class="icode">file_to_array</span> function is a little tricker.  It
 	will require taking these large strings consisting of the
 	whole contents of a file and splitting them into words.  We
 	haven't talked much about complex operations on strings yet,
 	but of course there is a module for this.  Real-life Python
 	(as well as just about every other programming language) has a
 	very extensive library of string functions.  In our version of
-	Python, these are found in the <div class="icode">string</div> module,
+	Python, these are found in the <span class="icode">string</span> module,
 	two of whose functions we will find very useful: </p><table>
 	  <tr><td>Function</td><td>Arguments</td><td>Return
 	  value</td></tr>
 	  
-	  <tr><td><div class="icode">string.simplify(text)</div></td><td><div class="icode">text</div>
+	  <tr><td><span class="icode">string.simplify(text)</span></td><td><span class="icode">text</span>
 	  is the string to be simplified.</td><td>Returns a new string
 	  with all characters that aren't letters or spaces removed,
 	  all space characters (tabs, newlines, multiple spaces)
 	  turned into a single space character " ", and all letters
 	  converted to lower case.</td></tr>
 	  
-	  <tr><td><div class="icode">string.split(text,char)</div></td><td><div class="icode">text</div>
-	  is the string to be split, and <div class="icode">char</div> is the
+	  <tr><td><span class="icode">string.split(text,char)</span></td><td><span class="icode">text</span>
+	  is the string to be split, and <span class="icode">char</span> is the
 	  string to use as the separator.  </td><td>Returns an array
-	  of all strings taken from <div class="icode">text</div> separated by
-	  instances of the string <div class="icode">char</div>.  For example,
-	  <div class="icode">string.split("babacathe","a")</div> returns the array
-	  <div class="icode">["b","b","c","the"]</div>.</td></tr>
+	  of all strings taken from <span class="icode">text</span> separated by
+	  instances of the string <span class="icode">char</span>.  For example,
+	  <span class="icode">string.split("babacathe","a")</span> returns the array
+	  <span class="icode">["b","b","c","the"]</span>.</td></tr>
 
 		</table><p>So in fact we can implement the
-	<div class="icode">file_to_array</div> function as simply a call to the
+	<span class="icode">file_to_array</span> function as simply a call to the
 	string module's functions:
 
 	<div class="code"><pre>string.split(string.simplify(file_text)," ")</pre></div>
@@ -2221,7 +2221,7 @@ while(i &lt; len(index)):
    i = i+1</pre></div>
 
 	</p><p>As a note, if we were unsure about whether
-	<div class="icode">file_to_array</div> worked as intended, we could
+	<span class="icode">file_to_array</span> worked as intended, we could
 	always pull it out and test it separately with a small code
 	snippet like:
 
@@ -2235,8 +2235,8 @@ print(file_to_array("Hello!  I am Bob, and this is my pet kangaroo."))</pre></di
         called <b>testability</b>: The ability to test that your code
         works as intended not just by testing it all at once, but by
         taking out pieces and testing them individually.
-	</p><p><b><div class="icode">search_file: </div></b>Finally, the
-	<div class="icode">search_file</div> function is a simple while loop
+	</p><p><b><span class="icode">search_file: </span></b>Finally, the
+	<span class="icode">search_file</span> function is a simple while loop
 	remiscient of our many other examples of this to date.  We
 	also add in a while loop to keep asking for a new query until
 	we get the "EXIT" query in this version of the code, making it
@@ -2312,31 +2312,31 @@ while(query != "EXIT"):
 	  middle with a very limited graphics display: a 10x10 grid of
 	  squares that can change color, display text, and are
 	  clickable.  We call this arrangement our "lightboard", and
-	  it can be controlled by functions from the <div class="icode">lb</div>
+	  it can be controlled by functions from the <span class="icode">lb</span>
 	  module:</p><table>
 	      <tr><td>Function</td><td>Arguments</td><td>Return
 	      value</td></tr>
 	      
-	      <tr><td><div class="icode">lb.set_color(x,y,color)</div></td><td><div class="icode">x</div>
-	      is the x-coordinate of the button to set, <div class="icode">y</div>
+	      <tr><td><span class="icode">lb.set_color(x,y,color)</span></td><td><span class="icode">x</span>
+	      is the x-coordinate of the button to set, <span class="icode">y</span>
 	      is the y-coordinate of the button to set, and
-	      <div class="icode">color</div> is a string describing the color to set
+	      <span class="icode">color</span> is a string describing the color to set
 	      for in the button.</td><td>Sets the button at coordinates
-	      x,y to have color described in the <div class="icode">color</div>
+	      x,y to have color described in the <span class="icode">color</span>
 	      argument.  Returns 1 if the setting was successful, and -1
 	      if it failed (e.g. if x or y was too large).</td></tr>
 	  
-	      <tr><td><div class="icode">lb.set_text(x,y,text)</div></td><td><div class="icode">x</div>
-	      is the x-coordinate of the button to set, <div class="icode">y</div>
+	      <tr><td><span class="icode">lb.set_text(x,y,text)</span></td><td><span class="icode">x</span>
+	      is the x-coordinate of the button to set, <span class="icode">y</span>
 	      is the y-coordinate of the button to set, and
-	      <div class="icode">text</div> is the text to put in the
+	      <span class="icode">text</span> is the text to put in the
 	      button.</td><td>Sets the button at coordinates x,y to have
 	      text equal to the first character of the string
-	      <div class="icode">text</div>.  Returns 1 if the setting was
+	      <span class="icode">text</span>.  Returns 1 if the setting was
 	      successful, and -1 if it failed (e.g. if x or y was too
 	      large).</td></tr>
 	      
-	      <tr><td><div class="icode">lb.get_click()</div></td><td>No
+	      <tr><td><span class="icode">lb.get_click()</span></td><td>No
 	      arguments</td><td>Waits for the user to click the
 	      lightboard.  When they do, this function returns an array
 	      containing, in order, the x coordinate of the click, the y
@@ -2371,7 +2371,7 @@ while(1 == 1):
             exit or similar.  For example, if we want the top right
             button to be the "quit" button, we can, instead of looping
             forever, loop as long as a variable (say we call it
-            <div class="icode">done</div>) is set to 0.  Then, when the right
+            <span class="icode">done</span>) is set to 0.  Then, when the right
             button is clicked, we'll set it to 1, which will cause the
             loop to stop looping:
 
@@ -2409,8 +2409,8 @@ while(done == 0):
 	    yet?  </p><p>The location of the player can in turn be described by
 	    their x- and y-coordiantes, so the situation of the game
 	    at any point in time can be stored in three variables,
-	    which we shall call <div class="icode">user_x</div>,
-	    <div class="icode">user_y</div> and <div class="icode">done</div>.  <div id="def_model" class="definition"></div>These variables comprise what is called the
+	    which we shall call <span class="icode">user_x</span>,
+	    <span class="icode">user_y</span> and <span class="icode">done</span>.  <div id="def_model" class="definition"></div>These variables comprise what is called the
 	    game's <b>model</b>--that is, the information that
 	    describes competely the game's current setup (positions of
 	    all objects, scores, whatever), independently of how this
@@ -2419,7 +2419,7 @@ while(done == 0):
 	    the model would be the only values we needed to store,
 	    since we can recreate the entire setup from that
 	    information.</p><p>Now, just like before, we'll have a loop that continues
-	    until <div class="icode">done</div> changes, where we get the user's
+	    until <span class="icode">done</span> changes, where we get the user's
 	    clicks.  But this time, rather than blithely setting
 	    wherever they clicked to be red, now we'll test whether
 	    they clicked next to the player's current position or
@@ -2428,18 +2428,18 @@ while(done == 0):
 
 	    <ul>
 	      <li>Change the player's current position to gray.</li>
-	      <li>Update the player's position (<div class="icode">user_x</div>
-	      and <div class="icode">user_y</div>) to the location of the
+	      <li>Update the player's position (<span class="icode">user_x</span>
+	      and <span class="icode">user_y</span>) to the location of the
 	      click.</li>
 	      <li>Change the player's new position to red.</li>
 	      <li>If the player has reached the bottom right corner,
-	      set <div class="icode">done</div> to be 1.</li>
+	      set <span class="icode">done</span> to be 1.</li>
 	    </ul>
 
 	    So how do we check whether the click was next to the
-	    player?  We can use the <div class="icode">math</div> library, which
+	    player?  We can use the <span class="icode">math</span> library, which
 	    includes a function for measuring distance:
-	    <div class="icode">math.distance</div>.  If the distance between the
+	    <span class="icode">math.distance</span>.  If the distance between the
 	    click point and the player's position is exactly 1, then
 	    the user clicked one of the four adjacent spots.  
       
@@ -2557,27 +2557,27 @@ while(done == 0):
 	to get directions from one address to another.  In fact, it is
 	better than that, as there already exists a Python module that
 	performs the task of using this API: the
-	<div class="icode">googlemaps</div> module.  </p><table>
+	<span class="icode">googlemaps</span> module.  </p><table>
 	  <tr><td>Function</td><td>Arguments</td><td>Return
 	  value</td></tr>
 	  
-	  <tr><td><div class="icode">googlemaps.init()</div></td><td>No
+	  <tr><td><span class="icode">googlemaps.init()</span></td><td>No
 	  arguments</td><td>This function does the work needed to set
 	  up communication with the Google Maps server.  It must be
 	  called only once in the program, and must be before any
 	  other googlemaps functions are called.</td></tr>
 	  
-	  <tr><td><div class="icode">googlemaps.directions(start,
-	  end)</div></td><td><div class="icode">start</div> is a string with
+	  <tr><td><span class="icode">googlemaps.directions(start,
+	  end)</span></td><td><span class="icode">start</span> is a string with
 	  the address from which navigation should start, and
-	  <div class="icode">end</div> is a string with the destination
+	  <span class="icode">end</span> is a string with the destination
 	  address</td><td>The function returns an array whose entries
 	  are the steps in navigating from the starting address to the
 	  ending address.</td></tr>
 	</table><p>
 	For a simple example of using this, we call the
-	<div class="icode">googlemaps.init</div> function first (as we always
-	must).  Then we call the <div class="icode">googlemaps.directions</div>
+	<span class="icode">googlemaps.init</span> function first (as we always
+	must).  Then we call the <span class="icode">googlemaps.directions</span>
 	function with whatever two arguments we please.  This returns
 	an array, which we loop through to print out each element,
 	thereby supplying the directions:
@@ -2594,19 +2594,19 @@ while(i &lt; len(dirs)):
         If you run this program, it should output the directions from
         The North and Clyburn Red Line station in Chicago to
         Centrailia, Pennsylvania.  
-	</p><p>We note in the above example that the <div class="icode">init</div>
+	</p><p>We note in the above example that the <span class="icode">init</span>
 	function didn't appear to really do anything.  It didn't set
 	any variables and it didn't output anything.  However, as per
 	the documentation, it is actually necessary--if we call the
-	<div class="icode">directions</div> function without first calling
-	<div class="icode">init</div>, we will get a runtime error.  What this
+	<span class="icode">directions</span> function without first calling
+	<span class="icode">init</span>, we will get a runtime error.  What this
 	function does is actually I/O, but not keyboard input or
 	screen output.  Rather, it outputs the appropriate thing on
 	the computer's network interface (wireless card or whatever)
 	to set up a connection with Google's map service so that we
 	can communicate with it with future calls.  If we just call
-	the <div class="icode">directions</div> function immediately without
-	first calling <div class="icode">init</div>, then this will send our
+	the <span class="icode">directions</span> function immediately without
+	first calling <span class="icode">init</span>, then this will send our
 	request to Google who will promptly respond with the computer
 	equivalent of "Uh...who are you again?"</p><p>It is now a rather simple exercise to combine this with the
 	input library to let the user provide the start and end
@@ -2630,9 +2630,9 @@ while(i &lt; len(dirs)):
 	the Python language in the browser-simulated version compared
 	to Python as it exists in the wild.  </p><p>There are many small examples--we have disallowed
 	multiplying integers and strings, whereas Python is very happy
-	to evaluate <div class="icode">2+"hello"</div> to mean
-	<div class="icode">"hellohello"</div>.  Python also includes a
-	<div class="icode">//</div> operator for performing integer
+	to evaluate <span class="icode">2+"hello"</span> to mean
+	<span class="icode">"hellohello"</span>.  Python also includes a
+	<span class="icode">//</span> operator for performing integer
 	division.</p><p>There are also corner-cases where the simulated Python will
 	behave slightly differently than real-world Python regarding
 	scopes.</p><p>One of the largest features of actual Python that we

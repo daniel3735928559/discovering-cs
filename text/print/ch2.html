@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><link rel="stylesheet" type="text/css" href="/sim/avr/sim.css"><link rel="stylesheet" type="text/css" href="/sim/bin/sim.css"><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><script type="text/javascript" src="/sim/cm/codemirror.js"></script><link rel="stylesheet" type="text/css" href="/lib/spy/sim.css"><script type="text/javascript" src="/lib/spy/expr_ng.js"></script><script type="text/javascript" src="/lib/spy/sim.js"></script><script type="text/javascript" src="/sim/bin/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2')">2: Chapter 2</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_1')">2.1: Programming as a means of making systems</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2')">2.2: Algorithms: Expressing solutions in human language, but in terms of the computer's primitives</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_2_1')">2.2.1: Edge-cases</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2_2')">2.2.2: Efficiency</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2_3')">2.2.3: Scalability</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_3')">2.3: Python: Expressing algorithms using a programming language</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_3_1')">2.3.1: Running Python</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_3_2')">2.3.2: A first Python example</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_3_3')">2.3.3: Python language summary</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4')">2.4: A detailed explanation of Python</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_1')">2.4.1: Python syntax</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2')">2.4.2: Assignments</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_2_1')">2.4.2.1: Variable names</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2_2')">2.4.2.2: Expressions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2_3')">2.4.2.3: Strings</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4_3')">2.4.3: Print</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4')">2.4.4: Flow control</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_4_1')">2.4.4.1: if/else</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4_2')">2.4.4.2: tests</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4_3')">2.4.4.3: while</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4_5')">2.4.5: Comments and whitespace</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_5')">2.5: Simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_5_1')">2.5.1: Factorial</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_5_2')">2.5.2: Primality testing</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_5_3')">2.5.3: Counting digits</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_6')">2.6: Applications</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_6_1')">2.6.1: Search engine</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_2')">2.6.2: Game console</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_3')">2.6.3: Mobile phone</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_4')">2.6.4: Debrief</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_7')">2.7: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_programming')">programming</a><br><a href="#" ng-click="goto_loc('def_executing')">executing</a><br><a href="#" ng-click="goto_loc('def_edge-case')">edge-case</a><br><a href="#" ng-click="goto_loc('def_efficiency')">efficiency</a><br><a href="#" ng-click="goto_loc('def_scalability')">scalability</a><br><a href="#" ng-click="goto_loc('def_syntax')">syntax</a><br><a href="#" ng-click="goto_loc('def_semantics')">semantics</a><br><a href="#" ng-click="goto_loc('def_modulus')">modulus</a><br><a href="#" ng-click="goto_loc('def_syntax tree')">syntax tree</a><br><a href="#" ng-click="goto_loc('def_camel casing')">camel casing</a><br><a href="#" ng-click="goto_loc('def_value (expression)')">value (expression)</a><br><a href="#" ng-click="goto_loc('def_evaluation (expression)')">evaluation (expression)</a><br><a href="#" ng-click="goto_loc('def_concatenation')">concatenation</a><br><a href="#" ng-click="goto_loc('def_escape')">escape</a><br><a href="#" ng-click="goto_loc('def_newline')">newline</a><br><a href="#" ng-click="goto_loc('def_succeed (tests)')">succeed (tests)</a><br><a href="#" ng-click="goto_loc('def_fail (tests)')">fail (tests)</a><br><a href="#" ng-click="goto_loc('def_infinite loop')">infinite loop</a><br><a href="#" ng-click="goto_loc('def_whitespace')">whitespace</a><br><a href="#" ng-click="goto_loc('def_comment')">comment</a><br><a href="#" ng-click="goto_loc('def_off-by-one error')">off-by-one error</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_2"></div><div class="text"><div class="header">2: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2')">2: Chapter 2</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_1')">2.1: Programming as a means of making systems</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2')">2.2: Algorithms: Expressing solutions in human language, but in terms of the computer's primitives</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_2_1')">2.2.1: Edge-cases</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2_2')">2.2.2: Efficiency</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2_3')">2.2.3: Scalability</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_3')">2.3: Python: Expressing algorithms using a programming language</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_3_1')">2.3.1: Running Python</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_3_2')">2.3.2: A first Python example</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_3_3')">2.3.3: Python language summary</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4')">2.4: A detailed explanation of Python</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_1')">2.4.1: Python syntax</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2')">2.4.2: Assignments</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_2_1')">2.4.2.1: Variable names</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2_2')">2.4.2.2: Expressions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2_3')">2.4.2.3: Strings</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4_3')">2.4.3: Print</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4')">2.4.4: Flow control</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_4_1')">2.4.4.1: if/else</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4_2')">2.4.4.2: tests</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4_3')">2.4.4.3: while</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4_5')">2.4.5: Comments and whitespace</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_5')">2.5: Simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_5_1')">2.5.1: Factorial</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_5_2')">2.5.2: Primality testing</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_5_3')">2.5.3: Counting digits</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_6')">2.6: Applications</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_6_1')">2.6.1: Search engine</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_2')">2.6.2: Game console</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_3')">2.6.3: Mobile phone</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_4')">2.6.4: Debrief</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_7')">2.7: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_programming')">programming</a><br><a href="#" ng-click="goto_loc('def_executing')">executing</a><br><a href="#" ng-click="goto_loc('def_edge-case')">edge-case</a><br><a href="#" ng-click="goto_loc('def_efficiency')">efficiency</a><br><a href="#" ng-click="goto_loc('def_scalability')">scalability</a><br><a href="#" ng-click="goto_loc('def_syntax')">syntax</a><br><a href="#" ng-click="goto_loc('def_semantics')">semantics</a><br><a href="#" ng-click="goto_loc('def_modulus')">modulus</a><br><a href="#" ng-click="goto_loc('def_syntax tree')">syntax tree</a><br><a href="#" ng-click="goto_loc('def_camel casing')">camel casing</a><br><a href="#" ng-click="goto_loc('def_value (expression)')">value (expression)</a><br><a href="#" ng-click="goto_loc('def_evaluation (expression)')">evaluation (expression)</a><br><a href="#" ng-click="goto_loc('def_concatenation')">concatenation</a><br><a href="#" ng-click="goto_loc('def_escape')">escape</a><br><a href="#" ng-click="goto_loc('def_newline')">newline</a><br><a href="#" ng-click="goto_loc('def_succeed (tests)')">succeed (tests)</a><br><a href="#" ng-click="goto_loc('def_fail (tests)')">fail (tests)</a><br><a href="#" ng-click="goto_loc('def_infinite loop')">infinite loop</a><br><a href="#" ng-click="goto_loc('def_whitespace')">whitespace</a><br><a href="#" ng-click="goto_loc('def_comment')">comment</a><br><a href="#" ng-click="goto_loc('def_off-by-one error')">off-by-one error</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_2"></div><div class="text"><div class="header">2: 
 	  Chapter 2</div></div></div><div class="section"><div id="sec_2_1"></div><div class="text"><div class="header">2.1: 
 	  Programming as a means of making systems</div><div class="figure"><img src="/text/figures/2.1.fig1.png" width="800px"><div class="caption">Figure 2.1.1: We are now going to study programming at a high level
 (low-level programming will happen at the ISA
@@ -548,7 +548,7 @@ follow along with the program, one line at a time, to see:
 	variable name can be anything with letters, numbers, and
 	underscores, but not starting with a number, and not a Python
 	keyword.  So we can decide to call our variable, say, 
-	<div class="icode">H3LL0_th3re_</div>.  </p><p>But what about the expression bit?  Expressions are defined
+	<span class="icode">H3LL0_th3re_</span>.  </p><p>But what about the expression bit?  Expressions are defined
 	in the table as any valid combination of numbers, strings, and
 	variables using the basic operations and parentheses for
 	grouping.  So if we want to store the value 89*90, we can do
@@ -760,7 +760,7 @@ will have all the words be lower-case and separated by underscores
 <div id="def_camel casing" class="definition"></div>There is another convention that some people
 use, which is to have nothing separate the words but to capitalize the
 first letter of each word, as in
-<div class="icode">RollingSphereKineticEnergy</div>.  This is called <b>camel
+<span class="icode">RollingSphereKineticEnergy</span>.  This is called <b>camel
 casing</b>.</p></div></div><div class="section"><div id="sec_2_4_2_2"></div><div class="text"><div class="header">2.4.2.2: 
 	  Expressions</div><div class="summary"><b>Summary: </b> Expressions are the usual things, but they have to
 	make sense: No adding a string to a number or dividing a
@@ -773,9 +773,9 @@ combination thereof using arithmetic operations.
 </p><p><div id="def_value (expression)" class="definition"></div>Any expression has a <b>value</b>
 which is the result of retrieving what is stored in each variable
 mentioned in the expression and applying all the specified arithmetic
-operations.  For example, the line <div class="icode">x = 2 * 3</div>
-stores 6 into x because the value of the expression <div class="icode">2 *
-3</div> is 6.  <div id="def_evaluation (expression)" class="definition"></div>The process of
+operations.  For example, the line <span class="icode">x = 2 * 3</span>
+stores 6 into x because the value of the expression <span class="icode">2 *
+3</span> is 6.  <div id="def_evaluation (expression)" class="definition"></div>The process of
 determining the value of an expression is called
 <b>evaluation</b>, and happens as follows:
 
@@ -805,13 +805,13 @@ y = x + 1
 x = 2
 x = 5*x + 2*(3 - y)</pre></div>
 
-The first assignment sets <div class="icode">x</div> to 4.  The second one sets
-y to whatever is the value of <div class="icode">x + 1</div>.  To evaluate this
-expression, we plug in the current value of <div class="icode">x</div> (namely
-4) in place of the name <div class="icode">x</div> in this expression, yielding
+The first assignment sets <span class="icode">x</span> to 4.  The second one sets
+y to whatever is the value of <span class="icode">x + 1</span>.  To evaluate this
+expression, we plug in the current value of <span class="icode">x</span> (namely
+4) in place of the name <span class="icode">x</span> in this expression, yielding
 4 + 1, and then we perform the arithmetic to get a value of 5.  So the
-second assignment assigns the value 5 to <div class="icode">y</div>.  The third
-assignment stores the value 2 in <div class="icode">x</div>.</p><p>Finally, to find out what the last assignment stores in x, we need
+second assignment assigns the value 5 to <span class="icode">y</span>.  The third
+assignment stores the value 2 in <span class="icode">x</span>.</p><p>Finally, to find out what the last assignment stores in x, we need
 to evaluate the last expression
 
 <div class="code"><pre>5*x + 2*(3 - y)</pre></div>
@@ -1372,9 +1372,9 @@ Step last: print the number stored in the variable answer.
 So clearly at some point we'll need to make a variable called answer.
 May as well make that step 2.  So step 2 will be an assignment (a
 valid operation), setting answer equal to...what?  Clearly we cannot
-just say <div class="icode">answer = input!</div> since ! is not one of the
+just say <span class="icode">answer = input!</span> since ! is not one of the
 operations that Python understands.  So let's just start
-small--<div class="icode">answer = 1</div>.
+small--<span class="icode">answer = 1</span>.
 
 <div class="code"><pre>Step 1: Store the number whose factorial we want in a variable called input.  
 Step 2: Store the number 1 in the variable answer.
@@ -1594,7 +1594,7 @@ Step 5: If is_prime is 1, print "n is prime"
 Step 6: If is_prime is 0, print "n is not prime"</pre></div><p><b>Program:</b></p><p>To turn this into an honest program is reasonably
 	straightforward.  The elements we have not yet used are the
 	tests, which are accomplished with the if/else instructions.
-	How to see if <div class="icode">counter</div> divides <div class="icode">n</div>
+	How to see if <span class="icode">counter</span> divides <span class="icode">n</span>
 	evenly?  One way to do it is to divide n by counter and see if
 	the quotient is an integer.  However we don't yet have any
 	operation for testing "is this variable an integer",
@@ -1644,7 +1644,7 @@ if(is_prime == "penguin goes shopping"):
 	it.</p><p>This program is also far, far less efficient than it could
 	be in many ways.  You can probably think of improvements
 	already--for instance, we don't have to test all the possible
-	divisors less than <div class="icode">n</div>--we can certainly get away
+	divisors less than <span class="icode">n</span>--we can certainly get away
 	with testing only to n/2, since if n/2 evenly divides n, then
 	2 also evenly divides n, so we would have caught that already.
 	Also, none of the numbers between n/2 and n can possibly
@@ -1681,9 +1681,9 @@ if(is_prime == "penguin goes shopping"):
 	  0.128.  So it takes three divisions to get to below 1, and
 	  indeed, 128 has three digits.</p><p>To accomplish this programmatically, we will need two
 	  variables--one to store the number that we will repeatedly
-	  divide--say this is called <div class="icode">n</div>, and another to
+	  divide--say this is called <span class="icode">n</span>, and another to
 	  store how many times we've divided so far--say this one is
-	  called <div class="icode">digit_count</div>.  Then we can write the
+	  called <span class="icode">digit_count</span>.  Then we can write the
 	  algorithm more precisely as: </p><div class="code"><pre>Step 1: n = 1238129 (or whatever)
 Step 2: digit_count = 0
 Step 3: Repeat the following as long as n &gt; 1:
@@ -1699,14 +1699,14 @@ digit_count at 0 or at 1?  We can tell by single-stepping the program
 in a simple case, as we did before, or you can run the program with a
 few different inputs as examples.  Convince yourself that we are OK.
 </p><p>There is also a tricky edge-case that may have slipped your notice,
-however: Consider what happens when we start with <div class="icode">n = 1</div>:
-First <div class="icode">digit_count</div> will be set to 0, and then we'll run the
-while loop as long as <div class="icode">n &gt; 1</div>.  But even at the start, this
-test fails, as <div class="icode">n = 1</div>, so <div class="icode">n</div> is not greater than
+however: Consider what happens when we start with <span class="icode">n = 1</span>:
+First <span class="icode">digit_count</span> will be set to 0, and then we'll run the
+while loop as long as <span class="icode">n &gt; 1</span>.  But even at the start, this
+test fails, as <span class="icode">n = 1</span>, so <span class="icode">n</span> is not greater than
 1!  So the stuff inside the while loop gets skipped entirely, and the
-value of <div class="icode">digit_count</div>--namely 0--gets printed.  And this is
+value of <span class="icode">digit_count</span>--namely 0--gets printed.  And this is
 definitely the wrong answer--the number 1 has one digit!  </p><p>In fact, this isn't the only issue--this problem shows up whenever
-<div class="icode">n</div> gets set to 1 during execution, for example if it started
+<span class="icode">n</span> gets set to 1 during execution, for example if it started
 at 1000, we would get the wrong answer of 3.  </p><p>To fix this, we simply need to realize that we wrote our algorithm
 correctly--we stop if n is below 1--but our program doesn't reflect
 this--it stops if n is below 1 <i>or if n is equal to 1</i>.  We can
