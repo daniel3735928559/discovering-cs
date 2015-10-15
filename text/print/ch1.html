@@ -1,6 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1')">1: Introduction</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_1')">1.1: What is a computer?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_2')">1.2: Computers through history--Types of computers and what
-    they can do</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_3')">1.3: The big idea -- Abstraction</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_3_1')">1.3.1: Abstraction -- A first example</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_3_2')">1.3.2: Abstraction applied to our two questions</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_1_4')">1.4: Up the tower: How to program computers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_4_1')">1.4.1: The ISA layer</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_4_2')">1.4.2: The programming language layer</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_4_3')">1.4.3: A word about programming in practice</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_4_3_1')">1.4.3.1: How do we decide what program to write?  </a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_4_3_2')">1.4.3.2: What programming language do we use?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_4_3_3')">1.4.3.3: What can go wrong when writing a program?</a><br><div style="margin-left:5px;" class="index_div"></div></div></div><a href="#" ng-click="goto_loc('sec_1_5')">1.5: Down the tower: How to build computers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_5_1')">1.5.1: State machines</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_5_2')">1.5.2: Microarchitecture</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_5_3')">1.5.3: Binary representation</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_5_4')">1.5.4: Logic gates and transistors</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_1_6')">1.6: Theoretical underpinnings--why are computers so
-    powerful?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_7')">1.7: Some modern computing systems</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_8')">1.8: Search engine</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_8_1')">1.8.1: High-level problem</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_8_2')">1.8.2: Zooming in: Crawling the web</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_8_2_1')">1.8.2.1: Software side</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_8_2_2')">1.8.2.2: Hardware side</a><br><div style="margin-left:5px;" class="index_div"></div></div></div><a href="#" ng-click="goto_loc('sec_1_9')">1.9: Game console</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_9_1')">1.9.1: High-level problem</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_9_2')">1.9.2: Hardware side: The console</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_9_3')">1.9.3: Software side: The game</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_9_4')">1.9.4: Zooming in: Rendering a triangle</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_1_10')">1.10: Mobile phone</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_1_10_1')">1.10.1: High-level problem</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_10_2')">1.10.2: Zooming in: Smoothing out noise</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_1_11')">1.11: Outline of the remainder of the book</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_1_12')">1.12: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_computer')">computer</a><br><a href="#" ng-click="goto_loc('def_fixed program')">fixed program</a><br><a href="#" ng-click="goto_loc('def_stored program')">stored program</a><br><a href="#" ng-click="goto_loc('def_program')">program</a><br><a href="#" ng-click="goto_loc('def_Turing completeness')">Turing completeness</a><br><a href="#" ng-click="goto_loc('def_interface')">interface</a><br><a href="#" ng-click="goto_loc('def_implementation')">implementation</a><br><a href="#" ng-click="goto_loc('def_abstraction')">abstraction</a><br><a href="#" ng-click="goto_loc('def_ISA (basic)')">ISA (basic)</a><br><a href="#" ng-click="goto_loc('def_programming language         (basic)')">programming language         (basic)</a><br><a href="#" ng-click="goto_loc('def_compiler         (basic)')">compiler         (basic)</a><br><a href="#" ng-click="goto_loc('def_microarchitecture (basic)')">microarchitecture (basic)</a><br><a href="#" ng-click="goto_loc('def_architecture (basic)')">architecture (basic)</a><br><a href="#" ng-click="goto_loc('def_registers (basic)')">registers (basic)</a><br><a href="#" ng-click="goto_loc('def_instruction set (basic)')">instruction set (basic)</a><br><a href="#" ng-click="goto_loc('def_syntax (basic)')">syntax (basic)</a><br><a href="#" ng-click="goto_loc('def_semantics  (basic)')">semantics  (basic)</a><br><a href="#" ng-click="goto_loc('def_library (basic)')">library (basic)</a><br><a href="#" ng-click="goto_loc('def_algorithm')">algorithm</a><br><a href="#" ng-click="goto_loc('def_complexity')">complexity</a><br><a href="#" ng-click="goto_loc('def_trade-off')">trade-off</a><br><a href="#" ng-click="goto_loc('def_low-level language')">low-level language</a><br><a href="#" ng-click="goto_loc('def_high-level language')">high-level language</a><br><a href="#" ng-click="goto_loc('def_syntax error')">syntax error</a><br><a href="#" ng-click="goto_loc('def_logic error')">logic error</a><br><a href="#" ng-click="goto_loc('def_runtime error')">runtime error</a><br><a href="#" ng-click="goto_loc('def_debugging')">debugging</a><br><a href="#" ng-click="goto_loc('def_state machine')">state machine</a><br><a href="#" ng-click="goto_loc('def_microarchitecture')">microarchitecture</a><br><a href="#" ng-click="goto_loc('def_binary (basic)')">binary (basic)</a><br><a href="#" ng-click="goto_loc('def_logic gate')">logic gate</a><br><a href="#" ng-click="goto_loc('def_and gate')">and gate</a><br><a href="#" ng-click="goto_loc('def_truth table')">truth table</a><br><a href="#" ng-click="goto_loc('def_xnor gate')">xnor gate</a><br><a href="#" ng-click="goto_loc('def_Turing machine')">Turing machine</a><br><a href="#" ng-click="goto_loc('def_Church-Turing thesis')">Church-Turing thesis</a><br><a href="#" ng-click="goto_loc('def_Turing complete')">Turing complete</a><br><a href="#" ng-click="goto_loc('def_computational complexity')">computational complexity</a><br><a href="#" ng-click="goto_loc('def_modeling')">modeling</a><br><a href="#" ng-click="goto_loc('def_rendering')">rendering</a><br><a href="#" ng-click="goto_loc('def_binary  (basic)')">binary  (basic)</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_1"></div><div class="text"><div class="header">1: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_1"></div><div class="text"><div class="header">1: 
 	  Introduction</div></div></div><div class="section"><div id="sec_1_1"></div><div class="text"><div class="header">1.1: 
 	  What is a computer?</div><div class="summary"><b>Summary: </b>A computer is fundamentally any machine that can perform
     a small number of very simple operations on numbers.  It turns out
@@ -14,7 +12,7 @@
       internet, game consoles, and air-traffic control systems all
       have in common?  Certainly they are computer-based systems, but
       the specific thing that they are all fundamentally doing, as we
-      will come to understand, is surprisingly banal:</p><p><div id="def_computer" class="definition"></div>A <b>computer</b> is simply any system that
+      will come to understand, is surprisingly banal:</p><p><span id="def_computer" class="definition"></span>A <b>computer</b> is simply any system that
       is capable of four things:
       <ul>
 	<li><b>Arithmetic: </b>Basic arithmetic and logical operations
@@ -117,7 +115,7 @@
       better value of s, and repeat until we are satisfied.  </p><p>(As a note, we could make an even more complicated "machine"
       out of components like these that would perform for us step 4
       rather than doing it manually.  The reader is invited to think
-      about this at leisure.)</p><p><div id="def_fixed program" class="definition"></div>This square root machine, ABC, and
+      about this at leisure.)</p><p><span id="def_fixed program" class="definition"></span>This square root machine, ABC, and
       other machines like them, are computers, in that they do
       computations.  However, they are single-purpose, or
       <b>fixed-program</b>, devices.  That is, they are designed
@@ -126,13 +124,13 @@
       ENIAC.  ENIAC, like the ABC and square-root-inator, had the
       basic hardware for arithmetic operations and storage.
 
-      <div id="def_stored program" class="definition"></div>But unlike the above, where the
+      <span id="def_stored program" class="definition"></span>But unlike the above, where the
       sequence in which these arithmetic and storage operations were
       performed was hard-wired, the owner of the ENIAC was able to
       tell it what sequence of such operations to perform on its
       input.  Such a machine is called a <b>stored-program</b> device,
       because the user would store the sequence of operations he
-      wanted performed on the input. <div id="def_program" class="definition"></div>Any
+      wanted performed on the input. <span id="def_program" class="definition"></span>Any
       sequence of operations that is stored inside such a device is
       called a <b>program</b>.  So when someone with an ENIAC
       has a problem and has designed an algorithm to solve it, the
@@ -145,7 +143,7 @@
       than one algorithm, the ENIAC was in a sense profoundly
       general-purpose: it was in fact the case that absolutely any
       algorithm could be implemented as an ENIAC program written by a
-      sufficiently clever user.  <div id="def_Turing completeness" class="definition"></div>This
+      sufficiently clever user.  <span id="def_Turing completeness" class="definition"></span>This
       property of a machine being able to run any algorithm on a
       single machine is referred to as that machine being <b>Turing
       complete</b>.
@@ -215,15 +213,15 @@
 	let alone how it comes to his location but only how to cause
 	this to happen.  The above specification: 'User gives us an
 	address, card number, and waffle selection', is the system's
-	interface.  <div id="def_interface" class="definition"></div>An <b>interface</b>, in
+	interface.  <span id="def_interface" class="definition"></span>An <b>interface</b>, in
 	general, is a description of what inputs to provide to a
 	system, and what outputs will be expected as a result.
-	<div id="def_implementation" class="definition"></div>The actual mechanism that in turn
+	<span id="def_implementation" class="definition"></span>The actual mechanism that in turn
 	causes the user's inputs (waffle selection, etc.) to be turned
 	into corresponding outputs (delivered waffle) is called the
 	system's <b>implementation</b>.  So in short, the user cares
 	only about the interface, and nothing about the
-	implementation.  <div id="def_abstraction" class="definition"></div>This
+	implementation.  <span id="def_abstraction" class="definition"></span>This
 	description of the system using only its interface and
 	ignoring its implementation is what is called an
 	<b>abstraction</b> of the system--it isn't a complete
@@ -390,7 +388,7 @@
 	operations will vary from computer to computer--in some,
 	'multiply two numbers' might be a valid operation, and in
 	other more basic computers, only 'add two numbers' is
-	available.  <div id="def_ISA (basic)" class="definition"></div>All computers come with a
+	available.  <span id="def_ISA (basic)" class="definition"></span>All computers come with a
 	precise specification of what operations they understand,
 	called its <b>Instruction Set Architecture</b> or
 	<b>ISA</b>. This is the computer's interface.</p><div class="figure"><img src="/text/figures/1.3.2.fig1.png" width="800px"><div class="caption">Figure 1.3.2.1: When the system requires a computer as a part of
@@ -406,9 +404,9 @@ add r30,r31</pre></div><p>Whatever this rather obscure incantation actually mean
         sane programmer would prefer to be able to simply tell the
         computer '2+7' and have something automatically figure out the
         appropriate ISA operations that correspond to this computation
-        (namely, the above).  <div id="def_programming language         (basic)" class="definition"></div>A <b>programming language</b> is a more
+        (namely, the above).  <span id="def_programming language         (basic)" class="definition"></span>A <b>programming language</b> is a more
         human-friendly way of specifying to the computer what
-        computations to perform.   <div id="def_compiler         (basic)" class="definition"></div>The trouble is that a computer only understands
+        computations to perform.   <span id="def_compiler         (basic)" class="definition"></span>The trouble is that a computer only understands
         operations from the ISA, so we need an intermediary that can
         translate the programming language into ISA operations.  This
         is called the <b>compiler</b>.</p><p>So the programmer, instead of telling the computer directly
@@ -439,7 +437,7 @@ add r30,r31</pre></div><p>Whatever this rather obscure incantation actually mean
 	this directly, let us take a more gradual descent (much as we
 	didn't immediately start talking about details like oven
 	temperatures and GPS navigation when we wanted to explain the
-	implementation of WaffleCo).  </p><p><div id="def_microarchitecture (basic)" class="definition"></div>While ultimately the
+	implementation of WaffleCo).  </p><p><span id="def_microarchitecture (basic)" class="definition"></span>While ultimately the
 	computer will be made of circuits, we start with a high-level
 	organization of these circuits according to their various
 	jobs.  This is called the computer's
@@ -491,16 +489,16 @@ add r30,r31</pre></div><p>Whatever this rather obscure incantation actually mean
       whatever).  </li></ol>
       <br><br><b>Definitions: </b><a href="#def_architecture%20(basic)">architecture (basic)</a>, <a href="#def_registers%20(basic)">registers (basic)</a>, <a href="#def_instruction%20set%20(basic)">instruction set (basic)</a></div><p> The ISA layer comes in two parts: The computer's
 	<b>architecture</b> and the <b>instruction set</b>. The idea
-	is that <div id="def_architecture (basic)" class="definition"></div>before we can specify
+	is that <span id="def_architecture (basic)" class="definition"></span>before we can specify
 	what instructions the computer can perform, we have to specify
 	what sorts of basic physical components (or "primitives") it
 	has at its disposal.  Specifying this gives us the computer's
-	architecture.  <div id="def_registers (basic)" class="definition"></div> For
+	architecture.  <span id="def_registers (basic)" class="definition"></span> For
 	example, a part of the architecture of an AVR computer is that
 	it has 32 memory slots, called <b>registers</b>, that can only
 	store numbers 0-255.  The registers are called r0, r1,
 	..., r31.  The architecture includes other elements as well,
-	which we will discuss later.  </p><p><div id="def_instruction set (basic)" class="definition"></div>Once we have described
+	which we will discuss later.  </p><p><span id="def_instruction set (basic)" class="definition"></span>Once we have described
 	the architecture, then we can describe the actual instructions
 	that the computer understands--its <b>instruction set</b>--by
 	explaining what the instructions are and what they do to the
@@ -555,13 +553,13 @@ add r30,r31</pre></div>
 	text and turn it into ISA operations.  For instance, if
 	instead of writing "7+2" a programmer writes "Add seven and
 	two" or "cook some waffles", the compiler will not know what
-	this means.  <div id="def_syntax (basic)" class="definition"></div>A programming language
+	this means.  <span id="def_syntax (basic)" class="definition"></span>A programming language
 	always comes with specific rules governing exactly what makes
 	valid code.  They may be less rigid than the rules governing
 	the ISA (for instance, numbers above 255 will be allowed), but
 	they are no less precisely defined.  These rules saying how to
 	write valid code are collectively called the programming
-	language's <b>syntax</b>.  <div id="def_semantics  (basic)" class="definition"></div>The rules explaining what the various operations in
+	language's <b>syntax</b>.  <span id="def_semantics  (basic)" class="definition"></span>The rules explaining what the various operations in
 	the syntax actually do are called the language's
 	<b>semantics</b>.</p><p>For instance, a programming language's syntax may specify
 	that [number] + [number] is a valid piece of code.  The
@@ -573,7 +571,7 @@ add r30,r31</pre></div>
 	inputs will actually do.  So the use of layering in this case
 	means that the programmer needs only to understand the syntax
 	and semantics of the programming language, and can ignore the
-	crunchy details of the ISA.</p><p><div id="def_library (basic)" class="definition"></div>Further, on top of a
+	crunchy details of the ISA.</p><p><span id="def_library (basic)" class="definition"></span>Further, on top of a
 	programming language, we will often deal with
 	<b>libraries</b>, i.e., pre-written code that performs
 	commonly-used operations.  For instance, at some point,
@@ -610,7 +608,7 @@ add r30,r31</pre></div>
 	  not necessarily start by writing code, since this requires
 	  us to think about the specific way that the programming
 	  language requires us to write the various operations (i.e.,
-	  its syntax).  <div id="def_algorithm" class="definition"></div>To begin with, it is
+	  its syntax).  <span id="def_algorithm" class="definition"></span>To begin with, it is
 	  often helpful to try to think of the solution in terms of
 	  what the programming language can do--basic arithmetic and
 	  storage--but to phrase it simply in English (or other human
@@ -684,7 +682,7 @@ add r30,r31</pre></div>
 	  lots of data to other computers, sometimes it will tie up
 	  lots of auxiliary special-purpose circuits, whatever.  We
 	  can analyze how much of each of these a given algorithm will
-	  use.  <div id="def_complexity" class="definition"></div>These will give various
+	  use.  <span id="def_complexity" class="definition"></span>These will give various
 	  estimates of the <b>complexity</b> of the algorithm--that
 	  is, an answer to the question 'how much memory, time, or
 	  other resources does the algorithm require to come to its
@@ -694,7 +692,7 @@ add r30,r31</pre></div>
 	  algorithms will simply be worse in all measurements, but
 	  often one algorithm will be faster but will, for example,
 	  use more space in memory, whereas another will be slower but
-	  use less memory.  <div id="def_trade-off" class="definition"></div>Such situations are
+	  use less memory.  <span id="def_trade-off" class="definition"></span>Such situations are
 	  called <b>trade-offs</b>, where we cannot have the best of
 	  all worlds and must exchange efficiency in one area for
 	  efficiency in another.</p><p>To then make a decision about which algorithm we want, we
@@ -724,7 +722,7 @@ add r30,r31</pre></div>
 	  If we use the ISA directly, however, we get much greater
 	  control over precisely what steps the computer will actually
 	  perform, which can allow us to optimize our program very
-	  aggressively, for example.  <div id="def_low-level language" class="definition"></div>A
+	  aggressively, for example.  <span id="def_low-level language" class="definition"></span>A
 	  <b>low-level programming language</b>, more generally, is
 	  any programming language that is close enough to the ISA to
 	  afford the programmer substantial control over what ISA
@@ -739,7 +737,7 @@ add r30,r31</pre></div>
 	  and if not store the first number as the result.  This is a
 	  lot of work, but it means for example that we can choose
 	  precisely where in memory the numbers are stored, which can
-	  provide extra flexibility that is sometimes useful.  </p><p><div id="def_high-level language" class="definition"></div>By contrast, a
+	  provide extra flexibility that is sometimes useful.  </p><p><span id="def_high-level language" class="definition"></span>By contrast, a
 	  <b>high-level programming language</b> is one where to
 	  program in it, we think in terms of often more
 	  human-friendly abstractions that the compiler will, behind
@@ -777,7 +775,7 @@ y = 199 </pre></div>
 	  actually do.  Corresponding to these two are three types of
 	  problems you may encounter when running your code: <b>syntax
 	  errors</b> (or <b>compile-time errors</b>), <b>logic
-	  errors</b>, and <b>runtime errors</b>.</p><p><div id="def_syntax error" class="definition"></div>A <b>syntax error</b> is where
+	  errors</b>, and <b>runtime errors</b>.</p><p><span id="def_syntax error" class="definition"></span>A <b>syntax error</b> is where
 	  your program was written with invalid structure that fails
 	  to conform to the syntax of the programming language.
 	  For instance, you might have a programming language whose
@@ -795,7 +793,7 @@ y = 199 </pre></div>
 	  run because it will never even be converted into ISA
 	  operations because, in turn, the compiler (which does this
 	  job) only understands code written that obeys the
-	  programming language's syntax, which the above does not.</p><p><div id="def_logic error" class="definition"></div>A <b>logic error</b> is when your
+	  programming language's syntax, which the above does not.</p><p><span id="def_logic error" class="definition"></span>A <b>logic error</b> is when your
 	  program is written with valid syntax, so the compiler can
 	  turn it into ISA code that the computer can actually run,
 	  but where what gets run is not what you intended.  
@@ -807,13 +805,13 @@ y = 199 </pre></div>
 	  then this is now perfectly valid code--it does follow the
 	  syntax of max(?, ?), so will be run without complaint, but
 	  will give back 2 as the result, whereas the desired result
-	  was 3.</p><p><div id="def_runtime error" class="definition"></div>A <b>runtime error</b> is a
+	  was 3.</p><p><span id="def_runtime error" class="definition"></span>A <b>runtime error</b> is a
 	  slightly more subtle one that we shall not discuss at
 	  length.  In brief, it is when some external circumstance to
 	  the program causes the program to fail.  For example, if the
 	  program attempts to save some file to a disk, but the disk
 	  is full.</p><p>When your code has an error of any kind, obviously you'll
-	  want to fix it.  <div id="def_debugging" class="definition"></div>The process of fixing
+	  want to fix it.  <span id="def_debugging" class="definition"></span>The process of fixing
 	  errors is called <b>debugging</b> (there was an
 	  incident in the very early days of computers in which a
 	  system was behaving oddly and the problem was traced back to
@@ -845,7 +843,7 @@ y = 199 </pre></div>
     operations. 
     <br><br><b>Definitions: </b><a href="#def_state%20machine">state machine</a></div><p>While our ultimate goal will be to build a real machine, we
 	start with an organizational tool called a "state machine."
-	<div id="def_state machine" class="definition"></div>A <b>state machine</b> is an
+	<span id="def_state machine" class="definition"></span>A <b>state machine</b> is an
 	abstract "machine" that consists of a collection of "states"
 	that the machine can be in.  The machine accepts inputs one at
 	a time, and each state also specifies, for each possible
@@ -947,7 +945,7 @@ y = 199 </pre></div>
 	  <li>Connect up these components in a way that gives the
 	  behavior described by the state machine.</li>
 	</ul>
-	</p><p><div id="def_microarchitecture" class="definition"></div>A precise description of the
+	</p><p><span id="def_microarchitecture" class="definition"></span>A precise description of the
 	individual components and the connections between them, along
 	with a state machine describing how they interact, is what
 	will be called the <b>microarchitecture</b> of the
@@ -971,7 +969,7 @@ y = 199 </pre></div>
 	sequence of symbols 0, 1, 2, ..., or 9, is called 'decimal'.
 	We use 10 symbols in this representation simply because we
 	have 10 fingers, so it turns out to be well-adapted for
-	human-to-human communication.  </p><p><div id="def_binary (basic)" class="definition"></div>For the purposes of making a
+	human-to-human communication.  </p><p><span id="def_binary (basic)" class="definition"></span>For the purposes of making a
 	computer, there is another way to represent numbers that will
 	be much more convenient, called <b>binary</b>.  In this system
 	numbers are represented as sequences now just of the symbols
@@ -1002,14 +1000,14 @@ y = 199 </pre></div>
       <br><br><b>Definitions: </b><a href="#def_logic%20gate">logic gate</a>, <a href="#def_and%20gate">and gate</a>, <a href="#def_truth%20table">truth table</a>, <a href="#def_xnor%20gate">xnor gate</a></div><p>Once we have decided to represent our numbers in binary, we
 	need a way to take two numbers and perform operations on them.
 	The building blocks we will use to do this are called <b>logic
-	gates</b>.  <div id="def_logic gate" class="definition"></div>Most basically, a logic
+	gates</b>.  <span id="def_logic gate" class="definition"></span>Most basically, a logic
 	gate is a device with two input wires and one output wire.
 	Referring back to the previous section, where a wire
 	represented a binary digit (current flowing = '1', no current
 	= '0'), the gate will either send or not send current on the
 	output wire depending on what's happening at the input wires.
 	</p><p>Different types of logic gates will have different rules
-	for how to determine the output based on the inputs.  <div id="def_and gate" class="definition"></div>For instance, we can have a gate whose output
+	for how to determine the output based on the inputs.  <span id="def_and gate" class="definition"></span>For instance, we can have a gate whose output
 	will be 0 unless both inputs are 1.  This is called an <b>"AND
 	gate"</b>.  There is a standard symbol that is used when
 	an AND gate appears in a circuit diagram, which looks like
@@ -1018,7 +1016,7 @@ y = 199 </pre></div>
 	circuitry that provides the input for the gate, and the line
 	coming off the right represents the output of the gate, which
 	would also be connected somehow to some other part of the
-	circuit.  </p><p><div id="def_truth table" class="definition"></div>We can summarize the behavior of
+	circuit.  </p><p><span id="def_truth table" class="definition"></span>We can summarize the behavior of
 	an AND gate rather succinctly in a table, called the gate's
 	<b>truth table</b>: </p><table><tr><td>Input 1</td><td>Input
 	2</td><td>Output</td></tr>
@@ -1026,7 +1024,7 @@ y = 199 </pre></div>
 	<tr><td>1</td><td>0</td><td>0</td></tr>
 	<tr><td>0</td><td>1</td><td>0</td></tr>
 	<tr><td>1</td><td>1</td><td>1</td></tr>
-	</table><p><div id="def_xnor gate" class="definition"></div>Of course, we can make any gate we
+	</table><p><span id="def_xnor gate" class="definition"></span>Of course, we can make any gate we
 	want by writing down a different truth table--for instance,
 	the following gate (called an <b>XNOR gate</b>) will output 1
 	if the inputs are the same and 0 otherwise: </p><table><tr><td>Input 1</td><td>Input
@@ -1076,7 +1074,7 @@ y = 199 </pre></div>
       search able documents into the numbers encoding the search
       results).  So we need some guarantee that any numerical
       computation can be done by a computer that, by definition, only
-      has the capability of basic arithmetic.</p><p><div id="def_Turing machine" class="definition"></div>In 1936, Alan Turing proposed an
+      has the capability of basic arithmetic.</p><p><span id="def_Turing machine" class="definition"></span>In 1936, Alan Turing proposed an
       even more apparently limited sort of device, called a <b>Turing
       machine</b>.  This was a device with three parts: a tape
       consisting of slots in which numbers may be written, a
@@ -1084,11 +1082,11 @@ y = 199 </pre></div>
       written there or writing numbers onto the tape (or possibly
       overwriting numbers already written on the tape), and a state
       machine by which it will decide what numbers to write and where
-      on the tape to write them. </p><p><div id="def_Church-Turing thesis" class="definition"></div>The Church-Turing thesis
+      on the tape to write them. </p><p><span id="def_Church-Turing thesis" class="definition"></span>The Church-Turing thesis
       (called a "thesis" because it is more a philosophy more than a
       precise axiom) says that if you can write an algorithm for
       performing a computation, then a Turing machine can be built
-      that performs that same computation.  </p><p><div id="def_Turing complete" class="definition"></div>A Turing machine is said to be
+      that performs that same computation.  </p><p><span id="def_Turing complete" class="definition"></span>A Turing machine is said to be
       <b>Turing complete</b> if it is capable of simulating any other
       Turing machine (and therefore of running any algorithm, if you
       believe Church's Thesis).  Since our computers have memory
@@ -1109,7 +1107,7 @@ y = 199 </pre></div>
       a given algorithm.  As we think about all possible Turing
       machines, one notion that arises is the computational complexity
       of a problem itself (as opposed to a specific algorithm that
-      solves the problem).  <div id="def_computational complexity" class="definition"></div>The
+      solves the problem).  <span id="def_computational complexity" class="definition"></span>The
       <b>computational complexity</b> of a problem is defined to be
       the minimum complexity among that of all algorithms that solve
       the problem. This notion allows us to distinguish the
@@ -1958,13 +1956,13 @@ y = 199 </pre></div>
 	fundamental difficulty involved here, we must understand what
 	concrete problem we are actually solving.  There are, by and
 	large, two main pieces of work that a game console must do,
-	which we might label as "modeling" and "rendering".  </p><p><div id="def_modeling" class="definition"></div><b>Modeling</b> is the business of
+	which we might label as "modeling" and "rendering".  </p><p><span id="def_modeling" class="definition"></span><b>Modeling</b> is the business of
 	computing the locations of all objects subject to whatever
 	forces are acting. A common sort of modeling is physics
 	modeling, where maybe an object falls into a stack of crates
 	and the crates themselves fall in response and some of them
 	perhaps splinter, and the game console must compute all of
-	this behavior in real time.</p><p><div id="def_rendering" class="definition"></div><b>Rendering</b> is the business of
+	this behavior in real time.</p><p><span id="def_rendering" class="definition"></span><b>Rendering</b> is the business of
 	actually displaying everything that we have computed onto the
 	screen. This is a distinct and independently difficult
 	task: The model tells us that we have 10 crates and has
@@ -2123,7 +2121,7 @@ y = 199 </pre></div>
 	as "1", and the absence as "0", then there are 16
 	possibilities for what might be coming into our gadget: 0000,
 	0001, 0010, 0011, 0100, 0101, 0110, 0111, 1000, 1001, 1010,
-	1011, 1100, 1101, 1110, 1111.  <div id="def_binary  (basic)" class="definition"></div><b>Binary representation</b> is a scheme for treating
+	1011, 1100, 1101, 1110, 1111.  <span id="def_binary  (basic)" class="definition"></span><b>Binary representation</b> is a scheme for treating
 	each of these sequences as representing a different number.
 	Without explaining how it works, we can for now simply say
 	which combination corresponds to which number in a table: </p><div class="code"><pre>Number   Representation

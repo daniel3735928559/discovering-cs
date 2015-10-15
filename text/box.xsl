@@ -274,13 +274,13 @@
 	<title><xsl:value-of select="chapter/title" /></title>
 	<link rel="stylesheet" type="text/css" href="/text/box.css" />
 
+	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
+	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
+	<script type="text/javascript" src="/text/box.js"></script>
 	
 	<xsl:if test="$print!='yes'">
 	  <link rel="stylesheet" href="/sim/cm/codemirror.css" />
 	  <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
-	  <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
-	  <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
-	  <script type="text/javascript" src="/text/box.js"></script>
 	  <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
 	  
 	  <xsl:if test="count(//python) > 0">
@@ -347,7 +347,6 @@
 	    <a href="/text/info/copyright.xml"><div class="sidebar_link">Copyright</div></a>
 	    <a href="/text/info/links.xml"><div class="sidebar_link">Links</div></a>
 	    </div>
-	  </xsl:if>
 	  <div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()">
 	  </div>
 	  <div class="index"  ng-if="display_index == true">
@@ -361,6 +360,7 @@
 	    <xsl:call-template name="definitions" />
 	  </div>
 	  
+	  </xsl:if>
 	  <div class="super">
 	    <xsl:apply-templates select="@*|node()"/>
 	  </div>

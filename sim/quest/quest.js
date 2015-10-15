@@ -1,4 +1,4 @@
-if(!app) var app = angular.module('app');
+var app = app || angular.module('app');
 
 app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$document', '$sce', function($scope, $http, $window, $timeout, $document, $sce){
     $scope.pycontrol = {};

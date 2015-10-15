@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3')">3: Advanced Programming</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_1')">3.1: Practical Programming</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_2')">3.2: Running actual Python code</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_3')">3.3: Arrays</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_3_1')">3.3.1: Strings as read-only arrays</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_3_2')">3.3.2: Search engine, revisited</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_4')">3.4: Logical operators</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_5')">3.5: Functions</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_5_1')">3.5.1: Composition</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_5_2')">3.5.2: Scope</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_6')">3.6: Library functions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7')">3.7: More simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_7_1')">3.7.1: Square Roots</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7_2')">3.7.2: Factorial</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_7_3')">3.7.3: List of prime numbers</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_8')">3.8: Applications</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_3_8_1')">3.8.1: Search Engine</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_8_2')">3.8.2: Game Console</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_3_8_3')">3.8.3: Mobile Phone</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_3_9')">3.9: Real-life Python versus Simulator Python</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_readability')">readability</a><br><a href="#" ng-click="goto_loc('def_maintainability')">maintainability</a><br><a href="#" ng-click="goto_loc('def_subscript')">subscript</a><br><a href="#" ng-click="goto_loc('def_input (function)')">input (function)</a><br><a href="#" ng-click="goto_loc('def_body (function)')">body (function)</a><br><a href="#" ng-click="goto_loc('def_return value (function)')">return value (function)</a><br><a href="#" ng-click="goto_loc('def_library function')">library function</a><br><a href="#" ng-click="goto_loc('def_module')">module</a><br><a href="#" ng-click="goto_loc('def_recursive (definition)')">recursive (definition)</a><br><a href="#" ng-click="goto_loc('def_recursive (function)')">recursive (function)</a><br><a href="#" ng-click="goto_loc('def_mock up')">mock up</a><br><a href="#" ng-click="goto_loc('def_testability')">testability</a><br><a href="#" ng-click="goto_loc('def_model')">model</a><br><a href="#" ng-click="goto_loc('def_API')">API</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_3"></div><div class="text"><div class="header">3: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_3"></div><div class="text"><div class="header">3: 
 	  Advanced Programming</div></div></div><div class="section"><div id="sec_3_1"></div><div class="text"><div class="header">3.1: 
 	  Practical Programming</div><div class="summary"><b>Summary: </b>In the previous chapter, we introduced a simplified
     version of Python in order to communicate the fundamental ideas of
@@ -92,14 +92,14 @@ if(search_word == file2_word8):
 	concerns start to matter more when your code gets very large
 	and has many users, but are worth at least thinking about for
 	any code you write.
-	</p><p><div id="def_readability" class="definition"></div><b>Readability</b> refers to how
+	</p><p><span id="def_readability" class="definition"></span><b>Readability</b> refers to how
 	easy it is to look at the code and both understand what it is
 	meant to do and verify that it actually does that.
 	Readability does not necessarily mean concision.  Doing a
 	complex task in one really clever line of code may obscure
 	what task that line is actually performing.  Breaking it into
 	two or three more perspicuous lines may actually improve
-	readability.  </p><p><div id="def_maintainability" class="definition"></div><b>Maintainability</b> refers to
+	readability.  </p><p><span id="def_maintainability" class="definition"></span><b>Maintainability</b> refers to
 	how easy it is to maintain the code.  This includes things
 	like:
 
@@ -192,7 +192,7 @@ declares an array with values
 4
 "goodbye"</pre></div>
 
-<div id="def_subscript" class="definition"></div>Once we have this set up, we can access the individual values stored
+<span id="def_subscript" class="definition"></span>Once we have this set up, we can access the individual values stored
 in the array with the following <b>subscript</b> notation:
 
 <div class="code"><pre>an_array[4]</pre></div>
@@ -590,11 +590,11 @@ if we want to store this in some variable called x, then we can do
    <i>[lines of code that comprise the function]</i>
    return <i>expression</i></pre></div>
  
-<div id="def_input (function)" class="definition"></div>The variable named in the parentheses
+<span id="def_input (function)" class="definition"></span>The variable named in the parentheses
 after the function name is called the <b>input</b> to the
 function.  Whenever the function is run, this variable can be
-given a new value, which can be used inside the function.  <div id="def_body (function)" class="definition"></div>The indented lines after the function
-definition are called the function's <b>body</b>.  <div id="def_return value (function)" class="definition"></div>The expression in the final line will
+given a new value, which can be used inside the function.  <span id="def_body (function)" class="definition"></span>The indented lines after the function
+definition are called the function's <b>body</b>.  <span id="def_return value (function)" class="definition"></span>The expression in the final line will
 be the output of this function--called its <b>return value</b>.
 </p><p>A function name may be anything that a variable name could be.  </p><p>To cause the functionto run, then, we simply use the function's
 name like:
@@ -1032,12 +1032,12 @@ print(y)</pre></div>
 	many functions already written that perform various difficult
 	tasks.  From displaying graphics to a screen, to playing
 	sounds, to getting mouse click information, there is a
-	pre-written function for almost everything.  <div id="def_library function" class="definition"></div>These pre-written functions are called
+	pre-written function for almost everything.  <span id="def_library function" class="definition"></span>These pre-written functions are called
 	<b>library functions</b>.  </p><p>As a note, one of the things we have conspicuously omitted
 	from our explanation of Python to date was input.  This is
 	because input is performed mainly using library functions.  So
 	we are now ready to introduce various kinds of input
-	functions.  </p><p><div id="def_module" class="definition"></div>In Python, library functions are
+	functions.  </p><p><span id="def_module" class="definition"></span>In Python, library functions are
 	contained in <b>modules</b>--separate pieces of code that can
 	be loaded into our programs and that contain functions that
 	can be used from those programs. In Python, the way to
@@ -1423,7 +1423,7 @@ print(factorial(5))</pre></div>
 	    So it all works out in the end.  
 	  </p>
 	  
-	  <p><div id="def_recursive (definition)" class="definition"></div>This is a special kind
+	  <p><span id="def_recursive (definition)" class="definition"></span>This is a special kind
 	  of definition, where to define the function we use the
 	  function itself in the definition.  Such a definition is
 	  called <b>recursive</b>. Obviously such definitions
@@ -1455,7 +1455,7 @@ print(factorial(input.get_num("Factorial of: ")))</pre></div>
           definition above went through computing 4! via 3! and 2! and
           so on. </p>
 	  
-	  <p><div id="def_recursive (function)" class="definition"></div>A function that calls
+	  <p><span id="def_recursive (function)" class="definition"></span>A function that calls
 	  itself in this way is called a <b>recursive
 	  function</b>. Recursive functions are relatively
 	  subtle beasts, and we won't concern ourselves any further
@@ -1852,7 +1852,7 @@ print(files)</pre></div>
         really reads the files (probably using a method based on the
         earlier file reading code), but for now, this function returns
         something of the same shape as the actual thing will, so we
-        can use it in our later code.  <div id="def_mock up" class="definition"></div>This idea
+        can use it in our later code.  <span id="def_mock up" class="definition"></span>This idea
         of creating a function with the correct kind of behaviour that
         simulates the actual function's behaviour in a much simpler
         way is called creating a <b>mock up</b> (or sometimes just
@@ -2231,7 +2231,7 @@ def file_to_array(text):
 
 print(file_to_array("Hello!  I am Bob, and this is my pet kangaroo."))</pre></div>
 
-        and observe that what happens matches our expectations.  <div id="def_testability" class="definition"></div>This is an element of maintainability
+        and observe that what happens matches our expectations.  <span id="def_testability" class="definition"></span>This is an element of maintainability
         called <b>testability</b>: The ability to test that your code
         works as intended not just by testing it all at once, but by
         taking out pieces and testing them individually.
@@ -2410,7 +2410,7 @@ while(done == 0):
 	    their x- and y-coordiantes, so the situation of the game
 	    at any point in time can be stored in three variables,
 	    which we shall call <span class="icode">user_x</span>,
-	    <span class="icode">user_y</span> and <span class="icode">done</span>.  <div id="def_model" class="definition"></div>These variables comprise what is called the
+	    <span class="icode">user_y</span> and <span class="icode">done</span>.  <span id="def_model" class="definition"></span>These variables comprise what is called the
 	    game's <b>model</b>--that is, the information that
 	    describes competely the game's current setup (positions of
 	    all objects, scores, whatever), independently of how this
@@ -2549,7 +2549,7 @@ while(done == 0):
 	website, to access the same data.  If our goal is to write
 	that program, we have to have a way of accessing Google's map
 	data from within a program, rather than by going to the
-	website.  <div id="def_API" class="definition"></div>Such a mechanism that allows not
+	website.  <span id="def_API" class="definition"></span>Such a mechanism that allows not
 	just people using a web browser, but other programs to access
 	data and functionality contained in a given program (such as
 	Google maps, in this case) is called an <b>application

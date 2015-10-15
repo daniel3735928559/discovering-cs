@@ -1,6 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4')">4: Physical representations of numbers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_1')">4.1: Chapter organization</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_4_2')">4.2: Unary representation of numbers: A bouncy-ball-based
-    computer</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_2_1')">4.2.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_3')">4.3: Binary representation of non-negative integers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_3_1')">4.3.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_4')">4.4: Binary representation of negative integers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_4_1')">4.4.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_5')">4.5: Binary representation of real numbers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_5_1')">4.5.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_6')">4.6: Hexadecimal</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_6_1')">4.6.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_7')">4.7: 8 bits--three different meanings?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_4_8')">4.8: Integer operations on representations</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_8_1')">4.8.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_9')">4.9: Boolean operations</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_9_1')">4.9.1: Relation between boolean and arithmetic
-      operations</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_4_9_2')">4.9.2: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_10')">4.10: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_unary')">unary</a><br><a href="#" ng-click="goto_loc('def_bit')">bit</a><br><a href="#" ng-click="goto_loc('def_unsigned')">unsigned</a><br><a href="#" ng-click="goto_loc('def_significant')">significant</a><br><a href="#" ng-click="goto_loc('def_LSB')">LSB</a><br><a href="#" ng-click="goto_loc('def_MSB')">MSB</a><br><a href="#" ng-click="goto_loc('def_width')">width</a><br><a href="#" ng-click="goto_loc('def_byte')">byte</a><br><a href="#" ng-click="goto_loc('def_word')">word</a><br><a href="#" ng-click="goto_loc('def_nibble')">nibble</a><br><a href="#" ng-click="goto_loc('def_sign bit')">sign bit</a><br><a href="#" ng-click="goto_loc('def_twos complement')">twos complement</a><br><a href="#" ng-click="goto_loc('def_fixed point')">fixed point</a><br><a href="#" ng-click="goto_loc('def_floating point')">floating point</a><br><a href="#" ng-click="goto_loc('def_concatenation')">concatenation</a><br><a href="#" ng-click="goto_loc('def_boolean logic')">boolean logic</a><br><a href="#" ng-click="goto_loc('def_truth table')">truth table</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_4"></div><div class="text"><div class="header">4: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_4"></div><div class="text"><div class="header">4: 
 	  Physical representations of numbers</div><div class="summary"><b>Summary: </b><p>Computers are devices that perform operations on numbers.
   A computer is also supposed to be a real-world physical machine,
   whereas a number is something abstract.  We will bridge that gap
@@ -68,7 +66,7 @@
 
       <div class="code"><pre>111111111 + 1111 = 1111111111111</pre></div>
 
-      <div id="def_unary" class="definition"></div>This way of representing numbers is called
+      <span id="def_unary" class="definition"></span>This way of representing numbers is called
       <b>unary</b>, so-called because the 'un-' prefix indicates
       that we only need a single digit (1) to write down the
       representation of any number (just as the usual system of
@@ -188,7 +186,7 @@
       now.  Why we use powers of 10 specifically had to do with the
       fact that we were using 10 possible digits--0-9 (which in turn
       had to do with the fact that most humans have 10 fingers to
-      use as a counting aid).  </p><p><div id="def_bit" class="definition"></div>Binary, by contrast, will only have two
+      use as a counting aid).  </p><p><span id="def_bit" class="definition"></span>Binary, by contrast, will only have two
       digits--0 and 1.  (Binary digits are also called
       <b>bits</b>.) And because we have two possible digits, we
       will use the powers of 2 for our place values: 1, 2, 4, 8, 16,
@@ -215,21 +213,21 @@
       2<sup>1</sup> = 1 * 2<sup>7</sup> + 0 * 2<sup>6</sup> + 0 * 2<sup>5</sup> + 0 * 2<sup>4</sup> + 0 * 2<sup>3</sup> + 1 * 2<sup>2</sup> + 1 * 2<sup>1</sup> + 0 * 2<sup>0</sup>, the binary representation of 134 is 10000110.  
       </p>
       
-      <div id="def_unsigned" class="definition"></div>Since we're
+      <span id="def_unsigned" class="definition"></span>Since we're
       talking about non-negative integers, that is, integers where
       there is no concern about sign--whether it is positive or
       negative--this is sometimes called the representation of an
       <b>unsigned integer</b>.
-      </p><p><div id="def_significant" class="definition"></div>As in decimal, the first bits in a
+      </p><p><span id="def_significant" class="definition"></span>As in decimal, the first bits in a
       binary number have a much greater effect on the value: The
       difference between 1561 and 1562 isn't that large, but the
       difference between 1561 and 2561 is very large in comparison.
       For this reason it is common to call the first bits of a
       binary number more <b>significant</b>. Using this
       terminology, the last two bits would be called the two "least
-      significant bits".  <div id="def_LSB" class="definition"></div>Especially common is
+      significant bits".  <span id="def_LSB" class="definition"></span>Especially common is
       calling the last bit the <b>least significant bit</b> or
-      <b>LSB</b> <div id="def_MSB" class="definition"></div>and the first bit, the
+      <b>LSB</b> <span id="def_MSB" class="definition"></span>and the first bit, the
       <b>most significant bit</b> or <b>MSB</b>.</p><p>With 8 decimal digits, the largest number we can represent
       is 99999999--i.e., one less than the next place value of
       100000000.  With 8 binary digits, the largest number we can
@@ -260,17 +258,17 @@
       will be limited in this way to storing only numbers of a fixed
       width, and then it is up to programmers to concoct ways to use
       these limited memories to store larger numbers if they are
-      needed.</p><p><div id="def_width" class="definition"></div>The number of bits that an individual
+      needed.</p><p><span id="def_width" class="definition"></span>The number of bits that an individual
       memory slot can store is called its <b>width</b>.  A few
       particular widths of memories come up frequently, and so have
       special terminology associated with them:
 
-      <ul><li><div id="def_byte" class="definition"></div>A memory slot that can store an 8-bit
+      <ul><li><span id="def_byte" class="definition"></span>A memory slot that can store an 8-bit
       binary number is called a
       <b>byte</b>.</li>
-      <li><div id="def_word" class="definition"></div>A memory slot that can store a 16-bit
+      <li><span id="def_word" class="definition"></span>A memory slot that can store a 16-bit
       binary number is called a <b>word</b>.</li>
-      <li><div id="def_nibble" class="definition"></div>A memory slot that can store a 4-bit
+      <li><span id="def_nibble" class="definition"></span>A memory slot that can store a 4-bit
       binary number is called a <b>nibble</b>.</li>
       </ul>
       </p></div></div><div class="section"><div id="sec_4_3_1"></div><div class="text"><div class="header">4.3.1: 
@@ -386,7 +384,7 @@
     place-values as above except that the largest one is
     negative.</p><br><br><b>Definitions: </b><a href="#def_sign%20bit">sign bit</a>, <a href="#def_twos%20complement">twos complement</a></div><p>There are two common ways of representing arbitrary
       integers as sequences of bits: With a sign bit, and with two's
-      complement.  </p><p><div id="def_sign bit" class="definition"></div>The <b>sign bit</b> method is as
+      complement.  </p><p><span id="def_sign bit" class="definition"></span>The <b>sign bit</b> method is as
       follows: Suppose we have an 8-bit memory and we want to treat
       it as an integer with sign bit.  Then we treat the 7 least
       significant bits as usual, but the 8th bit, instead of giving
@@ -406,7 +404,7 @@
       method for adding them is rather complex, both in terms of how
       to explain it and how to implement it with circuitry, but we'll
       leave it be for now and instead discuss the more common
-      method employed in the wild:</p><p><div id="def_twos complement" class="definition"></div>The preferred method for
+      method employed in the wild:</p><p><span id="def_twos complement" class="definition"></span>The preferred method for
       representing arbitrary integers in binary is called <b>two's
       complement</b>, in which the place values are all the same
       except the most significant bit's place value is the negative
@@ -533,7 +531,7 @@
 	<tr><td>Binary digits</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
       </table>
 
-      For an end result of 8 + 4 + 1 + 1/4 + 1/8 = 13.375</p><p><div id="def_fixed point" class="definition"></div>This scheme is called <b>fixed
+      For an end result of 8 + 4 + 1 + 1/4 + 1/8 = 13.375</p><p><span id="def_fixed point" class="definition"></span>This scheme is called <b>fixed
       point</b> because the point is at a predetermined and fixed
       location for all numbers encoded in this scheme</p><p>Under this scheme, however, the largest number we can
       represent is 11111111, or 15.9375.</p><p>Even if we extended this scheme to 16 bits, where we still
@@ -551,7 +549,7 @@
       the point goes, we have effectively two pieces of information
       to keep track of: A single fixed point number (5.329), and the
       exponent, 2.  If we wanted a smaller number like .005329, all
-      we have to do is change the exponent to, in this case, -3.</p><p><div id="def_floating point" class="definition"></div>In a <b>floating point</b> scheme,
+      we have to do is change the exponent to, in this case, -3.</p><p><span id="def_floating point" class="definition"></span>In a <b>floating point</b> scheme,
       we use 16 bits (though there are variants for larger numbers of
       bits).  We use the first bit of these as a sign bit exactly as
       in the sign bit scheme.  The next 5 will represent a
@@ -900,7 +898,7 @@ f5 28 60 b8
       the original representation 11101100 represented -20, and the
       result of this procedure is indeed 20.  </p><p><b>Subtraction: </b>Now that we can negate and add, we can
       compute x - y for two given two's complement representations by
-      simply negating y and then adding that to x.  </p><p><b>Concatenation: </b><div id="def_concatenation" class="definition"></div>If we have
+      simply negating y and then adding that to x.  </p><p><b>Concatenation: </b><span id="def_concatenation" class="definition"></span>If we have
       two bytes stored somewhere, then each of these can only hold
       values 0-255 (if being interpreted as unsigned integers).
       However, despite the fact that they are stored separately, we
@@ -1149,7 +1147,7 @@ f5 28 60 b8
       and 1 being "true".  Then a sequence of 8 bits can simply
       describe the truth of 8 separate assertions; for example 11000100 means
       that assertions 1, 2, and 6 are true and the rest are false.
-      </p><p><div id="def_boolean logic" class="definition"></div>This perspective is called
+      </p><p><span id="def_boolean logic" class="definition"></span>This perspective is called
       <b>boolean logic</b>, and it has its own set of operations that
       we will now discuss.</p><p><b>AND: </b> For instance, if I have information about the
       truth of two statements--statement A and statement B, I can
@@ -1159,7 +1157,7 @@ f5 28 60 b8
       combined statement.  This operation is generally denoted by the
       symbol "&amp;", and for two bits x and y, the value of x &amp; y
       is "true" (i.e., 1) if both x and y are true (i.e., 1), and
-      "false" (0) otherwise.</p><p><div id="def_truth table" class="definition"></div>It is common to see such operations
+      "false" (0) otherwise.</p><p><span id="def_truth table" class="definition"></span>It is common to see such operations
       described with a table like so, called a <b>truth table</b>:
     
 

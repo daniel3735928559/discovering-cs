@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Spy demo</title>
+    <title>Python simulator</title>
     <link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
     <link rel="stylesheet" type="text/css" href="/sim/quest/quest.css" />
     <link rel="stylesheet" href="/lib/codemirror/codemirror.css" />
@@ -11,11 +11,14 @@
     <script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
     <script type="text/javascript" src="/lib/spy/sim.js"></script>
     <script type="text/javascript" src="/sim/quest/quest.js"></script>
+    <script type="text/javascript" src="/sim/py/python.js"></script>
   </head>
   <body ng-app="app">
-    <div class="quest" ng-controller="QuestController">
-      <exploration template="/sim/quest/quest.html" quest_name="/sim/quest/pyquest.xml">
-      </exploration>
+    <div ng-controller="PythonController">
+      <div class="quest" ng-controller="QuestController">
+	<exploration control="qcontrol" template="/sim/quest/quest.html">
+	</exploration>
+      </div>
     </div>
   </body>
 </html>
