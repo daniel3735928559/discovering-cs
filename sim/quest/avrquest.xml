@@ -91,12 +91,46 @@ ld r0,Z</pre>
     st.</p></text>
   </q>
   <q type="avr" id="add/sub">
-    <program></program>
-    <text></text>
+    <program>ldi r31,1
+ldi r30,255
+add r31,r30
+
+ldi r31,1
+ldi r30,2
+add r31,r30
+
+ldi r31,2
+ldi r30,19
+sub r31,r30
+
+ldi r31,4
+sub r31,r31</program>
+    <text>Once we have values stored in registers, we can start
+    messing with them.  For example, we can add any register to any
+    other using the "add" instruction.  For example, <pre>add
+    r0,r1</pre> would behave like r0 = r0 + r1.  You can also add a
+    register to itself, effectively doubling it like <pre>add
+    r16,r16</pre>
+
+    <p>If an add instruction ends up with a result of 0, then the Z
+    (short for "zero flag") that's been hanging out on the right hand
+    panel there will be set to 1.  Otherwise, it will be cleared (set
+    to 0).  Note that this can happen from adding numbers that add up
+    to 256 which, when written in binary, has its last 8 bits being 0.
+    </p>
+
+    <p>There are also more weird things that can happen: 255+2 = 1 in
+    8-bit land.  When we get a wraparound like this, the C flag
+    ("carry flag") will also be set.  </p>
+    
+    <p>There's also a "sub" operation for subtraction.  It works the
+    same way: If the subtraction gives 0, Z is set.  If the
+    subtraction wraps around the bottom (as with, say, 2 - 19), C is
+    set.  </p></text>
   </q>
   <q type="avr" id="inc/dec">
     <program></program>
-    <text></text>
+    <text><p></p></text>
   </q>
   <q type="avr" id="and/or/eor">
     <program></program>

@@ -48,9 +48,10 @@ app.post('/homework/rate', function(req, res){
 });
 
 app.post('/homework/get', function(req, res){
-    console.log("AAAA",req.body);
+    console.log("GET",req.body);
+    var hwid = get_homework_data(req).hwid;
     subs_provider.get(get_user_data(req), get_homework_data(req), function(error, result){
-	res.send({"error":error,"data":result});
+	res.send({"error":error,"id":hwid,"data":result});
     });
 });
 
@@ -60,7 +61,7 @@ app.get('/homework', function(req, res){
 });
 
 app.post('/homework/saveall', function(req, res){
-    console.log("AAAAXXX",get_user_data(req),req.body);
+    console.log("SAVEALL",get_user_data(req),req.body);
     var tried = 0;
     var saved = 0;
     var total = req.body.total;

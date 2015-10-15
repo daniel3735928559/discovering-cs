@@ -219,7 +219,7 @@
   </xsl:template>
 
   <xsl:template match="def">
-    <div id="def_{@term}" class="definition"> </div>
+    <span id="def_{@term}" class="definition"> </span>
     <xsl:apply-templates select="*|text()" />
   </xsl:template>
 
