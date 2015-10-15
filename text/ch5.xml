@@ -4250,7 +4250,150 @@ where now for the purpose of updating the array we'll treat these two
   array, and also r29,r28 the address where the length is stored, and
   finally r16 will be the index we wish to delete.  </p>
 
-  <p>Then the algorithm will be: </p>
+  <p>Then the algorithm will be:
+
+  <ol>
+    <li>Set a counter to be length - index.  This is how many things we have to copy</li>
+    <li>Add the index to Z</li>
+    <li>Store Z in X.  X will be the address we are writing to</li>
+    <li>Increment Z.  Now X will always be 1 behind Z</li>
+    <li>While the counter >= 0:
+    <ol>
+      <li>Read from Z into a temporary location</li>
+      <li>Increment Z</li>
+      <li>Write the temporary value into X</li>
+      <li>Increment X</li>
+      <li>Decrement the counter</li>
+    </ol>
+
+    </li>
+  </ol>
+
+  Translating this to assembly, we'll let the counter be r17 and the
+  "temporary location" used in the loop be r18, then the rest of this
+  translates rather straightforwardly:
+
+  <code>array_delete:
+push r17
+push r18
+push r19
+ld r17,Y      ; Y is the counter address, so now r17 is the length
+sub r17,r16   ; r16 is the index, so now r17 is length - index
+ldi r18,0     ; we need this to compute index + Z
+add r30,r0
+adc r31,r17   ; Z += index
+mov r26,r30
+mov r27,r30   ; X = Z
+ldi r18,1
+ldi r19,0     ; now r19:r18 = 1 and we can add this to Z to increment it
+add r30,r18
+adc r31,r19   ; Z = Z + 1
+loop_start:
+cpi r17,0
+breq loop_end ; if r17 == 0 then we are done
+ld r18,Z+     ; read Z into temp location and then increment Z
+st X+,r18     ; store temp value at X and then increment X
+dec r17       ; decrement the counter
+loop_end:
+pop r19
+pop r18
+pop r17
+ret</code>
+
+
+<p>We can try applying this to our previous example, adding also the
+appropriate preamble to set up the stack and skip the function code initially:</p>
+
+
+<avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+array_delete:
+push r17
+push r18
+push r19
+ld r17,Y      ; Y is the counter address, so now r17 is the length
+sub r17,r16   ; r16 is the index, so now r17 is length - index
+dec r17       ; Preventing an off-by-one error
+ldi r18,0     ; we need this to compute index + Z
+add r30,r17
+adc r31,r18   ; Z += index
+mov r26,r30
+mov r27,r31   ; X = Z
+ldi r18,1
+ldi r19,0     ; now r19:r18 = 1 and we can add this to Z to increment it
+add r30,r18
+adc r31,r19   ; Z = Z + 1
+loop_start:
+cpi r17,0
+breq loop_end ; if r17 == 0 then we are done
+ld r18,Z+     ; read Z into temp location and then increment Z
+st X+,r18     ; store temp value at X and then increment X
+dec r17       ; decrement the counter
+rjmp loop_start
+loop_end:
+pop r19
+pop r18
+pop r17
+ret
+
+real_program_start:
+
+.byte(my_array_length) 9
+.byte(my_array) 2,3,5,7,0,11,13,0,17
+ldi r28,lo8(my_array_length)
+ldi r29,hi8(my_array_length)  ; Y is now the address of the length of the array
+ldi r30,lo8(my_array)
+ldi r31,hi8(my_array)         ; Z is now the address of the array
+ldi r16,4                     ; r16 is the index we want to remove
+rcall array_delete
+</avrasm>
+
+<warning title="Arrays and frequent deletion don't mix">
+  <p>Ultimately, the lesson here is that while deleting an element of
+  an array might look like a very simple operation, it in fact
+  requires us to shift the entire array following the element we're
+  deleting.  Imagine if we had a string of the text of an entire book
+  and we were deleting the first letter.  That would require moving
+  all the other letters one step back!</p>
+  
+  <p>In general, if we have <icode>k</icode> things to delete from an
+  array of <icode>N</icode> elements, then we might think that this
+  will take <icode>k</icode> steps--one for each deletion.  In fact it
+  may take as many as <icode>k*N</icode> steps, as each deletion may
+  require shifting up to N elements of the array.</p>
+  
+  <p>For this reason, using simple arrays like those we have described
+  to store data that will require many deletions of elements is
+  actually quite inefficient.  There are other, cleverer ways to store
+  data that may require many delete operations.  One way that suits
+  this purpose is called a "linked list", where the elements of the
+  list are stored in possibly completely unrelated locations in RAM,
+  but each element also includes the RAM address of the next
+  element.  This way, to delete element number 4 in the list, we only
+  need to update the "next element" address stored with element 3 to
+  be the address of element 5.</p>
+  
+  <p>This is just one example of how the particular scheme used for
+  storing data can very meaningfully affect efficiency, and of how
+  what you want to do with the data can affect how you decide to store
+  it.  There are many schemes for storing data, all tailored to
+  slightly different use-cases.  Such schemes are called "data
+  structures", and you may have an entire class to learn about some of
+  them (and maybe you will even design your own!) in your future
+  computer programming life.</p>
+</warning>
+</p>
+
+  <p><b>Array concatenation: </b> The last example we'll do is array
+  concatenation.
+
+  </p>
   
   </text></section>
 

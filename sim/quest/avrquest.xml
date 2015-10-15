@@ -1,33 +1,189 @@
 <?xml version="1.0" encoding="UTF-8"?><quest name="Python Intro" id="0">
-  <q type="avr" id="Basics">
+  <q type="avr" id="Intro">
 <program>ldi r30,115
 ldi r31,6</program>
 <text>First things first, let's learn how to use this thing.  Observe
-the code in the editor to the right.  <p>Press [run] to start running
-the program.  While the program is running, the program cannot be
-modified.  Press [step] (or use Shift+S) to advance through the
-program.  Note how the variables change as you do so.</p><p>The
-program will stop running either when you step through the last
-instruction or when you press [end] (or use Shift+E), at which point
-you can modify the program again.  </p><p>To make the step button take
-more steps at once, enter a higher number in the box next to it.</p>
+the code in the editor to the right.
+
+<p>Edit the program and then press [run] (or Ctrl-Enter) to start
+running the program.  While the program is running, the program cannot
+be modified.  While the program is running, you can switch between the
+program and a view of some input/output devices using the
+selection-box next to the "end" button.</p>
+
+<p>Press [step] to advance through the program.  Note how the
+variables change as you do so.</p>
+
+<p>The program will stop running either when you step through a "halt"
+instruction or when you press [end], at which point you can modify the
+program again.  </p>
+
+<p>To make the step button take more steps at once, enter a higher
+number in the box next to it.</p>
 </text>
   </q>
-  <q type="avr" id="Stuff">
-    <program>nop
-ldi r31,9
-add r30,r31
-add r30,r30
-add r30,r30
-cp r30,r31
-cpi r30,36
-breq 125
-inc r0
-add r0,r30
-ldi r31,0
-ldi r30,11
-st Z,r0
-ld r1,Z</program>
-<text>Hello</text>
-</q>
+  <q type="avr" id="ldi">
+    <program></program>
+    <text>Registers are your first way of storing data.  A register
+    can only store numbers, and in fact only 8-bit numbers.  I know
+    that sounds just fantastic, but it gets better: There are only 32
+    of them, named r0, r1, r2, up through r31.
+
+    <p>An ldi instruction lets you store something in any of the
+    registers r16 through r31.  For example, you can put 114 into r29
+    with: <pre>ldi r29,114</pre> and you can put 0 into r16 with
+    <pre>ldi r16,0</pre> Read this as "load into r16 the value 0".</p>
+
+    <p>You cannot put larger numbers into registers and you cannot use
+    ldi to put any numbers into r0-r15.  For example, these will not
+    work:
+
+    <pre>ldi r0,12
+ldi r31,999</pre></p>
+    </text>
+  </q>
+  <q type="avr" id="mov">
+    <program></program>
+    <text>You can copy any register into any other register with the
+    "mov" instruction.  For example, <pre>mov r0,r31</pre> (read as
+    "move into r0 the value in r31") will store into r0 whatever
+    value was stored in r31.  Despite the name looking like "move",
+    this is more like "copy"--r31 keeps its original value.
+
+    <p>This kind of makes up for ldi not being able to touch r0-r15.
+    If you really wanted to get 9 into r1, you can do <pre>ldi r31,9
+mov r1,r31</pre></p></text>
+  </q>
+  <q type="avr" id="st">
+    <program></program>
+    <text>The other way to store data is in RAM.  RAM also only stores
+    8-bit numbers, but at least it can store 65536 of them.  To store
+    a number in RAM, that number has to be in a register already.  Say
+    you've got the number in r14 to store into RAM.  Then you can do
+    <pre>st X,r14</pre>
+
+    <p>Wait--what is this X?  X means r27:r26 (remember, that means
+    "smash the 8 bits of r27 in front of the 8 bits of r26 to get one
+    big 16-bit number; if you like formulas, that's r27*256+r26).</p>
+
+    <p>X in this case is being used to say which slot in RAM to store
+    in, so if we want to store in slot 1009, then we compute that
+    1009 = 3:241, so we do:
+    <pre>ldi r27,3
+ldi r26,241
+ldi r14,90 ; or whatever we want to store
+st X,r14</pre></p></text>
+  </q>
+  <q type="avr" id="ld">
+    <program></program>
+    <text>We can also load from any slot in RAM to any register using
+    the "ld" instruction such as <pre>ld r14,X</pre> to load from slot
+    X to register r14 (supposing we'd pre-arranged X to be whatever
+    we'd wanted).
+
+    <p>Instead of X, we can also of course use Y or Z.  Y is r29:r28
+    and Z is r31:r30.  For example, to load from address 200 into r0,
+    we can do: <pre>ldi r31,0
+ldi r30,200
+ld r0,Z</pre>
+
+    Oh yeah, forgot to mention: Y and Z are also valid options for
+    st.</p></text>
+  </q>
+  <q type="avr" id="add/sub">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="inc/dec">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="and/or/eor">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="com">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="neg">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="asr">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="in">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="out">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="rjmp">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="breq/brne">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="brlo/brsh">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="cp/cpi">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="subi/andi/ori">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="ld sequential">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="st sequential">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="push/pop">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="rcall/ret">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="word directives">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="byte directives">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="string directives">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="labels">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="labels as immediate operands">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="labels as offset operands">
+    <program></program>
+    <text></text>
+  </q>
+  <q type="avr" id="characters as immediate operands">
+    <program></program>
+    <text></text>
+  </q>
 </quest>
