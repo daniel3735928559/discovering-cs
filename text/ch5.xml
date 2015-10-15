@@ -3552,7 +3552,9 @@ in Python, we can do in the ISA.  Since assembly translates directly
 to the ISA, we only need to substantiate the claim that everything we
 can do in Python, we could instead do in assembly language.  To this
 end, we shall take a few constructs from Python and see how they can
-be realized using AVR assembly language in this section.  </p>
+be realized using AVR assembly language in this section.  In effect,
+we will manually be doing the job of a compiler in order to start to
+learn how a compiler does what it does.</p>
 </text>
 
 <section><title>Assignment</title>
@@ -4391,6 +4393,110 @@ rcall array_delete
 </warning>
 </p>
 
+  <p><b>Comparing strings</b>: What about just comparing two strings?
+  Maybe we have two strings in RAM--one that the user typed in and the
+  other, a password.  We then want to see if they match in order to
+  authenticate the user.  In Python we could just do something like:
+
+  <code>if(password_entered == password_stored):
+   <i>do stuff</i></code>
+
+  We've already seen how to compare numbers like this in assembly
+  using the cp operation, but haven't yet seen this for strings.  </p>
+  
+  <p><b>Algorithm: </b></p>
+  <p>The idea isn't too far removed, however, from comparing numbers.
+  After all, strings are just sequences of numbers.  So if we have
+  strings stored at, say, addresses 200 and 650 in RAM, then we can
+  start by comparing the numbers at those addresses.  If they don't
+  match, then the strings are definitely different.  But if they do
+  match, then we need to compare the numbers at addresses 201 and 651.
+  Then the numbers at 202 and 652.  If at any point we don't get a
+  match, then we know the strings are different.  If, on the other
+  hand, the two numbers match and are both 0, then that means we
+  reached the end of both strings simultaneously, and so we're
+  done, and only then can we conclude that the strings themselves
+  actually match</p>
+
+  <p>Put into steps:
+
+  <ol>
+    <li>Put Y = [address of string 1]</li>
+    <li>Put Z = [address of string 2]</li>
+    <li>Read RAM address Y into r0 and increment Y</li>
+    <li>Read RAM address Z into r1 and increment Z</li>
+    <li>Compare r0 and r1</li>
+    <li>
+      If they're the same, do the following:
+      <ol>
+	<li>Compare r0 with 0</li>
+	<li>If they're the same, then the strings are equal!</li>
+      </ol>
+    </li>
+    <li>Jump back to step 3</li>
+    <li>If we've got here, then the strings differ</li>
+  </ol>
+
+  We only have to decide what to do if the strings differ.  Lets say
+  we'll return the answer in r31: It will be 1 if they are the same,
+  and 0 if they are different.  </p>
+
+  <p><b>Program: </b></p>
+
+  <p>Turning the above into a program is relatively straightforward,
+  bearing in mind the constructs from the previous sections about how
+  to do conditional execution and while loops:</p>
+  
+  <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+compare_strings:
+push r0
+push r1
+push r2
+eor r2,r2    ; set r2 to be 0
+loop_start:
+ld r0,Y+
+ld r1,Z+
+cp r0,r1
+brne strings_not_equal
+cp r0,r2
+breq strings_equal
+rjmp loop_start
+strings_not_equal:
+ldi r31,0
+rjmp end_of_comparison
+strings_equal:
+ldi r31,1
+end_of_comparison:
+pop r2
+pop r1
+pop r0
+ret
+
+real_program_start:
+
+.string(string1) "password123"
+.string(string2) "password12#"
+.string(string3) "password12#"
+.string(string4) "password12#"
+ldi r28,lo8(string1)
+ldi r29,hi8(string1)
+ldi r30,lo8(string2)
+ldi r31,hi8(string2)
+rcall compare_strings
+
+ldi r28,lo8(string3)
+ldi r29,hi8(string3)
+ldi r30,lo8(string4)
+ldi r31,hi8(string4)
+rcall compare_strings</avrasm>
+
   <p><b>Array concatenation: </b> The last example we'll do is array
   concatenation.  Say we've put two arrays--or even two strings--into
   RAM like:
@@ -4480,7 +4586,7 @@ st Z,r26
 st -Z,r27                       ; Store X back at address first_free_address (which is still in Z)</avrasm>
   </p>
 
-  <warning title="Concatenation can also be expensive">
+  <warning title="Frequent concatenation means frequent copying">
     <p>Note that to concatenate two arrays meant copying the contents
     of both of them!  This means that our harmless little "append an
     element to an array" code from chapter 3:
@@ -4591,18 +4697,18 @@ ldi r18,0</code>
 
 <code>begin_while:
 <i>do comparison</i>
-<i>[appropriate branch instruction]</i> end_while
+<i>[branch if condition fails]</i> end_while
 <i>do stuff</i>
 rjmp begin_while
 end_while:</code>
 
   Here, the condition is <icode>counter &lt;= n</icode>.  This means
-  that the comparison we'll perform is between r16 and r17.  We saw
-  earlier that the comparison <icode>r16 &lt;= r17</icode> could be
-  tested with:
+  the condition fails if <icode>counter > n</icode>.  We saw earlier
+  (at the end of 5.4.6) that the comparison <icode>r17 > r16</icode>
+  could be tested with:
 
-  <code>cpi r17,r16
-brsh ...</code>
+  <code>cpi r16,r17
+brlo ...</code>
 
   (This is testing "is r17 the same as or higher than r16", i.e. <icode>r17 >= r16</icode> which
   is equivalent to the condition in question.)
@@ -4611,187 +4717,241 @@ brsh ...</code>
 <p>Thus our code now looks like:
 
 <code>ldi r16,20
-ldi r17,1
-ldi r18,0
+ldi r17,1    ; r17 will store the counter
+ldi r18,0    ; r18 will store the sum
 begin_while:
-cp r17,r16
-brsh end_while
+cp r16,r17
+brlo end_while
 <i>do stuff</i>
 rjmp begin_while
 end_while:</code>
 
-  
+   So all that remains is to figure out what "do stuff" should be.
+   But this is relatively straightforward: Since the sum is r18 and
+   the counter is r17, <icode>sum = sum+counter</icode> can just be
+   <icode>add r18,r17</icode>, and <icode>counter = counter+1</icode>
+   can just be <icode>inc r17</icode>.  Thus:
+
+
+<avrasm>ldi r16,20
+ldi r17,1    ; r17 will store the counter
+ldi r18,0    ; r18 will store the sum
+begin_while:
+cp r16,r17
+brlo end_while
+add r18,r17
+inc r17
+rjmp begin_while
+end_while:</avrasm>   
 
   </p>
 
-  <p>We can, however, draw inspiration from our Python approach:
-  There, we had a loop with a variable counting up from 1 to n, and
-  another variable that started at 0 and got the counter variable
-  added to it each time.  These are all things we can do once again,
-  except there are no "variables" in the ISA.  There are, however,
-  registers, and recall our instruction that registers will be used in
-  place of non-array variables.  Thus we pick two of them--say r16 and
-  r17, to be the counter and accumulator, respectively.  Then, we'll
-  start by getting the input into r31, and then setting r16 to 1 and
-  r17 to 0 with ldi.</p>
+<p><b>Debrief: </b>
 
-  <p>Now we need a loop, so we put a "start of loop" label.  And
-  inside the loop, we'll do the following operations: 
+Note that 1+2+...+22 is the largest such sum we can compute without
+overflow.  We could have stored the sum using two registers such as
+r19:r18 to compute much larger sums.</p>
 
-  <ol><li>Add the counter to the accumulator (r17)</li>
+<p><b>Assembly, mark II: </b> This time, we'll try to get the sum from
+1 to 100.  This will require the use of 16 bits to store the sum
+(i.e. at least two registers).  To choose at random, we'll have r17
+store the counter, and r31:r30 store the sum:
 
-  <li>Increment the counter (r16)</li>
+<avrasm>ldi r16,100
+ldi r17,1    ; counter = 1
+ldi r30,0
+ldi r31,0    ; sum = r31:r30 = 0:0 = 0
+begin_while:
+cp r16,r17   
+brlo end_while
+; We shall add r17 to r31:r30, but the usual method
+; requires adding numbers of the same width, so we
+; set up r18 as 0 so that r18:r17 is just the 16-bit
+; version of r17:
+ldi r18,0    
+add r30,r17
+adc r31,r18  ; r31:r30 = r31:r30 + r18:r17
+inc r17
+rjmp begin_while
+end_while:</avrasm>
 
-  <li>Check if the counter is larger than the input (r31)--if so,
-  print r17 and exit; if not, jump to the start of the loop</li>
-  </ol></p>
+Note that because we've used r31:r30, we can view the counter's
+progress in the Z register.
 
-<p><b>Program: </b></p>
+</p>
 
-ldi r31, 22
-ldi r16,1 ; this will be the counter
-ldi r17,0 ; this will be the running total
-sum_loop:
-add r17,r16
-inc r16
-cp r31,r16
-brsh sum_loop
-mov r31,r17
-call print_reg
-call exit
 
-<p><b>Debrief: </b></p>
+<p><b>Debrief: </b>
 
-This contains an off-by-one error!  Use something other than brsh.
-Also, 1+2+...+22 is the largest such sum we can compute without
-overflow.  Have the result stored in r17 and r18 to compute much
-larger sums.
+Unlike factorial, there is a simple formula for the sum of the first n
+integers, namely n*(n+1)/2.  We already know how to divide by 2 using
+asr, so if we knew how to multiply registers this might have been a
+lot simpler.  We'll explore this business in the next example.</p>
 
 </text></section>
 
 <section><title>Multiplication</title>
 <text>
-  <p><b>Introduction: </b></p>
-  
-  <p>We could almost convert the previous example into an
-  assembly-language factorial program, but for two main difficulties:
-  <ul>
-    <li>The numbers would get too big, even for two registers.</li>
-    <li>We don't have a multiplication instruction!</li>
-  </ul>
-
-  Now, the AVR instruction set does include an instruction called mul,
-  but many cheaper AVR chips you can buy do not actually support this
-  instruction.  So if we want to multiply numbers, we have to do it
-  ourselves.</p>
+  <p><b>Introduction: </b> The AVR instruction set does include an
+  instruction called mul for multiplying registers, but many cheaper
+  AVR chips you can buy do not actually support this instruction.  So
+  if we want to multiply numbers, we have to do it ourselves.</p>
 
   <p>One issue that arises is that multiplying numbers is a good way
-  to get large numbers, so it is likely that when we do
-  multiplication, even if we're only multiplying two registers, we'll
-  have to store the result in more than one register.</p>
-
-  <p><b>Python program: </b></p>
-
-  <p>We'll arrange our registers so that the numbers being multiplied
-  are stored in r30 and r31, and the answer will be stored in the two
-  registers r16 and r17, with r16 being the low byte and r17 the
-  high.  </p>
-
-  <p><b>Program: </b></p>
+  to get large numbers: it is likely that even if we only multiply two
+  single-register numbers, the result will not fit in a register.  For
+  example, 20*20 = 400 which is already too big.  So in this case
+  we're almost forced to store the result in two registers.</p>
   
-<code>ldi r31,13
-ldi r30,9
-ldi r16,0
-ldi r17,0
-ldi r18, 1
-loop_start: 
-add r16, r31
-adc r17, r18
-dec r30
-cpi r30,0
-brne loop_start</code>
+  <p><b>Python program: </b> Otherwise, the most obvious algorithm
+  seems like a straightforward loop: To compute <icode>a*b</icode> we
+  simply start with storing 0 somewhere and add <icode>b</icode> to it
+  <icode>a</icode> times (say, using a while loop with a counter):
 
-</text></section>
+  <code>product = 0
+counter = 0
+while(counter &lt; a):
+   product = product + b
+   counter = counter + 1</code>
 
+   If we decide the product should be stored in r31:r30 and the
+   counter will be r19, <icode>a</icode> will be r16, and
+   <icode>b</icode> will be r17, then we can write this rather simply
+   as a function even:
 
-<section><title>Comparing two strings</title>
-<text>
-  <p><b>Introduction: </b></p>
-  
-  <p>Suppose we have two strings somewhere in RAM, say at addresses
-  200 and 650 respectively.  
+   <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
 
-  <!-- <figure><description>RAM with two strings at the specified -->
-  <!-- addresses</description><caption></caption></figure> -->
-  
-  Maybe the user typed one of them in and the other is a username, and
-  we want to see if they match in order to, say, authenticate the
-  user as having that username.  In Python we could just do something
-  like:
+rjmp real_program_start
 
-  <code>if(name_entered == name_stored):
-   <i>do stuff</i></code>
+multiply:
+push r18
+push r19
+ldi r18,0    ; counter = 0
+ldi r19,0    ; since product is r31:r30 and we are going to add
+             ; b to it, b should be two bytes also.
+             ; We pick r19:r17
+ldi r30,0
+ldi r31,0    ; product = 0
+mul_loop_start:
+cp r18,r16   ; while(counter &lt; a)
+brsh mul_loop_end
+add r30,r17
+adc r31,r19  ; product = product + b
+inc r18      ; counter = counter + 1
+rjmp mul_loop_start
+mul_loop_end:
+pop r19
+pop r18
+ret
 
-  We've already seen how to compare numbers like this in assembly, but
-  haven't yet seen for strings.  </p>
+real_program_start:
 
-  
-  
-  <p><b>Algorithm: </b></p>
-  <p>The idea isn't too far removed, however, from comparing numbers.
-  Since all strings are just sequences of numbers, what we want to do
-  is compare the numbers stored in RAM at addresses 200 and 650.
-  Then, if those match, we need to compare the numbers at addresses
-  201 and 651.  Then the numbers at 202 and 652.  If at any point we
-  don't get a match, then we know the strings are different.  If, on
-  the other hand, the two numbers match and are both 0, then that
-  means we reached the end of both strings simultaneously, and so
-  we're done.</p>
-
-  <p>Put into steps:
-
-  <code>
-Put Y = 200
-Put Z = 650    
-Read RAM address Y into r0
-Read RAM address Z into r1
-Compare r0 and r1
-If they're the same, do the following:
-   Compare r0 with 0
-   If so, branch ahead to the code we run if the strings are equal
-   Jump back to step 3
-If we've got here, then the strings differ
-  </code>
+ldi r16,29
+ldi r17,41
+rcall multiply ; after this, Z is the product</avrasm>
   </p>
 
-  <p><b>Program: </b></p>
+<p><b>Debrief:</b> This is actually a somewhat horrendous algorithm
+for multiplying two numbers.  For a start, it only takes two steps to
+computer 2*255, but takes 255 steps to compute 255*2.  While 255 steps
+is not so bad if we only have to do it every once in a while, there is
+a more clever algorithm that we shall leave in an aside for the
+curious.</p>
 
-  <p>Turning the above into a program is relatively straightforward,
-  bearing in mind the constructs from the previous section about how
-  to do conditional execution and while loops:</p>
+<aside title="The proper way to multiply numbers by hand">
+  <p>The trick is that we can very easily multiply numbers by 2: Just
+  add a number to itself!  This even works for tow-register numbers:
+  To multiply r29:r28 by 2, just do:
+
+  <code>add r28,r28
+adc r29,r29</code>
+
+  So how does multiplying by 2 help us?  Let us think about writing
+  <icode>b</icode> in binary: Maybe it is, say, 00100110 or
+  2<sup>5</sup> + 2<sup>2</sup> + 2<sup>1</sup>.  Then to compute a*b,
+  we only have to compute a*(2<sup>5</sup> + 2<sup>2</sup> +
+  2<sup>1</sup>).  Using the distributive law, this means we only have
+  to compute a*2, a*2*2, and a*2*2*2*2*2 and add them up.</p>
   
-  <code>
-    ldi r28,
-    ldi r29,
-    ldi r30,
-    ldi r31,
-    comparison_start:
-    ld r0,Y+
-    ld r1,Z+
-    cp r0,r1
-    brne strings_not_equal
-    cpi r0,0
-    breq strings_equal
-    rjmp comparison_start
-    strings_not_equal:
-    <i>Whatever we want to do if they're not equal</i>
-    rjmp end_comparison
-    strings_equal:
-    <i>Whatever we want to do if they are equal</i>
-    end_comparison:
-  </code>
+  <p>Put another way, this means we can do:
+  <ol>
+    <li>Store 0 in r31:r30.  This will be the answer by the end of the
+    algorithm</li>
+    <li>Store a in r29:r28</li>
+    <li>For each bit of b, do the following:
+    <ol>
+      <li>If the bit of b is set, then add r29:r28 to r31:r30</li>
+      <li>Multiply r29:r28 by 2</li>
+    </ol>
+    </li>
+  </ol>
   
+  OK, but how do we test if each bit of b is set?  This is where the
+  AND operation will help us: We can "b AND 1" will be nonzero exactly when the first
+  bit is set, "b AND 2" will be nonzero exactly when the second bit is
+  set, "b AND 4" will be nonzero exactly when the third bit is set,
+  and so on.  So we can keep another counter that we keep doubling and
+  ANDing with b for this test.  </p>
+
+  
+  
+   <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+multiply:
+push r29
+push r28
+push r22
+push r21
+push r20
+ldi r31,0
+ldi r30,0        ; store 0 in r31:r30, which will become the answer
+ldi r29,0
+mov r28,r16      ; store a in r29:r28
+ldi r20,0        ; counter = 0
+ldi r21,8        ; there are 8 digits
+ldi r22,1        ; r22 will double each time to test the bits
+mul_loop_start:
+cp r20,r21
+brsh mul_loop_end
+mov r23,r22
+and r23,r17      ; b AND r17
+breq bit_not_set
+add r30,r28      ; add our doubling version of a to the answer
+adc r31,r29      ; if the bit was set
+bit_not_set:
+add r22,r22      ; double r22
+add r28,r28
+adc r29,r29      ; double a
+inc r20          ; increment the counter
+rjmp mul_loop_start
+mul_loop_end:
+pop r20
+pop r21
+pop r22
+pop r28
+pop r29
+ret
+
+real_program_start:
+
+ldi r16,29
+ldi r17,41
+rcall multiply ; after this, Z is the product</avrasm>
+
+</aside>
+
 </text></section>
+
 
 </section>
 
