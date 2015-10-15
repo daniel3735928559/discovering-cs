@@ -3246,9 +3246,9 @@ above example, the value of the label <icode>hello</icode> is 0, of
 
     This will convert each character of the string into its
     corresponding byte, place these bytes into RAM, and create a new
-    label whose value is the address of the first byte of this
-    string.  
-  </def></p>
+    label whose value is the address of the first byte of this string.
+    It will also leave a 0 byte at the end of the string that it
+    stores in RAM.  </def></p>
 
     <p>For example, the directive
     
@@ -3274,6 +3274,7 @@ above example, the value of the label <icode>hello</icode> is 0, of
       <tr><td>1917</td><td>105</td></tr>
       <tr><td>1918</td><td>109</td></tr>
       <tr><td>1919</td><td>101</td></tr>
+      <tr><td>1920</td><td>0</td></tr>
     </table>
 
     <p>In this case, the label <icode>story</icode> will have the
@@ -4391,10 +4392,145 @@ rcall array_delete
 </p>
 
   <p><b>Array concatenation: </b> The last example we'll do is array
-  concatenation.
+  concatenation.  Say we've put two arrays--or even two strings--into
+  RAM like:
 
+  <code>.string(string1) "'Tis hard to say, if greater want of skill\nAppear in writing or in judging ill;\n"
+.string(string2) "But, of the two, less dang'rous is th' offence\nTo tire our patience, than mislead our sense."</code>
+
+   These two strings occur at separate locations in RAM, potentially
+   with other things in between them.  We want to construct a single
+   string that consists of the contents of string 1 followed by the
+   contents of string 2, say followed by a 0 (as is the convention
+  with strings).  </p>
+  
+  <p>Once we phrase the problem this way, a procedure presents
+  itself rather simply:
+  
+  <ol>
+    <li>Find a free space in RAM</li>
+    <li>Copy string1 to that space</li>
+    <li>Copy string2 to that space, starting at the end of string1</li>
+  </ol>
+
+  So first of all, how do we find a free spot in RAM to put our
+  combined string?  Well, directives start filling RAM at address
+  1024, and the bottom of the stack is at 5000 (so the stack occupies
+  only address 5000 and below).  So this should leave any addresses
+  above 5000 free for use.  </p>
+
+  <p>But we cannot just always use 5001 as a free address.  The first
+  time we want to concatenate in a program, this will be fine, but the
+  second time it will not--that space will be used by the result of
+  our first concatenation!  So we can start at 5001, but if our first
+  concatenation uses 100 bytes, then our next concatenation should
+  start at address 5101.  So when we do anything with that space above
+  5000, we should always keep track of how much we've used so far.  To
+  do this, we'll mark off a spot in RAM to store for this address.
+  Since we have to store the address in bytes, we compute 5001 =
+  19:137 and then store: 
+
+  <code>.byte(first_free_address) 19,137</code>
+
+  So now the algorithm can be made more precise:
+  
+  <ol>
+    <li>Load <icode>first_free_address</icode> into X</li>
+    <li>Load address of string1 into Y</li>
+    <li>Loop through the characters starting at Y, copying them to
+    address X and incrementing X along the way, until we see a 0</li>
+    <li>Load address of string2 into Y</li>
+    <li>Loop through the characters starting at Y, copying them to
+    address X and incrementing X along the way, until we see a 0</li>
+    <li>Put a 0 at the current address X and increment X one last time
+    (so it points to the address just after the 0)</li>
+    <li>Store the current value of X at address <icode>first_free_address</icode></li>
+  </ol>
   </p>
   
+  <p>We can then start converting this to code immediately:
+
+  <avrasm>.byte(first_free_address) 19,137
+.string(string1) "\'Tis hard to say, if greater want of skill\\nAppear in writing or in judging ill;\\n"
+.string(string2) "But, of the two, less dang\'rous is th\' offence\\nTo tire our patience, than mislead our sense."
+ldi r30,lo8(first_free_address)
+ldi r31,hi8(first_free_address) ; Z = value of label first_free_address
+ld r27,Z+
+ld r26,Z                        ; X = what was stored at first_free_address, i.e., 5001
+ldi r28,lo8(string1)
+ldi r29,hi8(string1)            ; Y = string1
+loop1_start:
+ld r16,Y+                       ; r16 = char at address Y, and inc Y
+cpi r16,0
+breq string2_start              ; if r16 is 0, move on to string2
+st X+,r16                       ; store r16 ad address X, and inc X
+rjmp loop1_start
+string2_start:
+ldi r28,lo8(string2)
+ldi r29,hi8(string2)            ; Y = string2
+loop2_start:
+ld r16,Y+                       ; r16 = char at address Y, and inc Y
+cpi r16,0
+breq done                       ; if r16 is 0, we\'re done!
+st X+,r16                       ; store r16 at address X, and inc X
+rjmp loop2_start
+done:
+st X+,r16                       ; store one last 0 at the end of the concatenation, and inc X
+st Z,r26
+st -Z,r27                       ; Store X back at address first_free_address (which is still in Z)</avrasm>
+  </p>
+
+  <warning title="Concatenation can also be expensive">
+    <p>Note that to concatenate two arrays meant copying the contents
+    of both of them!  This means that our harmless little "append an
+    element to an array" code from chapter 3:
+
+    <icode>my_array += [6]</icode>
+
+    may not just be a single ISA operation to plop 6 at the end of the
+    array, but might require a whole copy of the entire array first!
+    Now, if we knew in advance that we were going to have to append
+    things to our array, we could ensure that enough bytes after the
+    array in RAM are also unused so that we could just plop the right
+    values immediately after the array and append to it that way.</p>
+    
+    <p>Once again, the details of exactly how our data is stored
+    (beyond what we can see just by knowing the high-level prgramming
+    language) can affect the efficiency of our high-level programs and
+    what code we write.</p>
+  </warning>
+
+  <aside title="Free RAM is expensive">
+    <p>In the above algorithm, we had this step of "Find some unused
+    area in RAM", and we dispatched it in a relatively simple way:
+    Have a single barrier above which everything is considered
+    "unused" and below which everything is "used".  This is great if
+    there is unlimited RAM and our program is simple, but real
+    computers have to deal with a circumstance where a program might
+    use some RAM for a while and then decide it no longer needs that
+    RAM.</p>
+
+    <p>For example, suppose we did a concatenation which used 100
+    bytes, taking up the space from 5001 through 5100.  Then we did
+    another concatenation using the next 100 bytes from 5101 to 5200.
+    Then we decided we were done using te bytes 5001 to 5100 (maybe we
+    printed that string out to the user and no longer need to store
+    it, say).  </p>
+    
+    <p>We would like in these circumtances to keep track of the fact
+    that next time we need some unused RAM (provided we ask for 100
+    bytes or fewer) we have the option of using the byte 5101 to 5100,
+    rather than just continuing onward from 5201 where we left
+    off.</p>
+
+    <p>In general, there might be many small chunks of unused RAM in
+    our "heap" of used RAM, and keeping track of all of them in a
+    non-wasteful way is a challenging problem whose solutions can make
+    use of quite complicated data structures.  Code that controls this
+    process is called a "memory allocator", which you may learn about
+    if your studies take you in the direction of learning about
+    operating systems or the C programming language.</p>
+  </aside>
   </text></section>
 
 </section>
