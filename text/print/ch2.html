@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><link rel="stylesheet" type="text/css" href="/sim/py/sim.css"><link rel="stylesheet" type="text/css" href="/sim/avr/sim.css"><link rel="stylesheet" type="text/css" href="/sim/bin/sim.css"><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><script type="text/javascript" src="/sim/cm/codemirror.js"></script><script type="text/javascript" src="/sim/py/expr_ng.js"></script><script type="text/javascript" src="/sim/py/sim.js"></script><script type="text/javascript" src="/sim/avr/sim.js"></script><script type="text/javascript" src="/sim/bin/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2')">2: Chapter 2</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_1')">2.1: Programming as a means of making systems</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2')">2.2: Algorithms: Expressing solutions in human language, but in terms of the computer's primitives</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_2_1')">2.2.1: Edge-cases</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2_2')">2.2.2: Efficiency</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_2_3')">2.2.3: Scalability</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_3')">2.3: Python: Expressing algorithms using a programming language</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_3_1')">2.3.1: Running Python</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_3_2')">2.3.2: A first Python example</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_3_3')">2.3.3: Python language summary</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4')">2.4: A detailed explanation of Python</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_1')">2.4.1: Python syntax</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2')">2.4.2: Assignments</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_2_1')">2.4.2.1: Variable names</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2_2')">2.4.2.2: Expressions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_2_3')">2.4.2.3: Strings</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4_3')">2.4.3: Print</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4')">2.4.4: Flow control</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_4_4_1')">2.4.4.1: if/else</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4_2')">2.4.4.2: tests</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_4_4_3')">2.4.4.3: while</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_4_5')">2.4.5: Comments and whitespace</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_5')">2.5: Simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_5_1')">2.5.1: Factorial</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_5_2')">2.5.2: Primality testing</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_5_3')">2.5.3: Counting digits</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_6')">2.6: Applications</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_2_6_1')">2.6.1: Search engine</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_2')">2.6.2: Game console</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_3')">2.6.3: Mobile phone</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_2_6_4')">2.6.4: Debrief</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_2_7')">2.7: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_programming')">programming</a><br><a href="#" ng-click="goto_loc('def_executing')">executing</a><br><a href="#" ng-click="goto_loc('def_edge-case')">edge-case</a><br><a href="#" ng-click="goto_loc('def_efficiency')">efficiency</a><br><a href="#" ng-click="goto_loc('def_scalability')">scalability</a><br><a href="#" ng-click="goto_loc('def_syntax')">syntax</a><br><a href="#" ng-click="goto_loc('def_semantics')">semantics</a><br><a href="#" ng-click="goto_loc('def_modulus')">modulus</a><br><a href="#" ng-click="goto_loc('def_syntax tree')">syntax tree</a><br><a href="#" ng-click="goto_loc('def_camel casing')">camel casing</a><br><a href="#" ng-click="goto_loc('def_value (expression)')">value (expression)</a><br><a href="#" ng-click="goto_loc('def_evaluation (expression)')">evaluation (expression)</a><br><a href="#" ng-click="goto_loc('def_concatenation')">concatenation</a><br><a href="#" ng-click="goto_loc('def_escape')">escape</a><br><a href="#" ng-click="goto_loc('def_newline')">newline</a><br><a href="#" ng-click="goto_loc('def_succeed (tests)')">succeed (tests)</a><br><a href="#" ng-click="goto_loc('def_fail (tests)')">fail (tests)</a><br><a href="#" ng-click="goto_loc('def_infinite loop')">infinite loop</a><br><a href="#" ng-click="goto_loc('def_whitespace')">whitespace</a><br><a href="#" ng-click="goto_loc('def_comment')">comment</a><br><a href="#" ng-click="goto_loc('def_off-by-one error')">off-by-one error</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_2"></div><div class="text"><div class="header">2: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_2"></div><div class="text"><div class="header">2: 
 	  Chapter 2</div></div></div><div class="section"><div id="sec_2_1"></div><div class="text"><div class="header">2.1: 
 	  Programming as a means of making systems</div><div class="figure"><img src="/text/figures/2.1.fig1.png" width="800px"><div class="caption">Figure 2.1.1: We are now going to study programming at a high level
 (low-level programming will happen at the ISA
@@ -30,12 +30,12 @@ compiler looks like programming the computer.</p>
 programming language in general in 2.2, as well as strategies for
 writing effective programs.  Then, starting in 2.3, we'll introduce an
 actual programming language: Python, and will walk through the process
-of writing Python programs to solve specified problems.  </p><p><div id="def_programming" class="definition"></div>Most generally, <b>programming</b> is expressing to the computer: 
+of writing Python programs to solve specified problems.  </p><p><span id="def_programming" class="definition"></span>Most generally, <b>programming</b> is expressing to the computer: 
 <ul><li>A sequence of steps for it to perform--also known as a <b>program</b></li>
 <li>specified in way that the computer understands--also known as a <b>programming language</b></li></ul>
 
 
-<div id="def_executing" class="definition"></div>When the computer subsequently executes the steps you gave it, it is
+<span id="def_executing" class="definition"></span>When the computer subsequently executes the steps you gave it, it is
 said to be <b>running</b> or <b>executing</b> the program.  </p><p>In general, you approach a computer with a human-level problem: You want to find out how much you spend on cookies each month, or maybe you want to make a Pacman clone.  However a computer has no understanding of such things--It does not know what a cookie is and does not come with a command for "play pacman".  But it does (at least, at the level we're thinking about it currently) provide you with a programming language--that is, you can tell it to do certain specific operations that are allowed by the language.  Beyond that, a computer is a machine--if you give it a sequence of commands in a programming language, it very simply does everything listed in that program, and nothing else.  It has no understanding of--let alone sympathy for--its owner's 'intent'.  </p><div class="code"><pre>A classic parable--"If your husband were a computer": 
 
 "Honey, while you're out, could you stop by the store and buy one
@@ -90,7 +90,7 @@ the scores</div><p>This procedure can now believably be broken down into simple 
 	some understanding of what you can and cannot expect of the
 	inputs.  For instance, try to follow through the above
 	algorithm if <div class="code"><pre>score1 = 10, score2 = 10, score3 = 7</pre></div>
-	It doesn't print anything at all!  <div id="def_edge-case" class="definition"></div>Such
+	It doesn't print anything at all!  <span id="def_edge-case" class="definition"></span>Such
 	inputs are sometimes called <b>corner-cases</b> or
 	<b>edge-cases</b>.  They are not generally what your algorithm
 	will have to deal with, but they can still happen in theory,
@@ -140,7 +140,7 @@ making it three times as fast as the original algorithm, at least in
 the event that player 3 wins.  </p><p>(As an aside: It is worth revisiting the question of edge-cases
 with this improved algorithm, and noting that while our previous
 algorithm printed nothing in case of a tie, this one may actively
-print the wrong thing--try it and see!)</p><p><div id="def_efficiency" class="definition"></div>This is an example of analyzing an
+print the wrong thing--try it and see!)</p><p><span id="def_efficiency" class="definition"></span>This is an example of analyzing an
 algorithm's <b>efficiency</b>--that is, analyzing how much of a given
 resource an algorithm may require under various circumstances.
 That definition is intentionally quite vague: "Resources" may refer to
@@ -206,7 +206,7 @@ update the display 10 times per second at most (i.e., run the game at
 comes from updating the picture on the screen at the very least 30
 times per second, so limiting a game to 10 frames per second would
 result in noticeable stuttering and could easily render the game
-unplayable.  </p><p><div id="def_scalability" class="definition"></div>This is an analysis of
+unplayable.  </p><p><span id="def_scalability" class="definition"></span>This is an analysis of
 <b>scalability</b>--that is, of questions about how well the algorithm
 performs when we apply it to scaled-up versions of the same problem,
 and about how big the problem can become before we are forced to
@@ -225,10 +225,10 @@ your time right at the start of such a project.  </p></div></div><div class="sec
       language</b>.  In this section, we'll be introducing the rules
       governing a specific programming language--Python.  </p><p>In this section, we'll provide a basic introduction to the
       language and get you running your first program.  In the
-      subsequent sections, we'll introduce the <div id="def_syntax" class="definition"></div>
+      subsequent sections, we'll introduce the <span id="def_syntax" class="definition"></span>
       <b>syntax</b>--that is, what are the rules that determine
       whether the instructions in a program are valid, and the
-      <b>semantics</b>--<div id="def_semantics" class="definition"></div> that is, what do the
+      <b>semantics</b>--<span id="def_semantics" class="definition"></span> that is, what do the
       various instructions actually do.</p><p>In this chapter alone, we will discuss only a subset of
       Python, which will be sufficient to accomplish many goals, at the
       price of being less powerful than the whole Python language
@@ -258,7 +258,7 @@ your time right at the start of such a project.  </p></div></div><div class="sec
 	sort of person who would rather play the game without first
 	reading the rules, a few example programs and challenges are
 	available by clicking the "Python" link on the sidebar, or by
-	clicking <b>Answer: </b><br>here.  </p><p>To use the simulator, you write your program in the text
+	clicking <a href="sim/py/python.html">here</a>.  </p><p>To use the simulator, you write your program in the text
 	box on the right.  When ready, click the "run" button above
 	it, whereupon the simulation will be prepared.  At this point,
 	no changes to the code can be made until you press the "reset"
@@ -333,7 +333,7 @@ Just as in grade school, before you learned to think of 13 divided by
 4 as 3.25, you may have instead learned it as "13 divided by 4 is 3
 with a remainder of 1".  That is, 4 goes into 13 three times, but then
 there's one left over.</p><p>In Python, the "/" operation represents the decimal division--so 13
-/ 4 is 3.25.  <div id="def_modulus" class="definition"></div>The "%" operation performs integer
+/ 4 is 3.25.  <span id="def_modulus" class="definition"></span>The "%" operation performs integer
 division and gives back not the quotient, but the remainder.  So 13 %
 4 is 1, because 4 goes 3 times into 13, with a remainder of 1.  This
 operator is known as the <b>modulus</b> operator.</p><div class="aside"><b>Aside: </b><p>In case you're wondering where this word "modulus" comes
@@ -548,7 +548,7 @@ follow along with the program, one line at a time, to see:
 	variable name can be anything with letters, numbers, and
 	underscores, but not starting with a number, and not a Python
 	keyword.  So we can decide to call our variable, say, 
-	<div class="icode">H3LL0_th3re_</div>.  </p><p>But what about the expression bit?  Expressions are defined
+	<span class="icode">H3LL0_th3re_</span>.  </p><p>But what about the expression bit?  Expressions are defined
 	in the table as any valid combination of numbers, strings, and
 	variables using the basic operations and parentheses for
 	grouping.  So if we want to store the value 89*90, we can do
@@ -584,7 +584,7 @@ follow along with the program, one line at a time, to see:
 	whereas "Accismus very kerfuffle the, bromnopnea in" is not,
 	even without knowing the meaning of many of the words
 	involved, you do not need to understand Python semantics in
-	order to tackle its syntax.</p><p><div id="def_syntax tree" class="definition"></div>To better understand the syntax, we
+	order to tackle its syntax.</p><p><span id="def_syntax tree" class="definition"></span>To better understand the syntax, we
 	will introduce another way of visualizing it, called a
 	<b>syntax tree</b>.  This is a visualization that highlights
 	the relationships between the syntax elements.   The
@@ -757,10 +757,10 @@ we wanted to name a variable as 'rolling sphere kinetic energy'), we
 will have all the words be lower-case and separated by underscores
 (since spaces are not allowed in variable names).  
 
-<div id="def_camel casing" class="definition"></div>There is another convention that some people
+<span id="def_camel casing" class="definition"></span>There is another convention that some people
 use, which is to have nothing separate the words but to capitalize the
 first letter of each word, as in
-<div class="icode">RollingSphereKineticEnergy</div>.  This is called <b>camel
+<span class="icode">RollingSphereKineticEnergy</span>.  This is called <b>camel
 casing</b>.</p></div></div><div class="section"><div id="sec_2_4_2_2"></div><div class="text"><div class="header">2.4.2.2: 
 	  Expressions</div><div class="summary"><b>Summary: </b> Expressions are the usual things, but they have to
 	make sense: No adding a string to a number or dividing a
@@ -770,12 +770,12 @@ casing</b>.</p></div></div><div class="section"><div id="sec_2_4_2_2"></div><div
 	<br><br><b>Definitions: </b><a href="#def_value%20(expression)">value (expression)</a>, <a href="#def_evaluation%20(expression)">evaluation (expression)</a>, <a href="#def_concatenation">concatenation</a></div><p>The right-hand side of an assignment is required to be an
 expression, i.e. any variable name, number, string, or valid
 combination thereof using arithmetic operations.
-</p><p><div id="def_value (expression)" class="definition"></div>Any expression has a <b>value</b>
+</p><p><span id="def_value (expression)" class="definition"></span>Any expression has a <b>value</b>
 which is the result of retrieving what is stored in each variable
 mentioned in the expression and applying all the specified arithmetic
-operations.  For example, the line <div class="icode">x = 2 * 3</div>
-stores 6 into x because the value of the expression <div class="icode">2 *
-3</div> is 6.  <div id="def_evaluation (expression)" class="definition"></div>The process of
+operations.  For example, the line <span class="icode">x = 2 * 3</span>
+stores 6 into x because the value of the expression <span class="icode">2 *
+3</span> is 6.  <span id="def_evaluation (expression)" class="definition"></span>The process of
 determining the value of an expression is called
 <b>evaluation</b>, and happens as follows:
 
@@ -805,13 +805,13 @@ y = x + 1
 x = 2
 x = 5*x + 2*(3 - y)</pre></div>
 
-The first assignment sets <div class="icode">x</div> to 4.  The second one sets
-y to whatever is the value of <div class="icode">x + 1</div>.  To evaluate this
-expression, we plug in the current value of <div class="icode">x</div> (namely
-4) in place of the name <div class="icode">x</div> in this expression, yielding
+The first assignment sets <span class="icode">x</span> to 4.  The second one sets
+y to whatever is the value of <span class="icode">x + 1</span>.  To evaluate this
+expression, we plug in the current value of <span class="icode">x</span> (namely
+4) in place of the name <span class="icode">x</span> in this expression, yielding
 4 + 1, and then we perform the arithmetic to get a value of 5.  So the
-second assignment assigns the value 5 to <div class="icode">y</div>.  The third
-assignment stores the value 2 in <div class="icode">x</div>.</p><p>Finally, to find out what the last assignment stores in x, we need
+second assignment assigns the value 5 to <span class="icode">y</span>.  The third
+assignment stores the value 2 in <span class="icode">x</span>.</p><p>Finally, to find out what the last assignment stores in x, we need
 to evaluate the last expression
 
 <div class="code"><pre>5*x + 2*(3 - y)</pre></div>
@@ -845,7 +845,7 @@ is not a valid expression and will similarly elicit an error.  </p><p>We can, ho
 
 <div class="code"><pre>"hello" + "world"</pre></div>
 
-is a valid expression, and its value is the <div id="def_concatenation" class="definition"></div><b>concatenation</b> (i.e., sticking the two
+is a valid expression, and its value is the <span id="def_concatenation" class="definition"></span><b>concatenation</b> (i.e., sticking the two
 strings together to make one long string) of the two strings:
 "helloworld"</p><p>So consider the following examples: </p><div class="code"><pre>x = Hello world!
 y = z+1
@@ -877,7 +877,7 @@ text inside the quotes.  But what if we change that text to itself
 contain a quote?  For instance, </p><div class="code"><pre>print("hi")</pre></div><p>prints: </p><div class="code"><pre>hi</pre></div><p>But what if we want to print the following: </p><div class="code"><pre>"hi", he said</pre></div><p>We might try </p><div class="code"><pre>print(""hi", he said")</pre></div><p>But Python understands this as three things: </p><p>The string "", which contains no text, followed by the
 variable called hi (since this is outside any quotes, so is not a part
 of the string), followed by the string ", he said".
-Disaster follows. </p><p>To include a quote, then, you need to <div id="def_escape" class="definition"></div><b>escape</b> it--that is, you precede it in the string
+Disaster follows. </p><p>To include a quote, then, you need to <span id="def_escape" class="definition"></span><b>escape</b> it--that is, you precede it in the string
 with a backslash.  In general, backslash is the string escape
 character, meaning that whatever character comes after it doesn't have
 its usual meaning, but has some special meaning.  The usual meaning of
@@ -886,7 +886,7 @@ if we precede it with a backslash, then its meaning just becomes just
 "the double-quote character".  So </p><div class="code"><pre>print("\"hi\", he said")</pre></div><p>accomplishes the desired result.  Similarly, if we want to store a
 string that contains multiple lines, like the string</p><div class="code"><pre>XXO
 _O_
-OX_</pre></div><p>which might represent a tic-tac-toe board in a game we're programming.  </p><p><div id="def_newline" class="definition"></div>It turns out that if we escape the character n,
+OX_</pre></div><p>which might represent a tic-tac-toe board in a game we're programming.  </p><p><span id="def_newline" class="definition"></span>It turns out that if we escape the character n,
 when escaped, has the special meaning of `the <b>newline</b>
 character'--that is, a character which represents going to another
 line.   Thus </p><div class="code"><pre>print("XXO\n_O_\nOX_")</pre></div><p>prints the above.  </p></div></div><div class="section"><div id="sec_2_4_3"></div><div class="text"><div class="header">2.4.3: 
@@ -1098,10 +1098,10 @@ which have the following meanings:
 <tr><td>!=</td><td>Not equal to</td></tr>
 </table>
 </p><p>On either side of the comparison operator can be an expression.
-The test is said to <div id="def_succeed (tests)" class="definition"></div><b>succeed</b> or to
+The test is said to <span id="def_succeed (tests)" class="definition"></span><b>succeed</b> or to
 <b>evaluate to true</b> if the values of the two expressions do in
 fact compare in the way that the comparison operator dictates.
-<div id="def_fail (tests)" class="definition"></div>If they do not, then the test is said to
+<span id="def_fail (tests)" class="definition"></span>If they do not, then the test is said to
 <b>fail</b> or to <b>evaluate to false</b>.</p><p>So for example, we can test if 2*x is greater than 5 with the test: </p><div class="code"><pre>2*x &gt; 5</pre></div><p>We can test if the variable x stores the string "hello" with </p><div class="code"><pre>x == "hello"</pre></div><p>If we have three variables x, y, and z, which all store numbers, and we want to print something if x + y is not the same as z, we can do: </p><div class="code"><pre>if(x+y != z):
    print("something")
 </pre></div><p>One final dumb example is </p><div class="code"><pre>if(1 == 1): print("hello") else: print("something
@@ -1250,7 +1250,7 @@ while(x &lt; 1000):
 print("Done")</pre></div><p>If you're not comfortable with why this program accomplishes this goal, single-step it in the same manner as before to see.</p><p>Finally, in the spirit of the last dumb if/else example, we also
 have a dumb while loop example.  Remember, 1 == 1 is still a valid
 test, so </p><div class="code"><pre>while(1 == 1):
-   print(":)")</pre></div><p>is a valid while loop.  <div id="def_infinite loop" class="definition"></div>Since the test is
+   print(":)")</pre></div><p>is a valid while loop.  <span id="def_infinite loop" class="definition"></span>Since the test is
 always true, and the while statement is supposed to repeat the
 indented lines for as long as the condition is true, it will print
 smileys forever.  This is called an <b>infinite loop</b>.  They
@@ -1267,13 +1267,13 @@ while(x*x % 4 != 3):
 	  otherwise only contain spaces and tabs.  It also ignores
 	  anything after a # symbol, so you can use this to insert
 	  English comments into your code explaining what it
-	  does.<br><br><b>Definitions: </b><a href="#def_whitespace">whitespace</a>, <a href="#def_comment">comment</a></div><p><div id="def_whitespace" class="definition"></div>As you may have gathered from
+	  does.<br><br><b>Definitions: </b><a href="#def_whitespace">whitespace</a>, <a href="#def_comment">comment</a></div><p><span id="def_whitespace" class="definition"></span>As you may have gathered from
 	    previous examples that inadvertently included blank lines,
 	    python ignores any line that is blank, or any line that
 	    includes nothing but spaces or tabs.  Such lines are
 	    called <b>whitespace</b> (presumably because the
 	    background colors for many text editors is white, and so
-	    the blank space is white).</p><p><div id="def_comment" class="definition"></div>Python will also ignore anything
+	    the blank space is white).</p><p><span id="def_comment" class="definition"></span>Python will also ignore anything
 	    after a '#' character on any line.  Text preceded by a
 	    '#' can therefore be used to annotate the program,
 	    explaining what it does inline.  These pieces of
@@ -1372,9 +1372,9 @@ Step last: print the number stored in the variable answer.
 So clearly at some point we'll need to make a variable called answer.
 May as well make that step 2.  So step 2 will be an assignment (a
 valid operation), setting answer equal to...what?  Clearly we cannot
-just say <div class="icode">answer = input!</div> since ! is not one of the
+just say <span class="icode">answer = input!</span> since ! is not one of the
 operations that Python understands.  So let's just start
-small--<div class="icode">answer = 1</div>.
+small--<span class="icode">answer = 1</span>.
 
 <div class="code"><pre>Step 1: Store the number whose factorial we want in a variable called input.  
 Step 2: Store the number 1 in the variable answer.
@@ -1497,7 +1497,7 @@ counter = 4</td>
 counter was set to 4 at the end of the loop body, and then because
 counter &lt; input was false (4 is not less than 4), the next iteration
 of the loop, which would have done the multiplication by 4, did not
-run.</p><p><div id="def_off-by-one error" class="definition"></div>This is a particularly notorious kind of runtime error called an
+run.</p><p><span id="def_off-by-one error" class="definition"></span>This is a particularly notorious kind of runtime error called an
 <b>off-by-one error</b>.  There are a couple of possible fixes.  The simplest
 is that we want the loop to run when counter is less than input or
 equal to it.  To get this behavior, we replace &lt; by &lt;= to get:
@@ -1594,7 +1594,7 @@ Step 5: If is_prime is 1, print "n is prime"
 Step 6: If is_prime is 0, print "n is not prime"</pre></div><p><b>Program:</b></p><p>To turn this into an honest program is reasonably
 	straightforward.  The elements we have not yet used are the
 	tests, which are accomplished with the if/else instructions.
-	How to see if <div class="icode">counter</div> divides <div class="icode">n</div>
+	How to see if <span class="icode">counter</span> divides <span class="icode">n</span>
 	evenly?  One way to do it is to divide n by counter and see if
 	the quotient is an integer.  However we don't yet have any
 	operation for testing "is this variable an integer",
@@ -1644,7 +1644,7 @@ if(is_prime == "penguin goes shopping"):
 	it.</p><p>This program is also far, far less efficient than it could
 	be in many ways.  You can probably think of improvements
 	already--for instance, we don't have to test all the possible
-	divisors less than <div class="icode">n</div>--we can certainly get away
+	divisors less than <span class="icode">n</span>--we can certainly get away
 	with testing only to n/2, since if n/2 evenly divides n, then
 	2 also evenly divides n, so we would have caught that already.
 	Also, none of the numbers between n/2 and n can possibly
@@ -1681,9 +1681,9 @@ if(is_prime == "penguin goes shopping"):
 	  0.128.  So it takes three divisions to get to below 1, and
 	  indeed, 128 has three digits.</p><p>To accomplish this programmatically, we will need two
 	  variables--one to store the number that we will repeatedly
-	  divide--say this is called <div class="icode">n</div>, and another to
+	  divide--say this is called <span class="icode">n</span>, and another to
 	  store how many times we've divided so far--say this one is
-	  called <div class="icode">digit_count</div>.  Then we can write the
+	  called <span class="icode">digit_count</span>.  Then we can write the
 	  algorithm more precisely as: </p><div class="code"><pre>Step 1: n = 1238129 (or whatever)
 Step 2: digit_count = 0
 Step 3: Repeat the following as long as n &gt; 1:
@@ -1699,14 +1699,14 @@ digit_count at 0 or at 1?  We can tell by single-stepping the program
 in a simple case, as we did before, or you can run the program with a
 few different inputs as examples.  Convince yourself that we are OK.
 </p><p>There is also a tricky edge-case that may have slipped your notice,
-however: Consider what happens when we start with <div class="icode">n = 1</div>:
-First <div class="icode">digit_count</div> will be set to 0, and then we'll run the
-while loop as long as <div class="icode">n &gt; 1</div>.  But even at the start, this
-test fails, as <div class="icode">n = 1</div>, so <div class="icode">n</div> is not greater than
+however: Consider what happens when we start with <span class="icode">n = 1</span>:
+First <span class="icode">digit_count</span> will be set to 0, and then we'll run the
+while loop as long as <span class="icode">n &gt; 1</span>.  But even at the start, this
+test fails, as <span class="icode">n = 1</span>, so <span class="icode">n</span> is not greater than
 1!  So the stuff inside the while loop gets skipped entirely, and the
-value of <div class="icode">digit_count</div>--namely 0--gets printed.  And this is
+value of <span class="icode">digit_count</span>--namely 0--gets printed.  And this is
 definitely the wrong answer--the number 1 has one digit!  </p><p>In fact, this isn't the only issue--this problem shows up whenever
-<div class="icode">n</div> gets set to 1 during execution, for example if it started
+<span class="icode">n</span> gets set to 1 during execution, for example if it started
 at 1000, we would get the wrong answer of 3.  </p><p>To fix this, we simply need to realize that we wrote our algorithm
 correctly--we stop if n is below 1--but our program doesn't reflect
 this--it stops if n is below 1 <i>or if n is equal to 1</i>.  We can

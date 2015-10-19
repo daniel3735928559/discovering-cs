@@ -1,5 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><link rel="stylesheet" type="text/css" href="/sim/py/sim.css"><link rel="stylesheet" type="text/css" href="/sim/avr/sim.css"><link rel="stylesheet" type="text/css" href="/sim/bin/sim.css"><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><script type="text/javascript" src="/sim/cm/codemirror.js"></script><script type="text/javascript" src="/sim/py/expr_ng.js"></script><script type="text/javascript" src="/sim/py/sim.js"></script><script type="text/javascript" src="/sim/avr/sim.js"></script><script type="text/javascript" src="/sim/bin/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_7')">7: Microarchitecture</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_7_1')">7.1: Where are we now?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_2')">7.2: What is a microarchitecture?</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_7_2_1')">7.2.1: State machines</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_7_2_1_1')">7.2.1.1: A state machine for our
-      microarchitecture</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_7_2_2')">7.2.2: Circuits</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_7_3')">7.3: Our microarchitecture as a state machine</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_7_3_1')">7.3.1: ldi</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_3_2')">7.3.2: ld</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_3_3')">7.3.3: st</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_3_4')">7.3.4: add, sub, cp</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_3_5')">7.3.5: subi, cpi</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_3_6')">7.3.6: rjmp</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_3_7')">7.3.7: breq</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_7_4')">7.4: Our microarchitecture as a circuit</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_7_4_1')">7.4.1: Circuit components</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_4_2')">7.4.2: ldi</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_4_3')">7.4.3: ld</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_7_4_4')">7.4.4: Everything else</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_7_5')">7.5: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_microarchitecture')">microarchitecture</a><br><a href="#" ng-click="goto_loc('def_auxiliary register')">auxiliary register</a><br><a href="#" ng-click="goto_loc('def_component')">component</a><br><a href="#" ng-click="goto_loc('def_width')">width</a><br><a href="#" ng-click="goto_loc('def_analog')">analog</a><br><a href="#" ng-click="goto_loc('def_digital')">digital</a><br><a href="#" ng-click="goto_loc('def_high, low')">high, low</a><br><a href="#" ng-click="goto_loc('def_ALU')">ALU</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_7"></div><div class="text"><div class="header">7: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_7"></div><div class="text"><div class="header">7: 
 	  Microarchitecture</div></div></div><div class="section"><div id="sec_7_1"></div><div class="text"><div class="header">7.1: 
 	  Where are we now?</div><p>We started with two organizing questions: "How do we program
       a computer?" and "How do we build a computer?"  In chapters 2
@@ -32,7 +31,7 @@
     perform the corresponding operations.  That is, the ISA--with its
     instruction set and encoding--was the computer's interface.  
 
-    <div id="def_microarchitecture" class="definition"></div>A <b>microarchitecture</b> is an
+    <span id="def_microarchitecture" class="definition"></span>A <b>microarchitecture</b> is an
     implementation of that interface. </p><p>As with most of the implementations we've discussed before, the
     the implementation of a computer will be done in layers: We will
     discuss it in terms of high-level components in this chapter, and
@@ -188,7 +187,7 @@ its "open but locked" state:
 	determine that register 17 needs to be written to and the
 	value 89 needs to be written.  These numbers then need to be
 	available to the writeback stage, which will actually store
-	the value 89 into register 17.  </p><p><div id="def_auxiliary register" class="definition"></div>For this purpose, the
+	the value 89 into register 17.  </p><p><span id="def_auxiliary register" class="definition"></span>For this purpose, the
 	microarchitecture will introduce some <b>auxiliary
 	registers</b>--that is, named memory slots where any given
 	stage can store values and a later stage can read those values
@@ -203,11 +202,11 @@ its "open but locked" state:
       computer will be electronic circuits.  At a high-level, circuits
       are made up of <b>components</b> connected with <b>wires</b>.
 
-      <div id="def_component" class="definition"></div>Components are black boxes of circuitry
+      <span id="def_component" class="definition"></span>Components are black boxes of circuitry
       that we specify in terms of their interface only: That is, they
       have some specified numbers of input and output wires, and we
       specify what the outputs do when certain inputs are
-      provided.</p><p><div id="def_width" class="definition"></div>For us, each input and output will be given
+      provided.</p><p><span id="def_width" class="definition"></span>For us, each input and output will be given
       a name and will consist of a collection of wires--i.e. channels
       that can carry electrical current.  The number of wires in a
       particular input or output is called its <b>width</b>.
@@ -216,12 +215,12 @@ its "open but locked" state:
       could draw this like so:</p><div class="figure"><img src="/text/figures/7.2.2.fig1.png" width="300px"><div class="caption">Figure 7.2.2.1: </div></div><p>But sometimes drawing each of the wires involved in a given
       input gets tedious, so we may also at times draw the input of
       width 3 as a single wire with some notation indicating that that
-      one line indicates three wires:</p><div class="figure"><img src="/text/figures/7.2.2.fig2.png" width="300px"><div class="caption">Figure 7.2.2.2: </div></div><p><div id="def_analog" class="definition"></div>Now, in general, wires can carry varying
+      one line indicates three wires:</p><div class="figure"><img src="/text/figures/7.2.2.fig2.png" width="300px"><div class="caption">Figure 7.2.2.2: </div></div><p><span id="def_analog" class="definition"></span>Now, in general, wires can carry varying
       levels of electrical current, and components whose behavior
       depends on the precise amount of current on its input wires is
       called an <b>analog</b> circuit.  Such a circuit may also send
       current on its output wires at varying levels depending on the
-      input currents.   <div id="def_digital" class="definition"></div>All the components
+      input currents.   <span id="def_digital" class="definition"></span>All the components
       we will discuss here will instead be <b>digital</b>--that is,
       the output will only depend on whether each input wire has
       current flowing and will not care about how much, and the output
@@ -238,7 +237,7 @@ its "open but locked" state:
       at least partly wrong; sort it out.</p></div><p>Since all of our circuits are digital, we can describe the
       state of the input wires at any time by saying which ones have
       current on them and which do not.  There are a few short-hands
-      for doing this: <div id="def_high, low" class="definition"></div>If an input wire has
+      for doing this: <span id="def_high, low" class="definition"></span>If an input wire has
       current coming in, we say that input is <b>high</b>, and if not,
       we say it is <b>low</b>. In a diagram, we might denote a
       wire that is high with a 1, and one that is low with a 0.  For
@@ -263,7 +262,7 @@ its "open but locked" state:
       affects the output.  There is one output--the data output--which
       will always reflect the value stored in the memory slot whose
     address is given on the address input.  </p><div class="figure"><img src="/text/figures/7.2.2.fig5.png" width="600px"><div class="caption">Figure 7.2.2.5: </div></div><p><b>Arithmetic logic unit: </b>Remember how one of the
-      basic things a computer can do is arithmetic?  <div id="def_ALU" class="definition"></div>The <b>Arithmetic logic unit</b>, or <b>ALU</b>
+      basic things a computer can do is arithmetic?  <span id="def_ALU" class="definition"></span>The <b>Arithmetic logic unit</b>, or <b>ALU</b>
       is the piece of circuitry that accomplishes this.  It has four
       inputs: two called A and B respectively for the incoming numbers
       to be operated on, one called op to indicate what operation, and
@@ -616,7 +615,7 @@ Taking this approach, we get the state diagram: </p><div class="figure"><img src
       components we'll need: Of course we have to get the instruction,
       so we'll need the program memory (PM) and the PC.  Also we'll be
       storing something in a register, so we need the register file
-      (RF).  Finally, looking back at the <b>Answer: </b><br>state machine for ldi, we'll need
+      (RF).  Finally, looking back at the <a href="drawings/sm_ldi.png">state machine for ldi</a>, we'll need
       the auxiliary registers INST, REG, and VAL.  Laying these all
       out, ready to be connected, we get:</p><div class="figure"><img src="/text/figures/7.4.2.fig1.png" width="800px"><div class="caption">Figure 7.4.2.1: </div></div><p>Further, without thinking too hard, we can see some of the
       connections straight away: The basic flow of an ldi instruction

@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><link rel="stylesheet" type="text/css" href="/sim/py/sim.css"><link rel="stylesheet" type="text/css" href="/sim/avr/sim.css"><link rel="stylesheet" type="text/css" href="/sim/bin/sim.css"><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><script type="text/javascript" src="/sim/cm/codemirror.js"></script><script type="text/javascript" src="/sim/py/expr_ng.js"></script><script type="text/javascript" src="/sim/py/sim.js"></script><script type="text/javascript" src="/sim/avr/sim.js"></script><script type="text/javascript" src="/sim/bin/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6')">6: Encodings: Everything is numbers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_1')">6.1: Where are we now?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_2')">6.2: Generalities about encodings</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_2_1')">6.2.1: Enumeration as encoding</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_6_3')">6.3: Encoding of instructions</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_3_1')">6.3.1: An enumeration-based instruction encoding</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_3_2')">6.3.2: The AVR ISA encoding</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_6_4')">6.4: Search engine: The encoding of text</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_4_1')">6.4.1: Text--ASCII</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_4_2')">6.4.2: Text--Unicode</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_4_3')">6.4.3: Which encoding to use?</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_6_5')">6.5: Game console: The encoding of graphics</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_5_1')">6.5.1: Pixels--RGB</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_5_2')">6.5.2: Images--BMP</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_6_6')">6.6: Mobile phone: The encoding of sensor data</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_6_1')">6.6.1: Sensor data with repetition for error-detection</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_6_2')">6.6.2: Sensor data with parity-bit error detection</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_6_7')">6.7: Case-studies revisited</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_7_1')">6.7.1: Search engine: Life cycle of a search</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_7_2')">6.7.2: Game console: Life cycle of a button press</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_7_3')">6.7.3: Mobile phone: Life cycle of a text message</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_6_8')">6.8: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_encoding')">encoding</a><br><a href="#" ng-click="goto_loc('def_decodable')">decodable</a><br><a href="#" ng-click="goto_loc('def_efficient (encoding)')">efficient (encoding)</a><br><a href="#" ng-click="goto_loc('def_error-resistant')">error-resistant</a><br><a href="#" ng-click="goto_loc('def_enumeration (encoding)')">enumeration (encoding)</a><br><a href="#" ng-click="goto_loc('def_opcode')">opcode</a><br><a href="#" ng-click="goto_loc('def_backwards compatible')">backwards compatible</a><br><a href="#" ng-click="goto_loc('def_codepoint')">codepoint</a><br><a href="#" ng-click="goto_loc('def_UTF-32')">UTF-32</a><br><a href="#" ng-click="goto_loc('def_metadata')">metadata</a><br><a href="#" ng-click="goto_loc('def_error-correcting code')">error-correcting code</a><br><a href="#" ng-click="goto_loc('def_parity bit')">parity bit</a><br><a href="#" ng-click="goto_loc('def_error-detecting')">error-detecting</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_6"></div><div class="text"><div class="header">6: 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_6"></div><div class="text"><div class="header">6: 
 	  Encodings: Everything is numbers</div></div></div><div class="section"><div id="sec_6_1"></div><div class="text"><div class="header">6.1: 
 	  Where are we now?</div><p>In the previous chapter, we described a computer's
       interface--the ISA-- and specifically the computer's
@@ -12,10 +12,10 @@
       images.</p><p>In this chapter, we shall bridge this final gap by
       demonstrating that all these things: instructions, images,
       graphics, and anything else we want to store, can be stored just
-      using numbers.  <div id="def_encoding" class="definition"></div>A mechanism for storing
+      using numbers.  <span id="def_encoding" class="definition"></span>A mechanism for storing
       numbers that correspond to a given kind of data is called an
       <b>encoding</b> for that data.</p></div></div><div class="section"><div id="sec_6_2"></div><div class="text"><div class="header">6.2: 
-	  Generalities about encodings</div><p><div id="def_decodable" class="definition"></div>There is essentially only one hard and
+	  Generalities about encodings</div><p><span id="def_decodable" class="definition"></span>There is essentially only one hard and
       fast rule governing what constitutes a valid encoding: It must
       be <b>unambiguous</b> or <b>decodable</b>. That is, if we
       tell someone our encoding scheme for some set of objects
@@ -23,10 +23,10 @@
       with a list of bytes that encodes some of these objects using
       that scheme, they should be able to use the scheme to determine
       without ambiguity what objects we have encoded.</p><p>As long as the encoding can actually be successfully decoded,
-      anything else is a bonus.  <div id="def_efficient (encoding)" class="definition"></div>For
+      anything else is a bonus.  <span id="def_efficient (encoding)" class="definition"></span>For
       example, some encodings are more <b>efficient</b> than others in
       that they usually require fewer bytes to encode the same
-      data.</p><p><div id="def_error-resistant" class="definition"></div>As another example, some
+      data.</p><p><span id="def_error-resistant" class="definition"></span>As another example, some
       encodings can be more <b>error-resistant</b> than others.  This
       refers to what happens if we see a sequence of bytes encoding
       some objects, but one or more of the bytes has been modified
@@ -88,7 +88,7 @@
 	sequence.</p>
 
       </div></div></div><div class="section"><div id="sec_6_2_1"></div><div class="text"><div class="header">6.2.1: 
-	  Enumeration as encoding</div><p><div id="def_enumeration (encoding)" class="definition"></div>Before we get into any
+	  Enumeration as encoding</div><p><span id="def_enumeration (encoding)" class="definition"></span>Before we get into any
 	specific encodings, we present the most basic strategy of all
 	for encoding: Enumeration. To illustrate this strategy,
 	we return to our waffle bakery example:</p><p>We're designing a computer program for the bakery.  We want
@@ -412,7 +412,7 @@ defined by the following arrangement:
 This means we use the lowest 4 bits for the low 4 bits of the
 immediate operand, the next 4 bits for the register, and then the next
 4 bits for the high 4 bits of the immediate.  This leaves us with 4
-additional bits which we have marked as C.  </p><p><div id="def_opcode" class="definition"></div>Note that we have four different instructions
+additional bits which we have marked as C.  </p><p><span id="def_opcode" class="definition"></span>Note that we have four different instructions
 that take a 4-bit register and an 8-bit immediate.  The C bits are
 used to distinguish between these.  For instance, for any ldi
 instruction, the C bits are always set to 1110.  This set of bits,
@@ -981,7 +981,7 @@ so if we see the list of bytes
 
 we can reference the table and readily decode this as the string
 
-<div class="code"><pre>Hello world!</pre></div></p><p><div id="def_backwards compatible" class="definition"></div>However, we still definitely want
+<div class="code"><pre>Hello world!</pre></div></p><p><span id="def_backwards compatible" class="definition"></span>However, we still definitely want
 improvements on ASCII--accented vowels, letters from non-Roman
 alphabets, and the like.  This brings up another feature of encodings:
 backwards-compatibility: Suppose we have a nice fancy encoding that
@@ -1045,7 +1045,7 @@ this case we say that the new encoding is <b>backwards-compatible</b>.
 	store text in Chinese.</p><p>Thus a more comprehensive character encoding is needed, and
 	several standards exist as attempts to fill the gap.  By far
 	the most popular as of this writing is one called UTF-8
-	("Universal character set Transition Format--8-bit").</p><p><div id="def_codepoint" class="definition"></div>As with ASCII, UTF-8 assigns to every
+	("Universal character set Transition Format--8-bit").</p><p><span id="def_codepoint" class="definition"></span>As with ASCII, UTF-8 assigns to every
 	character a unique number, called that character's
 	<b>codepoint</b>.  For example, the character pictured
 	here</p><div class="figure"><img src="/text/figures/6.4.2.fig1.png" width="100px"><div class="caption">Figure 6.4.2.1: Unicode codepoint 16706: 䅂</div></div><p>has codepoint 16706.  But then how does the computer actually
@@ -1055,7 +1055,7 @@ this case we say that the new encoding is <b>backwards-compatible</b>.
 	computer goes to figure out what this means, how does it
 	distinguish between the two-byte character representing
 	codepoint 16706 and two one-byte characters representing
-	codepoints 65 and 66 respectively (in ASCII, "A" and "B")?</p><p><div id="def_UTF-32" class="definition"></div>This is where a few possible encoding
+	codepoints 65 and 66 respectively (in ASCII, "A" and "B")?</p><p><span id="def_UTF-32" class="definition"></span>This is where a few possible encoding
 	schemes take different ideas.  One called <b>UTF-32</b> simply
 	declares that every character must take 4 bytes.  In UTF-32,
 	then, this character becomes 00000000 00000000 01000001
@@ -1316,7 +1316,7 @@ not lose all meaning entirely.</p></div></div><div class="section"><div id="sec_
 	  arranging pixel data so that it can be understood for
 	  display unambiguously.</p><p>Here is an example of a BMP image (here it has been blown
 	  up 10x in height and width; click it to get a link to the
-	  original image file): </p><b>Answer: </b><br><img src="figures/smile_big.bmp"><p>And here is the actual sequence of bytes that the
+	  original image file): </p><a href="figures/smile.bmp"><img src="figures/smile_big.bmp"></a><p>And here is the actual sequence of bytes that the
 	  computer is storing in this file:
 
 	  <div class="code"><pre>42 4d de 00 00 00 00 00 00 00 36 00 00 00 28 00
@@ -1338,7 +1338,7 @@ ff ff ff ff ff ff ff ff ff ff ff 00 00 00</pre></div>
 	  characters B and M, respectively.  This allows the computer
 	  to look at the file and determine that it is a BMP file even
 	  if the filename weren't something so informative as
-	  "smile.bmp".</p><p><div id="def_metadata" class="definition"></div>The 11th byte tells us where the
+	  "smile.bmp".</p><p><span id="def_metadata" class="definition"></span>The 11th byte tells us where the
 	  actual pixel data is stored.  Since in this case it is 0x36
 	  (decimal: 54) this means that the bytes that actually
 	  represent pixel colors start at byte number 54 onward.  The
@@ -1458,7 +1458,7 @@ situation vastly outweigh the odds of it being the latter.  So we can
 make the educated guess that it was probably sent as a 0 and just one
 of the three transmissions got flipped.  Thus, even though there was
 interference, the processor can still safely conclude the number
-transmitted was 00010111.  </p><p><div id="def_error-correcting code" class="definition"></div>This is an example of an
+transmitted was 00010111.  </p><p><span id="def_error-correcting code" class="definition"></span>This is an example of an
 <b>error-correcting code</b>--that is, an encoding for the data that
 is done in such a way that even if some bits of the data were
 accidentally (or maliciously!) flipped in transit, the intended
@@ -1509,7 +1509,7 @@ they may have some very beefy error-correcting codes indeed.</p></div></div><div
 	money and cannot afford error, this may be the way to go, but
 	if you cannot justify tripling the cost of your hardware, then
 	a slightly lighter-weight method may be more appropriate.  One
-	such method is to use a <b>parity bit</b>.</p><p><div id="def_parity bit" class="definition"></div>In this encoding scheme, we send
+	such method is to use a <b>parity bit</b>.</p><p><span id="def_parity bit" class="definition"></span>In this encoding scheme, we send
 	only one extra bit in addition to the required 8, rather than
 	an additional 16.  This extra bit will be sent as 0 if the
 	number of 1s in the transmitted number is even, and 0 if it is
@@ -1525,7 +1525,7 @@ they may have some very beefy error-correcting codes indeed.</p></div></div><div
 	got flipped.  Or it might have been 010101111 and the parity
 	bit got flipped!  All the processor can determine is that the
 	transmission was likely in some way corrupted in transit.
-	<div id="def_error-detecting" class="definition"></div>This is an example of an
+	<span id="def_error-detecting" class="definition"></span>This is an example of an
 	<b>error-detecting encoding</b>--it allows us to determine
 	that there was an error, but not to fix it. This may be
 	suitable in cases where errors are not too harmful, and where

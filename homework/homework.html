@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Homeworks</title>
+    <link rel="stylesheet" type="text/css" href="/lib/jsavr/sim.css" />
     <link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
     <link rel="stylesheet" type="text/css" href="/sim/quest/quest.css" />
     <link rel="stylesheet" type="text/css" href="/homework/homework.css" />
@@ -13,6 +14,7 @@
     <script type="text/javascript" src="/sim/quest/quest.js"></script>
     <script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
     <script type="text/javascript" src="/lib/spy/sim.js"></script>
+    <script type="text/javascript" src="/lib/jsavr/sim.js"></script>
   </head>
   <body ng-app="app">
     <div class="quest" ng-controller="HomeworkController">
@@ -26,7 +28,7 @@
 	  submission.</span></div>
 	<div class="homework_status">Status: {{hw_status}}</div>
       </div>
-      <exploration template="/sim/quest/quest.html" quest_name="{{homeworks[homework_id].file}}" control="qcontrol">
+      <exploration template="/sim/quest/quest.html" control="qcontrol">
       </exploration>
       <!-- Lightbox for verification --> 
       <div class="lightbox_background" ng-if="verify_submission == true" ng-click="exit_verify()">

@@ -4,6 +4,8 @@ var cm = CodeMirror(document.querySelector('.mp-editor'), {
 	mode: 'python',
 	theme: 'neat',
 
+	value: 'print("foo")\nprint(" foo")\nprint("  foo")\nprint("this is a very long string which must be clipped")\nprint([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])',
+
 	lineNumbers: true,
 	indentUnit: 4,
 	smartIndent: false,
