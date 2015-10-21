@@ -130,11 +130,23 @@ sub r31,r31</program>
   </q>
   <q type="avr" id="inc/dec">
     <program></program>
-    <text><p></p></text>
+    <text>As well as adding and subtracting, it is extremely common to
+    want to add and subtract 1 from a register.  So common, in fact,
+    that there are special instructions just for this: "inc" for
+    "increment" and "dec" for "decrement".  <pre>inc r4</pre> will
+    perform r4 = r4+1, and <pre>dec r0</pre> will perform r0 = r0-1.
+
+    <p>Just like add and sub, these will set the Z and N flags (Z if
+    result was 0 and N if two's complement interpretation of result is
+    negative).  However they do not modify the C flag.  </p></text>
   </q>
   <q type="avr" id="and/or/eor">
     <program></program>
-    <text></text>
+    <text>Entirely analogously to "add" nad "sub", we have operations
+    for bitwise operations AND, OR, and XOR, called "and", "or", and
+    "eor" respectively.  These operations will affect N and Z in the
+    usual ways, but will ignore C (there is no carry from a bitwise
+    operation).  </text>
   </q>
   <q type="avr" id="com">
     <program></program>
@@ -148,11 +160,7 @@ sub r31,r31</program>
     <program></program>
     <text></text>
   </q>
-  <q type="avr" id="in">
-    <program></program>
-    <text></text>
-  </q>
-  <q type="avr" id="out">
+  <q type="avr" id="in/out">
     <program></program>
     <text></text>
   </q>

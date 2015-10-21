@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><quest name="HW 5" id="5">
+
+<q type="avr" id="Problem 11">
+  <program></program>
+  <text>Write assembly code to configure the complete PORT D as an
+  output port and write 134 on this port. <b>Annotate your code with
+  comments for full credit.</b>  </text>
+</q>
+
+<q type="avr" id="Problem 12">
+  <program></program>
+  <text>
+    Using the stack, write a simple assembly language function labeled
+    myfunction that compares the values in the top two entries of the
+    stack and prints the higher number to the output LED. If they are
+    equal, print either value.
+	
+<p>Initialize your stack to RAM location 3000. Place values 4 and 3
+into registers, and then call this function. <b>Annotate your code
+with comments for full credit.</b></p>
+
+  </text>
+</q>
+
+<q type="avr" id="Problem 13">
+  <program></program>
+  <text>
+Convert the following Python code into assembly language. Assume x is
+stored in r16, y in r17, and z in r18, and a in r19. You may store
+values in other registers if necessary. <b>Annotate your code with
+comments for full credit.</b>
+
+<pre>x = 2
+y = 1
+z = x + y
+if(z >= 2):
+   a = 1
+else:
+   a = 2</pre>
+  </text>
+</q>
+
+<q type="avr" id="Problem 14">
+  <program></program>
+  <text>Repeat Homework 2 Question 11, but this time use assembly
+  language instead of Python.  A hard coded solution will result in 0
+  points (see the homework PDF for examples of this).  Because 377
+  does not fit in 8 bits, the last Fibonacci number may be outputted
+  as 121.  <b>Annotate your code with comments for full credit.  </b>
+  </text>
+</q>
+
+<q type="avr" id="Problem 15">
+  <program></program>
+  <text>Repeat Homework 2 Question 12, but this time use assembly
+  language instead of Python, and go from 32 to 50 instead.
+  <b>Annotate your code with comments for full credit.</b> <p>Hints:
+  <ol>
+    <li>You may have to write your own multiply by doing multiple adds.</li>
+    <li>You may have to write your own divide by using a quotient counter,
+    and subtracting the divisor from the dividend while the dividend is
+    greater than the divisor. </li>
+  </ol>
+  </p>
+
+  </text>
+</q>
+</quest>
