@@ -148,6 +148,7 @@ app.controller("QuestController", ['$scope','$http','$window', '$timeout', '$doc
 			scope.quest = scope.quests[qid]
 			scope.userdata.current_problem = 0;
 			scope.hwid = qid;
+			scope.update_sim();
 		    }
 		    scope.control.get_program_data = function(){
 			scope.update_model();
