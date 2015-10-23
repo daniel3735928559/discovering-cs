@@ -11,9 +11,9 @@
   <program></program>
   <text>
     Using the stack, write a simple assembly language function labeled
-    myfunction that compares the values in the top two entries of the
-    stack and prints the higher number to the output LED. If they are
-    equal, print either value.
+    myfunction that compares the values in two registers and prints the 
+    higher number to the output LED. If they are equal, print either 
+    value.
 	
 <p>Initialize your stack to RAM location 3000. Place values 4 and 3
 into registers, and then call this function. <b>Annotate your code
