@@ -340,6 +340,7 @@
 	    <a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a>
 	    <a href="/sim/bin/bin.html"><div class="sidebar_link">Binary</div></a>
 	    <a href="/sim/avr/avr.html"><div class="sidebar_link">AVR</div></a>
+	    <a href="/sim/uarch/uarch.html"><div class="sidebar_link">Micro&#173;architecture</div></a>
 
 	    <div class="sidebar_header">Additional:</div>
 	    <a href="/text/info/authors.xml"><div class="sidebar_link">Authors</div></a>

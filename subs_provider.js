@@ -5,7 +5,7 @@ var fs = require('fs');
 
 SubsProvider = function(host, port) {
     this.MAX_FILE_SIZE = 33333;
-    this.ended = {2:true,3:true,5:true,6:false}; // Store homework endedness
+    this.ended = {2:true,3:true,5:true,6:true}; // Store homework endedness
     this.homeworks = {2:4,3:7,5:5,6:10}; // Store homework sizes
 };
 

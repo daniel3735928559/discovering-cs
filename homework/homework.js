@@ -6,7 +6,7 @@ app.controller("HomeworkController", ['$scope','$http','$cookies', '$window', '$
     $scope.homework_id = 0;
     $scope.hwid = null;
     $scope.hw_status = "Loading saved homework data...";
-    $scope.homeworks = [{"name":"Homework 6","file":"/hw/hw6.xml","id":"6"}, {"name":"Homework 5 (ended)","file":"/hw/hw5.xml","id":"5"}, {"name":"Homework 3 (ended)","file":"/hw/hw3.xml","id":"3"}, {"name":"Homework 2 (ended)","file":"/hw/hw2.xml","id":"2"}];
+    $scope.homeworks = [{"name":"Homework 6 (ended)","file":"/hw/hw6.xml","id":"6"}, {"name":"Homework 5 (ended)","file":"/hw/hw5.xml","id":"5"}, {"name":"Homework 3 (ended)","file":"/hw/hw3.xml","id":"3"}, {"name":"Homework 2 (ended)","file":"/hw/hw2.xml","id":"2"}];
     $scope.homework_files = [];
     $scope.homework_ids = [];
     $scope.qcontrol = {};
