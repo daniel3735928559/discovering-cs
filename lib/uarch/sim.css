@@ -6,7 +6,7 @@
 }
 #simavr_rf{
     float:left;
-    width:16em;
+    width:32em;
     border:1px solid #aaa;
     text-align:center;
 }
@@ -124,6 +124,12 @@
     display:inline-block;
     float:left;
     width:75%;
+}
+
+.simavr_images{
+    display:inline-block;
+    float:left;
+    width:100%;
 }
 
 .simavr_output{
