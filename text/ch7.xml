@@ -1242,7 +1242,6 @@ Taking this approach, we get the state diagram: </p>
       <p>As this is intended to represent a machine that handles all the instructions we're targeting in this chapter, the state machine should implement the full state machine from 7.3.7.fig1.  However to describe its behavior we need not only describe how it transitions between states, but also what outputs it gives in each state.  To this end, we present these in the usual tabular format: </p>
 
       <table class="sm big">
-
 <tr><td>State number</td><td>State name</td>
 <td>PC_sel</td>
 <td>PC_we</td>
@@ -1639,7 +1638,7 @@ Taking this approach, we get the state diagram: </p>
 <td></td>
 <td>1</td>
 <td></td>
-<td>1</td>
+<td>0</td>
 <td></td>
 <td>0</td>
 <td>0</td>
