@@ -444,6 +444,7 @@ mov: 000100RRRRRSSSSS moves value of register SSSSS into register RRRRR</code>
 	  <tr><td>brlo</td><td>7-bit immediate</td></tr>
 	  <tr><td>cp</td><td>5-bit register, 5-bit register</td></tr>
 	  <tr><td>cpi</td><td>4-bit register, 8-bit immediate</td></tr>
+	  <tr><td>subi</td><td>4-bit register, 8-bit immediate</td></tr>
 	</table></p>
 	
 	<p>
@@ -467,7 +468,7 @@ mov: 000100RRRRRSSSSS moves value of register SSSSS into register RRRRR</code>
       4-bit register, 8-bit immediate
     </td>
     <td align="left" valign="top">
-      ldi, andi, ori, cpi                                                   
+      ldi, andi, ori, subi, cpi
     </td>
   </tr>
   <tr>
@@ -747,6 +748,14 @@ various instructions within that grouping are:: </p>
       0011        
     </td>
   </tr>
+  <tr>
+    <td align="left" valign="top">
+      subi         
+    </td>
+    <td align="left" valign="top">
+      0101        
+    </td>
+  </tr>
 </table>
 </p>
 
@@ -861,6 +870,14 @@ interpretable regardless of the values of these bits.  </p>
     </td>
     <td align="left" valign="top">
       <pre>0011????????????</pre>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      subi         
+    </td>
+    <td align="left" valign="top">
+      <pre>0101????????????</pre>
     </td>
   </tr>
   <tr>
