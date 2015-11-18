@@ -2485,29 +2485,20 @@ that go into RAM, describing the semantics of an element of assembly
 language is as easy as explaining what numbers it corresponds to and
 where in memory those numbers are stored.  </p><table>
 	  <tr>
-	    <td>Language element</td>
+	    <td>Line</td>
 	    <td>Syntax</td>
 	    <td>Semantics</td>
 	    <td>Examples</td>
 	  </tr>
 	  
 	  <tr>
-	    <td>Line</td>
-	    <td>Either an <i>ISA operation</i>, a <i>label</i>,
-	    or an <i>assembler directive</i>.</td>
-	    <td>A line is the basic unit of assembly language code.
-	    Each line in an assembly program is run in sequence.</td>
-	    <td>
-</td>
-	  </tr>
-	  <tr>
 	    <td>ISA operation</td>
-	    <td>An ISA operation can be any of the above operations we
-	    described.  The added features in assembly language are:
-	    <ul><li>In place of any operand that represents an offset,
-	    you may use a label name</li><li>In place of an immediate
-	    operand you may use a character or lo8(labelname) or
-	    hi8(labelname)</li></ul></td>
+	    <td>An ISA operation can be any of the normal operations
+	    we described.  The added features in assembly language
+	    are: <ul><li>In place of any operand that represents an
+	    offset, you may use a label name</li><li>In place of an
+	    immediate operand you may use a character or
+	    lo8(labelname) or hi8(labelname)</li></ul></td>
 	    <td>Performs the specified ISA operation.</td>
 	    <td>
 	      <pre>ldi r31, 51</pre>
@@ -2518,29 +2509,19 @@ where in memory those numbers are stored.  </p><table>
 	  </tr>
 	  <tr>
 	    <td>Label line</td>
-	    <td><pre><i>label_name</i>:</pre></td>
+	    <td><pre><i>labelname</i>:</pre></td>
 	    <td>Marks this offset in the program as being named by the
-	    given label name.</td>
+	    given label name.  A label name may be any combination of
+	    letters, numbers, and underscores (no spaces), except that
+	    a label name cannot begin with a number.</td>
 	    <td>
 	      <pre>hello: </pre>
-	      <pre>this_is_a_label: </pre>
+	      <pre>this_is_a_label_2: </pre>
 	    </td>
 	  </tr>
-	  <tr>
-	    <td>Assembler directive</td>
-	    <td>Either a <i>byte directive</i>, a <i>word
-	    directive</i>, or a <i>string directive.</i></td>
-	    <td>Provides methods for easily placing data into RAM or PM.</td>
-	    <td>
-	      <pre>.byte(my_bytes) 101,232,6,4</pre>
-	      <pre>.word 1212,87,0,33</pre>
-	      <pre>.string(stringOfCheese) "hello"</pre>
-	    </td>
-	  </tr>
-
 	  <tr>
 	    <td>byte directive</td>
-	    <td><pre>.byte(<i>label name</i>) <i>bytes</i></pre></td>
+	    <td><pre>.byte(<i>labelname</i>) <i>bytes</i></pre></td>
 	    <td>Instructs that these bytes should be inserted into
 	    RAM.  The label name will then refer to the address of the
 	    first of these bytes in RAM.</td>
@@ -2561,46 +2542,6 @@ where in memory those numbers are stored.  </p><table>
 	    string in RAM.</td>
 	    <td><pre>.string(helloworld) "Hello world!"</pre>
 	    <pre>.string(Gibberish) "AAA&amp;AAAA!!"</pre></td>
-	  </tr>
-
-	  <tr>
-	    <td>Label name</td>
-	    <td>Any combination of letters, numbers, and underscores
-	    (no spaces),
-	    except that a variable name cannot begin with a number.</td>
-	    <td>Specifies the name of a label.</td>
-	    <td><pre>helo
-hellow_world
-abc1DEF0__0GHIJ</pre><br>
-
-Non-examples: 
-
-<pre>2hello
-7
-my name</pre></td>
-	  </tr>
-	  <tr>
-	    <td>Character</td>
-	    <td>Any single character enclosed in single quotes.</td>
-	    <td>Stands in for a number that represents that character
-	    (see ASCII in the next chapter).  </td>
-	    <td>
-	      <pre>'h'</pre>
-	      <pre>'A'</pre>
-	      <pre>'%'</pre>
-	      <pre>' '</pre>
-	    </td>
-	  </tr>
-	  <tr>
-	    <td>String</td>
-	    <td>Any sequence of characters enclosed in
-	    double-quotes.</td>
-	    <td>Strings provide a method to store and manipulate
-	    text.  </td>
-	    <td>
-<pre>"Hello world!"
-"'That is beautiful', he said"</pre>
-	    </td>
 	  </tr>
 	  <tr>
 	    <td>Comments</td>

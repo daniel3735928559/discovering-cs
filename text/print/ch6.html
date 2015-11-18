@@ -345,8 +345,11 @@ mov: 000100RRRRRSSSSS moves value of register SSSSS into register RRRRR</pre></d
 	  <tr><td>brne</td><td>7-bit immediate</td></tr>
 	  <tr><td>brsh</td><td>7-bit immediate</td></tr>
 	  <tr><td>brlo</td><td>7-bit immediate</td></tr>
+	  <tr><td>ld (X)</td><td>5-bit register</td></tr>
+	  <tr><td>st (X)</td><td>5-bit register</td></tr>
 	  <tr><td>cp</td><td>5-bit register, 5-bit register</td></tr>
 	  <tr><td>cpi</td><td>4-bit register, 8-bit immediate</td></tr>
+	  <tr><td>subi</td><td>4-bit register, 8-bit immediate</td></tr>
 	</table></p><p>
 
 	We come out with the groupings:
@@ -367,7 +370,7 @@ mov: 000100RRRRRSSSSS moves value of register SSSSS into register RRRRR</pre></d
       4-bit register, 8-bit immediate
     </td>
     <td align="left" valign="top">
-      ldi, andi, ori, cpi                                                   
+      ldi, andi, ori, subi, cpi
     </td>
   </tr>
   <tr>
@@ -383,7 +386,7 @@ mov: 000100RRRRRSSSSS moves value of register SSSSS into register RRRRR</pre></d
       5-bit register                                                        
     </td>
     <td align="left" valign="top">
-      inc, dec, com
+      inc, dec, com, ld, st
     </td>
   </tr>
   <tr>
@@ -633,6 +636,30 @@ various instructions within that grouping are:: </p><p><table border="1">
       0011        
     </td>
   </tr>
+  <tr>
+    <td align="left" valign="top">
+      subi         
+    </td>
+    <td align="left" valign="top">
+      0101        
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      ld
+    </td>
+    <td align="left" valign="top">
+      10010001100
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      st
+    </td>
+    <td align="left" valign="top">
+      10010011100
+    </td>
+  </tr>
 </table>
 </p><p>Thus, to encode a mov instruction--say mov r30,r21--we use the
 opcode 001011, the source register r21, or 10101, and the target
@@ -735,6 +762,14 @@ interpretable regardless of the values of these bits.  </p><table border="1">
   </tr>
   <tr>
     <td align="left" valign="top">
+      subi         
+    </td>
+    <td align="left" valign="top">
+      <pre>0101????????????</pre>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
       ori         
     </td>
     <td align="left" valign="top">
@@ -771,6 +806,22 @@ interpretable regardless of the values of these bits.  </p><table border="1">
     </td>
     <td align="left" valign="top">
       <pre>1001010?????0011</pre>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      ld         
+    </td>
+    <td align="left" valign="top">
+      <pre>1001000?????1100</pre>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      st         
+    </td>
+    <td align="left" valign="top">
+      <pre>1001001?????1100</pre>
     </td>
   </tr>
   <tr>
