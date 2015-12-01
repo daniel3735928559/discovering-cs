@@ -297,6 +297,7 @@ A NOR B = ~A AND ~B</code>
       
       <p>
 	[TODO: Decoder and encoder truth-table and diagram here]
+        Added a line here
       </p>
       </text>
     </section>
