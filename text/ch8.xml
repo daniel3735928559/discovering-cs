@@ -499,10 +499,11 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 
     <section>
       <title>State machine controller using Logic gates</title>
-      <text><p>Revisting our processor, the one piece that uses logic
-gates and is not memory is the state-machine controller. We will look
-at its implementation in detail in this section.</p>
-
+      <text>
+        <p>Revisting our processor, the one piece that uses logic
+          gates and is not memory is the state-machine controller. We will look
+          at its implementation in detail in this section.</p>
+        
       <figure><caption>State-machine controller overview</caption></figure>
 
       <figure><caption>Control signals: truth-table and logic-gate implementation.</caption></figure>
