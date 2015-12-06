@@ -5,7 +5,8 @@
     high-level hardware components. In this chapter we will describe
     how exactly these high-level components are built going all the
     down to the physical manufacturing of these entities and end with
-    two of the most well known “laws” of computer systems.</p>
+    two of the most well known “laws” of computer systems. 
+    </p>
   </text>
   <section>
     <title>Gates</title>
@@ -17,8 +18,8 @@
 	showed in Chapter 7 an entire computer can be constructed by
 	combining and connecting together circuit blocks, registers,
 	and memories. In this chapter we also get into the details of
-	how the state exactly the state machine controller is
-	implemented with logic gates. So let's get started.
+	how exactly the state machine controller is implemented with
+	logic gates. So let's get started.
       </p>
       <p>
       
@@ -194,6 +195,13 @@ Let’s do this with text notation to keep it concise.
 	inputs and 1 output, annotated with formulas describing the
 	inputs that correspond to an output of 1.</caption></figure>
 
+        <p>
+          A brief note on precedence before we conclude. Just like in
+          regular algebra we have the notion of precedence in Boolean
+          Algebra. Terms within parenthesis are evaluated first. For
+          the operators, the order of precedence is NOT (~), followed
+          by AND (.), followed by (+).
+        </p>
 	<p>
 	  The takeaway from this subsection is simple: Given a
 	  truth-table you can follow the method we have developed to
@@ -355,17 +363,19 @@ processor that perform logical work and don't do any storage. These
 are muxes, the ALU, the and incrementor block.</p>
       
         <p>First we will introduce some notation to interpret the
-logic diagrams we will draw. The diagram below shows different ways to
-indicate wires criss-crossing and their meaning. Also, it shows the
-convention for extracting individual bits out of a multi-bit signal
-and combining multiple single-bit wires into one multi-bit
-signal. </p>
+          logic diagrams we will draw. The diagram below shows different ways to
+          indicate wires criss-crossing and their meaning. Also, it shows the
+          convention for extracting individual bits out of a multi-bit signal
+          and combining multiple single-bit wires into one multi-bit
+          signal. </p>
 	<figure><caption>Drawing conventions used.</caption></figure>
 
-        <p>8-bit invertor</p>
-	<figure width="200px"><caption>8-bit invertor</caption></figure>
+        <p>The simplest thing we can do is take individual gates
+          and combine them to produce blocks that operate on multiple bits. We can thus
+          build an 8-bit invertor and 8-bit AND gate-block as shown below. Indeed this
+          idea can be extended for all the basic gates.</p>
 
-        <p>8-bit AND</p>
+	<figure width="200px"><caption>8-bit invertor</caption></figure>
 	<figure  width="200px"><caption>8-bit AND</caption></figure>
 
       <p>
@@ -377,11 +387,11 @@ signal. </p>
       </p>
       
 	<figure  width="600px"><caption>1-bit Multiplexor</caption></figure>
-      <p>Just like what we did with the 8-bit NOT and AND gates, we
-can combine eight single-bit muxes to form an 8-bit MUX. Note in the
-diagram, that the same single-bit Select signal (S) is sent to all the
-muxes, since for each bit we want to do the same selection. </p>
-
+        <p>Just like what we did with the 8-bit NOT and AND gates, we
+          can combine eight single-bit muxes to form an 8-bit MUX. Note in the
+          diagram, that the same single-bit Select signal (S) is sent to all the
+          muxes, since for each bit we want to do the same selection. </p>
+        
 	<figure width="200px"><caption>8-bit Multiplexor</caption></figure>      
 
       <p>
@@ -393,8 +403,8 @@ muxes, since for each bit we want to do the same selection. </p>
 	used often in various circuits, it is common to develop an
 	optimized implementation with as few gates as
 	possible. Using some of the Boolen Algebra laws from above,
-we have simplified the Cout implementation. From the truth-table,
-Cout = ABCin' + A'BCin + AB'Cin + ABC. This can be simplified down as follows:</p>
+        we have simplified the Cout implementation. From the truth-table,
+        Cout = ABCin' + A'BCin + AB'Cin + ABC. This can be simplified down as follows:</p>
 
 <code>
 Cout = ABCin' + A'BCin + AB'Cin + ABC
@@ -429,9 +439,14 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
         delay there are many optimizations possible. These include carry-look-ahead adders,
         carry-select adders, and tree-adders. </aside>
 
-      <p>We need to build another module that <b> can detect if the zero-flag must be set</b>.
-        Let us call this a CHECKZ module. It can be implemented using AND gates by ANDing together
-        all the bits and producing one ouput bit as shown below</p>
+      <p>We need to build another module that <b> can detect if the
+        zero-flag must be set</b>.  Let us call this a CHECKZ
+        module. It can be implemented using AND gates by ANDing
+        together all the bits and producing one ouput bit as shown
+        below. To show some hierarchy, we have used two 4-input AND
+        gates fed to another 2-input AND gate to build this block.  We
+        could have used a single 8-input AND gate as well.
+      </p>
       
       <figure  width="600px"><caption>CHECK If ZERO block.</caption></figure>
 
@@ -478,7 +493,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
       <p>On this truth table you will notice that for any given output
         variable all outputs are 1 in exactly one row - which thus
         simplifies quite a bit the logic implementation. The Figure
-        below shows how the the truth table can be written in a
+        below shows how the truth table can be written in a
         stylized for with one boolean equation for each row where
         exactly one output variable is 1. The corresponding logic
         diagram is shown below the truth-table</p>
@@ -500,21 +515,125 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
     <section>
       <title>State machine controller using Logic gates</title>
       <text>
-        <p>Revisting our processor, the one piece that uses logic
-          gates and is not memory is the state-machine controller. We will look
-          at its implementation in detail in this section.</p>
+        <p>Revisting our processor from Chapter 7, the one piece that
+          uses logic gates and is not memory is the state-machine
+          controller. We will look at its implementation in detail in
+          this section.</p>
+
+        <p>The Figure below shows the high-level overview of the
+           state-machine controller. It internally has a 5-bit STATE
+           register (whose implementation we will look at in the next
+           section, since it is a storage element). Based on the value
+           in the state register a set of control signals are
+           generated each cycle. Based on the state and the current
+           instruction (more specifically the opcode), the next-state
+           for the next cycle is computed by the "State update unit".
+           The output of this unit is a 5-bit signal that will get
+           written into the STATE register at the beginning of the
+           next clock cycle (or equivalently the end of the current
+           clock cycle).</p>
+
+      <figure><caption>State-machine controller
+      overview</caption></figure>
+
+        <p>The upshot of all this is, we need to design the logic
+          gates based implementation of the two boxes in green. So let
+          us proceed. First we will look at the control signal logic
+          block.</p>
         
-      <figure><caption>State-machine controller overview</caption></figure>
+        <p>The large truth table from Chapter 7 is reproduced in the
+          Figure below with the output columns ordered slightly
+          differently.  This big table is simple a truth-table with 22
+          outputs and 5 inputs (each bit of the state register). Using
+          the rules of logic gates we can thus create the logic
+          circuit for each output variable as shown in the
+          Figure. While simple or perhaps intimidating, the
+          control-logic block of the processor is simply these set of
+          logic gates! Note that signal which are one in exactly one
+          row can be computed by just one 5-input AND gate which the
+          original or negated value of the relevant inputs. Signals
+          (like REG_we) which have multple rows that are 1, use an OR
+          gates which is fed by multiple AND gates.
+
+         </p>
 
       <figure><caption>Control signals: truth-table and logic-gate implementation.</caption></figure>
 
+      <p>Let us look at this in a little bit more detail. The Figure
+        below shows three (randomly) selected control signals, and the
+        subset of the truth table.</p>
+
       <figure width="600px"><caption>Control signals: truth-table and logic-gate zoomed in view of 3 signals.</caption></figure>
 
-      <figure><caption>State update unit: truth-table.</caption></figure>
+      <p>Considering PC_sel, it is 1 when the state-number is 10011. This can be expressed
+        as:
+        <code>
+ PC_sel = S[0] AND S[1] AND ~S[2] AND ~S[3] AND S[4]
+        </code>
+      </p>
 
-      <figure><caption>State update unit: implementation for state-bit 0.</caption></figure>
+      <p>Considering PC_we, it is 1 when the state-number is 10011 or 10100. This can be expressed
+        as:
+        <code>
+ PC_we = (S[0] AND S[1] AND ~S[2] AND ~S[3] AND S[4]) OR
+         (~S[0] AND ~S[1] AND S[2] AND ~S[4] AND S[4])
+        </code>
+      </p>
 
-      <figure width="400px"><caption>State update unit: full implementation.</caption></figure>        
+      <p>Considering INST_we, it is 1 when the state-number is 10011 or 10100. This can be expressed
+        as:
+        <code>
+ PC_we = (S[0] AND S[1] AND ~S[2] AND ~S[3] AND S[4]) OR
+         (~S[0] AND ~S[1] AND S[2] AND ~S[4] AND S[4])
+        </code>
+      </p>
+     
+      <p>The circuit for the entire truth-table essentially does such an
+      implementation for each and every control signal. Note also that
+      the 2-bit signal VAL_sel (which controls a 4-input MUX) is
+      represented as two separated 1-bit signals VAL_sel1 and
+      VAL_sel0.</p>
+
+      <p>The next piece if the state update unit. It's truth table
+      implementation is "long" but straigth-forward. For every opcode,
+      it contains a set of rows that show the transition from one
+      state to another as that instruction is executed. If you recall
+      the microarchitecture trace diagrams we had a set of states each
+      opcode would sequence through. A truth-table version that shows
+      this by combining all opcodes and their state transitions is
+      shown below. Note here that we taken all the 4-bit, 6-bit, and
+      8-bit opcode and zero-padded them all to be 11-bit signals since
+      that is the longest opcode we have.</p>
+
+      <figure><caption>State update unit:
+      truth-table.</caption></figure>
+
+      <p>Given this truth-table, we can observe that we have 16 inputs
+        (11 opcode bits and 5 state-number bits) and we have 5 output
+        bits. Just like we have done the previous big truth table and
+        all other truth-tables, we can compute the Sum-of-Products
+        implementation. It gets quite unwieldy here. For each row, we
+        first need a 16-input AND gate (since there are 16 inputs in
+        this truth-table).  For bit-0, there are 32 rows whose outputs
+        are 1 and hence we need a 32-input OR gate. The figure below
+        shows the detailed implementation - which is mostly illegible,
+        but conveys to you that the implementation is possible. And
+        you can do it yourself!</p>
+
+
+      <figure><caption>State update unit: implementation for state-bit
+      0.</caption></figure>
+
+      <p>Applying the ideas of sum-of-products representation, we can implement
+        all the 5 bits to complete the state-update-unit logic block shown
+        stylistically below hiding away the implementation details.</p>
+
+      <figure width="300px"><caption>State update unit: full implementation.</caption></figure>        
+
+      <p>With this we have (almost) completely specified the state-machine-controller
+        using purely logic gates. The only piece left in it is the STATE register
+        and the INST register which are sequential elements which we will look at next.
+        </p>
 
       </text>
     </section>
@@ -572,7 +691,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	is basically a single-bit register.
 	</p>
 
-	<figure><caption>Master-Slave D Flip-Flop</caption></figure>
+	<figure width="600px"><caption>Master-Slave D Flip-Flop</caption></figure>
 	
 	<p>
 	  We can enhance this slightly to get a single-bit register
@@ -587,7 +706,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
           such flip-flops to form an 8-bit block which can serve
           as the auxliary register we used to build our processor.
           </p>
-	<figure width="600px"><caption>8-bit REG</caption></figure>
+	<figure width="600px"><caption>8-bit REG. Used to implement all Auxiliary registers in processor.</caption></figure>
       </text>
     </section>
     <section>
@@ -621,7 +740,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	create a 512-entry memory. Combine four 512-entry memories to
 	create a 2048-entry memory. And so on.</p>
 
-	<figure><caption>32-entry 8-bit memory</caption></figure>
+	<figure><caption>32-entry 8-bit memory (Used for Register File).</caption></figure>
 	
         <p>Using these building blocks we can construct the register
           file, program memory and data-memory (RAM). In the previous section,
@@ -742,14 +861,78 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
       
       <figure width="400px"><caption>The implementation of an XOR gate using
       transistors.</caption></figure>
-      
+
       <p>Just like what we did with logic gates, given a
 	transistor-level circuit we can compute what it does by
 	tracing the operation of each transistor as being on or off.
 	Let us look at the example of the following transistor-level
-	circuit.
+	circuit. 
       </p>
+
+      <p>
+        The table below summarizes the number of transistors required
+        for simple gates and for the entire processor we built.
+        In the calculation below, we approximate
+        the control signals block as comprising for 22 5-input AND gates + 5 invertors.
+        We also approximate the state-update block as  32 16-input AND gates, 16 invertors, and 5 32-input OR gates.
+      </p>
+
+      <table>
+
+      	<tr>
+          <td> Block </td>
+          <td># Transistors</td>
+        </tr>
+<tr><td colspan="2">Basic elements</td></tr>
+<tr><td>NAND2</td><td>4</td></tr>
+<tr><td>NOR2</td><td>4</td></tr>
+<tr><td>NOT</td><td>2</td></tr>
+<tr><td>AND2</td><td>6</td></tr>
+<tr><td>OR2</td><td>6</td></tr>
+<tr><td>AND (n inputs)</td><td>2n+2</td></tr>
+<tr><td>OR (n inputs)</td><td>2n+2</td></tr>
+<tr><td>MUX</td><td>40</td></tr>
+<tr><td colspan="2">Combined logic gates</td></tr>
+<tr><td>FA 1-bit</td><td>74</td></tr>
+<tr><td>HA 1-bit</td><td>6</td></tr>
+<tr><td>1-bit REG</td><td>40</td></tr>
+<tr><td colspan="2">Datapath modules</td></tr>
+<tr><td>FA 8-bit</td><td>592</td></tr>
+<tr><td>CHECKZ 8-bit</td><td>32</td></tr>
+<tr><td>NOT 8-bit</td><td>16</td></tr>
+<tr><td>MUX 8-bit</td><td>320</td></tr>
+<tr><td>8-bit REG</td><td>320</td></tr>
+<tr><td colspan="2">Microarchitecture blocks</td></tr>
+<tr><td>ALU</td><td>1000</td></tr>
+<tr><td>Incrementor</td><td>48</td></tr>
+<tr><td>State machine controller (control sigs)</td><td>274</td></tr>
+<tr><td>State machine controller (next state)</td><td>1450</td></tr>
+<tr><td>Total AUX regs (9 8-bit REGS)</td><td>2880</td></tr>
+<tr><td>RF (32 8-bit REGs)</td><td>10240</td></tr>
+<tr><td>PM (16384 1-bit REGs)</td><td>655360</td></tr>
+<tr><td>RAM (16384 1-bit RGEs)</td><td>655360</td></tr>
+<tr><td><b>Total</b></td><td><b>1326612</b></td></tr>
+</table>
       
+      <p>The processor we have designed needs more than 1 million
+      transistors - these tiny things quickly add up! If we removed
+      all the memories, we are left with a measly 15892
+      transistors. To put this in perspective, Intel's first
+      microprocessor was introduced in 1971 had merely 2300
+      transistors. And in fact, that processor had no transistors
+      devoted for memories inside the processor chip - it was a
+      separate chip. It is true that the processor we have designed
+      here is more complex than that first processor. So Kudos!</p>
+
+      <aside>Modern microprocessors have 100 million to 10 billion
+transistors on a single chip (the SPARC M7 processor announced in
+2015). It is probably quite evident to you know that most of those
+transistors are devoted to storage structures of some sort. In modern
+processor these storage structure may be memories or could be
+auxiliary storage structures like prediction tables, and
+caches.</aside>
+        
+
     </text>
   </section>
   <section>
@@ -863,17 +1046,17 @@ A p-type transistors behavior is the converse and we will skip its operation det
 	  approximately every two years. </def></p>
 	  
 	  <p><def term="Dennard scaling">A companion to Moore’s Law is
-	  another phenomenon called <b>Dennard scaling</b>, which states
-	  that the supply voltage for a transistor can be reduced linearly
-	  with its size. </def> Combining these two, if we shrink the
-	  length by 1.41X, the width by 1.41X, we get a transistor that is
-	  2X smaller. We also reduce its voltage supply by 1.41X. The
-	  power consumption of a transistor is proportional to its length
-	  (because of capacitance of the electric field), and proportional
-	  to the (supply voltage)<sup>2</sup>. Combining all of these when
-	  we go from one generation of transistor to another, we get 2X
-	  reduction in size and cubic reduction in 2.7X reduction in its
-	  power consumption.</p>
+	  another phenomenon called <b>Dennard scaling</b>, which
+	  states that the supply voltage for a transistor can be
+	  reduced linearly with its size. </def> Combining these two,
+	  if we shrink the length by 1.41X, the width by 1.41X, we get
+	  a transistor that is 2X smaller. We also reduce its voltage
+	  supply by 1.41X. The power consumption of a transistor is
+	  proportional to its length (because of capacitance of the
+	  electric field), and proportional to the (supply
+	  voltage)<sup>2</sup>. Combining all of these when we go from
+	  one generation of transistor to another, we get 2X reduction
+	  in area and cubic reduction in its power consumption.</p>
 	</text>
       </section>
   </section>
