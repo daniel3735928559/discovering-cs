@@ -12,7 +12,7 @@
     <title>Gates</title>
     <text>
       <p>
-	First we will look at a level of abstract called the logic
+	First, we will look at a level of abstraction called the logic
 	gate and show how any circuit-block, register, or memory can
 	be constructed using logic gates alone. Recall that we already
 	showed in Chapter 7 an entire computer can be constructed by
@@ -24,15 +24,15 @@
       <p>
       
 	This section will be structured as follows. First we will
-	describe five simple logic gates, we will (re)introduce the
+	describe five simple logic gates by (re)introducing the
 	idea of a truth table and how it specifies the functionality
-	of what is desired. Next we will show look at arbitrary
+	of what is desired. Second, we will look at arbitrary
 	truth-tables and show how one can construct a circuit-block
 	using just the aforementioned logic gates to implement any
 	functionality – this is the magic we need to implement our
-	state machine controller. Third, we will look at how the logic
+	state machine controller. Third, we will look at how logic
 	gates can be combined to implement a register. Finally, we
-	will use logic gates to implement memories. Voila – all
+	will use registers to implement memories. Voila – all
 	components implemented with logic gates.
       </p>
       <p>
@@ -57,10 +57,11 @@
 	whose output is 0 when input is 1 and output is 1 when input
 	is 0. The standard notation to specify the functionality of
 	gates is the truth table. The text symbol for a NOT gate is
-	~. Sometimes a prefix of ! in front of a Boolean variable is
-	also used. In this course we will use ~x to denote NOT(x). The
-	Figure below (left-most column) shows the symbol for the NOT
-	gate, its corresponding truth-table, and the notation.</p>
+	~. Sometimes a prefix of !, ~ or ' (the apostrophe symbol) in
+	front of a Boolean variable is also used. In this course we
+	will mostly use ~x to denote NOT(x). The left-most column in
+	the Figure below shows the symbol for the NOT gate, its
+	corresponding truth-table, and the notation.</p>
 	
 	<p>
 	  The Figure also shows three other gates that are commonly
@@ -77,11 +78,13 @@
 
 	<p>Another set of logic gates that are commonly used are NAND,
 	NOR, and XNOR--these are simply the AND, OR, and XOR gates
-	with their outputs inverted. The Figure below shows their
-	symbols, truth-table, and also shows how one could construct
-	them using the NOT gate and the 3 gates we have already looked
-	at. It is important that you get familiar with these
-	symbols.</p>
+	respectively with their outputs inverted. The Figure below
+	shows their symbols, truth-table, and also shows how one could
+	construct them using the NOT gate and the 3 gates we have
+	already looked at. It is important that you get familiar with
+	these symbols. The reason we are looking at these gates is because,
+        in a somewhat counter-intuitive way they are easier to build of 
+        transistors than the usual AND and OR gates.</p>
 
 	<figure><caption>The symbols and truth tables for three
 	further logic gates, as well as how to construct them using
@@ -168,11 +171,34 @@ Let’s do this with text notation to keep it concise.
 	A = 1, B = 1, Q = 0. Notice Q is 0 so we don’t need to do
 	anything.  </li></ul></p>
 	
+        <p>It is important to note here that, when we consider each
+        row, we want to create a boolean function whose output is
+        1 <b>ONLY</b> for that row - this can be achieved by ANDing
+        and considering the complement or orginal version of each
+        variable. Specifically suppose we consider the 1st row, A = 0,
+        B = 1. One could consider the boolean function A OR B which
+        will also produce 1, which is the desired output for this
+        row. However the A OR B function will produce an output of 1
+        even when A is 1. For this specific truth-table although that
+        works out to be ok, in the general case it will not. The rule
+        to remember is that we want to create a function which is 1
+        ONLY for that row - and this can be achieved by ANDing the
+        variables together. From the basic AND gate's truth-table we
+        know that can AND will produce a 1 under exactly one
+        condition.</p>
+
 	<p><b>Step 2:</b> Now, we combine the previously constructed
 	circuits with one OR gate. So we have the final output Q for
 	the entire truth table as: Q = (~A and ~B) OR (~A and B) OR (A
 	and ~B). That’s it we are done! The schematic or gate-level
 	circuit corresponding to this is below:</p>
+
+        <p>These terms which are 1 are also referred to
+          as <b>min-terms</b>.  Conversely, one could consider the
+          rows that are 0 (referred to as max-terms) and also
+          construct the boolean equation - we will need to use a
+          different technique and is omitted in this book. That
+          technique is called product of sums. </p>
 
 
 	<figure width="400px"><caption>A circuit implementing the above truth
@@ -196,11 +222,11 @@ Let’s do this with text notation to keep it concise.
 	inputs that correspond to an output of 1.</caption></figure>
 
         <p>
-          A brief note on precedence before we conclude. Just like in
-          regular algebra we have the notion of precedence in Boolean
-          Algebra. Terms within parenthesis are evaluated first. For
-          the operators, the order of precedence is NOT (~), followed
-          by AND (.), followed by (+).
+          A brief note on precedence before we continue further. Just
+          like in regular algebra we have the notion of precedence in
+          Boolean Algebra. Terms within parenthesis are evaluated
+          first. For the operators, the order of precedence is NOT
+          (~), followed by AND (.), followed by (+).
         </p>
 	<p>
 	  The takeaway from this subsection is simple: Given a
@@ -215,7 +241,11 @@ Let’s do this with text notation to keep it concise.
 
     <section>
       <title>Laws of Boolean Algebra</title>
-      <text><p>Just like basic alebra has some simple laws for algebraic equations, we have simeple rules for Boolean Algebra. They are listed below and their meaning is intuitive and proofs are straight-forward and hence omitted.</p>
+      <text>
+        <p>Just like basic algebra has some simple laws for algebraic
+        equations, we have simple rules for Boolean Algebra. They are
+        listed below. Their meaning is intuitive and proofs are
+        straight-forward and hence omitted.</p>
         <p>
           <b>This entire sub-section on laws of Boolean Algebra you need to only skim for the exam - you will not be tested on it.</b>
         </p>
@@ -248,7 +278,7 @@ A + (BC) = (A+B)(A+C)</code>
         </tr>
         
         <tr>
-        <td>Identity law</td>
+        <td>Idempotent law </td>
         <td>       
         <code>
 A + A = A
@@ -316,14 +346,14 @@ AB + A(~B) = A
         <td>Applying distributive law (b)</td>
         <td>       
         <code>
-A + A~B = A + B
+A + ~AB = A + B
 A(~A + B) = AB</code>
         </td>
         </tr>
       </table>
 
 
-      <p>De Morgan's Laws are intruiguing and very powerful and we
+      <p>De Morgan's Laws are intruiging and very powerful and we
       will briefly discuss them in detail. Remember, we introduced
       NAND and NOR gates. These are useful in a practical way because
       they can be oddly be built out of fewer transistors than AND or
@@ -334,7 +364,7 @@ A(~A + B) = AB</code>
       the product of the compliment of each variable.”  </p>
       
       <p>In the Figure below we show how it can applied to build AND, OR,
-      and NOT gtes using only NAND gates. The next figure shows the
+      and NOT gates using only NAND gates. The next figure shows the
       same using only NOR gates. The NOT gate is a straight-forward
       application of the truth-table of a NAND gate when both inputs
       are the same. The AND gate can be construct by inverting the
@@ -351,7 +381,7 @@ A(~A + B) = AB</code>
 	our simple method here. We will defer that for a different
 	course.</aside>
 
-	<p>Recall, blocks like the ALU and mux and state machine tables from Chapter 7? We will now look at how these can be constructed using logic gates next.</p>
+	<p>Recall blocks like the ALU and mux and state machine tables from Chapter 7? We will now look at how these can be constructed using logic gates next.</p>
       </text>
     </section>
 
@@ -359,10 +389,11 @@ A(~A + B) = AB</code>
       <title>Datapath Modules</title>
       <text>
         <p>In this section we will build various components in the
-processor that perform logical work and don't do any storage. These
-are muxes, the ALU, the and incrementor block.</p>
+          processor that perform combination logic work and don't do
+          any storage. These are muxes, the ALU, and the incrementor
+          block.</p>
       
-        <p>First we will introduce some notation to interpret the
+        <p>First, we will introduce some notation to interpret the
           logic diagrams we will draw. The diagram below shows different ways to
           indicate wires criss-crossing and their meaning. Also, it shows the
           convention for extracting individual bits out of a multi-bit signal
@@ -390,7 +421,7 @@ are muxes, the ALU, the and incrementor block.</p>
         <p>Just like what we did with the 8-bit NOT and AND gates, we
           can combine eight single-bit muxes to form an 8-bit MUX. Note in the
           diagram, that the same single-bit Select signal (S) is sent to all the
-          muxes, since for each bit we want to do the same selection. </p>
+          muxes, since we want to do the samel selection for each bit. </p>
         
 	<figure width="200px"><caption>8-bit Multiplexor</caption></figure>      
 
@@ -401,10 +432,13 @@ are muxes, the ALU, the and incrementor block.</p>
 	a Full-Adder. The truth table and implementation for it can be
 	constructed using the techniques we know. Since an adder is
 	used often in various circuits, it is common to develop an
-	optimized implementation with as few gates as
-	possible. Using some of the Boolen Algebra laws from above,
-        we have simplified the Cout implementation. From the truth-table,
-        Cout = ABCin' + A'BCin + AB'Cin + ABC. This can be simplified down as follows:</p>
+	optimized implementation with as few gates as possible. In
+	fact, more optimized implementations are possible for the
+	other blocks as well. But in this book, we will look at
+	optimizations for just the adder. Using some of the Boolen
+	Algebra laws from above, we have simplified the Cout
+	implementation. From the truth-table, Cout = ABCin' + A'BCin +
+	AB'Cin + ABC. This can be simplified down as follows:</p>
 
 <code>
 Cout = ABCin' + A'BCin + AB'Cin + ABC
@@ -441,11 +475,13 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 
       <p>We need to build another module that <b> can detect if the
         zero-flag must be set</b>.  Let us call this a CHECKZ
-        module. It can be implemented using AND gates by ANDing
-        together all the bits and producing one ouput bit as shown
-        below. To show some hierarchy, we have used two 4-input AND
-        gates fed to another 2-input AND gate to build this block.  We
-        could have used a single 8-input AND gate as well.
+        module. From the definition of the Z-flag, we want to set it
+        to 1 if all bits are zero.  It can be implemented using AND
+        gates by ANDing together all the bits (after first inverting
+        them) and producing one ouput bit as shown below. To show some
+        hierarchy, we have used two 4-input AND gates fed to another
+        2-input AND gate to build this block.  We could have used a
+        single 8-input AND gate as well.
       </p>
       
       <figure  width="600px"><caption>CHECK If ZERO block.</caption></figure>
@@ -523,15 +559,15 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
         <p>The Figure below shows the high-level overview of the
            state-machine controller. It internally has a 5-bit STATE
            register (whose implementation we will look at in the next
-           section, since it is a storage element). Based on the value
-           in the state register a set of control signals are
-           generated each cycle. Based on the state and the current
-           instruction (more specifically the opcode), the next-state
-           for the next cycle is computed by the "State update unit".
-           The output of this unit is a 5-bit signal that will get
-           written into the STATE register at the beginning of the
-           next clock cycle (or equivalently the end of the current
-           clock cycle).</p>
+           section, since it is a storage element). A set of control
+           signals are generated each cycle based on the value in the
+           state register. The next-state for the next cycle is
+           computed by the "State update unit" based on the state and
+           the instruction (specifically only the opcode bits).  The
+           output of this unit is a 5-bit signal that will get written
+           into the STATE register at the beginning of the next clock
+           cycle (or equivalently the end of the current clock
+           cycle).</p>
 
       <figure><caption>State-machine controller
       overview</caption></figure>
@@ -594,16 +630,18 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
       represented as two separated 1-bit signals VAL_sel1 and
       VAL_sel0.</p>
 
-      <p>The next piece if the state update unit. It's truth table
-      implementation is "long" but straigth-forward. For every opcode,
+      <p>The next piece is the state update unit. Its truth table
+      implementation is "long" but straight-forward. For every opcode,
       it contains a set of rows that show the transition from one
       state to another as that instruction is executed. If you recall
-      the microarchitecture trace diagrams we had a set of states each
-      opcode would sequence through. A truth-table version that shows
-      this by combining all opcodes and their state transitions is
-      shown below. Note here that we taken all the 4-bit, 6-bit, and
-      8-bit opcode and zero-padded them all to be 11-bit signals since
-      that is the longest opcode we have.</p>
+      the microarchitecture trace diagrams, we had a set of states
+      each opcode would sequence through. A truth-table version that
+      shows this by combining all opcodes and their state transitions
+      is shown below. Note here that we have taken all the 4-bit,
+      6-bit, and 8-bit opcodes and zero-padded them all to be 11-bit
+      signals since that is the longest opcode we have. We are showing
+      the most significant 4 bits grouped together since most of the
+      opcodes are 4-bits and it makes the table easier to follow.</p>
 
       <figure><caption>State update unit:
       truth-table.</caption></figure>
@@ -646,21 +684,25 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	independent of any kind of clock signal and produces a new
 	output simply based on the input. Creating a register which
 	only changes its value based on a clock signal is a little
-	tricky. These types of circuits are called sequential circuits
-	and in this sub-section we will build two types of sequential
-	elements – something that can store a value and hold it
-	unmodified and a D-flip-flop register which will capture the
-	value on the rising clock edge.</p>
+	tricky. These types of circuits are called sequential
+	circuits.  Specifically sequential logic is defined as types
+	of logic blocks whose output depends on the previous input
+	that has been stored in them.  In this sub-section we will
+	build two types of sequential elements – something that can
+	store a value and hold it unmodified and a D-flip-flop
+	register which will capture the value on the rising clock
+	edge.</p>
 	
 	<p>
 	  First, a brief note the clock. In modern processors, the
 	  clock signal is a value that toggles between 0 and 1 at a
 	  clock period. It is used to build sequential elements and
 	  allows the construction of circuit that operates at a fixed
-	  frequency.
+	  frequency. We will need the clock-signal very soon when we lock at
+          a block called the D flip-flop.
 	</p>
+
 	<p>
-	  
 	  First, we will build an RS latch which is a type of circuit
 	  which can hold its value and can thus be used to build
 	  memories. The basic circuit an RS latch is shown below. Its
@@ -733,7 +775,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	combine four of these to create the 32-entry register file
 	memory. </p>
 	
-	<p>We can combine 8192 such blocks to create the full 65536
+	<p>We can combine 2048 such blocks to create the full 65536
 	byte memory we need. Or build this more
 	hierarchically. Combine four 32-entry memories to create a
 	128-entry memory. Then combine four 128-entry memories to
@@ -762,12 +804,13 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	built out of switches made from mechanical devices, and later
 	vacuum tubes before transistors became the standard – more
 	about this evolution later. A transistor has three terminals
-	called a source and drain. These are fancy terms that simply
-	refer to two ends of the circuit that is going to be connected
-	or left open. See diagram below. In a mechanical switch for an
-	electric light, when the switch is one position (manually set
-	by a human), the circuit is closed and current flows turning
-	the light on.
+	named source, drain, and gate. The source and drain are fancy
+	terms refer to two ends of the circuit that is going to be
+	connected or left open. The gate decides whether the circuit
+	should be closed or open. See diagram below. In a mechanical
+	switch for an electric light, when the switch is one position
+	(manually set by a human), the circuit is closed and current
+	flows turning the light on.
       </p>
       
       <figure width="400px"><caption></caption></figure>
@@ -826,7 +869,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
      
 
       <p>You might see the connection between the transistor and the
-      concept of Boolean logic. Essentially high-voltage we will treat
+      concept of Boolean logic. Essentially, high-voltage we will treat
       as logical 1 and low-voltage we will treat as logical
       0. Voila--with that we have built what we need for a digital
       computer.
@@ -856,7 +899,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	the operation of transistors as shown below. Note we are
 	assuming that ~A and ~B are available, which can be
 	accomplished with a NOT gate, which we already saw how to
-	constuct.
+	construct.
       </p>
       
       <figure width="400px"><caption>The implementation of an XOR gate using
@@ -865,16 +908,18 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
       <p>Just like what we did with logic gates, given a
 	transistor-level circuit we can compute what it does by
 	tracing the operation of each transistor as being on or off.
-	Let us look at the example of the following transistor-level
-	circuit. 
       </p>
 
       <p>
         The table below summarizes the number of transistors required
-        for simple gates and for the entire processor we built.
-        In the calculation below, we approximate
-        the control signals block as comprising for 22 5-input AND gates + 5 invertors.
-        We also approximate the state-update block as  32 16-input AND gates, 16 invertors, and 5 32-input OR gates.
+        for simple gates and for the entire processor we built.  In
+        the calculation below, we approximate the control signals
+        block as comprising for 22 5-input AND gates + 5 invertors.
+        We also approximate the state-update block as 32 16-input AND
+        gates, 16 invertors, and 5 32-input OR gates.  For the
+        memories we are ignoring the number of transistors needed for
+        the various decoders and the various muxes at the different
+        levels of hierarchy.
       </p>
 
       <table>
@@ -896,6 +941,8 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 <tr><td>FA 1-bit</td><td>74</td></tr>
 <tr><td>HA 1-bit</td><td>6</td></tr>
 <tr><td>1-bit REG</td><td>40</td></tr>
+<tr><td>3-to-8 Decoder</td><td>68</td></tr>
+<tr><td>8-to-3 Encoder</td><td>30</td></tr>
 <tr><td colspan="2">Datapath modules</td></tr>
 <tr><td>FA 8-bit</td><td>592</td></tr>
 <tr><td>CHECKZ 8-bit</td><td>32</td></tr>
@@ -906,31 +953,38 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 <tr><td>ALU</td><td>1000</td></tr>
 <tr><td>Incrementor</td><td>48</td></tr>
 <tr><td>State machine controller (control sigs)</td><td>274</td></tr>
-<tr><td>State machine controller (next state)</td><td>1450</td></tr>
-<tr><td>Total AUX regs (9 8-bit REGS)</td><td>2880</td></tr>
-<tr><td>RF (32 8-bit REGs)</td><td>10240</td></tr>
-<tr><td>PM (16384 1-bit REGs)</td><td>655360</td></tr>
-<tr><td>RAM (16384 1-bit RGEs)</td><td>655360</td></tr>
-<tr><td><b>Total</b></td><td><b>1326612</b></td></tr>
+<tr><td>State machine controller (next state)</td><td>1,450</td></tr>
+<tr><td>Total AUX regs (9 8-bit REGS)</td><td>2,880</td></tr>
+<tr><td>RF (32 8-bit REGs)</td><td>10,240</td></tr>
+<tr><td>PM (16384 1-bit REGs)</td><td>655,360</td></tr>
+<tr><td>RAM (16384 1-bit RGEs)</td><td>655,360</td></tr>
+<tr><td><b>Total</b></td><td><b>1,326,612</b></td></tr>
 </table>
       
       <p>The processor we have designed needs more than 1 million
       transistors - these tiny things quickly add up! If we removed
       all the memories, we are left with a measly 15892
       transistors. To put this in perspective, Intel's first
-      microprocessor was introduced in 1971 had merely 2300
-      transistors. And in fact, that processor had no transistors
-      devoted for memories inside the processor chip - it was a
-      separate chip. It is true that the processor we have designed
-      here is more complex than that first processor. So Kudos!</p>
+      microprocessor (the 4004) was introduced in 1971 had merely 2300
+      transistors. You can find its detailed transistor-level schematic 
+        <a href="http://www.intel.com/Assets/PDF/General/4004_schematic.pdf">here.</a>
+       and all about it at the <a href="http://www.4004.com/">4004
+       page</a>. Its high-level schematic can be
+       found <a href="http://www.intel.com/Assets/PDF/DataSheet/4004_datasheet.pdf">
+       here</a>.  That processor had no transistors
+       devoted for memories inside the processor chip - it was a
+       separate chip. </p>
+
+      <p>It is true that the processor we have designed here is more
+      complex than that first processor. So Kudos!</p>
 
       <aside>Modern microprocessors have 100 million to 10 billion
-transistors on a single chip (the SPARC M7 processor announced in
-2015). It is probably quite evident to you know that most of those
-transistors are devoted to storage structures of some sort. In modern
-processor these storage structure may be memories or could be
-auxiliary storage structures like prediction tables, and
-caches.</aside>
+        transistors on a single chip (the SPARC M7 processor announced in
+        2015). It is probably quite evident to you know that most of those
+        transistors are devoted to storage structures of some sort. In modern
+        processor these storage structure may be memories or could be
+        auxiliary storage structures like prediction tables, and
+        caches.</aside>
         
 
     </text>
@@ -1012,7 +1066,7 @@ A p-type transistors behavior is the converse and we will skip its operation det
 	</text>
       </section>
       <section>
-	<title>Physical Manufacturing of a Transtistor</title>
+	<title>Physical Manufacturing of a Transistor</title>
 	<text><p>The manufacture of transistor is a complicated
 	process that involves many steps. The cross section layout of
 	the transistor gives a hint on how the manufacturing is
@@ -1048,7 +1102,7 @@ A p-type transistors behavior is the converse and we will skip its operation det
 	  <p><def term="Dennard scaling">A companion to Moore’s Law is
 	  another phenomenon called <b>Dennard scaling</b>, which
 	  states that the supply voltage for a transistor can be
-	  reduced linearly with its size. </def> Combining these two,
+	  reduced linearly with its channel length. </def> Combining these two,
 	  if we shrink the length by 1.41X, the width by 1.41X, we get
 	  a transistor that is 2X smaller. We also reduce its voltage
 	  supply by 1.41X. The power consumption of a transistor is
@@ -1066,17 +1120,17 @@ A p-type transistors behavior is the converse and we will skip its operation det
     <p>We hope with this book you are now left with a better
       understanding of computer science, how computers operate, and
       how they can be programmed. Today's computers are made of
-      millions to billions of transistors - but their essense of
+      millions to billions of transistors - but their essence of
       operation is based on the transistor behavior we learned in this
       chapter, gates, microarchitecture, and ISA principles in
       previous chapters.  There are 100s of programming languages, but
       the foundational principles of almost all programming languages
       are based on the ideas we covered early on.</p>
-    <p>You know now more about computers. You also probably feel there
+    <p>You now know more about computers. You also probably feel there
       is a lot more you don't know about than you thought you didn't know
       about when you started!</p>
     <p>The basic ideas in this book and course should equip you on
-      your journel to build future computers, systems, languages, and
+      your journey to build future computers, systems, languages, and
       software. Good luck!</p>
     </text>
   </section>
