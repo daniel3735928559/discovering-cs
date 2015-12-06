@@ -579,14 +579,14 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
         
         <p>The large truth table from Chapter 7 is reproduced in the
           Figure below with the output columns ordered slightly
-          differently.  This big table is simple a truth-table with 22
+          differently.  This big table is simply a truth-table with 22
           outputs and 5 inputs (each bit of the state register). Using
           the rules of logic gates we can thus create the logic
           circuit for each output variable as shown in the
           Figure. While simple or perhaps intimidating, the
           control-logic block of the processor is simply these set of
-          logic gates! Note that signal which are one in exactly one
-          row can be computed by just one 5-input AND gate which the
+          logic gates! Note that signals which are one in exactly one
+          row can be computed by just one 5-input AND gate with the
           original or negated value of the relevant inputs. Signals
           (like REG_we) which have multple rows that are 1, use an OR
           gates which is fed by multiple AND gates.
@@ -597,7 +597,8 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 
       <p>Let us look at this in a little bit more detail. The Figure
         below shows three (randomly) selected control signals, and the
-        subset of the truth table.</p>
+        subset of the truth table - removing all rows that 0 for all
+        three outputs.</p>
 
       <figure width="600px"><caption>Control signals: truth-table and logic-gate zoomed in view of 3 signals.</caption></figure>
 
