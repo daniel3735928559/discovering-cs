@@ -912,14 +912,70 @@ Cout = ABCin' + A'BCin + AB'Cin + ABCin
 	addr into a decoder to produce a one-hot signal which is 1 at
 	the row that is being written to. This can be ANDed with the
 	we input and accomplishes the task of writing to the
-	memory. </p>
+	memory. What we have now is an 8-wide, 8-deep memory as shown in the Figure below. </p>
 
 	<figure><caption>8-entry memory with 8-bits per entry.</caption></figure>
 	
-	<p>What we have now is an 8-wide, 8-deep memory. We can
+	<p>We can
 	combine four of these to create the 32-entry register file
-	memory. </p>
-	
+	memory as shown below. Note in the figure below the wires
+	drawn in red and blue. The red wire now use bits 4 and 3 to
+	select which of 8-entry memories to choose from to produce as
+	the final outtput. Furthermore each 8-entry memory is fed bits
+	[2:0] from the address to select a specific row internally.
+	We also need a little bit more additional to logic to make
+	sure we write to only one of the 8-entry memories (which will
+	in-turn write to exactly one row within that memory). To
+	accomplish that, we use a 2-to-4 Decoder that uses bits [4:3]
+	to generate a one-hot signal each of which is ANDed with the
+	write-enable signal and sent as input into each 8-entry
+	memory.</p>
+
+	<figure><caption>32-entry 8-bit memory (Used for Register File).</caption></figure>
+
+	<p>We can now combine 4 of these again to create a 128-entry
+	memory. As is evident the only change will be that we now send
+	bits [4:0] as the addr bits into each 32-entry memory which
+	will serve as our building block. The final selection mux and
+	the write-decoders use bits [6:5] now. This Figure is shown
+	below.</p>
+
+	<figure><caption>32-entry 8-bit memory (Used for Register File).</caption></figure>
+
+        <p>This idea can be generalized to use an N-entry memory and
+          combine R of them to create an N*R capacity memory * 8
+          bits. A stylized Figure representing this circuit is shown
+          below.
+        </p>
+
+	<figure><caption>General memory organization.</caption></figure>
+
+        <p>The table below shows how we can hierarchicaly combine and
+          build larger memories.  Any combination of N and R are
+          allowed. Due to vagaries of how transistors are manufactured
+          microprocessor manufactures prefer certain combinations --
+          that is well beyond the scope of this book. In the table we
+          show one hierarchy of combining (16 X 32-entry memories) to
+          first form a 512-entry memory. We can then combine (16 x
+          512-entry memories) to form a 8192-entry memory. We can
+          combine two of these to form a 16384-entry memory. We can
+          combine (4 x 16384-entry memories) to form a 65536-entry
+          memory, which we can use for our processor's program memory
+          and data-memory. Not that our program memory needs 16-bits
+          per entry. For that memory, we can use a 16-bit register in
+          the first 8-entry memory block.
+        </p>
+
+        <table>
+          <tr><td>N</td><td>R</td><td>Capacity</td><td># addr bits</td></tr>
+          <tr><td>8</td><td>4</td><td>32 bytes</td><td>5</td> </tr>
+          <tr><td>32</td><td>16</td><td>512 bytes</td><td>9</td></tr>
+          <tr><td>512</td><td>16</td><td>8192 bytes</td><td>13</td></tr>
+          <tr><td>8192</td><td>2</td><td>16384 bytes</td><td>14</td></tr>
+          <tr><td>16384</td><td>4</td><td>65536 bytes</td><td>16</td></tr>
+        </table>
+
+
 	<p>We can combine 2048 such blocks to create the full 65536
 	byte memory we need. Or build this more
 	hierarchically. Combine four 32-entry memories to create a
@@ -927,7 +983,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABCin
 	create a 512-entry memory. Combine four 512-entry memories to
 	create a 2048-entry memory. And so on.</p>
 
-	<figure><caption>32-entry 8-bit memory (Used for Register File).</caption></figure>
+
 	
         <p>Using these building blocks we can construct the register
           file, program memory and data-memory (RAM). In the previous section,
