@@ -950,7 +950,7 @@ Cout = ABCin' + A'BCin + AB'Cin + ABCin
 
 	<figure><caption>General memory organization.</caption></figure>
 
-        <p>The table below shows how we can hierarchicaly combine and
+        <p>The Table below shows how we can hierarchicaly combine and
           build larger memories.  Any combination of N and R are
           allowed. Due to vagaries of how transistors are manufactured
           microprocessor manufactures prefer certain combinations --
@@ -974,15 +974,6 @@ Cout = ABCin' + A'BCin + AB'Cin + ABCin
           <tr><td>8192</td><td>2</td><td>16384 bytes</td><td>14</td></tr>
           <tr><td>16384</td><td>4</td><td>65536 bytes</td><td>16</td></tr>
         </table>
-
-
-	<p>We can combine 2048 such blocks to create the full 65536
-	byte memory we need. Or build this more
-	hierarchically. Combine four 32-entry memories to create a
-	128-entry memory. Then combine four 128-entry memories to
-	create a 512-entry memory. Combine four 512-entry memories to
-	create a 2048-entry memory. And so on.</p>
-
 
 	
         <p>Using these building blocks we can construct the register
