@@ -1,7 +1,7 @@
 ## Synopsis
 
-Discovering CS is an open-source introductory-level computer
-engineering online textbook, all in one handy NodeJS app!  
+Discovering CS is an open-source introductory-level computer engineering 
+online textbook, all in one handy NodeJS app!  
 
 The content of the text is arranged in a top-down fashion, starting
 with the high-level systems that students will have encountered in
@@ -19,6 +19,8 @@ To get started, simply clone this repositry, navigate to the home
 directory, and run:
 
 ```
+touch ratings/ratings.log
+touch logs/access.log
 node app.js
 ```
 
@@ -26,35 +28,8 @@ which will start up a server on `localhost:61453`
 
 ## Deploying
 
-One mechanism for deploying the textbook for use in a class is with
-Docker, starting with a Dockerfile like:
-
-```
-FROM ubuntu:latest
-RUN apt-get update
-RUN apt-get -y upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm
-EXPOSE 61453
-ADD src /tmp/
-ADD start.sh /tmp/
-RUN chmod +x /tmp/start.sh
-CMD . /tmp/start.sh
-```
-
-where `start.sh` looks like:
-
-```
-cd /tmp/
-npm install
-nodejs app.js
-```
-
-The container can then be built with:
-
-```
-docker build -t discoveringcs .
-docker run -p 61453:61453 discoveringcs
-```
+See https://github.com/daniel3735928559/run-discovering-cs for the 
+scripts used to deploy the book in the wild.
 
 ## Table of Contents
 
