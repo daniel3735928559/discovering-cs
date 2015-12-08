@@ -441,9 +441,12 @@ A(~A + B) = AB</code>
 	AB'Cin + ABC. This can be simplified down as follows:</p>
 
 <code>
-Cout = ABCin' + A'BCin + AB'Cin + ABC
+Cout = ABCin' + A'BCin + AB'Cin + ABCin
 
-[Applying Identity Law for ABC]
+[Applying Idempotent Law for ABC] (we add two copies of ABCin)
+     = ABCin' + A'BCin + ABCin + AB'Cin + ABCin + ABCin + ABCin
+
+[Applying Associative Law for ABC]
      = ABCin' + ABCin + A'BCin + ABCin + AB'Cin + ABCin 
 
 [Applying Distributive Law for ABC]
@@ -717,25 +720,164 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	</p>
 	
 	<figure><caption>Basic RS Latch</caption></figure>
-	
+
+	<p>Let us look at the behavior in more detail and how we
+          arrive at that truth table for it. The two inputs we have
+          control over in the RS latch are ~S and ~R. The output is Q
+          and ~Q (i.e. one of the outputs must be inverse of the
+          other). Two rules come in handy while trying to understand
+        the behavior of and RS-latch.</p>
+
+        <ul>
+        <li>The NAND truth-table says that if
+          any one input to a NAND gate is 0, the output is guaranteed
+          to be 1. It doesn't matter what the other input is. </li>
+
+        <li>All gates have some finite delay before they can produce their output.
+          We need to dig one level deeper into what gates are
+          made of.  We will look at this in detail in the next
+          section, but for now, we will take it that these gates can
+          be made out of transistors.  And each transistor has a
+          certain delay to turn on or off, effectively inducing a
+          delay for each logic gate. Assume that each of these gates
+          has 10 pico-seconds (ps) of delay. It does not matter what
+          this number is - we know it is non-zero. 
+          <p>The output will be produced only after that amount of
+          delay. In the intermediate time window of 0 to 10ps, the
+          output can be anything -- 0 or 1. </p>
+          </li>
+        </ul>
+
+        <p>We can now methodically look at all 4 combinations of
+          inputs. The immediate Figure below shows the behavior for
+          0/1 and 1/0 inputs to ~S and ~R and we elaborate on them
+          next.</p>
+
+	  <figure><caption>RS Latch Behavior for 0/1 and 1/0 inputs.</caption></figure>
+
+         <p>Given ~S = 0 and ~R = 1,
+          we know for sure that the output of the top NAND gate will
+          be 1 (because there is one 0 input). We get Q = 1. After 10
+          more ps (total 20ps), we can derive the value of ~Q from the
+          second NAND which has both inputs set to 1, and hence
+          outputs 0. This latch will then stabilize and hold onto its
+          value so long as ~S and ~R are held at 0 and 1.</p>
+
+          <p>We can repeat this process for ~S = 1 and ~R = 0 to get
+          ~Q = 1 (@10ps), Q = 0 (@20ps).</p>
+
+          <p>When both inputs are set to 1, then based on whether we
+            previously stored a 0 or a 1, the latch will continue
+            producing that same output. Looking at the Figure below we
+            can deduce the behavior. For either the top or bottom NAND
+            gate (actually the gate whose output was previously 1),
+            one input has to be zero, and it will produce a 1
+            immediately (no change). The other gate will then produce
+            a 0 (also no change).</p>
+
+
+	  <figure><caption>RS Latch Behavior for 1/1 and 0/0 input.</caption></figure>
+
+
+          <p>Now suppose that if ~S = 0 and ~R = 0. Q and ~Q would
+          then become 1 (after the 10 ps second and remain that
+          way). Since, we want Q to be the inverse of ~Q, we would
+          like to disallow this scenario from occuring and call this
+          the disallowed state. To disallow this state from ever
+          occurring, we are going to modify the RS latch.</p>
+
 	<p>
-	  This can be modified slightly by adding another set of gates
-	  controlling ~S and ~R to prevent the disallowed state from
-	  ever occurring. This design is called the gated-D latch and
-	  is shown below.
+	  This desired modification can be achieved by adding another
+	  set of gates controlling ~S and ~R to prevent the disallowed
+	  state from ever occurring. This design is called the gated-D
+	  latch and is shown below. It basically adds two NAND gates
+	  fed by a D and E input whose outputs are connected to the RS
+	  latch.
 	</p>
 	
+        <p>The Figure below shows the design of a gated D-latch. The behavior
+          can be deduced by first looking at E.</p>
+        <ul>
+          <li>When  E is 0, then the new gates will always output 1, generating the hold-state of
+            1/1 inputs for the RS latch.</li>
+          <li>When E is 1, then the D inputs becomes effectively the value we want to write into
+            the RS latch. </li>
+            <ul>
+              <li>When D is 0, the top-gate's (the new one we added -
+                shown in red) output becomes 1, and the bottom gate's
+                output becomes 0, generating the 1/0 input combination for the RS latch.</li>
+              <li>When D is 1, the top-gate's (the new one we added -
+                  shown in red) output becomes 0, and bottom gate's
+                  output becomes 1, generating the 0/1 input combination for the RS latch.</li>
+            </ul>
+          </ul>
+          
 	<figure><caption>Gated D-Latch</caption></figure>
 	
 	<p>Even this doesn’t quite give us the capability of being
 	able to modify values only at the clock-edge. We accomplish by
-	construction what is called a master-slave D-flip-flop circuit
+	constructing what is called a master-slave D-flip-flop circuit
 	using two gated D-latches as shown below. This gated D latch
 	is basically a single-bit register.
 	</p>
 
 	<figure width="600px"><caption>Master-Slave D Flip-Flop</caption></figure>
-	
+
+	<p>We explain the detailed behavior using the Figure below
+          using color for exposition.  Even though the values of Din
+          can only be 0 or 1, for exposition, let us assume the Din
+          input can be various colors at different times: blue,
+          salmon, green, and violet. The hatched yellow regions denote
+          any other value and indicate that the value can be changing
+          (or anything in that time). We also have colored the master
+          D-latch green and the slave D-latch orange. Q0 indicates
+          the output of the master and Q1 indicates the output of the
+          slip (which is the final output). The clock signals for each
+          are shown in green and orange respectively, and note they
+          are complements of each other. In the explanation below we
+          will use the terms green latch and organe latch to
+          aid in exposition. </p>
+
+        <p>The basic behavior is that at the end of the first half
+          of its clock cycle, the green latch will enter the hold state
+          and for the rest of that clock-cycle (green clock = 0), it will
+          produce as its output whatever value was available at that clock edge.
+          Until the clock-edge, the output will be identical to whatever Din is.
+          In clock-cycle 0, this will be blue, in the next cycle it will be salmon,
+          next green, and next violet.
+        </p>
+
+        <p>Now, consider the orange latch. It is controlled by a
+          clock-signal driving its E input that is phase-shifted
+          compared to the green latch. During its write-stage (which
+          happens during the hold-stage of the green D-latch), it will
+          produce the value provided to it by the green latch. In the
+          Figure, you can observe this by looking at the the first
+          half of every orange clock cycle and indicate by the cyan
+          arrow, which denotes the Q0 to D wire in the flip-flip
+          circuit. In the second-half of the orange clock cycle, the
+          orange latch will enter its hold state (since E is zero). At
+          this point, it will continue holding whatever was available
+          for the rest of that clock cycle -- shown by retaining the
+          same color for the rest of that clock cycle. Effectively
+          holding for an entire clock cycle (both 0 and 1 phase), the
+          Din value that was available at the beginning of the orangle
+          clock-cycle -- the rising edge (or equivalently middle of
+          the green clock-cycle - its falling edge).</p>
+        
+        <p>On cycle 1, the same thing repeats. In the Figure we denote
+          this value at the clock-edge with the salmon color and
+          notice how that is also held steady for any entire clock
+          cycle as the output, regardless of how Din changes in the
+          intervening time.</p>
+
+        <p>Using such an edge-triggered flip-flop we can performing
+          combination logic work for an entire clock-cycle, store the
+          result in an auxiliary register, and proceed to the next
+          cycle using this computed value.</p>
+
+	<figure><caption>Master-Slave D Flip-Flop Behavior</caption></figure>
+
 	<p>
 	  We can enhance this slightly to get a single-bit register
 	  with a write-enable like we need for all our auxiliary
