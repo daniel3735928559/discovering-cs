@@ -21,6 +21,7 @@ directory, and run:
 ```
 touch ratings/ratings.log
 touch logs/access.log
+npm install
 node app.js
 ```
 
