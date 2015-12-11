@@ -200,7 +200,7 @@ AB = BA</pre></div>
         <td>Distributive law</td>
         <td>       
         <div class="code"><pre>
-A(B + B) = AB + AC
+A(B + C) = AB + AC
 A + (BC) = (A+B)(A+C)</pre></div>
         </td>
         </tr>
@@ -225,9 +225,11 @@ A(A + B) = A</pre></div>
 
         <tr>
         <td>De Morgan's law</td>
+        <td>
         <div class="code"><pre>
 ~(AB) = ~A + ~B
 ~(A + B) = (~A)(~B)</pre></div>
+        </td>
         </tr>
       </table><p>We can apply the first 5 laws and get the following simple results that
 become handy in simplyfying boolean equations.</p><table>
@@ -329,9 +331,12 @@ A(~A + B) = AB</pre></div>
 	Algebra laws from above, we have simplified the Cout
 	implementation. From the truth-table, Cout = ABCin' + A'BCin +
 	AB'Cin + ABC. This can be simplified down as follows:</p><div class="code"><pre>
-Cout = ABCin' + A'BCin + AB'Cin + ABC
+Cout = ABCin' + A'BCin + AB'Cin + ABCin
 
-[Applying Identity Law for ABC]
+[Applying Idempotent Law for ABC] (we add two copies of ABCin)
+     = ABCin' + A'BCin + ABCin + AB'Cin + ABCin + ABCin + ABCin
+
+[Applying Associative Law for ABC]
      = ABCin' + ABCin + A'BCin + ABCin + AB'Cin + ABCin 
 
 [Applying Distributive Law for ABC]
@@ -511,25 +516,129 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	  the circuit retains its old value and serves as a memory
 	  cell. Setting ~R to 1 writes 1 into the cell. Setting ~S to
 	  1 writes 0 into the cell.
-	</p><div class="figure"><img src="/text/figures/8.1.6.fig1.png" width="800px"><div class="caption">Figure 8.1.6.1: Basic RS Latch</div></div><p>
-	  This can be modified slightly by adding another set of gates
-	  controlling ~S and ~R to prevent the disallowed state from
-	  ever occurring. This design is called the gated-D latch and
-	  is shown below.
-	</p><div class="figure"><img src="/text/figures/8.1.6.fig2.png" width="800px"><div class="caption">Figure 8.1.6.2: Gated D-Latch</div></div><p>Even this doesn’t quite give us the capability of being
+	</p><div class="figure"><img src="/text/figures/8.1.6.fig1.png" width="800px"><div class="caption">Figure 8.1.6.1: Basic RS Latch</div></div><p>Let us look at the behavior in more detail and how we
+          arrive at that truth table for it. The two inputs we have
+          control over in the RS latch are ~S and ~R. The output is Q
+          and ~Q (i.e. one of the outputs must be inverse of the
+          other). Two rules come in handy while trying to understand
+        the behavior of and RS-latch.</p><ul>
+        <li>The NAND truth-table says that if
+          any one input to a NAND gate is 0, the output is guaranteed
+          to be 1. It doesn't matter what the other input is. </li>
+
+        <li>All gates have some finite delay before they can produce their output.
+          We need to dig one level deeper into what gates are
+          made of.  We will look at this in detail in the next
+          section, but for now, we will take it that these gates can
+          be made out of transistors.  And each transistor has a
+          certain delay to turn on or off, effectively inducing a
+          delay for each logic gate. Assume that each of these gates
+          has 10 pico-seconds (ps) of delay. It does not matter what
+          this number is - we know it is non-zero. 
+          <p>The output will be produced only after that amount of
+          delay. In the intermediate time window of 0 to 10ps, the
+          output can be anything -- 0 or 1. </p>
+          </li>
+        </ul><p>We can now methodically look at all 4 combinations of
+          inputs. The immediate Figure below shows the behavior for
+          0/1 and 1/0 inputs to ~S and ~R and we elaborate on them
+          next.</p><div class="figure"><img src="/text/figures/8.1.6.fig2.png" width="800px"><div class="caption">Figure 8.1.6.2: RS Latch Behavior for 0/1 and 1/0 inputs.</div></div><p>Given ~S = 0 and ~R = 1,
+          we know for sure that the output of the top NAND gate will
+          be 1 (because there is one 0 input). We get Q = 1. After 10
+          more ps (total 20ps), we can derive the value of ~Q from the
+          second NAND which has both inputs set to 1, and hence
+          outputs 0. This latch will then stabilize and hold onto its
+          value so long as ~S and ~R are held at 0 and 1.</p><p>We can repeat this process for ~S = 1 and ~R = 0 to get
+          ~Q = 1 (@10ps), Q = 0 (@20ps).</p><p>When both inputs are set to 1, then based on whether we
+            previously stored a 0 or a 1, the latch will continue
+            producing that same output. Looking at the Figure below we
+            can deduce the behavior. For either the top or bottom NAND
+            gate (actually the gate whose output was previously 1),
+            one input has to be zero, and it will produce a 1
+            immediately (no change). The other gate will then produce
+            a 0 (also no change).</p><div class="figure"><img src="/text/figures/8.1.6.fig3.png" width="800px"><div class="caption">Figure 8.1.6.3: RS Latch Behavior for 1/1 and 0/0 input.</div></div><p>Now suppose that if ~S = 0 and ~R = 0. Q and ~Q would
+          then become 1 (after the 10 ps second and remain that
+          way). Since, we want Q to be the inverse of ~Q, we would
+          like to disallow this scenario from occuring and call this
+          the disallowed state. To disallow this state from ever
+          occurring, we are going to modify the RS latch.</p><p>
+	  This desired modification can be achieved by adding another
+	  set of gates controlling ~S and ~R to prevent the disallowed
+	  state from ever occurring. This design is called the gated-D
+	  latch and is shown below. It basically adds two NAND gates
+	  fed by a D and E input whose outputs are connected to the RS
+	  latch.
+	</p><p>The Figure below shows the design of a gated D-latch. The behavior
+          can be deduced by first looking at E.</p><ul>
+          <li>When  E is 0, then the new gates will always output 1, generating the hold-state of
+            1/1 inputs for the RS latch.</li>
+          <li>When E is 1, then the D inputs becomes effectively the value we want to write into
+            the RS latch. </li>
+            <ul>
+              <li>When D is 0, the top-gate's (the new one we added -
+                shown in red) output becomes 1, and the bottom gate's
+                output becomes 0, generating the 1/0 input combination for the RS latch.</li>
+              <li>When D is 1, the top-gate's (the new one we added -
+                  shown in red) output becomes 0, and bottom gate's
+                  output becomes 1, generating the 0/1 input combination for the RS latch.</li>
+            </ul>
+          </ul><div class="figure"><img src="/text/figures/8.1.6.fig4.png" width="800px"><div class="caption">Figure 8.1.6.4: Gated D-Latch</div></div><p>Even this doesn’t quite give us the capability of being
 	able to modify values only at the clock-edge. We accomplish by
-	construction what is called a master-slave D-flip-flop circuit
+	constructing what is called a master-slave D-flip-flop circuit
 	using two gated D-latches as shown below. This gated D latch
 	is basically a single-bit register.
-	</p><div class="figure"><img src="/text/figures/8.1.6.fig3.png" width="600px"><div class="caption">Figure 8.1.6.3: Master-Slave D Flip-Flop</div></div><p>
+	</p><div class="figure"><img src="/text/figures/8.1.6.fig5.png" width="600px"><div class="caption">Figure 8.1.6.5: Master-Slave D Flip-Flop</div></div><p>We explain the detailed behavior using the Figure below
+          using color for exposition.  Even though the values of Din
+          can only be 0 or 1, for exposition, let us assume the Din
+          input can be various colors at different times: blue,
+          salmon, green, and violet. The hatched yellow regions denote
+          any other value and indicate that the value can be changing
+          (or anything in that time). We also have colored the master
+          D-latch green and the slave D-latch orange. Q0 indicates
+          the output of the master and Q1 indicates the output of the
+          slip (which is the final output). The clock signals for each
+          are shown in green and orange respectively, and note they
+          are complements of each other. In the explanation below we
+          will use the terms green latch and organe latch to
+          aid in exposition. </p><p>The basic behavior is that at the end of the first half
+          of its clock cycle, the green latch will enter the hold state
+          and for the rest of that clock-cycle (green clock = 0), it will
+          produce as its output whatever value was available at that clock edge.
+          Until the clock-edge, the output will be identical to whatever Din is.
+          In clock-cycle 0, this will be blue, in the next cycle it will be salmon,
+          next green, and next violet.
+        </p><p>Now, consider the orange latch. It is controlled by a
+          clock-signal driving its E input that is phase-shifted
+          compared to the green latch. During its write-stage (which
+          happens during the hold-stage of the green D-latch), it will
+          produce the value provided to it by the green latch. In the
+          Figure, you can observe this by looking at the the first
+          half of every orange clock cycle and indicate by the cyan
+          arrow, which denotes the Q0 to D wire in the flip-flip
+          circuit. In the second-half of the orange clock cycle, the
+          orange latch will enter its hold state (since E is zero). At
+          this point, it will continue holding whatever was available
+          for the rest of that clock cycle -- shown by retaining the
+          same color for the rest of that clock cycle. Effectively
+          holding for an entire clock cycle (both 0 and 1 phase), the
+          Din value that was available at the beginning of the orangle
+          clock-cycle -- the rising edge (or equivalently middle of
+          the green clock-cycle - its falling edge).</p><p>On cycle 1, the same thing repeats. In the Figure we denote
+          this value at the clock-edge with the salmon color and
+          notice how that is also held steady for any entire clock
+          cycle as the output, regardless of how Din changes in the
+          intervening time.</p><p>Using such an edge-triggered flip-flop we can performing
+          combination logic work for an entire clock-cycle, store the
+          result in an auxiliary register, and proceed to the next
+          cycle using this computed value.</p><div class="figure"><img src="/text/figures/8.1.6.fig6.png" width="800px"><div class="caption">Figure 8.1.6.6: Master-Slave D Flip-Flop Behavior</div></div><p>
 	  We can enhance this slightly to get a single-bit register
 	  with a write-enable like we need for all our auxiliary
 	  registers. What we do is AND the “we” wire to the clock wire
 	  as shown below.
-	</p><div class="figure"><img src="/text/figures/8.1.6.fig4.png" width="800px"><div class="caption">Figure 8.1.6.4: Master-Slave D Flip-Flop with Write Enable</div></div><p>Just like we did the NOT gates and muxes we can combine 8
+	</p><div class="figure"><img src="/text/figures/8.1.6.fig7.png" width="800px"><div class="caption">Figure 8.1.6.7: Master-Slave D Flip-Flop with Write Enable</div></div><p>Just like we did the NOT gates and muxes we can combine 8
           such flip-flops to form an 8-bit block which can serve
           as the auxliary register we used to build our processor.
-          </p><div class="figure"><img src="/text/figures/8.1.6.fig5.png" width="600px"><div class="caption">Figure 8.1.6.5: 8-bit REG. Used to implement all Auxiliary registers in processor.</div></div></div></div><div class="section"><div id="sec_8_1_7"></div><div class="text"><div class="header">8.1.7: 
+          </p><div class="figure"><img src="/text/figures/8.1.6.fig8.png" width="600px"><div class="caption">Figure 8.1.6.8: 8-bit REG. Used to implement all Auxiliary registers in processor.</div></div></div></div><div class="section"><div id="sec_8_1_7"></div><div class="text"><div class="header">8.1.7: 
 	  Memories</div><p>The final module we will examine is how to build
 	memories. Recall memories are constructed to have a certain
 	width, a certain depth and are accessed with an addr point, a
@@ -543,14 +652,50 @@ Cout = ABCin' + A'BCin + AB'Cin + ABC
 	addr into a decoder to produce a one-hot signal which is 1 at
 	the row that is being written to. This can be ANDed with the
 	we input and accomplishes the task of writing to the
-	memory. </p><div class="figure"><img src="/text/figures/8.1.7.fig1.png" width="800px"><div class="caption">Figure 8.1.7.1: 8-entry memory with 8-bits per entry.</div></div><p>What we have now is an 8-wide, 8-deep memory. We can
+	memory. What we have now is an 8-wide, 8-deep memory as shown in the Figure below. </p><div class="figure"><img src="/text/figures/8.1.7.fig1.png" width="800px"><div class="caption">Figure 8.1.7.1: 8-entry memory with 8-bits per entry.</div></div><p>We can
 	combine four of these to create the 32-entry register file
-	memory. </p><p>We can combine 2048 such blocks to create the full 65536
-	byte memory we need. Or build this more
-	hierarchically. Combine four 32-entry memories to create a
-	128-entry memory. Then combine four 128-entry memories to
-	create a 512-entry memory. Combine four 512-entry memories to
-	create a 2048-entry memory. And so on.</p><div class="figure"><img src="/text/figures/8.1.7.fig2.png" width="800px"><div class="caption">Figure 8.1.7.2: 32-entry 8-bit memory (Used for Register File).</div></div><p>Using these building blocks we can construct the register
+	memory as shown below. Note in the figure below the wires
+	drawn in red and blue. The red wire now use bits 4 and 3 to
+	select which of 8-entry memories to choose from to produce as
+	the final outtput. Furthermore each 8-entry memory is fed bits
+	[2:0] from the address to select a specific row internally.
+	We also need a little bit more additional to logic to make
+	sure we write to only one of the 8-entry memories (which will
+	in-turn write to exactly one row within that memory). To
+	accomplish that, we use a 2-to-4 Decoder that uses bits [4:3]
+	to generate a one-hot signal each of which is ANDed with the
+	write-enable signal and sent as input into each 8-entry
+	memory.</p><div class="figure"><img src="/text/figures/8.1.7.fig2.png" width="800px"><div class="caption">Figure 8.1.7.2: 32-entry 8-bit memory (Used for Register File).</div></div><p>We can now combine 4 of these again to create a 128-entry
+	memory. As is evident the only change will be that we now send
+	bits [4:0] as the addr bits into each 32-entry memory which
+	will serve as our building block. The final selection mux and
+	the write-decoders use bits [6:5] now. This Figure is shown
+	below.</p><div class="figure"><img src="/text/figures/8.1.7.fig3.png" width="800px"><div class="caption">Figure 8.1.7.3: 32-entry 8-bit memory (Used for Register File).</div></div><p>This idea can be generalized to use an N-entry memory and
+          combine R of them to create an N*R capacity memory * 8
+          bits. A stylized Figure representing this circuit is shown
+          below.
+        </p><div class="figure"><img src="/text/figures/8.1.7.fig4.png" width="800px"><div class="caption">Figure 8.1.7.4: General memory organization.</div></div><p>The Table below shows how we can hierarchicaly combine and
+          build larger memories.  Any combination of N and R are
+          allowed. Due to vagaries of how transistors are manufactured
+          microprocessor manufactures prefer certain combinations --
+          that is well beyond the scope of this book. In the table we
+          show one hierarchy of combining (16 X 32-entry memories) to
+          first form a 512-entry memory. We can then combine (16 x
+          512-entry memories) to form a 8192-entry memory. We can
+          combine two of these to form a 16384-entry memory. We can
+          combine (4 x 16384-entry memories) to form a 65536-entry
+          memory, which we can use for our processor's program memory
+          and data-memory. Not that our program memory needs 16-bits
+          per entry. For that memory, we can use a 16-bit register in
+          the first 8-entry memory block.
+        </p><table>
+          <tr><td>N</td><td>R</td><td>Capacity</td><td># addr bits</td></tr>
+          <tr><td>8</td><td>4</td><td>32 bytes</td><td>5</td> </tr>
+          <tr><td>32</td><td>16</td><td>512 bytes</td><td>9</td></tr>
+          <tr><td>512</td><td>16</td><td>8192 bytes</td><td>13</td></tr>
+          <tr><td>8192</td><td>2</td><td>16384 bytes</td><td>14</td></tr>
+          <tr><td>16384</td><td>4</td><td>65536 bytes</td><td>16</td></tr>
+        </table><p>Using these building blocks we can construct the register
           file, program memory and data-memory (RAM). In the previous section,
           we built the state-machine controller, and in the one prior to that we
           built MUXes and the ALU. Thus we have seen how all the elements of the
