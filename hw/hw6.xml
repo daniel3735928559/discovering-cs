@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><quest name="HW 6" id="6">
+
+<q type="avr" id="Problem 1a">
+  <program></program>
+  <text>Write the AVR assembly code equivalent to the following Python code snippet:
+
+<pre>i = 23
+k = 0
+while(i > 12):
+   j = i - 2
+   while(j &lt; 30):
+      j = j + 10
+      k = k + 1
+   i = i - 3</pre>
+
+(Hint: there is no addi AVR instruction for "j = j + 10". Therefore,
+you may have to use subi with negative 10 instead.)  <b>Annotate your
+code with comments for full credit.</b>
+  </text>
+</q>
+
+<q type="avr" id="Problem 2">
+  <program></program>
+  <text>Write an AVR assembly program that outputs the indices of 'c'
+  is in "computer sciences". Use an assembler directive to load the
+  string into memory and then loop through the string in memory.
+  <b>Annotate your code with comments for full credit.</b>
+  </text>
+</q>
+
+<q type="avr" id="Problem 6">
+  <program></program>
+  <text>Write an AVR assembly program that prints out the 3 bit input
+  interpreted as signed magnitude, and then print out the 3 bit input
+  interpreted as 2's complement. You can assume that the 3 bits has
+  been loaded into r30 and that it will be at most 3 bits long. You
+  can load r30 with 0 through 7 for testing purposes.  See the
+  homework PDF for a table of the desired outputs for each possible
+  input.  <b>Annotate your code with comments for full credit.</b>
+  </text>
+</q>
+
+<q type="avr" id="Problem 7">
+  <program></program>
+  <text>
+    Write an AVR assembly program that measures the length (inclusive)
+    between the first binary 1 and the last binary 1 in a number, and
+    print the length to the output LCD. You can assume that the number
+    has been loaded into r30. You can load r30 with anything for
+    testing purposes.  For examples, see the homework PDF.
+    <b>Annotate your code with comments for full credit.</b>
+
+  </text>
+</q>
+
+<q type="avr" id="Problem 8">
+  <program></program>
+  <text>Write a AVR program that takes a positive integer input and
+  print to output LCD the largest number that divides it that is not
+  itself.  For examples, see the PDF.  <b>Annotate your code with
+  comments for full credit.</b>
+
+  </text>
+</q>
+
+<q type="avr" id="Problem 9">
+  <program></program>
+  <text>Repeat Homework 3 Question 9, but this time use assembly
+  language instead of Python and use an array in RAM. You must set all
+  15 Fibonacci numbers in RAM before you begin printing.  For a
+  reference solution to homework 3 question 9, see the PDF.
+  <b>Annotate your code with comments for full credit.  </b>
+  </text>
+</q>
+
+<q type="avr" id="Problem 10">
+  <program></program>
+  <text>
+    Repeat homework 5 question 15, but with 2 caveats
+    <ol>
+      <li>You must use a function to convert from fahrenheit to
+      celsius. If the function needs more registers, then it must be
+      callee-saved. </li>
+      <li>You can only use 2 registers (r16 and r17 (along with IO
+      registers 17, 18, 61, and 62))!  </li>
+    </ol>
+    The function should only contain the conversion (looping from 32
+    to 50 should be done outside of the function).  For a reference
+    solution to homework 5 question 15, see the PDF.  <b>Annotate your
+    code with comments for full credit.</b>
+
+  </text>
+</q>
+
+<q type="avr" id="Problem 11">
+  <program></program>
+  <text>
+    Repeat the previous question, but this time, if the function needs
+    more registers, then it must be caller-saved.  <b>Annotate your
+    code with comments for full credit.</b>
+  </text>
+</q>
+
+<q type="avr" id="Problem 12">
+  <program></program> <text>Use AVR assembly to convert a 16-bit fixed
+  point binary number to a 16-bit floating point floating point
+  number. Assume that the integer value has been loaded into r30 and
+  the fractional value has been loaded into r31. Put the high byte in
+  r29 and the low byte in r28. You may assume that the integer input
+  will be less than or equal to 127 while the fractional input is not
+  zero. You can load anything &lt;= 127 into r30 and anything non-zero
+  into r31 for testing purposes.  See the PDF for examples.
+  <b>Annotate your code with comments for full credit.</b>
+  </text>
+</q>
+
+<q type="avr" id="Problem 14">
+  <program></program>
+  <text>
+  Interpret the block of machine code below by unassembling it back
+  into assembly language. Check your answer with the assembler to see
+  if it assembles back into the given machine code.
+
+<pre>1110000000001111
+1110000000010010
+0001011100010000
+1111010000001000
+0010111110100001
+1001010100010011</pre>
+
+<b>Comments are not needed for this question</b>
+  </text>
+</q>
+</quest>
