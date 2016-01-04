@@ -1,0 +1,40 @@
+<div class="pysim" ng-controller="PySimController">
+  <div class="pysim_programming">
+    <div class="pysim_controls">
+      <div class="pysim_button" ng-click="run()">[run]</div>
+      <div class="pysim_button" ng-click="reset()">[end]</div>
+      <div class="pysim_button" ng-click="set_original()" ng-if="simid != 'big'">[reset]</div>
+      <!-- <div class="pysim_button" ng-click="submit()">[submit]</div> -->
+    </div><br />
+    <div class="pysim_main">
+      <form><textarea ng-attr-id="pysim{{simid}}_program_area">{{program}}</textarea></form>
+    </div>
+    <br />
+  </div>
+  <div class="pysim_simulator">
+    <div class="pysim_controls">
+      <div class="pysim_button" ng-click="step()" ng-if="running == true">[step]</div>
+      <input class="pysim_input" ng-model="steps.count" ng-if="running == true"></input>
+      <div class="pysim_status">Status: {{status}}</div>
+    </div><br />
+    <div class="pysim_vars">
+      <div class="pysim_title">Variables</div><br />
+      <span ng-repeat="(name,val) in variables">
+	<div ng-class="'pysim_reg '+ (is_updated(name) ? 'updated' : 'normal')">{{name}} = {{val}}</div><br />
+      </span><br />
+    </div>
+    <div class="pysim_outputs">
+      <div class="pysim_title">Output</div><br />
+      <span ng-repeat="output in outputs track by $index">
+	<div ng-class="'pysim_output'">{{output}}</div><br />
+      </span><br />
+    </div>
+    <!-- <div ng-attr-id="pysim{{simid}}_exec_flow"> -->
+    <!--   <div class="pysim_title">Execution flow</div><br /> -->
+    <!--   <span ng-repeat="reason in reasons"> -->
+    <!-- 	<div ng-class="'pysim_output'">{{reason}}</div><br /> -->
+    <!--   </span><br /> -->
+    <!-- </div> -->
+  </div>
+</div>
+

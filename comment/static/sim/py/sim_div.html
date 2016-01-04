@@ -1,0 +1,36 @@
+<div id="pysim" ng-controller="PySimController">
+  <div class="pysim_programming">
+    <div class="pysim_controls">
+      <div class="pysim_button" ng-click="run()">[run]</div>
+      <div class="pysim_button" ng-click="submit()">[submit]</div>
+    </div><br />
+    <form><textarea id="program_area" ng-init="cm_setup()">Hello</textarea></form>
+    <br />
+  </div>
+  <div class="pysim_simulator">
+    <div class="pysim_controls">
+      <div class="pysim_button" ng-click="step()" ng-if="running == true">[step]</div>
+      <div class="pysim_button" ng-click="reset()">[reset]</div>
+      <div class="pysim_status">Status: {{status}}</div>
+    </div><br />
+    <div id="pysim_vars">
+      <div class="pysim_title">Variables</div><br />
+      <span ng-repeat="(name,val) in variables">
+	<div ng-class="'pysim_reg '+ (is_updated(name) ? 'updated' : 'normal')">{{name}} = {{val}}</div><br />
+      </span><br />
+    </div>
+    <div id="pysim_output">
+      <div class="title">Output</div><br />
+      <span ng-repeat="output in outputs">
+	<div ng-class="'output'">{{output}}</div><br />
+      </span><br />
+    </div>
+    <div id="pysim_exec_flow">
+      <div class="pysim_title">Execution flow</div><br />
+      <span ng-repeat="reason in reasons">
+	<div ng-class="'pysim_output'">{{reason}}</div><br />
+      </span><br />
+    </div>
+  </div>
+</div>
+

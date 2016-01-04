@@ -1,0 +1,1 @@
+jison expr.jison && ./angularise expr.js > expr_ng.js

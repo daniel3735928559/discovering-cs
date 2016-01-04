@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="box.xsl" type="text/xsl"?>
+<toc>
+  <chapter>
+    <title>Introduction</title>
+    <description>
+      <p>Chapter 1 introduces the course as a whole, starting with a
+      precise definition of what we mean by the word "computer".  This
+      will be a relatively simple notion, and the course will revolve
+      around two separate questions:
+      <ul><li>How can we program a computer?</li>
+      <li>How can we build a computer?</li></ul>
+
+      The first question will be addressed in chapters 2-5, and the
+      second in chapters 6-8.</p>
+    </description>
+  </chapter>
+  <chapter>
+    <title>Programming</title>
+    <description>
+      <p>Chapter 2 starts in on the study of programming.  Programming
+      occurs in two steps: When we come up against a problem, the
+      first step is to describe a precise sequence of steps that will
+      solve it.  Such a set of steps, written in English (or human
+      language of choice) is called an algorithm, and is the focus of
+      section 2.2.  </p>
+
+      <p>Once we have an algorithm, the second step is to rewrite that
+      algorithm not in human language, but in a
+      computer-understandable language.  This will be the program.  In
+      section 2.3, we introduce a particular programming language--a
+      simplified version of Python--to illustrate this process.  </p>
+    </description>
+  </chapter>
+  <chapter>
+    <title>Advanced Programming</title>
+    <description>
+      <p>In chapter 2, we learned a simple subset of the Python
+      programming language.  Its simplicity made it easier to explain,
+      but hard to use for any complicated or interesting tasks.
+      Chapter 3 is devoted to expanding our knowledge of Python so we
+      can work toward programs that actually behave like software as
+      we know it in the real world.  </p>
+    </description>
+  </chapter>
+  <chapter>
+    <title>Numbers in Computer Science</title>
+    <description>
+      <p>Chapter 4 is a brief digression: As we descend to the level
+      of the computer hardware, we are going to need a new language to
+      talk about numbers as a computer understands them.  This is
+      accomplished by the binary representation of numbers, which is
+      the focus of chapter 4.</p>
+    </description>
+  </chapter>
+  <chapter>
+    <title>ISA</title>
+    <description>
+      <p>In chapters 2 and 3, we learned our first programming language.
+      However this language is not something that a computer
+      understands itself.  Rather, the computer understands a much
+      more basic language, called the ISA, and our programs from
+      chapters 2 and 3 were being secretly translated to this basic
+      language before being run by the computer.  </p>
+
+      <p>To truly understand what a computer does under the hood, we
+      need to learn to work with the ISA directly.  This happens in
+      two parts: We learn what the main components inside the computer
+      are (that is, the computer's "architecture"), and then we learn
+      what instructions the computer itself natively understands for
+      manipulating these components (that is, the computer's
+      "instruction set").</p>
+    </description>
+  </chapter>
+  <chapter>
+    <title>Encodings and the ISA</title>
+    <description>
+      <p>Chapter 5 is another brief but fun digression to address the
+      question of, now that we know that the computer deals in
+      numbers, how is it that we can manipulate things like text and
+      images using computers as well?  The answer is that everything
+      that a computer with, from text to images to the ISA
+      instructions themselves, must actually be numbers behind the
+      scenes.  The schemes by which numbers are made to correspond to
+      text or to graphical data or to instructions are called
+      encodings, and we explore several different types of encoding in
+      this chapter.</p>
+    </description>
+  </chapter>
+  <chapter>
+    <title>Microarchitecture</title>
+    <description>
+      <p>Chapter 7 resumes the `How to build a computer' thread by
+      taking the major tasks that the various ISA instructions need to
+      be able to accomplish, imagining we have some black-box circuit
+      components that perform these tasks, and examining how these
+      large-scale components can be connected to create an actual
+      computer.  </p>
+    </description>
+  </chapter>
+  <chapter>
+    <title>Digital Logic and Transistors</title>
+    <description>
+      <p>Finally, now that we know that to build a computer, all that
+      remains is to build the components we hooked up in the previous
+      chapter, we examine the building blocks of digital circuits:
+      Logic gates and, ultimately, transistors.  </p>
+    </description>
+  </chapter>
+</toc>

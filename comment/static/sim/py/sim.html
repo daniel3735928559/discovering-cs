@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>IAMB A NANA</title>
+    <link rel="stylesheet" type="text/css" href="sim.css">
+    <link rel="stylesheet" href="cm/codemirror.css">
+    <script src="cm/codemirror.js"></script>
+    <script src="angular.min.js"></script>
+    <script src="expr_ng.js"></script>
+    <script>console.log(parser.parse("2*2"));</script>
+    <script type="text/javascript" src="sim.js"></script>
+  </head>
+  <body ng-app="app">
+    <div id="super" ng-controller="PySimController">
+      <div class="programming">
+	<div class="controls">
+	  <div class="button" ng-click="run()">[run]</div>
+	  <div class="button" ng-click="submit()">[submit]</div>
+	</div><br />
+	<form><textarea id="program_area" ng-init="cm_setup()">Hello</textarea></form>
+	<br />
+      </div>
+      <div class="simulator">
+	<div class="controls">
+	  <div class="button" ng-click="step()" ng-if="running == true">[step]</div>
+	  <div class="button" ng-click="reset()">[reset]</div>
+	  <div class="status">Status: {{status}}</div>
+	</div><br />
+	<div id="vars">
+	  <div class="title">Variables</div><br />
+	  <span ng-repeat="(name,val) in variables">
+	    <div ng-class="'reg '+ (is_updated(name) ? 'updated' : 'normal')">{{name}} = {{val}}</div><br />
+	  </span><br />
+	</div>
+	<div id="output">
+	  <div class="title">Output</div><br />
+	  <span ng-repeat="output in outputs">
+	    <div ng-class="'output'">{{output}}</div><br />
+	  </span><br />
+	</div>
+	<div id="exec_flow">
+	  <div class="title">Execution flow</div><br />
+	  <span ng-repeat="reason in reasons">
+	    <div ng-class="'output'">{{reason}}</div><br />
+	  </span><br />
+	</div>
+      </div>
+    </div>
+  </body>
+</html>

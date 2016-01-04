@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet href="box.xsl" type="text/xsl"?><section number="4">
+  <title>Numbers in Computer Science</title>
+  <text>
+
+  </text>
+  <section>
+    <title>Physical representations of numbers</title>
+    <summary></summary>
+    <text>
+      <p>Now we plateau on our journey down the tower of abstractions
+      for a moment to stop and ponder the following problem: A
+      computer is supposed to be a physical machine, but it is also
+      supposed to perform arithmetic--for example, it is supposed to
+      be able to add numbers.  But numbers are abstract, whereas the
+      computer is a real machine, so when we say that the computer
+      `adds' two numbers, we must mean that it takes two physical
+      things--maybe pieces of paper with holes it them or electrons
+      flowing through wires or perhaps something else entirely--that
+      represent the two numbers it should add, and outputs a third
+      physical thing (paper, electrons, whatever) that represents the
+      sum.</p>
+
+      <p>The question then is: How can we represent numbers and
+      operations on them physically?  Put another way: A computer is
+      meant to store and perform arithmetic on numbers.  Now we have
+      to understand the physical realisations of these two operations.
+      </p>
+      
+    </text>
+
+    <section>
+      <title>Unary representation of numbers: A BB-based computer</title>
+      <text>
+        <p>A very simple way of representing a number physically is to
+        have a large supply of identical small objects--BBs for
+        example--and then to represent the a given number by having
+        that many BBs.  So, for example, recall that our computer 32
+        registers r0 through r31.  To build this physically, these can
+        be separate small trays that can store BBs.  So our computer
+        needs to, when it receives the operation <pre>ldi r17,9</pre>
+        just get 9 BBs and pour them into tray 17.  </p>
+
+	<p>This also makes adding numbers quite easy: To perform
+	<pre>add r14, r19</pre> we need to build a contraption that,
+	when it gets this operation, counts out an identical number of
+	BBs to the number in tray 14 (perhaps by moving tray 14 to a
+	scale with an empty tray at the other end and then adding BBs
+	to the empty tray until the scale is balanced) and then pours
+	those BBs into tray 19.</p>
+
+	<p>We can represent this with digits (the way we are used to
+	writing numbers) using only one digit: 0.  Then the number
+	that we normally write as 9 would be written as
+
+	<pre>000000000</pre>
+
+
+	And the addition of 9 and 4 would be written:
+
+	<pre>000000000 + 0000 = 0000000000000</pre>
+
+	<def term='unary'>This way of representing numbers is called
+	<b>unary</b>.  So-called because the 'un-' prefix indicates
+	that we only need a single digit in each number/</def> Unary
+	is conceptually very convenient for machine-building purposes,
+	but it becomes terribly unweildy when dealing with numbers
+	that are at all close to large.  For example, the number that
+	is so compactly written in decimal notation as 134 would be
+	written in unary as:
+
+	<pre>00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pre>
+
+	If we tried to run our factorial program on a unary-based
+	computer, we could easily need more BBs than there are atoms
+	in the universe!  So unary might be nice for a simple, slow
+	computer, but not so much for the powerful and compact
+	computers we want.  
+	</p>
+      </text>
+         
+    </section>
+
+    <section>
+      <title>Binary representation of non-negative integers</title>
+      <text>
+	<p>A representation that is still simple enough to be suitable
+	for machines but also compact enough to represent large
+	numbers in less space is binary.  In binary, as the prefix
+	'bi-' suggests, we use two possible digits: 0 and 1.  </p>
+
+	<p>To understand precisely how it works, we can think back to
+	the decimal representation that we're used to: When we write
+	the number 134, all we've done is to put the digits 1, 3, and
+	4 next to each other, and somehow this can denotes a
+	relatively large number--134.  It does so by the notion of
+	place-value: The right-most digit--4--represents how many 1s
+	we have.  The next digit represents how many 10s we have.  The
+	next, how many 100s.  And so on.  So 134 means: four 1s, three 10s,
+	and one 100, which communicates the desired quantity:
+
+	<table border="1px" cellpadding="2px">
+	  <tr><td>How many...</td><td>100s?</td><td>10s?</td><td>1s?</td></tr>
+	  <tr><td>Decimal digits</td><td>1</td><td>3</td><td>4</td></tr>
+	</table>
+	</p>
+
+	<p>We used 1, 10, and 100 as the place values because these
+	are powers of 10.  Why we use powers of anything at all is an
+	interesting mathematical idea that we leave for an aside.  Why
+	we use powers of 10 specifically had to do with the fact that
+	we were using 10 possible digits--0-9 (which in turn had to do
+	with the fact that most humans have 10 fingers to use as a
+	counting aid).  </p>
+
+	<p>Binary will only have two digits--0 and 1.
+
+	(<def term='bit'>Binary digits are also called
+	<b>bits</b>.</def>) And because we have two possible digits,
+	we will use the powers of for our place values: 1, 2, 4, 8,
+	16, 32, 64, 128, 256, 1024, etc.  So the number that we wrote
+	in decimal as 134 can be written in binary by breaking it up
+	into powers of 2: To make 134 we need one 128, one 4, and one
+	2.  So:
+
+	
+	<table border="1px" cellpadding="2px">
+	  <tr><td>How many...</td><td>128s?</td><td>64s?</td><td>32s?</td><td>16s?</td><td>8s?</td><td>4s?</td><td>2s?</td><td>1s?</td></tr>
+	  <tr><td>Binary digits</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+	</table>
+
+	So the binary representation of 134 is 10000110.
+	</p>
+
+	<p>With 3 decimal digits, the largest number we can represent
+	is 999--i.e. one less than the next place value of 1000.  With
+	8 binary digits, the largest number we can represent is
+	11111111, or 255--one less than the next place value of 256.
+	This should sound familiar from our discussion of register
+	width--a register of width 8 could only store values 0-255.
+	This is because a register of width 8 is comprised of 8 bits,
+	and with 8 bits, those are all the numbers that can be
+	represented.  In general, if we have an <i>n</i>-bit register,
+	we can use it to store numbers 0 through 2<sup>n</sup>-1.  </p>
+
+	<p>A few particular widths of binary numbers come
+	up frequently, and so have special terminology associated with
+	them:
+
+	<ul><li><def term='byte'>An 8-bit binary number is called a
+	<b>byte</b>.</def></li>
+	<li><def term='word'>A 16-bit binary number is
+	called a <b>word</b>.</def></li>
+	<li><def term='nibble'>A 4-bit binary number is
+	called a <b>nibble</b>.</def></li>
+	</ul>
+	</p>
+
+	<p>To build a computer based on binary, we need a way to
+	represent bits physically.  This is also not too hard.  If we
+	wish to build our computer out of BBs, then instead of just
+	having a tray that can hold however many BBs, we can have a
+	tray divided into slots, and each slot can hold at most one
+	BB.  Since the registers have width 8, this means each
+	register has 8 slots, and a register storing a value of 134,
+	instead of having 134 BBs, only has 3:</p>
+
+	<figure><description>
+	  |O|-|-|-|-|O|O|-|
+	</description><caption></caption></figure>
+
+	<p>In practice, computers are electrical devices, and bits are
+	stored using cells that can either store electrical charge or
+	not, where the presence of electrical charge stands for the
+	bit being a 1, and the absence of charge stands for it being
+	0.  We can then create an 8-bit register by taking 8 of these
+	cells as we did with the slots of BBs.</p>
+	
+      </text>
+         
+    </section>
+    <section>
+      <title>Binary representation of negative integers</title>
+      <text>
+	<p>Above, we said we were going to be able to represent
+	numbers, but in fact, all we did was to represent positive
+	integers.  In these next two sections, we'll briefly explore
+	how we represent other kinds of numbers--specifically,
+	negative numbers and fractions.  </p>
+      </text>
+         
+    </section>
+    <section>
+      <title>Binary representation of fractions</title>
+      <text>
+      </text>
+         
+    </section>
+    
+    <section>
+      <title>Hexadecimal</title>
+      <text>
+	<p>When dealing with large numbers, it is common to have these
+	numbers stored not in a single byte, but in multiple
+	bytes--often 4 or 8.  But an 8-byte number is 64 bits.  So if
+	we want to inspect these numbers in binary we have to read
+	strings like
+
+	<pre>0000000011111000101100001010000100001110010001110000000000000000</pre>
+	
+	instead of the slightly more illuminating representation: 
+	
+	<pre>70000000000000000</pre>
+
+	The problem is that the computer only understands the binary
+	representation, and converting large decimal numbers to binary
+	is somewhat involved.  There is a further representation that
+	is both more compact but is very easily converted to binary,
+	called <b>hexadecimal</b>.  The idea is that we split our long
+	binary representation into groups of 4, and then simply
+	translate according to the following table:
+	
+<table>
+<tr><td>Hexadecimal</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>a</td><td>b</td><td>c</td><td>d</td><td>e</td><td>f</td></tr>
+<tr><td>Binary</td><td>0000</td><td>0001</td><td>0010</td><td>0011</td><td>0100</td><td>0101</td><td>0110</td><td>0111</td><td>1000</td><td>1001</td><td>1010</td><td>1011</td><td>1100</td><td>1101</td><td>1110</td><td>1111</td></tr>
+<tr><td>Decimal</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+</table>
+
+For example, the above becomes: 
+
+<table>
+<tr><td>0000</td><td>0000</td><td> 1111 </td><td>1000 </td><td>1011</td><td> 0000</td><td> 1010</td><td> 0001</td><td> 0000</td><td> 1110</td><td> 0100</td><td> 0111</td><td> 0000</td><td> 0000</td><td> 0000</td><td> 0000</td></tr>
+<tr><td>0</td><td>    0</td><td>    F</td><td>    8</td><td>
+B</td><td>    0</td><td>    A</td><td>    1</td><td>    0</td><td>
+E</td><td>    4</td><td>    7</td><td>    0</td><td>    0</td><td>
+0</td><td>    0</td></tr>
+</table>
+
+Or 
+
+<pre>00F8B0A10E470000</pre>
+
+One advantage of this is that every byte is two hexadecimal digits.
+So 0-255 can be represented by 00-FF. </p>
+
+<p>Because numbers written in hexadecmial can be visually similar to
+numbers written in decimal if none of the digits happen to be A-F.
+For example, the number '33' might be the decimal number thirty-three,
+or it might be the hexadecmial representation for the number 51.  To
+alleviate this, numbers written in hexadecimal are often preceded by
+"0x".  So in future, unless context removes this ambiguity, we will
+write 33 for the decimal number, and 0x33 for the hexadecimal
+version.  </p>
+
+      </text>
+         
+    </section>
+  </section>
+  <section>
+    <title>Integer operations on representations</title>
+    <text>
+    </text>
+  </section>
+</section>

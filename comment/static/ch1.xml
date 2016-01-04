@@ -1,0 +1,2153 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet href="box.xsl" type="text/xsl"?><section number='1'>
+  <title>Introduction</title>
+  <section>
+    <title>What is a computer?</title>
+
+    <summary>A computer is fundamentally anything that can do
+    arithmetic on and store numbers.  </summary>
+    <text>
+      <p>The future is now.  You can speak and text with friends on
+      the other side of the world, fly on an airplane to visit them,
+      play games that are so realistic you can pass off screenshots as
+      photographs, and browse the internet with a device that fits in
+      your pocket.  What is it precisely that all these things--cell
+      phones, the internet, game consoles, air-traffic control
+      systems--all have in common?  Certainly they are all
+      computer-based systems, but the specific thing that they are all
+      fundamentally doing, as we will come to understand, is
+      surprisingly banal:</p>
+
+      <p><def term='computer'>A <b>computer</b> is simply any system that
+      is capable of four things:
+      <ul>
+	<li><b>Arithmetic: </b>Basic arithmetic and logical operations
+	on numbers</li>
+	<li><b>Storage: </b>Storing the results of these
+	operations</li>
+	<li><b>Branching: </b>Choosing which basic operations to
+	perform next based on the result of a given operation</li>
+	<li><b>Input/Output: </b>Receiving signals from external
+	sources (input) and sending signals to the outside world
+	(output)</li>
+      </ul>
+    </def>
+
+      </p>
+
+      <p>All computers, from the microchip in a thermostat to
+      smartphones, laptops, game-consoles, and the ones that power
+      Google's and Facebook's servers, are at heart nothing more than
+      machines that can do these four things really really
+      quickly.</p>
+
+      <p>We shall spend the rest of this book discussing two
+      questions:
+      <ul>
+	<li>How, if we have a 'computer' (in our apparently limited
+	sense), we can use it to actually construct some of the
+	complicated systems we associate with computers?  We will
+	focus specifically on the examples of search engines, game
+	consoles, and smartphones.</li>
+	<li>Once we are convinced that this notion of computer is
+	actually powerful enough to do everything we would expect, how
+	do we actually construct a physical machine that can perform
+	these four kinds of operations?</li>
+      </ul>
+      </p>
+      
+      <figure sk="sk1.png" src='1.1.png'>
+	<description>This is the main figure that will be filled out
+	with more details (more layers explaining how to build a
+	computer and more layers involved with how to build systems on
+	top of a computer) throughout this chapter, and whose final
+	version will be referenced at the start of every chapter going
+	forward.  </description>
+	<caption>The two sides of the story of this text.</caption>
+      </figure>
+    </text>
+  </section>
+
+
+  <section>
+    <title>Computers through history--Types of computers and what
+    they can do</title>
+    <summary>A computer can either be wired to perform a fixed
+    specific sequence of arithmetic and storage operations, or it
+    can be wired to accept lists of such operations that it will
+    then perform.  When we think of computers in this book, we will
+    be speaking of the latter type.  Further, if the operations that
+    the computer can perform are general enough that they can be
+    used to run any algorithm, we call that computer
+    'Turing-complete'.  </summary>
+
+    <text>
+      <p>One of the world's first computers was designed to do one
+      thing only: solve systems of linear equations.  This was the
+      Atanasoff-Berry computer (ABC).  Brainchild of John Vincent
+      Atanasoff and Clifford Berry around 1937, the ABC would take in
+      equations encoded onto punched paper cards, perform the equation
+      solving process, store the results of its computations in an
+      electronic memory, and then output the final result to an
+      external display.  </p>
+
+      <p>Such were the times--if we had a computation we needed done
+      repeatedly and frequently, be it solving a set of linear
+      equations or computing the correct aiming point for an
+      anti-aircraft gun--we would of course first have to figure out a
+      precise sequence of steps that would solve the problem.  But
+      then, because we do not want to execute these steps by hand over
+      and over again, we would design a machine that would take a
+      specific problem as input (say, an actual system of linear
+      equations), mechanically perform the steps we worked out for
+      solving it, and then output the result for us to use.  </p>
+
+      <p>For instance, suppose we need to compute a lot of square
+      roots.  Before we can make a machine to do this, we first need a
+      procedure to approximate the square root of any given input by
+      hand.  For example, consider the following procedure: In it,
+      we'll have two numbers called s and x.  x will be the number
+      whose square root we want to find, and s will be a value that we
+      repeatedly update throughout the procedure until it becomes
+      close enough to the desired output--the square root of x.  The
+      steps will be as follows:
+
+      <ol>
+	<li>Start by changing s to be s = x/2.  </li>
+	<li>Take whatever s is currently and add the number x/s to it,
+	making that sum the new value of s.</li>
+	<li>Divide s by 2, making the result the new value of s.</li>
+	<li>If s*s is not yet as close as we want it to be to x,
+	return to step 2 and continue from there.</li>
+      </ol>
+      
+      This is an abstract recipe, written for human understanding with
+      no particular machine in mind.  Such a recipe is called an
+      <b>algorithm</b>.  (It may not actually be obvious that this
+      algorithm actually computes the square root of x.  In fact it
+      relies on a technique from calculus called 'Newton's method of
+      approximation', but it is not necessary for the moment to
+      understand why it works.  If you have a calculator, try using
+      this method to compute the square root of 3 and compare what you
+      get after 4 repetitions with the actual answer of approximately
+      1.73205.)
+      </p>
+      
+      <p>Now that we have contrived an algorithm that turns the
+      problem 'Compute some square roots' into a sequence of simple
+      arithmetic operations, we want an actual machine to compute some
+      actual square roots so that we don't have to run this procedure
+      by hand.  To that end, we can design some separate bits of
+      hardware for storing, multiplying, adding, dividing, and
+      comparing numbers, and hook them up as in the figure below:</p>
+      
+      <figure sk="sk2.png">
+	<description>This should look similar to circuit diagrams that
+	will appear later in the text.  For example, line widths
+	should be the same, and none of the connecting lines should
+	actually be curved</description>
+	<caption>The square-root-inator: A physical device for
+	computing square roots</caption>
+      </figure>
+
+      <p>To use this machine, we would store our desired input into x,
+      and store half of that--x/2--into s.  Then a single run of the
+      machine will run steps 2 and 3 of the algorithm.  When it is
+      finished, we can look at the new value of s, and if s^2 is close
+      enough to x, we can take that s to be the square root.
+      Otherwise, we can simply run the machine again to get an even
+      better value of s, and repeat until we are satisfied.  </p>
+
+      <p>We could make an even more complicated machine to perform for
+      us step 4 rather than doing it manually.  This is an exercise: 
+      
+      <exercise>
+	<description>
+	  User is given boxes representing hardware that adds,
+	  divides, stores, subtracts, compares, and is allowed to hook
+	  them up and is asked to do so in a way that outputs the
+	  square root.
+	</description>
+      </exercise>
+
+      </p>
+
+      <p><def term='fixed program'>This square root machine, ABC, and
+      other machines like them, are computers, in that they do
+      computations.  However, they are single-purpose, or
+      <b>fixed-program</b>, devices.  That is, they are designed
+      around and can execute only a single algorithm.</def></p>
+
+      <p>The next major step, historically, was a device called the
+      ENIAC.  ENIAC, like the ABC and square-root-inator, had the
+      basic hardware for arithmetic operations and storage.
+
+      <def term='stored program'>But unlike the above, where the
+      sequence in which these arithmetic and storage operations were
+      performed was hard-wired, the user of the ENIAC was able to tell
+      it what sequence of such operations to perform on its input.
+      Such a machine is called a <b>stored-program</b> device, because
+      the user would store the sequence of operations he wanted
+      performed on the input.</def> <def term='program'>The sequence
+      of operations that the user inputs to run a given algorithm is
+      called the <b>program</b> that implements that algorithm.</def>
+      So the ENIAC user could store the sequence of operations--the
+      program--implementing the above square root algorithm, and
+      suddenly his ENIAC behaves like a square-root-inator.  Until he
+      decides to rewrite the program to implement equation solving,
+      and now his ENIAC is an ABC clone.</p>
+
+      <p>Beyond just being able to run programs that implemented more
+      than one algorithm, the ENIAC was in a sense profoundly
+      general-purpose: it was in fact the case that absolutely any
+      algorithm could be implemented as an ENIAC program written by a
+      sufficiently clever user.  <def term='Turing completeness'>This
+      property of a machine being able to run any algorithm on a
+      single machine is referred to as that machine being <b>Turing
+      complete</b>.</def>
+
+      <aside>(It bears mention that when we say 'algorithm', we refer
+      to procedures that involve manipulations of numbers.  The
+      'algorithm' that says simply 'shoot down all enemy aircraft'
+      does not specify a precise sequence of calculations, but only an
+      end-goal.  It is also clearly outside the scope of a computer
+      that doesn't also come with a gun!)</aside>
+
+      </p>
+      
+      <!-- <p>We start to see a hint of the answer to our first question -->
+      <!-- then: All we need to do to get a computer (as we defined it) to -->
+      <!-- do complex tasks like run Halo is to give it an appropriately -->
+      <!-- clever program.  But how do we reduce such a complex task into -->
+      <!-- the basic operations we are allowed to use?  </p> -->
+      <p>So we may rephrase our two basic questions simply as: 'If we
+      are given a programmable computer, how do we program it?' and
+      'How do we make a programmable computer?'  More precisely: </p>
+
+      <ul>
+	<li>Given a programmable computer capable of arithmetic and
+	storage operations, how can we program it to do the things we
+	want?</li>
+
+	<li>How can we design a physical machine that can receive a
+	program--i.e. a sequence of arithmetic, storage, branching,
+	and I/O operations--and execute it?</li>
+      </ul>
+
+    </text>
+  </section>
+
+  <section>
+    <title>The big idea -- Abstraction</title>
+    <summary>To allow us to think about complicated systems without
+    drowning in the complexity, we use a technique called abstraction,
+    where we divide the system into subsystems, and think about each
+    of these subsystems not in terms of their internal details, but
+    only in terms of how they interact with other subsystems--that is,
+    in terms of their interfaces.  Then, when the need arises, we can
+    isolate a subsystem and consider its internals separately--that
+    is, consider that subsystem's implementation.</summary>
+    <text>
+      <p>
+	The key to answering both of our central questions lies in the
+	concept of <b>abstraction</b>, also known as <b>layering</b>
+	or <b>black-boxing</b>.  The basic idea is the following: When
+	presented with a problem, e.g. trying to create a 3D video
+	game, we do not begin by thinking about every electron that
+	will ever move in one of our wires--even keeping track of
+	individual wires gets messy fast:
+      </p>
+      
+      <figure>
+	<description>Big Mess O' Wires--A photograph of the `Big Mess
+	O' Wires' project</description>
+	<caption>Imagine what would happen if your cat walked
+	through this...</caption>
+      </figure>
+      
+      <p>A neater approach is to divide the solution into separate
+      functional units, all performing distinct, specified tasks.  We
+      first try to understand how to combine these units up to solve
+      the problem, pretending all the while that the units simply work
+      as intended without caring about how they do it--they are 'black
+      boxes' into which we need not peek.  </p>
+
+      <p>When we have a solution built out of black boxes, then all
+      that will remain is to actually make the black boxes.  So we
+      then focus on each black box in turn and treat it as a
+      sub-problem.  Some black boxes might themselves be complciated
+      enough that we have to solve them using simpler black boxes that
+      will then constitute sub-sub-problems.  Eventually, however, all
+      our problems should reduce to sufficiently small sub-problems
+      that we can handle them without punting any further.</p>
+      
+      <p>We provide a detailed example: </p>
+    </text>
+    <section>
+      <title>Abstraction -- A first example</title>
+      <summary>We provide an example of a waffle bakery as a
+      complicated system.  At a top-level view, the bakery is just a
+      black-box that accepts customer orders and responds with
+      waffles.  Peering into this black-box, we see it is comprised of
+      smaller subsystems: A website, a kitchen, and a delivery team.  
+      </summary>
+      <text>
+	<p>Consider a hypothetical waffle-delivery service--WaffleCo.
+	From the customer's perspective, this consists of a web site
+	he goes to where he types in his phone number, address, credit
+	card info, and desired sort of waffle.  Within 30 minutes, he
+	will receive a text message alerting him that the waffle of
+	his dreams is on his doorstep: </p>
+	
+	<figure sk="sk3.png" >
+	  <description>The upcoming diagrams should visibly be this
+	  one, except filled in with more detail.  The boxes and
+	  arrows can be stylised or replaced with artistic
+	  interpretations, but these should make it easier to see
+	  what's happening at a glance.  In particular, using drawings
+	  of relevant objects is fine, but the level of detail should
+	  be kept somewhat low to avoid a cluttered look that would
+	  take longer to interpret than the dry labelled
+	  boxes.</description>
+	  <caption>Level-1 view of WaffleCo--the system as a
+	  whole</caption>
+	</figure>
+	
+	<p>In this picture, the system as a whole is a black box to
+	the user--he needs not understand how the waffle comes to be,
+	let alone how it comes to his location but only how to cause
+	this to happen.  The above specification: 'User gives us an
+	address, card number, and waffle selection', is the system's
+	interface.  <def term='interface'>An <b>interface</b>, in
+	general, is a description of what inputs to provide to a
+	system, and what outputs will be expected as a result.</def>
+	<def term='implementation'>The actual mechanism that in turn
+	causes the user's inputs (waffle selection, etc.) to be turned
+	into corresponding outputs (delivered waffle) is called the
+	system's <b>implementation</b>.  So in short, the user cares
+	only about the interface, and nothing about the
+	implementation</def>.  <def term='abstraction'>This
+	description of the system using only its interface and
+	ignoring its implementation is what is called an
+	<b>abstraction</b> of the system--it isn't a complete
+	description of everything that happens in the waffle-making
+	process, but it is a complete description of everything the
+	user needs to know about it.</def></p>
+	
+	<p>These were a simple ideas at this top-level view, but let
+	us now see how the concepts of interfaces, implementations,
+	and abstraction let us understand WaffleCo more deeply, but
+	still in a neatly organised way, by peering into the black box
+	one layer deeper:</p>
+
+	<p>For starters, there is the website that allows the user
+	to order waffles.  The website doesn't itself make the
+	waffles--all it does is provide the mechanism for receiving
+	the user's input.  The website then has to forward this
+	request on to another piece of the system that can actually
+	prepare waffles.  Say it does this by sending an email to
+	the bakery specifying the chosen waffle and target address.
+	</p>
+	
+	<p>But then, of course, preparing the waffles isn't enough
+	either--they have to be delivered.  So the bakery will send
+	the waffle with the address to the delivery team, who will
+	convey the waffle to the provided address.  </p>
+	
+	<figure sk="sk4.png"><description></description><caption>Level-2 view of WaffleCo</caption></figure>
+	
+	<p>Each of these three subsystems is a black box to the
+	others--the website doesn't care how the bakery prepares the
+	waffles.  It only needs to know what to include in the email,
+	namely the name of the waffle to prepare, and the address to
+	send it to--that is, it needs only to know the bakery's
+	interface.  </p>
+
+	<p>The bakery, in turn, doesn't need to know whether the
+	waffles get delivered by an army of 12-year-olds on bicycles
+	or by GPS-equipped quadcopter drones--that is a matter of the
+	delivery system's implementation--it just needs to know the
+	delivery system's interface, namely, that it needs to box up
+	the waffle in the special company-provided insulated packaging
+	with the destination address printed on top of it.</p>
+	
+	<p>Thus we have the level-2 view of the system: Earlier, we
+	described the whole system just in terms of its
+	interface--i.e. we described only an abstraction of the
+	system.  Now, we've described additionally the implementation
+	details of the system--how it actually processes the requests
+	and makes the waffles, but we did so in terms of smaller
+	abstractions.  </p>
+	
+	<p>This organisation has many benefits.  To name a couple:  
+	
+	<ul><li>The various subsystems can be improved or modified
+	independently: Once the company upgrades from 12-year-olds
+	on bicycles to the drones, the bakery won't have to change
+	any procedures if the delivery interface remains the
+	same.</li>
+	
+	<li>Specialists can do what they are good at: It will be
+	harder to find someone who can code websites and also
+	organise a bakery to craft excellent waffles than to find
+	two different people for the two separate jobs.  If the
+	bakery and website internals are completely separated apart
+	from their use of the agreed-upon interface of emailing the
+	orders, then the website programmer need not think about the
+	bakery's organisation to do his job well.  He can trust that
+	whatever he does, as long as it sends the user's orders to
+	the bakery in the agreed-upon manner, will work.</li>
+	</ul>
+
+	As we study the complicated real-world systems built using
+	computers, we will perform a similar layer-by-layer analysis,
+	first describing all the abstractions and thenlater peering
+	into their implementations to find further abstractions until
+	we get down to the level of something so simple it can be
+	realised as a physical device--the transistor.  At that point,
+	since everything else we describe will be built on that one
+	idea, everything else will become as real as that device.  And
+	all the innovation brought to bear on improving the
+	implementation of the one fundamental idea will ripple out,
+	allowing smaller and faster computers and computer-based
+	systems. </p>
+
+	<warning>
+	  <p>We have just described abstraction and how it allows us
+	  to think about complicated systems without getting
+	  overwhelmed by complexity.  A pithy rephrasing of this idea
+	  comes from Gregor Kiczales:
+	  </p>
+
+	  <p><i>'[Abstraction] is a primary concept in all engineering
+	  disciplines and is, in fact, a basic property of how people
+	  approach the world. We simply can't cope with the full
+	  complexity of what goes on around us, so we have to find
+	  models or approximations that capture the salient features
+	  we need to address at a given time, and gloss over issues
+	  not of immediate concern.'</i></p>
+
+	  <p>He was describing how we benefit from abstraction, but
+	  was also highlighting (as was in fact the main point of his
+	  article) the fact that thinking of a subsystem only in terms
+	  of its interface is fundamentally a simplification of the
+	  world.  In particular, it can and often does fail to capture
+	  all the features of the subsystem that we, even though
+	  working at a different level or on a separate subsystem, may
+	  need to consider.  </p>
+
+	  <p>For example, from the abstracted view of WaffleCo, the
+	  website designer may think that all he needs to do is get
+	  the customer's address and pass it on to the bakery to pass
+	  on to the delivery subsystem.  But if the delivery subsystem
+	  is implemented using 12-year-olds on bicycles, he may wish
+	  to code in a way of warning any customers whose address is
+	  in a remote suburb that their delivery may take several
+	  hours, whereas if the delivery system is quadcopter drones,
+	  he may wish to code in a way of warning customers of delays
+	  if there is an ongoing thunderstorm.  In other words, in
+	  practice it is possible the website programmer may have to
+	  care a little about the implementation of the delivery
+	  subsystem rather than just its interface.</p>
+
+	  <p>In such situations, we say the abstraction has 'leaked'.
+	  Indeed, insofar as every abstraction is letting you hide
+	  some of the truth about what happens 'behind the curtain',
+	  every abstraction can leak.  This doesn't contradict the
+	  fact that abstraction is an extremely powerful
+	  organisational tool.  However, it qualifies the idea we
+	  hinted at that, say, if you are only working on the bakery,
+	  you don't have to think about the delivery subsystem.  Or,
+	  more to the point, if you only want to write computer games,
+	  you don't have to know how a computer fundamentally works.
+	  </p>
+
+	  <p>This is part of the benefit of what we will be doing in
+	  the remainder of this book, namely peeling back the layers
+	  of abstraction surrounding the computer and the
+	  computer-based systems around us.  Even if you only ever
+	  want to write software, the abstraction that programming
+	  languages provides you is actually a very leaky one.  And in
+	  the day when one of the abstractions leaks in a critical
+	  way, understanding the implementation behind the interface
+	  is key.  </p>
+
+	  <p>As we discuss the various layers of abstractions, in this
+	  text, we will not tend to dwell excessively on every little
+	  way in which they can leak.  However, in cases where we do
+	  wish to point out a potential leak, that discussion will
+	  live in a warning box like this one to separate it from the
+	  main body of the text.</p>
+	</warning>
+      </text>
+    </section>
+    <section>
+      <title>Abstraction applied to our two questions</title>
+      <summary>The layers of abstraction involved in programming
+      computers are the low-level instructions that the computer
+      understands (its instruction-set architecture, or ISA), and the
+      human-friendly high-level programming language that gets
+      translated into ISA instructions by a compiler.  <br /><br />
+
+      The first layer involved with building a computer is where the
+      computer is broken down into basic functional units--called the
+      computer's microarchitecture.  Then these units are expressed in
+      terms of basic components called logic gates.  Finally, logic
+      gates are made up of transistors, which are actual physical
+      devices one can build.</summary>
+      <text>
+	<p>
+	  We now turn back to our original questions: How to program a
+	  computer, and how to build a computer.
+	</p>
+
+	<p>To address the first question, we were supposing the
+	computer already exists and not worrying about how it works
+	internally; in other words, treating it as a black box!  So,
+	like the black boxes of the waffle bakery, the first thing we
+	want to do is to specify its interface.</p>
+	
+	<p>We've already hinted at the interface by saying a computer
+	was a device that can perform certain arithmetic and logical
+	operations and that can store and retrieve the results of
+	these.  The actual interface will consist of a set of
+	operations that the computer is allowed to perform.  These
+	operations will vary from computer to computer--in some,
+	'multiply two numbers' might be a valid operation, and in
+	other more basic computers, only 'add two numbers' is
+	available.  <def term='ISA (basic)'>All computers come with a
+	precise specification of what operations they understand,
+	called its <b>Instruction Set Architecture</b> or
+	<b>ISA</b>.</def> This is the computer's interface.</p>
+	
+	<figure sk="sk5.png">
+	  <description></description>
+	  <caption></caption>
+	</figure>
+	
+	<p>The ISA is a complete list of the basic operations a
+	computer can perform, but does not represent how people
+	typically program computers in practice.  For example, to
+	compute 2+7 using one kind of computer's ISA requires the
+	programmer to write:</p>
+	
+	<pre>ldi r30,2
+	ldi r31,7
+	add r30,r31</pre>
+	
+        <p>Whatever that actually means, it certainly looks a lot more
+        cumbersome than we would like.  A sane programmer would prefer
+        to be able to simply tell the computer '2+7' and have
+        something automatically figure out the appropriate ISA
+        operations that correspond to this computation (namely, the
+        above).  <def term='programming language (basic)'>A
+        <b>programming language</b> is a more human-friendly way of
+        specifying to the computer what computations to perform.
+        </def> <def term='compiler (basic)'>The trouble is that a
+        computer only understands operations from the ISA, so we need
+        an intermediary that can translate the programming language
+        into ISA operations.  This is called the
+        <b>compiler</b>.</def></p>
+
+	<p>So the programmer, instead of telling the computer directly
+	to execute the complicated ISA operations, writes simpler code
+	in his programming language.  The compiler turns his
+	simple-looking program into the appropriate ISA operations,
+	which can then be fed to the computer for execution.</p>
+	
+	<figure sk="sk6.png"><description></description><caption></caption></figure>
+	
+	<p>Now that the programmer can use the programming language
+	instead of the ISA directly to control the computer, this
+	starts to make possible the complicated tasks needed to
+	create systems like Google and Facebook, as we'll discuss in
+	1.7 and beyond.  </p>
+	
+	<p>So we have two layers that comprise programming a computer:
+	The ISA layer, and then on top of that, the programming
+	language layer.  We now turn to the question of what layers
+	are involved with implementing a computer.  </p>
+	
+	<p>A computer, by definition, is a physical machine that can
+	accept commands from the ISA and perform the corresponding
+	operations.  Typically, these days, such a machine is made out
+	of circuits guiding electron flows, but rather than jumping to
+	this directly, let us take a more gradual descent (much as we
+	didn't immediately start talking about details like oven
+	temperatures and GPS navigation when we wanted to explain the
+	implementation of WaffleCo).  </p>
+	
+	<p><def term='microarchitecture (basic)'>While ultimately the
+	computer will be made of circuits, we start with a high-level
+	organisation of these circuits according to their various
+	jobs.  This is called the computer's
+	<b>microarchitecture</b>.</def> For instance, there should be
+	a circuit that decodes the operations and figures out whether
+	they are performing an addition, a subtraction, a memory
+	retrieval, or something else entirely.  Then there should be
+	circuitry for performing additions, and other bits of
+	circuitry for storing and retrieving data.  The layout and
+	specification of these high-level components is the
+	microarchitecture.  The actual implementation of these
+	components lies one layer lower.  </p>
+	
+	<figure sk="sk7.png"><description></description></figure>
+
+	<p>Having set up the appropriate microarchitecture, we will
+	then need to inspect each of the black-box functional units
+	involved and actually put together some circuitry that
+	implements them.  We do this, still not in terms of bare
+	wires, but in terms of objects called <b>logic gates</b>.
+	Logic gates will still be abstract notions, which in turn will
+	be realised by a single concept--that of a <b>transistor</b>
+	which, finally, will be a basic physical device we can
+	actually build using silicon.  And since transistors can be
+	used to make logic gates, and logic gates can build the
+	various components of the microarchitecture, we will then be
+	able to actually build a computer.</p>
+	
+	
+	<figure sk="sk8.png">
+	  <description></description>
+
+	  <caption>All the layers involved with answering our two
+	  questions</caption>
+	</figure>
+      </text>
+      
+    </section>
+  </section>
+
+  <section>
+    <title>Up the tower: How to program computers</title>
+    <text>
+      <p>Let us now examine a little more closely the process of going up
+      the tower--that is, the process of, once we have of computer,
+      building a system on top of it.</p>
+    </text>
+
+    <section>
+      <title>The ISA layer</title>
+      <summary>The ISA defines two things: It specifies the primitives
+      that the computer contains--often including 'registers' (small
+      memories) and a larger data 'random-access' memory--collectively
+      known as the 'architecture'.  It also specifies the instruction
+      set--that is, the set of things that can be done to these
+      primitives--e.g. 'add the numbers in these two registers and
+      store the result in this third register' might be a valid
+      instruction in the instruction sets of some types of computer.
+      </summary>
+      <text>
+	<p> The ISA layer comes in two parts: The computer's
+	<b>architecture</b> and the <b>instruction set</b>. The idea
+	is that <def term='architecture (basic)'>before we can specify
+	what instructions the computer can perform, we have to specify
+	what sorts of primitives it has that it can actually use.
+	Specifying this gives us the computer's architecture.
+	</def><def term='registers (basic)'> For example, a part of
+	the architecture of an AVR computer is that it has 32 memory
+	slots, called <b>registers</b>, that can only store numbers
+	0-255.  </def>The registers are called r0, r1, ..., r31.  The
+	architecture includes other elements as well, which we will
+	discuss later.  </p>
+
+	<p><def term='instruction set (basic)'>Once we have described
+	the architecture, then we can describe the actual instructions
+	that the computer understands--its <b>instruction set</b>--by
+	explaining what the instructions are and what they do to the
+	various components that make up the computer's
+	architecture.</def> For example, there will be an instruction
+	to actually store numbers in the registers, called ldi.  So to
+	get the value 90 stored in register r18, we use the
+	instruction:
+ 
+	<pre>ldi r18,90</pre>
+ 
+	(Read as 'load into register r18 the value 90')</p>
+ 
+	<p>Another part of the instruction set is an instruction that
+	can add one register to another.  This instruction is called
+	(perspicuously enough) add.  So, to add r19 to r18, we can
+	just do
+	
+	<pre>add r18,r19</pre>
+ 
+	(Read as 'add to register r18 the value in register r19')</p>
+	
+	<p>You should now be able to follow our previous example of ISA
+	operations to compute 7+2:
+	
+	<pre>ldi r30,2 
+ldi r31,7 
+add r30,r31</pre>
+	
+	Of course, there are many arbitrary-looking features of this
+	description: Why 32 registers?  Why can they only store
+	numbers 0-255?  What if I want to add or deal with larger
+	numbers?  What if I want to store more than 32 values?  These
+	questions will be answered in chapters 4 and 5 when we talk
+	about the ISA layer in detail.</p>
+      </text>
+    </section>
+    <section>
+      <title>The programming language layer</title>
+      <summary>Because the ISA deals in very basic primitives,
+      programmers often use a programming language, which allows them
+      to write more human-friendly code which will then be translated
+      into instructions from the actual ISA by a compiler.
+      A programming language has less rigid rules for what valid code
+      can be than the ISA, but there are still rules--called the
+      language's syntex.  The meaning of various valid constructions
+      using the programming language--what those lines of code
+      actually do--is also a part of the programming language's
+      definition--called the language's semantics.  
+      </summary>
+      <text>
+	<p>However, as we mentioned, the ISA layer is not the one that
+	programmers actually deal with most frequently, not least
+	because it takes three lines of code just to compute 7+2!  So
+	a programmer will use a programming language, which allows him
+	to code using expressions like just '7+2' and similar.  Then a
+	compiler will take the more human-readable code and will turn
+	it into ISA operations that the computer can actually
+	understand.</p>
+ 
+	<p>However a compiler doesn't just understand any
+	human-readable text and turn it into ISA operations.  For
+	instance, if instead of writing '7+2' a programmer writes 'Add
+	seven and two', the compiler will not know what this means.
+	<def term='syntax (basic)'>A programming language always comes
+	with specific rules governing exactly what makes valid code.
+	They may be less rigid than the rules governing the ISA (for
+	instance, numbers above 255 will be allowed), but they are no
+	less precisely defined.  These rules saying how to write valid
+	code are collectively called the programming language's
+	<b>syntax</b>.  </def><def term='semantics (basic)'>The rules
+	explaining what the various operations in the syntax actually
+	do are called the language's <b>semantics</b>.</def></p>
+ 
+	<p>For instance, a programming language's syntax may specify
+	that [number] + [number] is a valid piece of code.  The
+	specification that, further, this piece of code computes the
+	sum of the two numbers is the semantic definition of this
+	syntax element.</p>
+ 
+	<p>The language's syntax and semantics together define the
+	interface of the programming language layer--they say what
+	inputs the programmer is allowed to give it, and what those
+	inputs will actually do.  So the use of layering in this case
+	means that the programmer needs only to understand the syntax
+	and semantics of the programming language, and can ignore the
+	crunchy details of the ISA.</p>
+ 
+	<p><def term='library (basic)'>Further, on top of a
+	programming language, we will often deal with
+	<b>libraries</b>, i.e. pre-written code that performs
+	commonly-used operations</def>.  For instance, at some point,
+	many programs have to draw a square on the screen, whether for
+	a window, a button, icon, spaceship, whatever.  Every
+	programmer who ever wanted to draw a square could write the
+	program for `turn all the pixels with coordinates 10,154;
+	10,155; 11,154, and 11,155 all black'.  Or, there could be a
+	library for this, and now they can invoke the library function
+	whose semantic meaning is `draw a 2x2 black square with
+	top-left corner at coordinates 10,154', which runs the
+	pre-written library code that does exactly that.  </p>
+      </text>
+    </section>
+    <section>
+      <title>A word about programming in practice</title>
+      <summary></summary>
+      <text>
+	<p>When we sit down and we have a high-level task set in mind
+	like, 'Create a world-class search engine' or even something
+	simpler like 'Create a small platformer game', there are a few
+	questions we need to answer, and a few things that can happen
+	along the way that we will take a moment to address now.
+	Specifically: 
+	<ul><li>How to start designing the program?</li>
+	<li>What programming language out of the many hundreds that
+	exist to use?</li> <li>What things can go wrong when writing a
+	program?</li></ul></p>
+      </text>
+      <section>
+	<title>How to decide what program to write?  </title>
+	<summary>Suppose we have a problem.  Before writing a program
+	to solve the problem, we write an algorithm--a description of
+	the steps the program should take, but not written in the
+	programming language's syntax.  Then we can assess how
+	expensive this algorithm is by considering various notions of
+	algorithmic complexity, and whether a different algorithm
+	might be better-suited to the problem given our resources.
+	</summary>
+	<text>
+	  <p>Say we have some problem we are trying to solve by
+	  programming a computer.  A computer works by executing a
+	  sequence of arithmetic and storage operations, so we need to
+	  express any solution in terms of these things--storing
+	  numbers and performing arithmetic on them.  However we do
+	  not necessarily start by writing code, since this requires
+	  us to think about the specific way that the programming
+	  language requires us to write e.g. arithmetic
+	  operations--i.e. its syntax.  <def term='algorithm'>To begin
+	  with, it is often helpful to try to think of the solution in
+	  terms of what the programming language can do--basic
+	  arithmetic and storage--but to phrase it simply in English
+	  (or other human language of your choice).  Such a phrasing
+	  is called an <b>algorithm</b>.</def></p>
+
+	  <p>We discussed this in general earlier when we described
+	  the problem of computing the square root of a number: Our
+	  algorithm for computing the square root of a given number x
+	  was:
+	  <ol>
+	    <li>Start by storing x/2 in a storage slot called s.
+	    </li>
+	    <li>Take the current value of s and add x/s to it.</li>
+	    <li>Divide s by 2</li>
+	    <li>If s*s is not yet as close as we want it to be to x,
+	    return to step 2</li>
+	  </ol>
+
+	  This last step might look a little fishy--everything else in
+	  the algorithm was essentially basic arithmetic, but 'as
+	  close as we want it to be' is not likely a thing built in to
+	  our program language.  </p>
+
+	  <p>But what we actually mean by this is something quite
+	  precise: Say we want s*s to be within .001 of x.  Then we
+	  are just asking that s*s - x be between -0.001 and 0.001.
+	  So we can repharse: 
+
+	  <ol>
+	    <li>Start by storing x/2 in a storage slot called s.
+	    </li>
+	    <li>Take the current value of s and add x/s to it.</li>
+	    <li>Divide s by 2</li>
+	    <li>If s*s - x is bigger than 0.001 or smaller than
+	    -0.001, return to step 2.  </li>
+	  </ol>
+
+	  Now truly the only things we do in this alrogithm are basic
+	  arithmetic with numbers and storing the results, and
+	  choosing what instructions to execute next based on the
+	  result.  So when we want to actually make a computer do
+	  this, we simply have to rephrase it using the particular
+	  syntax of our chosen programming language.  </p>
+
+	  <p>This is not the only agorithm that solves the problem.
+	  Another algorithm that solves it is based on the following
+	  idea: Suppose we are looking for the square root of 38.  I
+	  know the answer has to between 0 and 38, so I'll try the
+	  midpoint--19.  19*19 = 361, which is way too big.  So the
+	  answer's between 0 and 19, so we take the midpoint--9.5.
+	  9.5*9.5 is 90.25--still way bigger than 38--so we know the
+	  answer is between 0 and 9.5.  The midpoint is 4.75, and
+	  4.75*4.75 is 22.5625.  This is now too small, so the answer
+	  is between 4.75 and 9.5.  The midpoint is 7.125.  Repeating
+	  this process enough will eventually converge on the actual
+	  value of 6.1644....  </p>
+
+	  <exercise>Exercise: This example of computing the square
+	  root of 38 should suggest the general procedure.  Write down
+	  an actual algorithm based on this idea. </exercise>
+
+	  <p>Because there are different algorithms that solve the
+	  same problem, it is useful to have some notion of how 'good'
+	  an algorithm is.  More specifically, an algorithm will
+	  always have to use resources to solve the problem--sometimes
+	  it will have to store lots of intermediate data, sometimes
+	  it will take a lot of steps, sometimes it will have to send
+	  lots of data to other computers, sometimes it will tie up
+	  lots of auxiliary special-purpose circuits, whatever.  We
+	  can analyse how much of each of these a given algorithm will
+	  use.  <def term='complexity'>These will give various
+	  estimates of the <b>complexity</b> of the algorithm--that
+	  is, an answer to the question 'how much memory, time, or
+	  other resources does the algorithm require to come to its
+	  answer?'</def> </p>
+
+	  <p>If we have several algorithms that all accomplish a given
+	  task and must select one to use, the first thing we can do
+	  is to compute the complexity of each algorithm.  Maybe some
+	  algorithms will simply be worse in all measurements, but
+	  often one algorithm will be faster but e.g. will use more
+	  space in memory, whereas another will be slower but use less
+	  memory.  <def term="trade-off">Such situations are called
+	  <b>trade-offs</b>, where we cannot have the best of all
+	  worlds and must exchange efficiency in one area for
+	  efficiency in another.</def></p>
+
+	  <p>To then make a decision about which algorithm we want, we
+	  then have to consider what it is in our specific situation
+	  that we care the most about: Maybe we want to get the job
+	  done in as little time as possible and have a massive
+	  budget, so can buy whatever resources we need to run a very
+	  memory-hungry algorithm.  In that case, we want to
+	  understand and minimise the time complexity of the algorithm
+	  and perhaps can ignore, within reason, other notions of
+	  complexity.  Or maybe our algorithm is running on a small
+	  chip inside a cheap camera and we have very limited memory
+	  to work with, but we are not worried about taking a little
+	  extra time.  Now our choice of algorithm will reflect our
+	  different needs.</p>
+	</text>
+      </section>
+      <section>
+	<title>What programming language to use?</title>
+	<summary>There are two broad classes of programming
+	languages--low-level languages that allow great control over
+	exactly what happens during their execution, and high-level
+	languages which provide less control but correspondingly do
+	not require the programmer to think about all the details of
+	what's happening under the hood.</summary>
+	<text>
+	  <p>We will spend a decent amount of time in this book
+	  talking about writing programs, so it will do here to
+	  mention some ideas associated with various programming
+	  languages and the process of creating programs using
+	  them.</p>
+ 
+	  <p>As we mentioned, the ISA may be able, with enough work,
+	  to solve any problem you have, but it is so low-level that
+	  it is cumbersome to actually write code using it directly.
+	  However, if we use the ISA directly we get much greater
+	  control over precisely what steps the computer will actually
+	  perform, which can allow us to optimise our program very
+	  aggressively, for example.  <def term='low-level language'>A
+	  <b>low-level programming language</b>, more generally, is
+	  any programming language that is close enough to the ISA to
+	  afford the programmer substantial control over what ISA
+	  operations the computer will end up doing.</def> Examples of
+	  such languages include Assembly (which is actually
+	  programming in the ISA directly) and C.</p>
+ 
+	  <p>For example, if we are using a low-level language and
+	  want to figure out which of two given numbers is larger, we
+	  may have to figure out exactly where in memory the numbers
+	  are stored, load them into the special memory where they can
+	  be operated on, subtract them, check if the result is
+	  negative, and if so store the second number as the result
+	  and if not store the first number as the result.  This is a
+	  lot of work, but it means for example that we can choose
+	  precisely where in memory the numbers are stored, which can
+	  provide extra flexibility that is sometimes useful.  </p>
+ 
+	  <p><def term='high-level language'>By contrast, a
+	  <b>high-level programming language</b> is one where to
+	  program in it, we think in terms of often more
+	  human-friendly abstractions that the compiler will, behind
+	  the scenes, turn into ISA operations that we the programmers
+	  need not concern outselves with.</def> For instance,
+	  generally storing a number using a high-level language is as
+	  simple as:
+ 
+<pre>x = 2 <br />
+y = 199 </pre>
+ 
+          We don't have to think about how you need to find a free
+          slot in memory and store the numbers in those slots and
+          remember which slots you used--we just give the values names
+          and the compiler takes care of organising the actual
+          underlying memory.  </p>
+ 
+	  <p>In a high-level programming language, then, computing the
+	  maximum is as easy as writing:
+	  
+	  <pre>max(x,y)</pre></p>
+	</text>
+      </section>
+      <section>
+	<title>What can go wrong when writing a program?</title>
+	<summary><p>If a program breaks the rules of the programming
+	language's syntax, this is called a syntax error.  The
+	compiler will know that the program is invalid and will
+	generally give some indication of what specifically in the
+	program was problematic, so these errors are often easy enough
+	to fix.  </p><p>If, on the other hand, the program was written
+	with correct syntax, but had a logical mistake whereby it does
+	not actually do what the programmer intended, this is called a
+	runtime error and is much harder to fix.</p></summary>
+	<text>
+	  <p>When you've written a program and are ready to run it on
+	  the computer, very very rarely will it behave correctly the
+	  first time (this is as true for 20-year programming veterans
+	  as for complete newbies).  There are two sorts of things
+	  that can go wrong: Remember that a programming language is
+	  defined by syntax: what sorts of constructs are allowed as
+	  valid programs--and semantics: what the various constructs
+	  actually do.  Corresponding to these two are two types of
+	  problems you may encounter when running your code: <b>syntax
+	  errors</b> (or <b>compile-time errors</b>), and <b>runtime
+	  errors</b>.</p>
+
+	  <p><def term='syntax error'>A <b>syntax error</b> is where
+	  your program was written with invalid structure that fails
+	  to conform to the syntax of the programming language.</def>
+	  For instance, you might have a programming language whose
+	  syntax says that
+
+	  <pre>max(?,?)</pre>
+
+	  is a valid piece of code to write, where the blanks can be
+	  filled with any numbers.  If you made a typo in your
+	  program, you might accidentally write something like:
+
+	  <pre>max(2,3(</pre>
+	  
+	  This would be a syntax error.  Your program will never be
+	  run because it will never even be converted into ISA
+	  operations because, in turn, the compiler (which does this
+	  job) only understands code written that obeys the
+	  programming language's syntax, which the above does not.</p>
+
+	  <p><def term='runtime error'>A <b>runtime error</b> is when
+	  your program is written with valid syntax, so the compiler
+	  can turn it into ISA code that the computer can actually
+	  run, but where what gets run is not what you intended.
+	  </def> For instance, if we accidentally typed the above code
+	  instead as
+
+	  <pre>max(2,2)</pre>
+	  
+	  then this is now perfectly valid code--it does follow the
+	  syntax of max(?, ?), so will be run without complaint, but
+	  will give back 2 as the result, whereas the desired result
+	  was 3.</p>
+
+	  <p>When your code has an error of either kind, obviously
+	  you'll want to fix it.  <def term='debugging'>The process of
+	  fixing errors is called <b>debugging</b></def> (there was an
+	  incident in the very early days of computers in which a
+	  system was behaving oddly and the problem was traced back to
+	  a bug that had decided to nest in the equipment; thanks to
+	  this, errors--though mainly runtime errors--are also called
+	  'bugs').  With compile-time errors, debugging is usually
+	  easier--if the compiler finds a piece of your code that it
+	  cannot understand, it can just tell you 'hey, I don't
+	  understand line 15 in file X', and you can go look at file X
+	  and hopefully spot the invalid syntax and correct it.</p>
+
+	  <p>When our code has a runtime error, debugging is much more
+	  challenging because the computer doesn't see any
+	  problem--the code is understandable and runnable, but it
+	  just doesn't do what the programmer intended.  So the
+	  computer cannot tell where the code messed up because it
+	  doesn't know it messed up!  (Computers cannot read our
+	  minds.  Yet...)</p>
+	  
+	  <p>In chapters 2 and 3 when we talk about programming, we
+	  will talk through some techniques for debugging runtime
+	  errors, but this is a skill that you will constantly be
+	  working to improve throughout your programming life and is
+	  simply one of the hard parts of programming.</p>
+	</text>
+      </section>
+
+    </section>
+  </section>
+
+  <section>
+    <title>Down the tower: How to build computers</title>
+    <text>
+      <p>Now that we have begun to see that using this limited notion
+      of computer, combined with the power of abstraction, we can
+      possibly build complicated and useful systems out of such a
+      simple device as our 'computer', we turn in this section to the
+      question of how to actually build such a device.</p>
+
+    </text>
+    <section>
+      <title>State machines</title>
+    <summary>The basic operations that we want to be able to perform
+    will be organised using an abstract scheme called a state machine.
+    This will break each instruction down into a sequence of basic
+    operations. 
+    </summary>
+      <text>
+	<p>While our ultimate goal will be to build a real machine, we
+	start with an organisational tool called a "state machine".
+	<def term='state machine'>A <b>state machine</b> is an
+	abstract "machine" that consists of a collection of "states"
+	that the machine can be in.  The machine accepts inputs one at
+	a time, and each state also specifies, for each possible
+	input, which state to change to if that input comes
+	in.</def></p>
+
+	<p>For example, imagine we are trying to design a simple
+	robotic cat.  We can describe our design using a state
+	machine, which will have states called "Purring", "Neutral",
+	and "Grumpy".  The possible inputs to this state machine might
+	be, for example, "Feed", "Pet", and "Ignore".  So if the cat
+	is in the "Grumpy" state, then if it gets the "Pet" input it
+	will remain in "Grumpy", whereas if it gets the "Feed" input
+	it will move to "Neutral".  </p>
+
+	<p>This information is often represented as a drawing with the
+	states represented as labelled circles and the transitions as
+	labelled arrows between the states, like so:</p>
+
+	<figure sk="sk9.png">
+	  <description></description>
+	  <caption>Model of a cat's behaviour using a simple state
+	  machine</caption>
+	</figure>
+      </text>
+    </section>
+    <section>
+      <title>Microarchitecture</title>
+    <summary>
+    To actualy build the computer, then, we will create
+    black-box functional units that perform each of these basic
+    operations--storing a number, adding two numbers, etc.  The
+    arrangement of these basic functional units is called the
+    computer's microarchitecture.  
+    </summary>
+      <text>
+	<p>State machines are, in general, a useful way to define the
+	behaviour of a machine.  Our particular interest is of course
+	in applying it to design a computer.  The possible inputs will
+	be the instructions, and the states will be the basic sorts of
+	operations the computer can perform.  For example, we will
+	certainly want an 'add two numbers' state and a 'store this
+	number in this register' state.  </p>
+
+	<figure sk="sk10.png">
+	  <description></description>
+	  <caption>Model of simple processor implementing four
+	  instructions.</caption>
+	</figure>
+
+	<p>This describes a state machine for a simple processor.  For
+	example, if this machine receives the input 'add the number
+	12 to register 18', then the following sequence occurs: 
+
+	<ul><li>First, it moves to the state 'M = value
+	from register R', which stores in M the value in register
+	18.</li>
+	<li>Then it moves to the state 'Add M to number N', and since
+	N = 12 and M is whatever was in register 18, N is now the
+	desired sum.  </li>
+	<li>Then it moves to state 'Store number N into register R'
+	which stores the sum back into register 18</li>
+	<l>Finally, as the instruction is still a storage instruction,
+	we move into the state 'read next instruction', which changes
+	the current instruction.  </l></ul>
+	</p>
+
+	<p>Now say the next instruction is 'jump ahead 35
+	instructions': 
+	<ul>
+	  <li>We first move into state 'N = instruction number',
+	  storing the current instruction number in N.  </li>
+	  <li>Then we move to the state 'add M to N', which adds 35 to
+	  the current instruction number (since M is 35)</li>
+	  <li>Finally, we go to state 'Jump to instruction number
+	  N', which performs the desired operation, since N was 35
+	  plus the current instruction number.</li>
+	</ul></p>
+
+	<p>Having so organised the basic operations that our machine
+	should do, we have broken the problem into two tasks: 
+
+	<ul>
+	  <li>Build components that perform the tasks described in the
+	  states of the state machine as actual physical devices</li>
+	  <li>Connect up these components in a way that gives the
+	  behaviour described by the state machine</li>
+	</ul>
+	</p>
+
+	<p><def term='microarchitecture'>A precise description of the
+	individual components along with a state machine describing
+	how they interact is what will be called the
+	<b>microarchitecture</b> of the machine.</def></p>
+      </text>
+    </section>
+    <section>
+      <title>Binary representation</title>
+      <summary>Before we can start creating machines as physical
+      devices, we need to solve a more fundamental problem: Computers
+      as we have defined them operate on numbers, but physical
+      machines can only manipulate physical things, so we need a way to
+      represent numbers by something physical.  This will be solved by
+      means of binary representations.  
+      </summary>
+      <text>
+	<p>Before we can start creating machines as physical devices,
+	we need to solve a more fundamental problem: Computers as we
+	have defined them operate on numbers.  But physical machines
+	can only manipulate physical things, so we need a way to
+	represent numbers by something physical.  </p>
+
+	<p>Actually, when we write down numbers, we are already
+	representing them by something physical: To write the number
+	483, we took the symbols 4, 8, and 3, and wrote them next to
+	each other.  This physical arrangement of ink on a page (or
+	pixels on a screen) somehow corresponds to the number we say
+	as `Four hundred, eighty-three'.  This method of
+	representation, where every number can be written as a
+	sequence of symbols 0, 1, 2, ..., or 9, is called 'decimal'.
+	We use 10 symbols in this representation simply because we
+	have 10 fingers, so it turns out to be well-adapted for
+	human-to-human communication.  </p>
+
+	<p><def term='binary (basic)'>For the purposes of making a
+	computer, there is another way to represent numbers that will
+	be much more convenient, called <b>binary</b>.  In this system
+	numbers are represented as sequences now just of the symbols
+	'0' and '1'.</def> But a sequence of '0's and '1's, now, we
+	can imagine representing with some simple physical
+	thing--e.g. a sequence of switches where a switch being off
+	represents a '0' and on represents a '1', or a sequence of
+	wires, where a wire with electrons flowing through it will
+	represent a '1', and a wire with no electrons flowing will
+	represent a '0'.  </p>
+
+	<p>Then when we come to build the part of the computer that
+	adds numbers, it will take in two binary representations--that
+	is, two sequences of wires whose patterns of electron flow
+	will represent the two numbers we want to add, and we will
+	have to construct some circuitry so that on the outgoing wires
+	(representing the output), the sequence of '0's and '1's going
+	outrepresents the sum of the two input numbers.  We will get
+	more into the details of this in chapter 5.</p>
+
+	<p>Building this component happens in two steps: First, we
+	have to understand abstractly what is the procedure for
+	computing sums of binary numbers.  E.g., What is the procedure
+	that computes '001101 + 101001'?.  This is addressed in
+	chapter 4 in detail.  Then we need to construct actual
+	ciruitry that performs this procedure.  This will be discussed
+	in chapter 8.  </p>
+      </text>
+    </section>
+    <section>
+      <title>Logic gates and transistors</title>
+      <summary>The functional units comprising the microarchitecture,
+      finally, are themselves constructed using basic components
+      called logic gates, which are in turn constructed out of
+      transistors.
+      </summary>
+      <text>
+	<p>Once we have decided to represent our numbers in binary, we
+	need a way to take two numbers and perform operations on them.
+	The building blocks we will use to do this are called <b>logic
+	gates</b>.  <def term="logic gate">Most basically, a logic
+	gate is a device with two input wires and one output wire.
+	Going off the previous section, where a wire represented a
+	binary digit (current flowing = '1', no current = '0'), the
+	gate will either send or not send current on the output wire
+	depending on what's happening at the input wires.  </def></p>
+	
+	<p>Different types of logic gates will have different rules
+	for how to determine the output based on the inputs.  <def
+	term='and gate'>For instance, we can have a gate whose output
+	will be 0 unless both inputs are 1.  This is called an
+	<b>"AND gate"</b></def>, and is drawn like:</p>
+
+	<figure sk="sk11.png"><description></description><caption>The AND
+	gate</caption></figure>
+
+	<p><def term='truth table'>We can summarise its behaviour rather
+	succinctly in a table, called the gate's <b>truth
+	table</b></def>: </p>
+
+	<table><tr><td>Input 1</td><td>Input
+	2</td><td>Output</td></tr>
+	<tr><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td>1</td><td>0</td><td>0</td></tr>
+	<tr><td>0</td><td>1</td><td>0</td></tr>
+	<tr><td>1</td><td>1</td><td>1</td></tr>
+	</table>
+	
+	<p><def term="xnor gate">Of course, we can make any gate we
+	want by writing down a different truth table--for instance,
+	the following gate (called an <b>XNOR gate</b>) will output 1
+	if the inputs are the same and 0 otherwise: </def></p>
+
+
+	<table><tr><td>Input 1</td><td>Input
+	2</td><td>Output</td></tr>
+	<tr><td>0</td><td>0</td><td>1</td></tr>
+	<tr><td>1</td><td>0</td><td>0</td></tr>
+	<tr><td>0</td><td>1</td><td>0</td></tr>
+	<tr><td>1</td><td>1</td><td>1</td></tr>
+	</table>
+	
+	<figure sk="sk12.png"><description></description><caption>The XNOR
+	gate and its truth table</caption></figure>
+
+	<p>The true power of logic gates will come from connecting
+	them together, as we will see in chapter 8.  There, we will
+	learn to build things like a circuit that adds binary numbers
+	out of nothing more than the various kinds of logic gates.
+	</p>
+
+	<figure sk="sk13.png"><description></description><caption>A
+	four-input AND gate</caption></figure>
+
+	
+	<p>Finally, once we know how to build interesting things using
+	gates, it will behoove us to figure out how to actually build
+	physical logic gates.  We do this using, finally, actual
+	physical devices you can make (or buy) called transistors,
+	which will also be discussed toward the end of chapter 8. </p>
+      </text>
+    </section>
+  </section>
+
+  <section>
+    <title>Theoretical underpinnings--why are computers so
+    powerful?</title>
+    <summary>Just because we can write an algorithm to solve a
+    problem, why does that mean we will be able to write a program
+    that expresses this algorithm, thereby using a machine to solve
+    the problem.  Alan Turing devised an abstract notion of a machine,
+    called a 'Turing machine' and noted that there are certain Turing
+    machines--the so-called 'Turing complete' ones--that can simulate
+    the behaviour of any other Turing machine.  Since we can make a
+    machine that follows any given algorithm, and since our computer
+    will be Turing complete, we can conclude that our computer can
+    itself simulate the behaviour of the other machine, i.e. our
+    computer can run the specified algorithm.  </summary>
+    <text>
+      <p>We now turn to a fundamental question we've been blithely
+      presupposing throughout the preceding discussion: Why do we
+      expect to be able to implement any algorithm using just a
+      computer?  </p>
+
+      <p>As we have defined it, 'computer' refers to an apparently
+      quite limited device, not obviously capable of running games or
+      talking to other computers or any of the thing you already think
+      of as doable with a computer.  There are two steps to building a
+      system on top of a computer: Since as we have defined it, a
+      computer deals only with numbers and can only do
+      arithmetic/logic on these numbers and store them, we need to
+      encode the objects of our system.  For instance, if we want to
+      think about searching through text files, we need a way to
+      represent text as numbers.  </p>
+
+      <p>Secondly, once everything is numbers, anything we want to do
+      then consists of turning a bunch of numbers into another bunch
+      of numbers (e.g. the numbers encoding a query to the search
+      engine together with the numbers encoding the database of
+      searchable documents into the numbers encoding the search
+      results).  So we need some guarantee that any numerical
+      computation can be done by a computer that, by definition, only
+      has the capability of basic arithmetic.</p>
+
+      <p><def term='Turing machine'>In 1936, Alan Turing proposed an
+      even more apparently limited sort of device, called a <b>Turing
+      machine</b>.  This was a device with three parts: a tape
+      consisting of slots in which numbers may be written, a
+      read/write head that can move along the tape reading the numbers
+      written there or writing numbers onto the tape (or possibly
+      overwriting numbers already written on the tape), and a state
+      machine by which it will decide what numbers to write and where
+      on the tape to write them.</def> </p>
+
+      <p><def term='Church-Turing thesis'>The Church-Turing thesis
+      (called a "thesis" because it is more a philosophy more than a
+      precise axiom) says that if you can write an algorithm for
+      performing a computation, then a Turing machine can be built
+      that performs that same computation.  </def></p>
+
+      <p><def term='Turing complete'>A Turing machine is said to be
+      <b>Turing complete</b> if it is capable of simulating any other
+      Turing machine (and therefore of running any algorithm, if you
+      believe Church's Thesis)</def>.  Since our computers have memory
+      (which serves the same function as the tape) and have access to
+      memory operations and arithmetic operations, it is not hard to
+      any Turing machine might be representable as a program in our
+      computer.  And since we can write any program we want, our
+      computer can therefore simulate any Turing machine, and should
+      therefore be Turing complete.  In fact, if one performs a more
+      detailed study of the matter, this argument can be made
+      rigorous.  So for this purely theoretical reason, if we have a
+      problem and can write down an algorithm for it, we can know that
+      there should be an ISA-level program that realises this
+      algorithm.  (It may take an substantial amount of skill to
+      concoct this program, but at least in theory, we can be assured
+      that it will be possible.)
+      </p>
+
+      <p>We already spoke about the various notions of complexity for
+      a given algorithm.  As we think about all possible Turing
+      machines, one notion that arises is the computational complexity
+      of a problem itself (as opposed to a specific algorithm that
+      solves the problem).  <def term="computational complexity">The
+      <b>computational complexity</b> of a problem is defined to be
+      the minimum complexity among that of all algorithms that solve
+      the problem.</def> This notion allows us to distinguish the
+      problems where we use a resource-intensive algorithm because we
+      simply couldn't think of a simpler one and the problems that are
+      actually inherently difficult and require at least that minimum
+      complexity regardless of cleverness.  </p>
+
+      <p>Actually figuring out the computational complexity for a
+      given problem is quite hard.  Indeed, looking at the definition,
+      to know it appears to require us to analyse all possible
+      algorithms for solving a problem, and there are infinitely many
+      such algorithms!  The area of computer science known as
+      computability theory, using some quite clever techniques,
+      manages to get answers to these sorts of questions.  In your
+      study of computer science you will almost surely encounter this
+      area at some point, but we will venture no further in that
+      direction in this text.</p>
+    </text>
+  </section>
+
+  <section>
+    <title>Some modern computing systems</title>
+    <text>
+      <p>Returning to our first main point--how with just a computer
+      we can do anything we want: So far we've abstracted up to the
+      level of a programming language that will let us do the basic
+      arithmetic and storage operations in a (somewhat) human-friendly
+      way, but there is still a substantial gap between doing
+      arithmetic/storage, and the applications we associate with
+      modern computers.</p>
+
+      <p>In the direction of bridging this gap, we will in the next
+      few sections introduce three such applications, provide a
+      high-level overview of each, and start breaking these down into
+      components until we reach pieces that consist of concrete
+      programming problems.</p>
+
+      <p>This breakdown, as well as the programming of the individual
+      pieces, will happen in full throughout the course of this book,
+      but we'll start it now, and then flesh the components out as we
+      go along.</p>
+    </text>
+  </section>
+
+  <section>
+    <title>Search engine</title>
+    <text>
+
+    </text>
+    <section>
+      <title>High-level problem</title>
+      <summary>The high-level goal of a search engine is to accept
+      user input and find, among a vast space of documents, those
+      documents that best match the user's input.  </summary>
+      <text>
+      <p>We want a system into which any user anywhere who wants to
+      know something can visit our website, input a sequence of words,
+      and be presented quickly with a list of websites that contain
+      the information he was looking for.</p>
+
+      <p>The scope of the problem is dizzying--recent estimates put
+      the size of Google's index at nearly a million GB--i.e. a
+      quadrillion bytes--with about 4 million search queries coming in
+      every minute.  The engineering problem associated even with just
+      getting a webpage that displays the search box sent out 4
+      million times a minute are substantial, let alone solving the
+      high-level problem stated above at least as many times every
+      minute.  This massive challenge has engendered a highly complex
+      solution, to the point where no individual engineer at Google
+      has a hope of understanding the entire system from top to
+      bottom.  But then how can it work?</p>
+
+      <p>The key, once again, is abstraction--the problem is broken up
+      into distinct subproblems, and separate units are engineered to
+      solve each of these individually.  A team is tasked with
+      crawling through all the websites on the internet and collecting
+      data and keeping it current.  Another team might manage all the
+      physical storage units needed to keep all that data, ensuring
+      proper redundancy in case of hardware failure, and ensuring
+      uniform access to the data even if some of it is in Canada and
+      some of it is in Japan.  A further team will have to find a way
+      to automatically determine the most relevant results for a given
+      query and rank them for display to the end-user.  And if
+      abstraction is employed properly, the search team will not need
+      to know how specifically the data management team stores the
+      data--they just know they can ask `Give me a bunch of data to
+      search' and it will happen.  And the storage team doesn't have
+      to know how the crawler team gets the data--they just have to
+      tell the crawler team how to feed them new data and store the
+      submissions.</p>
+
+      <figure sk="sk14.png">
+	<description></description>
+      <caption>Hello</caption></figure>
+      	
+      </text>
+    </section>
+    <section>
+      <title>Zooming in: Crawling the web</title>
+      <text>
+	<p>Now say you're specifically on the team responsible for
+	crawling the internet and collecting the data.  You can
+	receive user queries from the website team, and once you
+	decide how to organise the data for quick searching, you can
+	then send the data to the datacenter for safe, redundant,
+	distributed storage.  </p>
+      </text>
+      <section>
+	<title>Software side</title>
+	<summary>Collecting the data of all pages on the internet is
+	hard enough, but if we simply store all these documents
+	naively, then searching through them will take forever.  We
+	want a more clever scheme for storing this data, then, that
+	makes it easier to search quickly.  </summary>
+	<text>
+	  <p>Once we have the data, we need to store it, but with an
+	  eye toward what we want to actually do with it.  </p>
+
+	  <p>First, if we find a match for a user query within some
+	  part of the data, we must be able to tell which specific
+	  place on the internet this data came from so that we can
+	  point the user there.  </p>
+
+	  <p>Secondly, in view of exactly how much data we will be
+	  collecting, we need to store it in a way that will make
+	  searching through it fast.  As a basic example, suppose we
+	  are searching the works of Shakespeare for the word
+	  'bestride'.  If we have all the works of Shakespeare stored,
+	  we can simply open each document and compare each word in
+	  turn to the query, and when we find a match, we report the
+	  name of the document we're currently searching through.</p>
+
+	  <p>But wouldn't it be nicer if instead we had an
+	  alphabetised list of all the words in Shakespeare's
+	  collected works, say in a book much like a dictionary.
+	  Except instead of listing the definition of the word next to
+	  the actual word, this book lists each location (e.g. which
+	  play, which act, which scene) where the word may be
+	  found.</p>
+
+	  <p>We are storing the same information in each case, but
+	  because we organised it more cleverly in the second example,
+	  the lookups will be faster.  So too with our search
+	  engine--if we find a clever way to store the data, we can
+	  make searching through the data much faster than if we store
+	  the data in the naive way.  </p>
+
+	  <p>So we have designed an algorithm for searching, namely:
+	  store the data in a lexicon, and then, when you get a query,
+	  take each word in the query, look it up in the lexicon, and
+	  see what websites contain that word.  We feed that list of
+	  websites, along with the original query, to the ranking team
+	  to put the results in order of relevance to the query, and
+	  then to forward on to the user for display.  </p>
+
+	  <p>Further, in designing our algorithm, we have ensured that
+	  its time-complexity is not too great.  For instance, if a
+	  website becomes twice as big, it contains more words, so we
+	  get more entries in our lexicon, but looking up words in a
+	  lexicon is really rather fast, even if it is somewhat large.
+	  If we add more websites with the same words, this doesn't
+	  affect our lookup time at all.  We'll have more results, so
+	  the ranking team who have to order the results will have
+	  more work, but the number of entries we search through in
+	  the lexicon remains the same.  </p>
+	</text>
+      </section>
+      <section>
+	<title>Hardware side</title>
+	<text>
+	  <p>When describing the algorithm above, and even when actually
+	  coding it up, we take a somewhat idealised view of
+	  memory--we talk about taking a query, breaking it up into
+	  words, and searching a stored index of words for each of the
+	  query words.</p>
+
+	  <p>But none of this is actually literally doable, at least
+	  not in the way the instruction `take two hotdogs and throw
+	  them out a second-story window into a lake' is doable.  The
+	  `text' you see on your screen is just a grid of lights in
+	  some pattern.  The real objects inside your computer are
+	  electrons.  And when we say we have some text stored, the
+	  way to `realise' this statement is the following: Text is be
+	  comprised of characters.  Thus if we can store a sequence of
+	  characters, we can store `text'.  There are only limitedly
+	  many characters in the world.  If we restrict to the English
+	  alphabet and English-friendly symbols, there are fewer than
+	  128 of them.</p>
+	  
+	  <p>We assign each character a number between 0 and 255</p>
+
+	  <pre>ASCII table</pre>
+
+	  <p>Then when I press the A key on the keyboard and that gets
+	  stored somewhere in memory, it gets stored as the number 65.
+	  And how do I store numbers?  I can represent numbers in
+	  binary--for instance, 65 = 100001.  And this, finally, I can
+	  realise: Any number under 256, when written in binary, has 8
+	  digits or fewer.  So I can have a sequence of 8 slots where
+	  I can store electrons, and if a slot contains electrons I
+	  will think of it as a 1, and if not, I think of it as a 0.
+	  That is, I can store a whole byte (8 bits) using actual
+	  hardware.  </p>
+
+	  <p>And if I have a whole array of these byte storage units,
+	  I can store now a sequence of characters, i.e., I can store
+	  text.  </p>
+
+	  <p>(Note that at no point thus far is the connection made
+	  between the number 00100001 and the shape 'A'--this
+	  connection only happens when we send this number to the
+	  screen for display, whereupon it reads this number and turns
+	  on the appropriate grid of lights to the right pattern so
+	  that it displays the 'A' shape.  But until you get to the
+	  display, everything is treated as numbers, or more
+	  precisely, sequences of bits.) </p>
+
+	  <p>OK, so we can store text.  Great.  But we also have our
+	  program that we wrote.  We'll look at only a little piece of
+	  this, where we have picked out a query word and one of the
+	  indexed words, and we have both in memory somewhere, and we
+	  want to see whether they are the same.  To do this, we'll
+	  have to start by taking the first character of each and
+	  comparing those.  So at some point in the program, this
+	  operation will be performed.  </p>
+
+	  <p>But the program was an abstract thing too!  It needs to
+	  be something real as well!  OK, yes.  Fine.  Good.  Remember
+	  that the computer only accepts instructions in its ISA.  One
+	  of those instructions might abstractly mean `compare these
+	  two bytes'.  But inside a computer, this instruction is just
+	  some specific number.  So the computer reads out the next
+	  number from wherever it stores its instructions.  Maybe it
+	  reads out 10011110.  This sequence of electrons comes
+	  through some wires, toggles some things, and causes the
+	  electrons representing the bytes for the first characters of
+	  the two words to flow down some more wires into some
+	  comparison circuit that will output more electrons
+	  representing whether it found a match. </p>
+
+	  <p>All these electron-moving operations happen using wires
+	  and gates.  For instance, somewhere in the compare circuit,
+	  we'll have two bits coming in--the first bit of the first
+	  char of query word, and the first bit of the first char of
+	  the index word.  And we'll want to compare these.  So we
+	  feed them into an '=' gate, exactly as in our example above.
+	  Supposing we have 4 bits in each character, we need 4 of
+	  these '=' gates</p>
+
+	  <p>But now we have 4 bits coming out--each representing
+	  whether the respective bits matched.  We only need a 1-bit
+	  answer: 1 if the whole bytes match, or 0 if they don't.  So
+	  we can feed these 4 outputs into the 4-bit AND-gate from
+	  earlier, which will output 1 if all the inputs are 1, and 0
+	  otherwise: </p>
+
+	  <figure sk="sk15.png"><description></description><caption>Circuit to compare two
+	  bytes</caption></figure>
+
+	</text>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Game console</title>
+    <text>
+      
+    </text>
+    <section>
+      <title>High-level problem</title>
+      <text>
+	<p>Create a system that will allow the user to play
+	high-quality 3D games.</p>
+	
+	<p>Once again, this is an enormous problem--the 3D models for
+	all the objects in a game are made of triangles: </p>
+	
+	<figure><description>Some low poly-count 3D model</description></figure>
+	
+	<p>Above is a guy made of very few triangles, but a scene in a
+	modern game can have upward of 1 million triangles on screen
+	at once.  And there are light sources in the scene, so before
+	you draw each triangle, you have to calculate how much light
+	is hitting it from each source based on angle and possible
+	occlusion and fog between that triangle and the light source,
+	among many other things.  </p>
+	
+	<p>Not only do you have to calculate the appropriate way to
+	draw a million triangles on screen, but objects are moving
+	around and colliding, and you have to test which ones are
+	colliding (so that the player's car cannot drive through
+	buildings) and if so how they should bounce or break (so that
+	the player's car can drive through buildings with plate glass
+	windows) or crumple.  </p>
+
+	<p>And in order to present the player with a reasonably fluid
+	gaming experience, each of these calculations has to be done
+	and the results displayed at least 50 times every second.</p>
+
+	<p>So once again, the infrastructure involved with solving the
+	problem is substantial, and, as before, it is likely beyond
+	the scope of any individual's skill level.  But it can still
+	be broken down into manageable subproblems, and success comes
+	from solving each of these and making the smaller solutions
+	work together to form the whole.</p>
+
+	<p>To break the problem down, we need to think carefully about
+	which piece does what: There is the console itself, which
+	needs to be able to perform all the calculations and display
+	all the graphics that the game needs, and the game itself,
+	which needs to manage which things it wants displayed and
+	which calculations it wants to do.  </p>
+
+	<figure><description></description><caption>High-level architecture</caption></figure>
+      </text>
+    </section>
+    <section>
+      <title>Hardware side: The console</title>
+      <text>
+	<p>The console itself needs to be able to handle two different
+	sorts of computations: those related to display, and those
+	related to game mechanics (e.g. collision detection).
+	Display-related computations are relatively
+	predictable--generally, a game has a large collection of
+	triangles, i.e. triples of points in 3D space, that comprise
+	the model of the game's universe.  </p>
+
+	<figure><description>A single triangle (with coordinates
+	displayed) rendered from two different camera
+	angles</description></figure>
+
+	<p>There is some other information like the player's current
+	location and relevant lighting and textures.  All this
+	information can be fed into the display unit which can take
+	stock of the situation, work out which triangles need to be
+	actually displayed (e.g. which ones can the player see and
+	which ones are behind trees), and then apply the textures,
+	lighting, and perspective to actually light up some pixels on
+	the user's screen.</p>
+
+	<p>So the display unit is a kind of special-purpose computer
+	like ABC earlier--it is designed for performing a particular
+	task very quickly, since the user demands performance that
+	exceeds what a general-purpose processor can provide.  Note
+	however that the processor in your phone is Turing complete.
+	So in theory it can do all these operations just fine.  The
+	thing that motivates us to build a special-purpose chip is
+	performance demands.  </p>
+
+	<p>The game will also have some logic that is better-suited to
+	general-purpose chips, like tracking points/ammo/health and
+	calculating the paths of flying bullets and testing whether
+	two spaceships collided.  So it will have a built-in
+	general-purpose processor that can communicate with and farm
+	out certain common operations to the display unit, and which
+	also handles the internal game mechanics.  </p>
+
+	<figure><description>Logical path from memory to screen of an
+	enemy spaceship, superimposed on an architecture diagram
+	(blocks for the memory, display unit, processor, etc.):
+	Calculate where the spaceship is supposed to be in space
+	(processor) -> Get spaceship model, texture, and current
+	relative camera angle/position (display unit) -> show picture
+	(screen, maybe with some actual rendering on
+	it)]</description></figure>
+      </text>
+    </section>
+    <section>
+      <title>Software side: The game</title>
+      <text>
+	<p>Once we have all the hardware as described above, then it
+	comes time to use it.  This is the responsibility of the
+	actual game--say for the sake of example, SpaceBlasters30000.
+	The game's code is divided into three principal components:</p>
+
+	<ul><li>Rendering engine: This is the bit responsible for
+	getting the graphics rendered (figuring out, based on light
+	sources, camera angle, etc. which of the objects in play
+	should be drawn on a player's screen and how they should
+	appear)</li>
+
+	<li>Physics engine: This bit is responsible for computing
+	where everything is going, what black holes are drawing in
+	which spaceships, etc.</li>
+
+	<li>Game mechanics: We also need something responsible for
+	accounting for fuel/shields/money/score and handling the basic
+	game mechanics.</li></ul>
+
+	<figure><description>Three components of the game, the various
+	bits of hardware (screen, user input, GPU, CPU), and their
+	interactions</description></figure>
+
+      </text>
+    </section>
+    <section>
+      <title>Zooming in: Rendering a triangle</title>
+      <text>
+	<p>Finally, at some point after all the physics calculations
+	are done, say one wants to actually render a 3D model of an
+	asteroid on the screen.  The asteroid, as with all models, is
+	as a collection of triangles that fit together to form the
+	shape:</p>
+
+	<figure><description>3D model of an asteroid, without
+	textures, and with varying numbers of triangles
+	used</description></figure>
+
+	<p>So to render the asteroid, we need first the list of
+	triangles--that is, the positions of the three vertices in
+	space for each triangle.  However, there's more:</p>
+	
+	<figure><description>One asteroid model (medium triangle
+	count) from three perspectives (and with different textures?)
+	and with varied lighting</description></figure>
+
+	<p>As visible in the figure, the same model might be drawn
+	differently on the screen depending on a few factors: Where is
+	the user's camera in space relative to the object, and where
+	are the light sources relative to the object?  </p>
+
+	<p>Let us focus here on the lighting-related calculations.
+	Suppose we know where the light sources are relative to the
+	object, so we know what direction the light should be coming
+	from.  How do we combine this direction and distance
+	information to get its intensity?</p>
+
+	<figure sk="sk16.png"><description></description></figure>
+
+	<p>If instead of paint emanating from a point, we have light,
+	then we see that light at a distance of 7m will have intensity
+	approximately 1/49.  So at some point we'll need to compute
+	distances:</p>
+
+	<pre>d = sqrt((x1-x0)^2 + (y1-y0)^2 + (z1-z0)^2)</pre>
+
+	<pre>intensity = 1/distance^2 = 1/((x1-x0)^2 + (y1-y0)^2 + (z1-z0)^2)</pre>
+
+	<p>Note that in the intensity calculation, the square root
+	went away, but we still have to compute 1/(some number).  Much
+	as we gave earlier an algorithm for computing the square root
+	that didn't actually require us to take any square roots, we
+	can now give an algorithm that can compute reciprocals without
+	actually requiring any division.  So say we are given x and
+	want to compute 1/x:</p>
+
+	<ol><li>Take s = 0.1</li>
+	<li>Let s = 2*s - s^2*x</li>
+	<li>If s * x is still too far from 1, go back to step 2.</li>
+	</ol>
+
+<figure><description>
+</description></figure>
+
+<p>Let us zoom into this a bit further--what does this `multiply by 2'
+gadget look like?  </p>
+
+<p>It somehow takes in a number and spits out the number, except
+doubled.  But what does this even mean--'takes in a number'?  After
+all, this is supposed to be a machine (electrical, mechanical, or
+whatever, but a physical device either way), whereas 'number' is
+abstract.  </p>
+
+<p>So suppose we mean 'this gadget takes in some number of marbles and
+spits out twice as many marbles'.  Such a machine would be
+accomplishing the stated goal, where feeding it 9 marbles stands for
+the abstract notion of inputting the number 9 into the gadget.  </p>
+
+<p>Modern computers don't represent the number 9 by 9 marbles, but
+rather by a sequence of wires.  Say we have 4 wires.  For each of
+these wires, at any give time we can either have electrons flowing
+through it or not.  This means that we have 16 combinations of flow/no
+flow to work with.  We'll represent the situation of 'electrons are
+flowing through the first and fourth wire but not the middle two' as
+1001.  Then the combinations we have available are 0000, 0001, 0010,
+0011, 0100, 0101, 0110, 0111, 1000, 1001, 1010, 1011, 1100, 1101,
+1110, 1111.  We'll say that these represent the numbers 0-15
+respectively: </p>
+
+<pre>
+Number   Representation<br />
+0        0000<br />
+1        0001<br />
+2        0010<br />
+3        0011<br />
+4        0100<br />
+5        0101<br />
+6        0110<br />
+7        0111<br />
+8        1000<br />
+9        1001<br />
+10       1010<br />
+11       1011<br />
+12       1100<br />
+13       1101<br />
+14       1110<br />
+15       1111<br />
+</pre>
+
+<p>There was in fact a systematic way of making this choice of
+assignment, which we'll explore in chapter 5, but for now take it as
+given.  One feature that this particular choice has, is that
+multiplying by 2 is rather easy: 5 is represented by 0101.  5*2, by
+1010.  In general, the procedure for multiplying by 2 is this:</p>
+
+<figure sk="sk17.png"><description></description></figure>
+
+	
+      </text>
+    </section>
+  </section>
+
+  <section>
+    <title>Mobile phone</title>
+    <text>
+      Nothing
+    </text>
+    <section>
+      <title>High-level problem</title>
+      <text>
+	<p>The problem that smartphone manufacturers must solve is the
+	following: Provide small computer that uses relatively little
+	power (so it can run off battery for a while) and that
+	interfaces with a rich set of sensors: It has to receive and
+	decode the 4G (or whatever it's at when you're reading this)
+	cellular signal, measure acceleration in various directions
+	(to e.g. figure out the phone's orientation in space to figure
+	out what to display), take photos, receive input from a touch
+	screen or from voice commands, communicate to other devices
+	using Bluetooth, among many other possibilities. </p>
+      </text>
+    </section>
+    <section>
+      <title>Zooming in: Smoothing out noise</title>
+      <text>
+	<p>One problem with sensors is that their output, as fed to
+	the phone's processor, is potentially slightly off.  Various
+	factors, from atmospheric pressure, environmental vibrations,
+	gamma rays, and subtle unknown engineering mistakes, lead to
+	the possibility of noise affecting each individual reading.</p>
+	
+	<p>For example, the phone might be falling to the ground,
+	straight down</p>
+	
+	<figure sk="sk18.png"><description></description></figure>
+
+	<p>However, because the phone was knocked off the table, it
+	was vibrated a bit, and residual vibration affects causes the
+	x-acceleration readings to vary between 1 and -1.  Further,
+	there is friction in the accelerometer, so while it is
+	accelerating at 9.81 m/s^2 downward, the measurements actually
+	bounce around this number in a random fashion.  </p>
+
+	<p>Ultimately, the software in the phone needs just three
+	numbers--'what is the current acceleration in each
+	direction?'--so that it can display the right thing.  But a
+	single reading may give values that are randomly a bit
+	off--sometimes significantly.  So the trick is to take
+	multiple readings in quick succession, say giving the
+	following values: </p>
+
+
+<pre>
+x   -1      .2     -.5     .9  <br />
+y   .5      -.1    -.1     -.2 <br />
+z   -10.1   -9.3   -10.2   -9.5<br />
+</pre>
+	
+	<p>and rather than taking any of these readings on their own
+	as absolute truth, we suppose that each reading is off from
+	reality by a random amount.  For example, the 4 z readings
+	are: </p>
+
+	<pre><br />g - .3<br />g + .5<br />g - .4<br />g + .3<br /></pre>
+
+	<p>So if we assume they are as often a bit high as a bit low, then the highs and lows will cancel out if we add up all these values: </p>
+	
+	<pre>(g - .3) + (g + .5) + (g - .4) + (g + .3) = 4g + (-.3 + .5 - .4 + .3) = 4g + .1</pre>
+
+	<p>But since we added up 4 values, each of which was close to
+	the true acceleration of g, we get something that is instead
+	close to 4*g.  Thus if we instead of just adding them all, we
+	average them--that is, we add them all and then divide by
+	4--we get an answer of g + .025, which is indeed pretty close
+	to g.  </p>
+
+	<p>So the algorithm for measuring acceleration will be instead
+	of just reading once from the accelerometer, reading 4 times
+	quickly, and then averaging the four readings, to hopefully
+	get most of the noise to cancel.  </p>
+
+	<p>Zooming in further, how would one compute the sum of two
+	numbers in a computer?  Let's say we have two wires coming in
+	to a circuit, and if electricity is flowing through a wire,
+	that will represent a 1, and if not, a 0.  Coming out of this
+	circuit should be a wire that will indicate the answer to the
+	sum</p>
+
+	<pre>input1 value + input2 value</pre>
+
+	<p>except that this answer could be 0, 1, or possibly 2 if
+	both input wires have electricity flowing through them.  We
+	cannot represent the answer using just one output wire, which
+	could only give answers of 0 and 1, so we'll have two output
+	wires--one of which will represent answers 0 and 1 if that's
+	the answer, and a second wire for `the answer was 2'.  So if
+	both input wires are on, representing the sum is 1 + 1, the
+	first output wire will be off, but the second `is the answer
+	2' output wire will be on.  </p>
+
+	<p>We can summarise this approach in the following table:</p>
+
+	<pre>
+input 1        off    off    on     on <br />
+input 2        off    on     off    on <br />
+actual sum     0      1      1      2  <br />
+output 1       off    on     on     off<br />
+output 2       off    off    off    on <br />
+	</pre>
+
+	<p>Now we have the challenge: make a circuit that, when it
+	receives all the patterns of input wires, sends out the
+	correct combination of output wires.  </p>
+
+	<p>Once again, the components will be logical gates.  output 2
+	seems relatively straightforward--it is controlled by a gate
+	that will only turn on if both its inputs are on--i.e. an AND
+	gate.</p>
+
+	<figure sk="sk19.png"><description>
+	</description></figure>
+
+	<p>output 1 requires a slightly different sort of logic--it
+	appears close to an OR gate, which turns on if either input 1
+	or input 2 is on.  But an OR gate will also turn on its output
+	if both inputs are on, which we don't want.  The sort of gate
+	we're after is called an 'exclusive-or' or 'XOR' gate--that
+	is, an or gate that turns on only if input 1 is on, or if
+	input 2 is on, but not if both are on.  </p>
+
+	<figure sk="sk20.png">
+	  <description>
+	  </description>
+	</figure>
+
+      </text>
+    </section>
+  </section>
+
+  <section>
+    <title>Outline of the remainder of the book</title>
+    <text>
+      
+<p>This chapter has been a whirlwind tour of some of the concepts of
+computer science.  The big picture, however, remains: A computer is an
+machine that does arithmetic and can store and retrieve results of
+these computations from some memory.  The organising questions of this
+book are:
+
+<ol><li>Once we have a computer, how do we make it perform all the
+functions we associate with computers?</li>
+
+<li>Once we know that such a (seemingly) simple machine is sufficient
+for our purposes, how do we actually construct such a
+machine?</li></ol>
+
+The distance in complexity between an game of Halo with several
+players in different countries and the moving around of electrons
+through wires is a rather intimidating gap, with several levels in
+between.  Nevertheless, this is the gap we intend to span in this
+book, and we'll accomplish it by starting from the top stepping
+through the levels individually, at each level, black-boxing all the
+lower levels entirely.  </p>
+
+<p><b>Chapters 2 and 3 -- Programming a computer: high-level programming language</b></p>
+
+<p>We'll start supposing we have a computer and that we also have a
+programming language that is able to translate somewhat human-friendly
+code into ISA operations, and we'll learn how to operate the
+programming language without reference to any lower-level details.
+The programming language of choice for us will be Python, and we will
+introduce it in two stages in chapters 2 and 3, respectively.</p>
+
+<p>In chapter 2, we'll introduce the basics of the language, and then
+give some examples of its use in programming the actual applications
+we've discussed in the previous three sections.  Because of the dearth
+of features introduced in chapter 2, these examples will be slightly
+cumbersome and unrealistic, but hopefully at least suggestive.</p>
+
+<p>In chapter 3, we shall build on this foundation, adding in some
+more advanced language features that make the previous chapter's
+examples more believable and more functional, at the price of being
+slightly more complex.</p>
+
+
+<p><b>Chapter 4 -- Numbers in computer science</b></p>
+
+<p>Chapter 4 will be a bit of an interlude--it stands on its own and
+may be read at leisure any time before chapters 5 and onward.  It
+tackles the following issue: We will at this point understand that we
+want a machine that can do arithmetic.  This means that a machine is
+going to have to deal with numbers.  But a machine is also physical,
+whereas numbers are abstract.  So we need some way to have an
+arrangement of physical objects--marbles, electrons, something--to
+represent numbers, and further how to perform operations like addition
+on these physical representations of numebrs.  The method we will use
+will be that of binary representations.  </p>
+
+<p><b>Chapter 5 -- Programming a computer: low-level programming
+language</b></p>
+
+<p>Once we know how to use a programming language, we'll start to see
+how such a thing can be actually made by introducing a particular real
+computer's ISA--namely that of the the AVR microprocessor.  This will
+be done in chapter 5.  The ISA, as we have already seen in a few
+snippets above, will be more esoteric-looking.  But in another sense
+it will be simpler, since in contrast to the whole suite of
+conceptually different operations available in Python, this language's
+operations are limited to precisely the three types we alluded to
+before: arithmetic, memory, and branching operations.</p>
+
+<p>So the language will be simpler, but then it behooves us to see how
+something as featureful as Python can be constructed on top of this,
+so we'll revisit our three applications in this lower-level language
+and do some of the work of translating from Python to assembly to see
+that a machine that understands even just this low-level language is
+still capable of doing all the same things.</p>
+
+<p><b>Chapter 6 -- Everything is numbers</b></p>
+
+<p>Chapter 6 will be another interlude to discuss how, once we can
+represent numbers, we can represent anything else the computer might
+in theory want to store--text, images, and sounds, and low-level
+programs--using numbers.  </p>
+
+<p><b>Chapter 7 -- Building a computer: A bird's-eye view of a machine
+that can handle the low-level language</b></p>
+
+<p>At this point, we'll have an idea of the basic low-level ISA
+instructions that the machine needs to be able to execute (from
+chapter 5).  We know that these act on numbers, and we know how to
+actually store/manipulate numbers in a machine--namely, via their
+binary representations (from chapter 4).  In chapter 7, then, we'll go
+through these instructions and build up a machine that can execute all
+of them, progressively adding on functionality for each new
+instruction as we go.  At this stage, we won't be designing a full
+blueprint for the machine, but we'll black-box certain components like
+'this is a module that can store numbers--here is its interface' or
+'this is a module that can add two numbers' and build the machine out
+of these black-boxes.</p>
+
+<p><b>Chapter 8 -- Building a computer: The pieces needed to build the
+machine of chapter 7</b></p>
+
+<p>In chapter 8, finally, we'll finally get down to the level of the
+low-level components--called logic gates--that comprise all of the
+high-level pieces.  We'll then see how to fill out the insides of the
+black boxes of chapter 6 using gates.  You can actually purchase chips
+with just logic gates (4000-series integrated circuits), so at this
+point, you'll know enough to, in theory, build the machine we've been
+describing throughout this book.</p>
+
+<p>One can purchase logic gates, so while we might stop there and say
+we have enough information to build a computer, logic gates are
+themselves built out of a single type of still lower-level component,
+namely a transistor.  We also explain in chapter 8 what a transistor
+is, how one can chain transistors together to create logic gates, and
+how the transistor that go into the computer in front of you now are
+actually built.</p>
+    </text>
+  </section>
+  
+</section>

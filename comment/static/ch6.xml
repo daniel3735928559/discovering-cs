@@ -1,0 +1,1987 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet href="box.xsl" type="text/xsl"?><section number="6">
+  <title>Encodings: Everything is numbers</title>
+  <text></text>
+  <section>
+    <title>What is an encoding?</title>
+    <text>
+      <p>At this point we've seen that we can store integers by
+      storing sequences of bits, and that performing operations on
+      these integers is really a mechanical process that a machine
+      could do.  So hopefully you believe that building a computer (in
+      the limited sense of chapter 1--a device that can compute with
+      numbers and store its results) might be possible.  And indeed,
+      the future chapters will proceed further in this direction.  But
+      there is a separate issue, which is that a lot of the primitives
+      that our examples do not appear to be just numbers: A search
+      engine deals in text, a game console deals in images, and a cell
+      phone deals in sounds.  Certainly there are numbers being
+      used--the number of matches for a given word in a page, the
+      players' scores in a game, and the current time as displayed on
+      the cell phone are all obvious examples of numbers.  But we wish
+      to explain now how in fact all the text, images, and sounds, in
+      these examples can already be stored and displayed even if our
+      machines are these (seemingly) limited things we are imagining
+      that have only the capability to manipulate binary numbers.</p>
+
+      <p>For example, text is a collection of symbols we wish to
+      display.  If at the moment all we can store is numbers, then we
+      can simply assign freely various numbers to various symbols.
+      Then rather than inventing some other way of storing the symbols
+      'h', 'e', 'l', 'l', 'o', we just store the numbers
+      104,101,108,108,111.  <def term='encoding'>Such a mapping, which
+      can be completely arbitrary (but usually makes some
+      sense--e.g. if 'A' is 65, then 'B' should be 66), is called an
+      <b>encoding</b> of the text symbols using numbers.  Such
+      mappings will be the key to our data representation
+      problem.</def></p>
+    </text>
+  </section>
+  
+  <section>
+    <title>Encoding of instructions</title>
+    <text>
+      <p>Our first example of an encoding will be something we've just
+      seen: ISA instructions.  Recall that the way the processor is
+      set up, there is a memory bank for instructions, and a
+      register--the pc--that stores which instruction is currently
+      executing.  But recall that a memory can only store numbers.
+      And specifically, the program memory had width 16, meaning it
+      can only store words (numbers 0-65535).  </p>
+
+      <p>So how should these words correspond to instructions?  For
+      instance, what words do we store in the program memory so that
+      the program
+
+<pre>ldi r30,89
+andi r30,6</pre>
+
+      will be run?  </p>
+
+      <p>For the sake of example, let us look at one hypothetical way
+      that a processor designer could choose to encode
+      instructions:</p>
+
+    </text>
+    
+    <section>
+      <title>A simple hypothetical instruction encoding</title>
+      <text>
+	<p>Let us now, just for the moment, take on the role of the
+	processor designer and think about how we might decide which
+	instructions correspond to which words.  This will let us
+	think about what sorts of considerations are involved with
+	this decision, and then afterward we'll see how the AVR
+	processors actually encode instructions.</p>
+
+	<p>One very naive way to encode instructions is to observe
+	that in describing the instruction set, we provided an
+	enhaustive list of all available instructions.  For instance,
+	all the possible incarnations of ldi instructions are:
+
+<pre>ldi r16,0
+ldi r16,1
+...
+ldi r16,255
+...
+ldi r31,255</pre>
+
+        These are 4096 different instructions, and so we we can
+        just make them correspond to the numbers 0-4095 respectively.
+        Thus ldi r16,0 will be encoded with the number 0, ldi r16,1
+        with the number 1, ldi r17,0 with the number 256, and ldi
+        r30,89 with the number 3673, etc.</p>
+
+	<p>Then we have the andi instructions
+
+<pre>andi r0,0
+...
+andi r0,255
+andi r1,0
+...
+andi r1,255
+......
+andi r31,255</pre>
+
+        This is another 8192 instructions.  We've already assigned
+        the numbers 0-4095 to correspond to the ldi instructions, so
+        we may as well take the next 8192 numbers--that is,
+        4096-12287--and make these correspond to the andi instructions
+        in the above order.  In the above list of andi instructions,
+        andi r30,6 will be the 7687th andi instruction, so it will be
+        assigned the number 11783 under this encoding scheme.</p>
+
+	<p>Thus, if we used the naive encoding above, then our program
+	would be stored as
+
+<pre>0000111001011001 0010111000000111</pre>
+
+Where <pre>0000111001011001</pre> in decimal is 3673--the encoded
+version of
+
+<pre>ldi r30,89</pre>
+
+and 00101110 00000111 for 11783--the encoding of <pre>andi
+r30,6</pre>.  </p>
+
+<p>From what we know so far, this encoding might be as good as any
+other--for instance, we chose to start with the ldi and andi
+instructions, but maybe we could instead encode the ldi instructions
+using the first 4096 numbers, and then encode the mov instructions
+using the next 1024 numbers (1024 being how many different possible
+mov instructions there are).</p>
+
+<p>But to see if we can be more systematic about it, let us see what
+this encoding actually means on the level of the binary
+representations.  Under this suggested scheme, we'll have encodings:
+
+<table><tr><td>Instruction</td><td>Decimal</td><td>16-bit binary</td></tr>
+<tr><td>ldi r16,0</td><td>0</td><td>0000000000000000</td></tr>
+<tr><td>ldi r16,1</td><td>0</td><td>0000000000000001</td></tr>
+<tr><td>ldi r16,60</td><td>0</td><td>0000000000111100</td></tr>
+<tr><td>ldi r16,145</td><td>0</td><td>0000000010010001</td></tr>
+<tr><td>ldi r16,255</td><td>0</td><td>0000000011111111</td></tr>
+<tr><td>ldi r17,0</td><td>0</td><td>0000000100000000</td></tr>
+<tr><td>ldi r18,0</td><td>0</td><td>0000001000000000</td></tr>
+<tr><td>ldi r19,0</td><td>0</td><td>0000001100000000</td></tr>
+<tr><td>ldi r26,0</td><td>0</td><td>0000101000000000</td></tr>
+<tr><td>ldi r31,0</td><td>0</td><td>0000111100000000</td></tr>
+<tr><td>ldi r31,5</td><td>0</td><td>0000111100000101</td></tr>
+<tr><td>ldi r31,60</td><td>0</td><td>0000111100111100</td></tr>
+<tr><td>ldi r31,255</td><td>0</td><td>0000111111111111</td></tr>
+</table>
+</p>
+
+<p>A couple of things we notice from these examples: out of our 16
+bits, the low 8 bits are just the binary representation of the value
+that should be loaded.  For instance, if we want to load the value 60
+into some register, I take 60 as an 8-bit binary number: 00111100, and
+place that into the lower 8 bits of the instruction.  Observe that ldi
+r16,60 was
+
+<pre>00000000<b>00111100</b></pre>
+
+whereas ldi r31,60 was
+
+<pre>00001111<b>00111100</b></pre>
+
+Then the next-lowest 4 bits tell us which register we're loading from: To store the value 145 (binary 10010001) into register 16, we do
+
+<pre>0000<b>0000</b>10010001</pre>
+
+whereas to store 145 into r26, we do
+
+<pre>0000<b>1010</b>10010001</pre>
+
+and into r31 would be
+
+<pre>0000<b>1111</b>10010001</pre>
+
+Observe that these four bits aren't literally the binary
+representation of the register number to be loaded:</p>
+
+<table><tr><td>To load to register number </td><td>(in binary)</td><td>Set bits 9-13 to: </td></tr>
+<tr><td>16</td><td>10000</td><td>0000</td></tr>
+<tr><td>26</td><td>11010</td><td>1010</td></tr>
+<tr><td>31</td><td>11111</td><td>1111</td></tr>
+</table>
+
+<p>Since the bits that select which register we load into only have to
+select between 16 different possibilities (registers 16-31) we only
+need 4 bits to represent this choice.  And if those four bits are,
+say, 1010, we see that we can get the actual register number being
+selected by just throwing a 1 on the front of it, giving 11010,
+i.e. 26.  </p>
+
+<p>So fundamentally, to specify an ldi instruction, we need to use 4
+bits for the register select, and 8 bits for the immediate value.  Our
+naive encoding said that for ldi, we use the lowest 8 bits for the
+immediate value and the next 4 bits for the register select.  We shall
+denote this encoding in the following concise notation:
+
+<pre>ldi: 0000RRRRIIIIIIII loads binary value IIIIIIII into register 1RRRR</pre>
+
+What this means is that the bits labelled I comprise the binary value
+to be loaded, and the bits labelled R comprise the low four bits of
+the register select, with the fifth bit of the register select being
+always 1.  For example, if we get the instruction 0000101000011110, we
+can decode it thus: </p>
+
+<figure><description>0000101000011110 with brackets over the 1010
+notated with 'Register to load value into is 11010, i.e. 26', and
+brackets over the 00011110 notated with 'Value to load into register
+is 00011110, i.e. 30'</description><caption>Decoding 0000101000011110
+as ldi r26, 30</caption></figure>
+
+      </text>
+    </section>
+    <section>
+      <title>The AVR ISA encoding</title>
+      <text>
+
+	<p>But now that we understand what's really required to choose
+	a representation for ldi instructions--we need to reserve one
+	4-bit blob and one 8-bit blob in the instruction for the
+	operands--we can do whatever we like.  For instance, we could
+	swap the order in which we did the above:
+
+	<pre>ldi: 0000IIIIIIIIRRRR loads binary value IIIIIIII into register 1RRRR</pre>
+
+	And this might be an equally good choice.  So rather than
+	choosing an encoding by trying to enumerate all the
+	instructions and assign them numbers sequentially, we can be
+	more systematic by looking at all the types of instructions
+	(mov, ldi, andi, etc.) and boil them down to exactly what
+	information they require.  For example, we just saw that ldi
+	fundamentally requires only one 4-bit number and one 8-bit
+	number.</p>
+
+	<p>By contrast mov requires us to specify two registers--that
+	is, two numbers 0-31.  And in binary, it takes 5 bits to
+	represent a number 0-31.  So the basic information built into
+	a mov instruction is two 5-bit numbers.  So we could encode
+	mov instructions as:
+
+	<pre>mov: 000000RRRRRSSSSS moves value of register SSSSS into register RRRRR</pre>
+
+	Thus the instruction 
+
+	<pre>0000000011011110</pre>
+
+	would have RRRRR being 00110 and SSSSS being 11110.  In
+	particular, this would put whatever was stored in register 30
+	into register 6.</p>
+
+	<p>But not so fast!  We intended this instruction to be a mov,
+	but if we use this encoding for mov and the above encoding for
+	ldi, then this is also the instruction ldi r16,222, as 1RRRR
+	is 10000 (decimal: 16) and IIIIIIII is 11011110 (decimal:
+	222)!  You the programmer might have intended one or the
+	other, but if we use this encoding scheme, both are valid
+	interpretations and the computer has no way of discerning
+	which you actually intended.</p>
+
+	<p>To resolve this particular ambiguity, we can take advantage of
+	the bits that are not storing actual information used by the
+	instruction.  In ldi, this is the first 4 bits, whereas in
+	mov, this is the first 5.  So if we instead use:
+
+	<pre>ldi: 0000IIIIIIIIRRRR loads binary value IIIIIIII into register 1RRRR
+mov: 000100RRRRRSSSSS moves value of register SSSSS into register RRRRR</pre>
+
+	Now we can always tell which instruction was intended by
+	looking at the first four bits.  If we see 0001, it was a mov,
+	and if we see 0000, it was an ldi.  </p>
+
+	<p>Note that this ambiguity was never going to be a problem
+	when we just wanted to assign numbers to instructions
+	sequentially.  But now that we're trying to be more systematic
+	and construct a system that is not so arbitrary, we need to be
+	at least a bit careful.</p>
+
+	<p>Now we have all the background necessary to understand the
+	encoding used by actual AVR chips for the AVR ISA.  We'll
+	start by enumerating the types of instruction and what
+	information they fundamentally require:
+
+
+	<table>
+	  <tr><td>Instruction</td><td>Required information</td></tr>
+
+
+	  <tr><td>ldi</td><td>4-bit register, 8-bit immediate</td></tr>
+	  <tr><td>mov</td><td>5-bit register, 5-bit register</td></tr>
+	  <tr><td>add</td><td>5-bit register, 5-bit register</td></tr>
+	  <tr><td>sub</td><td>5-bit register, 5-bit register</td></tr>
+	  <tr><td>inc</td><td>5-bit register</td></tr>
+	  <tr><td>dec</td><td>5-bit register</td></tr>
+	  <tr><td>and</td><td>5-bit register, 5-bit register</td></tr>
+	  <tr><td>andi</td><td>4-bit register, 8-bit immediate</td></tr>
+	  <tr><td>or</td><td>5-bit register, 5-bit register</td></tr>
+	  <tr><td>ori</td><td>4-bit register, 8-bit immediate</td></tr>
+	  <tr><td>com</td><td>5-bit register</td></tr>
+	  <tr><td>rjmp</td><td>12-bit immediate</td></tr>
+	  <tr><td>breq</td><td>7-bit immediate</td></tr>
+	  <tr><td>brne</td><td>7-bit immediate</td></tr>
+	  <tr><td>brsh</td><td>7-bit immediate</td></tr>
+	  <tr><td>brlo</td><td>7-bit immediate</td></tr>
+	  <tr><td>cp</td><td>5-bit register, 5-bit register</td></tr>
+	  <tr><td>cpi</td><td>4-bit register, 8-bit immediate</td></tr>
+	</table>
+
+	So we come out with the groupings: 
+
+<table border="1">
+  <tr>
+    <td align="left" valign="top">
+      Required information
+    </td>
+    <td align="left" valign="top">
+      Instructions requiring this information
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      4-bit register, 8-bit immediate
+    </td>
+    <td align="left" valign="top">
+      ldi, andi, ori, cpi                                                   
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      5-bit register, 5-bit register                                        
+    </td>
+    <td align="left" valign="top">
+      mov, add, sub, and, or, cp                                            
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      5-bit register                                                        
+    </td>
+    <td align="left" valign="top">
+      inc, dec, com
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      12-bit immediate
+    </td>
+    <td align="left" valign="top">
+      rjmp
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      7-bit immediate
+    </td>
+    <td align="left" valign="top">
+      breq, brne, brsh, brlo
+    </td>
+  </tr>
+</table>
+
+So we just need to specify which bits are used for which operands in each of these types of instructions.  For instance, for the first type of instruction, we will arrange the bits as 
+
+CCCCIIIIRRRRIIII
+
+This means we use the bottom 4 bits for the lowest 4 bits of the immediate, the next 4 bits for the register, and then the next 4 bits for the rest of the immediate.  This leaves us with 4 additional bits which we have marked as C.  
+
+But note that we have four different instructions that take a 4-bit register and an 8-bit immediate.  So we cannot just specify the I and R bits, but we need some way of telling which of the instructions is actually being run.  This is accomplished with the C bits.  For instance, for any ldi instruction, the C bits are always set to 1110.  This set of bits, which specifies not the operand, but rather which type of instruction is being run, is called the opcode.  
+
+Thus if we receive the instruction
+
+1110101000101110
+
+then we break it up: 
+
+C: 1110101000101110
+I: 1110101000101110
+R: 1110101000101110
+
+So the opcode is 1110, which tells us we're doing an ldi instruction.  The immediate is 10101110 (decimal: 174), and the register is 0010 (decimal: 2).  So this instruction should be ldi r2,174.  Note that in this format, the largest possible immediate we can load is by setting all the I bits to be 1, as in: 
+
+1110111100001111
+
+which corresponds to ldi r16,255.  
+
+We now summarise the bit-level layouts of the other groups of instructions that are used in the AVR ISA encoding: 
+
+<table border="1">
+  <tr>
+    <td align="left" valign="top">Instruction type    </td>
+    <td align="left" valign="top">
+      Format                                            
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      4-bit register, 8-bit immediate                   
+    </td>
+    <td align="left" valign="top">
+      CCCCIIIIRRRRIIII                                  
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      5-bit register, 5-bit register                    
+    </td>
+    <td align="left" valign="top">
+      CCCCCCSRRRRRSSSS                                  
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      5-bit register                                    
+    </td>
+    <td align="left" valign="top">
+      CCCCCCCRRRRRCCCC                                  
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      12-bit immediate                                  
+    </td>
+    <td align="left" valign="top">
+      CCCCIIIIIIIIIIII                                  
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      7-bit immediate                                   
+    </td>
+    <td align="left" valign="top">
+      CCCCCCIIIIIIICCC                                  
+    </td>
+  </tr>
+</table>
+
+In order to make use of this to actually encode instructions, we need to mention what the opcodes for each type of instruction is, which we summarise here: 
+
+<table border="1">
+  <tr>
+    <td align="left" valign="top">
+      Instruction 
+    </td>
+    <td align="left" valign="top">
+      Opcode      
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      ldi         
+    </td>
+    <td align="left" valign="top">
+      1110        
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      mov         
+    </td>
+    <td align="left" valign="top">
+      001011      
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      add         
+    </td>
+    <td align="left" valign="top">
+      000011      
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      sub         
+    </td>
+    <td align="left" valign="top">
+      000110      
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      inc         
+    </td>
+    <td align="left" valign="top">
+      10010100011 
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      dec         
+    </td>
+    <td align="left" valign="top">
+      10010101010 
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      and         
+    </td>
+    <td align="left" valign="top">
+      001000      
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      andi        
+    </td>
+    <td align="left" valign="top">
+      0111        
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      or          
+    </td>
+    <td align="left" valign="top">
+      001010      
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      ori         
+    </td>
+    <td align="left" valign="top">
+      0110        
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      com         
+    </td>
+    <td align="left" valign="top">
+      10010100000 
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      rjmp        
+    </td>
+    <td align="left" valign="top">
+      1100        
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      breq        
+    </td>
+    <td align="left" valign="top">
+      111100001   
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      brne        
+    </td>
+    <td align="left" valign="top">
+      111101001   
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      brsh        
+    </td>
+    <td align="left" valign="top">
+      111101000   
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      brlo        
+    </td>
+    <td align="left" valign="top">
+      111100000   
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      cp          
+    </td>
+    <td align="left" valign="top">
+      000101      
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      cpi         
+    </td>
+    <td align="left" valign="top">
+      0011        
+    </td>
+  </tr>
+</table>
+</p>
+
+<p>Thus, to encode a mov instruction--say mov r30,r21--we use the
+opcode 001011, the source register r21, or 10101, and the target
+register 30, or 11100.  Using the recipe for this group of
+instructions:
+
+CCCCCCSRRRRRSSSS
+
+We arrive at the encoding
+
+0010111111000101
+
+where the components of the instruction are found as: </p>
+
+<figure><description>
+C: 0010111111000101
+S: 0010111111000101
+R: 0010111111000101
+</description><caption>The components of the mov
+instruction</caption></figure>
+
+<p>Similarly, to encode the instruction breq 56, we use the opcode
+111100001 and immediate value 0111000, and put these together
+according to the recipe for instructions involving a 7-bit immediate
+value, which was:
+
+CCCCCCIIIIIIICCC
+
+So we arrive at the encoding
+
+1111000111000001</p>
+
+<figure><description>
+C: 1111000111000001
+I: 1111000111000001
+</description>
+<caption>Breakdown of the breq instruction
+</caption></figure>
+
+<p>So this is great from a programmer's perspective--we now know how to
+feed numbers into the processor (which is all the processor
+understands) that will correspond to whatever instructions we want.
+So let us once more don the hat of the processor designer and
+understand what it is our processor should do once we get numbers from
+a programmer.</p>
+
+<p>For instance, suppose we get the number
+
+<pre>0010111011110111</pre>
+
+How can we tell which instruction this is?  </p>
+
+<p>For that matter, how can we be sure, given that we have so many
+different instruction formats, that this couldn't be interpreted as
+two different instructions?</p>
+
+<p>To see this more clearly, let us list the opcodes for our
+instruction types once more, but this time, with placeholders for bits
+specifying the operands.  And we'll also write down the instructions
+in order of opcode, so that those starting with 0000 come first and
+those starting with 1111 come last:</p>
+
+<table border="1">
+  <tr>
+    <td align="left" valign="top">
+      Instruction 
+    </td>
+    <td align="left" valign="top">
+      Opcode          
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      add         
+    </td>
+    <td align="left" valign="top">
+      000011SRRRRRSSSS
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      cp          
+    </td>
+    <td align="left" valign="top">
+      000101SRRRRRSSSS
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      sub         
+    </td>
+    <td align="left" valign="top">
+      000110SRRRRRSSSS
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      and         
+    </td>
+    <td align="left" valign="top">
+      001000SRRRRRSSSS
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      or          
+    </td>
+    <td align="left" valign="top">
+      001010SRRRRRSSSS
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      mov         
+    </td>
+    <td align="left" valign="top">
+      001011SRRRRRSSSS
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      cpi         
+    </td>
+    <td align="left" valign="top">
+      0011IIIIRRRRIIII
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      ori         
+    </td>
+    <td align="left" valign="top">
+      0110IIIIRRRRIIII
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      andi        
+    </td>
+    <td align="left" valign="top">
+      0111IIIIRRRRIIII
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      dec         
+    </td>
+    <td align="left" valign="top">
+      1001010RRRRR1010
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      com         
+    </td>
+    <td align="left" valign="top">
+      1001010RRRRR0000
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      inc         
+    </td>
+    <td align="left" valign="top">
+      1001010RRRRR0011
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      rjmp        
+    </td>
+    <td align="left" valign="top">
+      1100IIIIIIIIIIII
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      ldi         
+    </td>
+    <td align="left" valign="top">
+      1110IIIIRRRRIIII
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      brlo        
+    </td>
+    <td align="left" valign="top">
+      111100IIIIIII000
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      breq        
+    </td>
+    <td align="left" valign="top">
+      111100IIIIIII001
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      brsh        
+    </td>
+    <td align="left" valign="top">
+      111101IIIIIII000
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      brne
+    </td>
+    <td align="left" valign="top">
+      111101IIIIIII001
+    </td>
+  </tr>
+</table>
+
+<p>So if we take our input of 
+
+<pre>0010010011110111</pre>
+
+to this table, we see that the only instruction that starts with 001011 is mov.  So then we can break it up as before: </p>
+
+<figure><description>C: 0010010011110111 (mov)
+S: 0010010011110111 (00111 = 7)
+R: 0010010011110111 (01111 = 15)</description>
+<caption>Decoding the instruction as a mov</caption></figure>
+
+<p>So this is the instruction mov r15,r7.  </p>
+
+<p>Similarly, if we get the instruction
+
+<pre>1001010000000011</pre>
+
+then we go to the table and see that only inc, dec, and com start with
+1001010.  But these are distinguished by the three bits they end with.
+And only inc ends with 011.  And the R bits are all 0, so this must be
+inc r0.  </p>
+
+      </text>
+    </section>
+  </section>
+  <section>
+    <title>Search engine: The encoding of text</title>
+    <text>
+      <p>Now we return to our search engine case-study in an attempt
+      to understand it at a lower level than before.  The basic
+      operation that happens in searching is comparing strings.  But
+      really, to compare two strings, we can just compare each letter
+      of the strings one after the other.  So what is this operation
+      of comparing letters?  After all, we now know all the operations
+      that our computer can actually do, and none of them even mention
+      letters.  What gives?</p>
+
+      <p>As with instructions, and really everything else, the computer
+      represents letters with bits.  That is, when you enter the
+      string "banana".  The computer is not dealing with the string
+      itself, but rather with a sequence of numbers that encode the
+      string.  In this case, the sequence is:
+
+      <pre>98,97,110,97,110,97</pre>
+
+      Depending on the need, there are different ways of encoding
+      letters using numbers, two of which we'll introduce now: ASCII,
+      and UTF-8.</p>
+
+    </text>
+    
+    <section>
+      <title>Text--ASCII</title>
+      <text>
+	<p>In the early days of computing, computers were used mostly
+	in the English speaking world, so there were only so many
+	characters people wanted to be able to use.  In fact, there
+	were only about 98 characters that were ever in use.  On top
+	of the 56 coming from 0-9, a-z, and A-Z, there are various
+	punctuation characters:
+
+<pre>: ; &quot; ' , . / &lt; &gt; ? [ ] { } \ | ` ~ ! @ # $ % ^ &amp; * ( ) - = _ +</pre>
+
+	But the computer can only store numbers, and so there had to
+	be a uniform way of corresponding numbers and characters.
+	What came out of this was the ASCII character encoding, which
+	was the following mapping: </p>
+
+
+
+<table border="1">
+  <tr>
+    <td align="left" valign="top">
+      9
+    </td>
+    <td align="left" valign="top">
+      [tab]
+    </td>
+    <td align="left" valign="top">
+      63
+    </td>
+    <td align="left" valign="top">
+      ?
+    </td>
+    <td align="left" valign="top">
+      96
+    </td>
+    <td align="left" valign="top">
+      `
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      10
+    </td>
+    <td align="left" valign="top">
+      [newline]
+    </td>
+    <td align="left" valign="top">
+      64
+    </td>
+    <td align="left" valign="top">
+      @
+    </td>
+    <td align="left" valign="top">
+      97
+    </td>
+    <td align="left" valign="top">
+      a
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      32
+    </td>
+    <td align="left" valign="top">
+      [space]
+    </td>
+    <td align="left" valign="top">
+      65
+    </td>
+    <td align="left" valign="top">
+      A
+    </td>
+    <td align="left" valign="top">
+      98
+    </td>
+    <td align="left" valign="top">
+      b
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      33
+    </td>
+    <td align="left" valign="top">
+      !
+    </td>
+    <td align="left" valign="top">
+      66
+    </td>
+    <td align="left" valign="top">
+      B
+    </td>
+    <td align="left" valign="top">
+      99
+    </td>
+    <td align="left" valign="top">
+      c
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      34
+    </td>
+    <td align="left" valign="top">
+      &quot;
+    </td>
+    <td align="left" valign="top">
+      67
+    </td>
+    <td align="left" valign="top">
+      C
+    </td>
+    <td align="left" valign="top">
+      100
+    </td>
+    <td align="left" valign="top">
+      d
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      35
+    </td>
+    <td align="left" valign="top">
+      #
+    </td>
+    <td align="left" valign="top">
+      68
+    </td>
+    <td align="left" valign="top">
+      D
+    </td>
+    <td align="left" valign="top">
+      101
+    </td>
+    <td align="left" valign="top">
+      e
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      36
+    </td>
+    <td align="left" valign="top">
+      $
+    </td>
+    <td align="left" valign="top">
+      69
+    </td>
+    <td align="left" valign="top">
+      E
+    </td>
+    <td align="left" valign="top">
+      102
+    </td>
+    <td align="left" valign="top">
+      f
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      37
+    </td>
+    <td align="left" valign="top">
+      %
+    </td>
+    <td align="left" valign="top">
+      70
+    </td>
+    <td align="left" valign="top">
+      F
+    </td>
+    <td align="left" valign="top">
+      103
+    </td>
+    <td align="left" valign="top">
+      g
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      38
+    </td>
+    <td align="left" valign="top">
+      &amp;
+    </td>
+    <td align="left" valign="top">
+      71
+    </td>
+    <td align="left" valign="top">
+      G
+    </td>
+    <td align="left" valign="top">
+      104
+    </td>
+    <td align="left" valign="top">
+      h
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      39
+    </td>
+    <td align="left" valign="top">
+      '
+    </td>
+    <td align="left" valign="top">
+      72
+    </td>
+    <td align="left" valign="top">
+      H
+    </td>
+    <td align="left" valign="top">
+      105
+    </td>
+    <td align="left" valign="top">
+      i
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      40
+    </td>
+    <td align="left" valign="top">
+      (
+    </td>
+    <td align="left" valign="top">
+      73
+    </td>
+    <td align="left" valign="top">
+      I
+    </td>
+    <td align="left" valign="top">
+      106
+    </td>
+    <td align="left" valign="top">
+      j
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      41
+    </td>
+    <td align="left" valign="top">
+      )
+    </td>
+    <td align="left" valign="top">
+      74
+    </td>
+    <td align="left" valign="top">
+      J
+    </td>
+    <td align="left" valign="top">
+      107
+    </td>
+    <td align="left" valign="top">
+      k
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      42
+    </td>
+    <td align="left" valign="top">
+      *
+    </td>
+    <td align="left" valign="top">
+      75
+    </td>
+    <td align="left" valign="top">
+      K
+    </td>
+    <td align="left" valign="top">
+      108
+    </td>
+    <td align="left" valign="top">
+      l
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      43
+    </td>
+    <td align="left" valign="top">
+      +
+    </td>
+    <td align="left" valign="top">
+      76
+    </td>
+    <td align="left" valign="top">
+      L
+    </td>
+    <td align="left" valign="top">
+      109
+    </td>
+    <td align="left" valign="top">
+      m
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      44
+    </td>
+    <td align="left" valign="top">
+      ,
+    </td>
+    <td align="left" valign="top">
+      77
+    </td>
+    <td align="left" valign="top">
+      M
+    </td>
+    <td align="left" valign="top">
+      110
+    </td>
+    <td align="left" valign="top">
+      n
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      45
+    </td>
+    <td align="left" valign="top">
+      -
+    </td>
+    <td align="left" valign="top">
+      78
+    </td>
+    <td align="left" valign="top">
+      N
+    </td>
+    <td align="left" valign="top">
+      111
+    </td>
+    <td align="left" valign="top">
+      o
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      46
+    </td>
+    <td align="left" valign="top">
+      .
+    </td>
+    <td align="left" valign="top">
+      79
+    </td>
+    <td align="left" valign="top">
+      O
+    </td>
+    <td align="left" valign="top">
+      112
+    </td>
+    <td align="left" valign="top">
+      p
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      47
+    </td>
+    <td align="left" valign="top">
+      /
+    </td>
+    <td align="left" valign="top">
+      80
+    </td>
+    <td align="left" valign="top">
+      P
+    </td>
+    <td align="left" valign="top">
+      113
+    </td>
+    <td align="left" valign="top">
+      q
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      48
+    </td>
+    <td align="left" valign="top">
+      0
+    </td>
+    <td align="left" valign="top">
+      81
+    </td>
+    <td align="left" valign="top">
+      Q
+    </td>
+    <td align="left" valign="top">
+      114
+    </td>
+    <td align="left" valign="top">
+      r
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      49
+    </td>
+    <td align="left" valign="top">
+      1
+    </td>
+    <td align="left" valign="top">
+      82
+    </td>
+    <td align="left" valign="top">
+      R
+    </td>
+    <td align="left" valign="top">
+      115
+    </td>
+    <td align="left" valign="top">
+      s
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      50
+    </td>
+    <td align="left" valign="top">
+      2
+    </td>
+    <td align="left" valign="top">
+      83
+    </td>
+    <td align="left" valign="top">
+      S
+    </td>
+    <td align="left" valign="top">
+      116
+    </td>
+    <td align="left" valign="top">
+      t
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      51
+    </td>
+    <td align="left" valign="top">
+      3
+    </td>
+    <td align="left" valign="top">
+      84
+    </td>
+    <td align="left" valign="top">
+      T
+    </td>
+    <td align="left" valign="top">
+      117
+    </td>
+    <td align="left" valign="top">
+      u
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      52
+    </td>
+    <td align="left" valign="top">
+      4
+    </td>
+    <td align="left" valign="top">
+      85
+    </td>
+    <td align="left" valign="top">
+      U
+    </td>
+    <td align="left" valign="top">
+      118
+    </td>
+    <td align="left" valign="top">
+      v
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      53
+    </td>
+    <td align="left" valign="top">
+      5
+    </td>
+    <td align="left" valign="top">
+      86
+    </td>
+    <td align="left" valign="top">
+      V
+    </td>
+    <td align="left" valign="top">
+      119
+    </td>
+    <td align="left" valign="top">
+      w
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      54
+    </td>
+    <td align="left" valign="top">
+      6
+    </td>
+    <td align="left" valign="top">
+      87
+    </td>
+    <td align="left" valign="top">
+      W
+    </td>
+    <td align="left" valign="top">
+      120
+    </td>
+    <td align="left" valign="top">
+      x
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      55
+    </td>
+    <td align="left" valign="top">
+      7
+    </td>
+    <td align="left" valign="top">
+      88
+    </td>
+    <td align="left" valign="top">
+      X
+    </td>
+    <td align="left" valign="top">
+      121
+    </td>
+    <td align="left" valign="top">
+      y
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      56
+    </td>
+    <td align="left" valign="top">
+      8
+    </td>
+    <td align="left" valign="top">
+      89
+    </td>
+    <td align="left" valign="top">
+      Y
+    </td>
+    <td align="left" valign="top">
+      122
+    </td>
+    <td align="left" valign="top">
+      z
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      57
+    </td>
+    <td align="left" valign="top">
+      9
+    </td>
+    <td align="left" valign="top">
+      90
+    </td>
+    <td align="left" valign="top">
+      Z
+    </td>
+    <td align="left" valign="top">
+      123
+    </td>
+    <td align="left" valign="top">
+      {
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      58
+    </td>
+    <td align="left" valign="top">
+      colon
+    </td>
+    <td align="left" valign="top">
+      91
+    </td>
+    <td align="left" valign="top">
+      [
+    </td>
+    <td align="left" valign="top">
+      124
+    </td>
+    <td align="left" valign="top">
+      |
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      59
+    </td>
+    <td align="left" valign="top">
+      ;
+    </td>
+    <td align="left" valign="top">
+      92
+    </td>
+    <td align="left" valign="top">
+      \
+    </td>
+    <td align="left" valign="top">
+      125
+    </td>
+    <td align="left" valign="top">
+      }
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      60
+    </td>
+    <td align="left" valign="top">
+      &lt;
+    </td>
+    <td align="left" valign="top">
+      93
+    </td>
+    <td align="left" valign="top">
+      ]
+    </td>
+    <td align="left" valign="top">
+      126
+    </td>
+    <td align="left" valign="top">
+      ~
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      61
+    </td>
+    <td align="left" valign="top">
+      =
+    </td>
+    <td align="left" valign="top">
+      94
+    </td>
+    <td align="left" valign="top">
+      ^
+    </td>
+    <td align="left" valign="top">
+      
+    </td>
+    <td align="left" valign="top">
+      
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      62
+    </td>
+    <td align="left" valign="top">
+      &gt;
+    </td>
+    <td align="left" valign="top">
+      95
+    </td>
+    <td align="left" valign="top">
+      _
+    </td>
+    <td align="left" valign="top">
+      
+    </td>
+    <td align="left" valign="top">
+      
+    </td>
+  </tr>
+</table>
+
+<p>The numbers we have elided in this table correspond in the ASCII
+encoding to certain special characters that do not interest us.</p>
+
+<p>This encoding is still used quite widely.  For instance, if you
+recall our printing program from chapter 4:
+
+<pre>ldi r31,hello
+call puts
+
+.section .data:
+hello: 
+db "Hello world!",0</pre>
+
+The string "Hello world!" in an assembly program is just shorthand for
+the sequence of characters, encoded with the ASCII encoding.  Thus an
+equivalent program would be:
+
+<pre>ldi r31,hello
+call puts
+
+.section .data:
+hello: 
+db 72,101,108,108,111,32,119,111,114,104,100,0</pre>
+
+Note that because each character has a number less than 255, we can
+use a single byte per character.  </p>
+
+      </text>
+    </section>
+    <section>
+      <title>Text--Unicode</title>
+      <text>
+	<p>ASCII is convenient when we want to be able to use a single
+	byte to represent every character, but there are definitely
+	languages that simply have more than 255 characters, and
+	certainly languages that use characters outside the ASCII
+	encoding.  So ASCII is not enough even if you just want to
+	type in proper French, and an encoding that uses one byte per
+	character will never work if you want to be able to type in
+	Chinese.</p>
+
+	<p>Thus a more comprehensive character encoding was needed,
+	and several standards rushed in to fill the gap.  By far the
+	most popular as of this writing is one called UTF-8
+	("Universal character set Transition Format--8-bit").  One
+	feature that makes it popular is that if you have a sequence
+	of numbers, such as 72,101,108,108,111,32,119,111,114,104,100
+	above, that is meant to be decoded with the ASCII table,
+	decoding it with the UTF-8 will produce the same result.  The
+	way it accomplishes this is by noticing that if you use one
+	byte per character in ASCII, the top-most bit is always 0.
+	For instance, our hello world is:
+
+<pre>01001000
+01100101
+01101100
+01101100
+01101111
+00100000
+01110111
+01101111
+01110010
+01101100
+01100100
+00100001</pre>
+
+So we have freedom to decide what to do if the top-most bit is a 1.
+Under the UTF-8 standard, if the first bit of a given byte is 1, then
+the number of 1s following that determine how many additional bytes
+are a part of the same character.  But all those additional bytes are
+required to start with the bits 10.  So for example, if we have the
+sequence of bytes:
+
+<pre>00100001
+11000011
+10110111
+11100010
+10011000
+10111010</pre>
+
+Then the first byte 00100001 starts with a 0, so is a full character
+on its own (in fact, the character "!"), and thus the next byte must
+be the start of the next character.  </p>
+
+<p>The second byte starts with 110, which indicates that it and the byte
+after it comprise the second character.  And indeed the byte after
+it--10110111--starts with 10, so this character is represented by the
+bytes
+
+<pre>11000011
+10110111</pre>
+
+Since the 110 and the 10 are just there to indicate that these bytes
+together form one character, the remaining bytes--00011110111--specify
+which character it is.  To find out which character, we can look these
+up in the UTF-8 table.  Since in decimal, this binary number is 247,
+we look at the 247th entry and find that this is the division sign: ÷.</p>
+
+<p>The next byte is 11100010, suggesting that the following two bytes
+are also a part of this character.  So the character is comprised of
+the bytes:
+
+<pre>11100010
+10011000
+10111010</pre>
+
+Of these, some of the bytes are again being used to pick out this blob
+of three bytes as one character:
+
+<pre><b>1110</b>0010
+<b>10</b>011000
+<b>10</b>111010</pre>
+
+and the rest--0010011000111010--are specifying which character it is.
+In decimal this is 9786, so we can look up this entry in the UTF-8
+tables to discover that this character is a smiley face.</p>
+
+      </text>
+    </section>
+  </section>
+  <section>
+    <title>Game console: The encoding of graphics</title>
+    <text>
+      <p>We've just seen how text files can indeed be stored in a
+      computer's memory (even though that memory can only store bytes)
+      by means of various character encodings.  We now turn to a more
+      complicated sort of data, which we'll need if we ever want a
+      hope of making games beyond the text-based format: Images.</p>
+
+      <p>Just as there are several ways of storing plain text, there are
+      many ways of storing image data, each with its own advantages
+      and disadvantages.  Before we get into the ways of storing an
+      entire image, we'll discuss the most basic component of all
+      images: Just as strings were comprised of characters, images are
+      (usually) comprised of pixels.</p>
+
+      <p>A computer screen is a grid of lights each of which can be set
+      to any colour you want individually.  Each one of these lights
+      is called a pixel.  An image, then, should contain (among other
+      things) a list of colours so that wherever on the screen the
+      image is being displayed, the pixels in that place should be set
+      to the colours in that list to show the desired graphic on the
+      screen:
+
+      <figure><description>A list of colours (by
+      name--"red","blue",etc.), and a screen with a rectangle cordoned
+      off for the image to display, and filled with the colour names
+      from the list, and then a rendering of what that actually looks
+      like when instead of names, it is filled with actual
+      colours.</description><caption></caption>
+      </figure></p>
+
+    </text>
+    
+    <section>
+      <title>Pixels--RGB</title>
+      <text>
+	<p>So the first problem to solve is how do we specify a colour
+	using just numbers?  It turns out that the physical design of
+	an individual pixel sort of gives us a way of doing this
+	already: </p>
+
+	<figure><description>Close-up photograph of pixels on an LCD</description><caption></caption></figure>
+
+	<p>As you can see, each pixel is not a single light at all, but
+	in fact three lights--one red, one green, and one blue.
+	Combinations of light of these colours can be used to create
+	any other colour:</p>
+
+	<figure><description>Three coloured lights merging in the
+	usual three-circle Venn-diagram-like
+	way</description><caption></caption></figure>
+
+	<p>and by specifying the intensity of each of the three colours,
+	we can specify what colour we want the pixel to appear as.
+	One common way of doing this is by specifying each intensity
+	with a single byte, so the full colour of a single pixel
+	requires three bytes to specify.  </p>
+	
+	<figure><description>Table of some common RGB values and
+	colours</description><caption></caption></figure>
+
+      </text>
+    </section>
+    <section>
+      <title>Images--BMP</title>
+      <text>
+	<p>Now that we know how to encode the colour of an individual
+	pixel, we consider what information is needed to turn a
+	sequence of these into an image.  For instance, if we just
+	specify the list of colours:
+
+	<pre>
+	  ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,
+	  ffffff,ff0000,ffffff,ff0000,ffffff,ffffff,ffffff,ffffff,
+	  ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,
+	  ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,
+	  ffffff,ffffff,ffffff,ffffff,000000,ffffff,ffffff,ffffff,
+	  000000,ffffff,ffffff,ffffff,000000,000000,000000,ffffff,
+	  ffffff
+	</pre>
+
+	  We don't know which of the following images this list represents: </p>
+
+	  <figure><description>All pixels in a horizontal line, in two
+	  rows, or in 7 rows</description></figure>
+
+	  <p>So we need some additional information to specify the
+	  height and width, among other things.</p>
+
+	  <p>The BMP file format is one of the simplest ways of
+	  arranging pixel data so that it can be understood for
+	  display unambiguously.</p>
+
+	  <p>Here is an example of a bmp image:</p>
+
+	  <figure><description>smile.bmp</description><caption>The
+	  above smiley as a BMP image</caption></figure>
+
+	  <p>And here is an excerpt from beginning of the actual sequence
+	  of bytes that the computer is storing in this file:
+
+<pre>42 4d 3a 05 00 00 00 00 00 00 8a 00 00 00 7c 00
+00 00 14 00 00 00 14 00 00 00 01 00 18 00 00 00
+00 00 b0 04 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 ff 00 00 ff 00 00 ff 00
+00 00 00 00 00 ff 42 47 52 73 80 c2 f5 28 60 b8
+1e 15 20 85 eb 01 40 33 33 13 80 66 66 26 40 66
+66 06 a0 99 99 09 3c 0a d7 03 24 5c 8f 32 00 00
+00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff ff ff ff 00 80 80 00 80
+80 00 80 80 00 80 80 00 80 80 00 80 80 ff ff ff
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ff 00 80 80 00 80 80 30 c2 f9 2c af e0 2c b1 e2
+2c b1 e2 2c b1 e2 36 a9 e3 00 80 80 00 80 80 ff
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff ff ff 00 80 80 28 c8 ff
+2c c3 fc 31 bd f1 27 b8 ed 29 b8 ed 24 b3 ea 24
+b3 ea 24 b3 ea 29 b6 ea 36 a9 e3 00 80 80 ff ff
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff</pre>
+
+	  </p>
+
+	  <p>The first two bytes are the ASCII values for the
+	  characters B and M, respectively.  This allows the computer
+	  to look at the file and determine that it is a BMP file even
+	  if the filename weren't something so informative as
+	  smile.bmp.</p>
+
+	  <p>The 11th byte tells us how many bytes in the actual pixel
+	  data is stored.  Since it is 8a (decimal: 138) this means
+	  that the first pixel is stored starting at byte number 138
+	  (which is the start of the green bytes)</p>
+
+	  <p>Bytes 19-23 stores the width of the image--in this case
+	  0x14, or, in decimal, 20.  The next 4 bytes store the
+	  height--again 20.</p>
+
+	  <p>The bytes we've skipped give some further technical
+	  information about the image that we won't go into here, but
+	  then starting at byte 138, we start to get the actual image
+	  data.  And the way BMP is stored, the first pixel stored is
+	  the bottom right pixel, and then the pixels proceed
+	  right-to-left, bottom-to-top.</p>
+
+	  <p>Thus the whole bottom row of the image is ffffff, or just
+	  white.  Then somewhere in the second-to-last row, we get
+	  some 008080, or a sort of light aqua.  And so on.</p>
+      </text>
+    </section>
+  </section>
+  
+  <section>
+    <title>Mobile phone: The encoding of sensor data</title>
+    <summary>In the foregoing sections, the challenge of encoding data
+    was always how to assign numbers to the data in a usable way.  In
+    this example, there is an obvious way to encode the data: We're
+    sending three numbers for acceleration along the three axes, so
+    just represent these numbers as binary and send them along!
+    However, if the wires along which we are sending these wires are
+    considered unreliable, then using the obvious encoding may end up
+    with our receiving misleading data.  To mitigate this, we give our
+    first (and, for this book, only) example of an encoding that not
+    only has to unambiguously communicate the desired information, but
+    that must account for other considerations beyond ease of
+    decoding.</summary>
+    
+    <text>
+      <p>A cell phone presents many further encoding challenges.  Here,
+      we'll focus on for now are how to encode the acceleration data
+      collected by the accelerometer for transmission to the
+      processor.  </p>
+
+      <p>On the one hand, we can say that the accelerometer just
+      outputs three bytes--one representing the amount of acceleration
+      for acceleration in each of the cardinal directions.</p>
+
+      <figure><description>Graphic of phone with three
+      axes</description></figure>
+
+      <p>However, sending a byte to the processor could mean that
+      there are 8 wires going between the accelerometer and the
+      processor.  But since the device is also a phone, it's got an
+      antenna transmitting as well, which means that all of these
+      wires are very close to some decently powerful radio
+      transmissions.  And radio waves near a wire can cause current to
+      flow through that wire--this is, after all, how an antenna works
+      in the first place, so we run the risk of at least one of the
+      wires being changed to something other than what it was supposed
+      to be sending.</p>
+
+      <p>So, for example, if we were trying to send the x-acceleration
+      as the number 23, i.e. as 00010111 on the 8 wires, we the radio
+      communication could flip one of these bits in transit and the
+      processor could receive the value 01010111, or 87, instead.</p>
+
+      <p>Thus the simple encoding of: "Turn the number into binary and
+      then send out the bits on wires" may be inadequate to ensure
+      proper communication.</p>
+
+    </text>
+    
+    <section>
+      <title>Sensor data with repetition for error-detection</title>
+      <text>
+	<p>One simple (if somewhat heavy-handed) change would be to
+	have instead of 8 wires, have three sets of 8 wires, and send
+	the same number out on all three.  The calculation is that
+	while there is a chance of one bit being flipped, there is a
+	much lower chance of more than one being flipped.  So if we
+	are trying to send the number 23, we will send
+
+<pre>00010111
+00010111
+00010111</pre>
+
+If the processor receives this, then it can be reasonably confident that the intended number was indeed 23.  But maybe there was interference and the processor receives: 
+
+<pre>00010111
+01010111
+00010111</pre>
+
+Now it can be reasonably sure of all but the second bit.  Either it
+was transmitted as a 0 three times and one of those got flipped to a
+1, or it was transmitted as a 1 three times and two of those got
+flipped to 0.  Because we're estimating that even one bit getting
+flipped is not so likely, we can make the educated guess that it was
+probably sent as a 0 and just one of the three transmissions got
+flipped, so even though there was interference, the processor can
+still safely conclude the number transmitted was 00010111.  </p>
+
+<p>This is an example of an error-correcting code--that is, an
+encoding for the data that is done in such a way that even if some
+bits of the data were accidentally (or maliciously!) flipped in
+transit, the intended message can still be deduced from the
+error-filled data that the processor received.</p>
+
+<p>It is worth mentioning that this error-correcting code can correct
+up to 8 errors, if they happen to all fall in the right places.  For
+instance, if the intended message was again
+
+<pre>00010111
+00010111
+00010111</pre>
+
+But the processor receives 
+
+<pre>10100111
+01010111
+00011101</pre>
+
+then it can still analyse this by taking, for each bit, the majority value.  For instance, the first bit was sent as 1 once and as 0 twice, so the processor assumes this was a 0.  Continuing thus, we get: 
+
+<pre>10100111
+01010111
+00011101
+00010111</pre>
+
+However, if the errors happened to line up so that one bit got flipped twice, as in 
+
+<pre>01010111
+01011111
+00000111</pre>
+
+then the processor would deduce an intended value of 01010111, which would be incorrect.  So an error-correcting code cannot correct arbitrary errors, but they tend to be designed to correct for as many errors as are considered likely and intolerable in the situation they are designed for.  </p>
+
+	
+      </text>
+    </section>
+    <section>
+      <title>Sensor data with parity-bit error detection</title>
+      <text>
+	<p>This scheme required rather a lot of work, however, since
+	it requires tripling the number of transmissions being made.
+	If you have a lot of money and cannot afford error, it might
+	be decent, but if a single error in accelerometer transmission
+	isn't going to affect very much, then a slightly
+	lighter-weight method may be more appropriate.  One such
+	method is to use a <b>parity bit</b>.</p>
+
+	<p><def term='parity bit'>In this encoding scheme, we send
+	only one extra bit, rather than 16.  This extra bit will be 0
+	if the number of 1s in the transmitted number is even, and 0
+	if it is odd.  Thus if we intend to send the number 23, or
+	00010111, then because this has an even number of 1s, we
+	actually send the number 000101110, where this last bit is the
+	so-called parity bit.</def></p>
+
+	<p>So if the processor receives the transmission 010101110,
+	then it notices that the number has an odd number of 1s, but
+	the parity bit is 0.  Therefore it concludes that some bit in
+	the transmission was corrupted.  Unlike in the previous
+	scheme, it cannot tell which bit was corrupted.  The intended
+	transmission might have been 010001110 but then the 4th bit
+	got flipped.  Or it might have been 010101111 and the parity
+	bit got flipped!  All the processor can determine is that the
+	transmission was likely in some way corrupted in transit.</p>
+
+	<p>But in this example, this is fine, since the processor can
+	in this event just ask the accelerometer for a new reading
+	until it gets one with a correct parity bit.</p>
+
+	<p>Note that just like in the previous example, if two bits
+	happen get flipped in transit, e.g. 000101101 then the error
+	will go unnoticed, since the number now has 3 1s and the
+	parity bit is correspondingly 1, as we expected.</p>
+
+	<p>This is an example of an error-detecting code, whose job is
+	to allow the recipient of the data to check whether it was
+	corrupted, but not necessarily to deduce what the intended
+	message was.  This is good in cases where errors are not too
+	harmful, and where the cost of re-sending the data is low.</p>
+      </text>
+    </section>
+  </section>
+</section>

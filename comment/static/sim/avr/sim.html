@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>IAMB A NANA</title>
+    <link rel="stylesheet" type="text/css" href="sim.css">
+    <link rel="stylesheet" href="../cm/codemirror.css">
+    <script src="../cm/codemirror.js"></script>
+    <script src="angular.min.js"></script>
+    <script>var app = angular.module('app', []);</script>
+    <script type="text/javascript" src="sim.js"></script>
+  </head>
+  <body ng-app="app">
+    <div id="super" ng-controller="AvrSimController">
+      <div class="programming">
+	<div class="controls">
+	  <div class="button" ng-click="program_pm()">[program]</div>
+	  <div class="button" ng-click="submit()">[submit]</div>
+	</div><br />
+	<form><textarea id="program_area" ng-init="cm_setup()">Hello</textarea></form>
+	<!-- <div id="editor" class="program" ng-init="ace_setup()"></div> -->
+	<!-- <script src="ed/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script> -->
+	<!-- <textarea class="program" ng-model="program" ng-model-instant></textarea><br /> -->
+	<br />
+      </div>
+      <div class="simulator">
+	<div class="controls">
+	  <div class="button" ng-click="submit()">[circuit]</div>
+	  <div class="button" ng-click="step()">[step]</div>
+	  <div class="button" ng-click="reset(false)">[reset]</div>
+	  <div class="button" ng-click="reset(true)">[clear]</div>
+	</div><br />
+	<div ng-class="{reg:true, updated:is_updated('PC'), normal:!is_updated('PC')}"><span class="label">PC: </span>{{PC}}</div>
+	<div ng-class="'reg '+(is_updated('Z') ? 'updated' : 'normal')"><span class="label">Z: </span>{{Z}}</div><div ng-class="'reg '+(is_updated('C') ? 'updated' : 'normal')"><span class="label">C: </span>{{C}}</div><div ng-class="'reg '+(is_updated('O') ? 'updated' : 'normal')"><span class="label">O: </span>{{O}}</div>
+	<br /><br />
+	<div id="pm">
+	  <div class="title">Program memory</div><br />
+	  <div class="display_button" ng-click="PC_display_mode = 't'">[text]</div>
+	  <div class="display_button" ng-click="PC_display_mode = 'b'">[bin]</div>
+	  <div class="display_button" ng-click="PC_display_mode = 'd'">[dec]</div>
+	  <div class="display_button" ng-click="PC_display_mode = 'h'">[hex]</div>
+	  <div ng-repeat="i in PM track by $index">
+	    <div ng-class="'pm '+ ($index == PC ? 'active' : 'normal')">
+	      <span class="label">{{$index}}: </span>{{PM[$index].display();}}
+	    </div>
+	    <br />
+	  </div>
+	  <br />
+	</div>
+	<div id="rf">
+	  <div class="title">Register file</div><br />
+	  <div class="display_button" ng-click="RF_display_mode = 'b'">[bin]</div>
+	  <div class="display_button" ng-click="RF_display_mode = 'd'">[dec]</div>
+	  <div class="display_button" ng-click="RF_display_mode = 'h'">[hex]</div>
+	  <br />
+	  
+	  <span ng-repeat="r in RF track by $index"><div ng-class="'reg '+ (is_updated($index) ? 'updated' : 'normal')"><span class="label">{{$index}}: </span>{{display_rf($index)}}</div><br ng-if="($index)%2 == 1" /></span><br />
+	  Pointers: <br />
+	  <div ng-class="'reg '+(is_updated(26)||is_updated(27) ? 'updated' : 'normal')">X: {{RF[26]+256*RF[27]}}</div><br />
+	  <div ng-class="'reg '+(is_updated(28)||is_updated(29) ? 'updated' : 'normal')">Y: {{RF[28]+256*RF[29]}}</div><br />
+	  <div ng-class="'reg '+(is_updated(30)||is_updated(31) ? 'updated' : 'normal')">Z: {{RF[30]+256*RF[31]}}</div>
+	</div>
+	<div id="ram">
+	  <div class="title">RAM</div><br />
+	  <div class="display_button" ng-click="RAM_display_mode = 'b'">[bin]</div>
+	  <div class="display_button" ng-click="RAM_display_mode = 'd'">[dec]</div>
+	  <div class="display_button" ng-click="RAM_display_mode = 'h'">[hex]</div>
+	  <div ng-repeat="i in RAM track by $index">
+	    <div ng-class="'ram '+ (is_updated('['+$index+']') ? 'updated' : 'normal')">
+	      <span class="label">{{$index}}: </span>{{display_ram($index);}}
+	    </div>
+	    <br />
+	  </div>
+	  <br />
+	</div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1784 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet href="box.xsl" type="text/xsl"?><section number="7">
+  <title>Microarchitecture</title>
+  <section>
+    <title>Where are we now?</title>
+    
+    <text>
+      <p>We started with two organising questions: "How do we program
+      a computer?" and "How do we build a computer?"  In chapters 2
+      and 3, we learned to program a computer using Python, and in
+      chapters 5, we learned how to translate our Python programs into
+      the computer's native language.  In chapter 6, we learned that
+      this native language, while we can write it using mnemonics for
+      improved human readability (well, some improvement in
+      readability anyway), is actually just numbers.  </p>
+      
+      <p>So now that we know the computer's native language--that is,
+      all commands are 16-bit numbers, and we know which of those
+      numbers correspond to what operations, our job in this chapter
+      will be to start down the path that answers the second question:
+      "How do we build a computer?"  But at this point, we can
+      actually understand the task more precisely: </p>
+
+      <p><i>"How do we build a physical machine that can take physical
+      representations of numbers that represent commands in the ISA
+      and perform the corresponding operations of moving physical
+      representations of numbers between various physical storage
+      units?"</i></p>
+
+      <p>The first step to answering this is called the computer's
+      <b>microarchitecture</b>, which provides a high-level view of
+      the machine we will build in terms of high-level
+      components--think at the level of "bakery" and "delivery squad"
+      back in our Waffle company.  In later chapters we'll get into
+      the details of how those components themselves are put together
+      (more like the level of oven temperatures and what colour hats
+      the chefs should wear).</p>
+      
+      <figure><description>The tower of abstractions with
+      microarchitecture layer
+      highlighted</description><caption></caption></figure>
+    </text>
+  </section>
+  <section>
+    <title>What is a microarchitecture?</title>
+    
+    <summary></summary>
+    <text>
+    
+    <p>By now we've understood that to build complex systems, all we
+    need is a machine that can execute commands from the ISA.
+    Further, we gave the ISA commands binary representations so that
+    all our machine has to do is to accept these as its inputs and
+    perform the corresponding operations.  That is, the ISA--with its
+    instruction set and encoding--was the computer's interface.  
+
+    <def term="microarchitecture">A <b>microarchitecture</b> is an
+    implementation of that interface.</def> </p>
+
+    <p>As with most of the implementations we've discussed before, the
+    the implementation of a computer will be done in layers: We will
+    discuss it in terms of high-level components in this chapter, and
+    then work our way down to the wires and switches and electrons in
+    the next chapter.</p>
+    
+    <p>In this chapter, our implementation will happen in two steps:
+    <ol>
+      <li>First, we will describe a computer as a specific kind of
+      abstract machine called a <b>state machine</b>.  </li>
+      <li>Then, we will start to build this state machine as a
+      physical device using various <b>circuit components</b>.
+      </li>
+    </ol>
+    
+    That is, we will first work toward constructing a large state
+    machine that completely decribes the behaviour of our computer.
+    Then we will turn this into a circuit diagram for our computer
+    consisting only of various circuit components and wires connecting
+    them.  This will mean that to actually build the computer, all we
+    will need is to build the individual circuit components, which
+    will be the topic of the next chapters.  At that point, upon
+    hooking them up as in the diagram, we will have designed our own
+    computer!</p>
+
+    </text>
+
+    <section>
+      <title>State machines</title>
+      <text>
+	<p>As we said: our first step will be to implement our
+	computer as a state machine.  A state machine, broadly, is a
+	description of a system as a collection of states it can be
+	in, and how it changes to different states depending on input.
+	Specifically, it encompasses the following three pieces of
+	information:
+	
+	<ol>
+	  <li>The states: What possible states are there?  These should be
+	  exclusive (it cannot be in two states at once) and
+	  exhaustive (it must always be in one of these states).</li>
+	  <li>The inputs: What possible actions can be performed in
+	  the system?</li>
+	  <li>The transitions: How does each action affect the state
+	  the system is in?</li>
+	</ol>
+	</p>
+	<p>Let us take, for example, a simple state machine modelling
+	the behaviour of a door.  We need to provide the three pieces
+	of information described above:
+	<ol>
+	  <li>States: It has three possible states: Open, closed, locked.
+	  </li>
+	  <li>Inputs: At any time, the actions available are: Open, close,
+	  lock, and unlock.  </li>
+	  <li>Transitions: How the actions affect the state</li>
+	</ol></p>
+
+	<p>In our example, to describe the transitions, we now have to
+	enumerate the possibilities: If the door is open, then opening
+	the door does nothing new and so leaves it in the state of
+	being open, closing the door moves it to a state of being
+	closed, and locking and unlocking the door doesn't work since
+	it is open, and so the door stays in the state of being open.
+	Then we'll have to describe also what the four actions do to a
+	closed door and to a locked door, but this will be rather
+	tiresome.  So we come to a much more efficient and readable
+	way of presenting this same information, which is the picture
+	referred to the state diagram for the state machine.  In it,
+	we draw each of the possible states inside circles:</p>
+
+	<figure sk="sk6_1.png"><description></description></figure>
+	
+	<p>And then, to indicate the actions and their effects on the
+	states, each state gets one arrow going out of it for each
+	possible action.  This arrow will be labelled with the
+	corresponding action, and will terminate at the state that the
+	action leaves the system in.  In the case of the door, we get
+	this diagram: </p>
+	
+	<figure sk="sk6_2.png"><description></description></figure>
+	
+	<p>So if the door is closed and we perform the "lock" action,
+	then we find the arrow labelled "lock" starting at the
+	"closed" state.  This arrow terminates at the "locked" state,
+	telling us that we end up in the "locked" state.</p>
+
+	<p>As a convenience, sometimes we omit the arrows that start
+	and end in the same state, drawing the previous diagram
+	instead as:</p>
+	
+	<figure sk="sk6_3.png"><description></description></figure>
+	
+	<p>where the fact that, e.g. if the door is open, then locking
+	doesn't change its state being left implicit.
+	</p>
+	
+<p>Of course, some doors do not behave this way.  Instead, they have a
+deadbolt that deploys when the door is locked, meaning the door cannot
+be closed.  To describe this, we would use states: "open with deadbolt
+retracted", "open with deadbolt deployed", "closed, deadbolt
+retracted", and "closed, deadbolt deployed":</p>
+
+<figure sk="sk6_4.png"><description></description></figure>
+
+<p>Other doors have a lock that affects only whether you can turn of
+the knob, meaning they can be locked while open, and if they are
+subsequently closed, they will be closed and locked.  These have a
+slightly different state machine, wherein you can close the door from
+its "open but locked" state:
+</p>
+
+
+<figure sk="sk6_5.png"><description></description></figure>
+
+      </text>
+      
+      <section><title>A state machine for our
+      microarchitecture</title>
+      <text>
+	<p>To describe our microarchitecture as a state machine, we
+	need to describe the states, the input, and the transitions.
+	The inputs will be all the possible instructions, and each
+	state will perform a single small operation, e.g. "write this
+	value to that memory" or "read this value from one memory and
+	store it in some other memory" or "add these two values".
+	</p>
+
+	<p>As we execute any given instruction, we will go through
+	several states.  For instance, ldi will first go through a
+	state that figures out what value you want to store, then
+	another that figures out what register you want to store it
+	in, and then a state that actually stores that value in that
+	register.  Finally, it will need to go to a state that will
+	get the next instruction.  </p>
+
+	<p>The states each instruction passes through will be
+	different, but there will be a common pattern of five stages
+	of execution that the states will fall under, called
+	respectively:
+
+	<ol>
+	  <li>The "fetch" stage: These are the states that retrieve
+	  the next instruction we are supposed to execute.</li>
+	  <li>The "decode" stage: These states will figure out what
+	  the instruction does--e.g. for ldi, which value it wants to
+	  store and which register it wants to store it in.</li>
+	  <li>The "execute" stage: These states will perform any
+	  arithmetic requessted by the operation.  For example, ldi
+	  will not have any states in this stage.</li>
+	  <li>The "memory" stage: These states will perform any
+	  RAM-related operations the the instruction requires.  ldi
+	  will not have any states in this stage either.</li>
+	  <li>The "writeback" stage: These states will perform any
+	  updates to registers.  ldi will go through a state here that
+	  writes the value to the desired register.</li>
+	</ol>
+
+	In more detail: 
+	</p>
+
+	<p><b>Fetch: </b>Remember that the value stored in the PC is
+	the address of the current instruction we are meant to be
+	executing.  So in the fetch stage, we feed the value from PC
+	into the program memory to read the actual instruction from
+	that address.</p>
+
+	<p><b>Decode: </b>Having got the current instruction--that is,
+	the 16 bits encoding it, we need to figure out which
+	instruction it is, and then what its various bits mean.  For
+	instance, if we get 1110010100011001, we can decode this as an
+	ldi instruction that should write value 01011001 to register
+	10001.  We don't at this point actually store anything in
+	register 10001, but merely store the information of what value
+	needs to be written and which register needs to be used.  </p>
+
+	<p><b>Execute: </b>Now that we've separated out the
+	information relevant to the instruction, in the execute stage
+	we perform any computations required by the instructions.  For
+	instance, if the instruction was add r20,r30, the decode stage
+	will have determined that we're storing to r20, and will have
+	read out the values from r20 and r30 that we're going to add.
+	In the execute stage, then, we actually add the two values.
+	This will also involve computing the new SREG--e.g. if the
+	result of the addition is 0, we will set the Z flag.  </p>
+
+	<p><b>Memory: </b>Some instructions, notably ld and st,
+	involve a trip to RAM.  In this stage we perform any
+	operations related to RAM.  So if we're running ld r30,567,
+	then decode will have determined that we're reading from
+	address 567 and storing into r30.  The memory stage, then,
+	will actually read out the value from data memory at address
+	567.  </p>
+
+	<p><b>Writeback: </b>In the final stage, we perform any
+	modifications to internal memory slots--that is, to the
+	register file, PC, and SREG.  So, for instance, when running
+	add r20,r30, decode will have determined what values to add as
+	well as that we're writing to r20.  Execute will have actually
+	added the two values, so now we have the value we need to
+	store (the sum) and where to store it (r20), so in this stage
+	we actually store the sum to r20, and the status flags
+	computed in the execute stage will be stored into SREG.</p>
+
+	<p>One thing that we left implicit in our descriptions above
+	is how data gets passed between the stages.  For instance, if
+	the instruction is ldi r17,89, then the decode stage, will
+	determine that register 17 needs to be written to and the
+	value 89 needs to be written.  These numbers then need to be
+	available to the writeback stage, which will actually store
+	the value 89 into register 17.  </p>
+
+	<p><def term="auxiliary register">For this purpose, the
+	microarchitecture will introduce some <b>auxiliary
+	registers</b>--that is, named memory slots where any given
+	stage can store values and a later stage can read those values
+	out.</def> For example, we will have one called REG and one
+	called VAL.  When decode gets ldi r17,89, it will store the
+	number 17 into REG and 89 into VAL.  Then the writeback stage
+	for ldi can be simply implemented telling the register file to
+	write whatever is stored in VAL to the register at the address
+	stored in REG.
+	</p>
+	
+      </text>
+      
+      </section>    
+    </section>
+
+    <section><title>Circuits</title>
+    <text>
+
+      <p>The method we will use for physiclly constructing our
+      computer will be elctronic circuits.  At a high-level, circuits
+      are made up of <b>components</b> connected with <b>wires</b>.
+
+      <def term="component">Components are black boxes of circuitry
+      that we specify in terms of their interface only: That is, they
+      have some specified numbers of input and output wires, and we
+      specify what the outputs do when certain inputs are
+      provided.</def></p>
+
+      <p><def term="width">For us, each input and output will be given
+      a name and will consist of a collection of wires--i.e. channels
+      that can carry electrical current.  The number of wires in a
+      particular input or output is called its <b>width</b>.
+      </def>So, for example, we can imagine a component with one input
+      called IN of width 3 and one output called OUT of width 1.  We
+      could draw this like so:</p>
+
+      <figure sk="sk6_6.png" width="500px"><description></description>
+      <caption></caption></figure>
+
+      <p>But sometimes drawing each of the wires involved in a given
+      input gets tedious, so we may also at times draw the input of
+      width 3 as a single wire with some notation indicating that that
+      one line indicates three wires:</p>
+
+      <figure sk="sk6_7.png" width="500px"><description></description>
+      <caption></caption></figure>
+      
+
+      <p><def term="analog">Now, in general, wires can carry varying
+      levels of electrical current, and components whose behaviour
+      depends on the precise amount of current on its input wires is
+      called an <b>analog</b> circuit.  Such a circuit may also send
+      current on its output wires at varying levels depending on the
+      input currents.  </def> <def term="digital">All the components
+      we will discuss here will instead be <b>digital</b>--that is,
+      the output will only depend on whether each input wire has
+      current flowing and will not care about how much, and the output
+      wires will only either have current flowing on them or
+      not--precisely how much current is neither specified nor
+      important.</def></p>
+
+      <warning><p>Obviously this is not literally true--if the amount
+      of current is small enough, then most devices will not be able
+      to detect it and will treat it as though there is no current.
+      On the other side, if the current is enormous it can overwhelm
+      the device and cause unpredictable behaviour or catastrophic
+      failure.  But most digital devices operate within some
+      reasonable ranges in which these concerns do not apply.  TODO:
+      There's something about current vs voltage that might make this
+      at least partly wrong; sort it out.</p></warning>
+
+      <p>Since all of our circuits are digital, we can describe the
+      state of the input wires at any time by saying which ones have
+      current on them and which do not.  There are a few shorthands
+      for doing this: <def term="high, low">If an input wire has
+      current coming in, we say that input is <b>high</b>, and if not,
+      we say it is <b>low</b>.</def> In a diagram, we might denote a
+      wire that is high with a 1, and one that is low with a 0.  For
+      example, we can describe several possible situations the above
+      example component might be in this way:</p>
+
+
+      <figure sk="sk6_8.png" width="500px"><description></description><caption></caption></figure>
+
+      <p>With this, we can be even more brief in our description by
+      treating each input's wires as the binary representation of a
+      number.  So if we instead represent each input and output with a
+      single line in our diagram with a notation indicating its width,
+      then we can represent the situation in the above figure by:</p>
+
+      <figure sk="sk6_9.png" width="500px"><description></description><caption></caption></figure>      
+
+      <p>We're writing the input value as 2, which in binary is 10.
+      Since the input has width 3, we can read off what each
+      individual input wire is doing by looking at the 3-bit
+      representation of this, i.e. 010.  So the middle wire is high
+      and the other two are low.  Likewise, the output wire is high. 
+      </p>
+
+      <!-- <p>While the components we will use in this chapter will be more -->
+      <!-- complicated, it may do to start with a simple example: The OR -->
+      <!-- component will have two inputs, called A and B, and one output, -->
+      <!-- called Q, all of width 1.  Its behaviour is defined thus: The -->
+      <!-- output will be 1 exactly when either of the inputs is 1 and will -->
+      <!-- be 0 otherwise.</p> -->
+
+      <!-- <figure sk="sk6_10.png"><description></description><caption>The OR component with several different -->
+      <!-- input combinations</caption></figure> -->
+
+      <!-- <p>This component may seem too simple to actually be of much use -->
+      <!-- to us.  It will in fact play an important role later, but for -->
+      <!-- now our interest lies with more complicated components.  An -->
+      <!-- example closer to that end of the spectrum is the ADD component, -->
+      <!-- which will perform addition of 8-bit binary numbers.  This -->
+      <!-- component has two inputs, again called A and B, but this time of -->
+      <!-- width 8, which will represent the two numbers we want to add. -->
+      <!-- Since these numbers will be 8 bits wide, they can each range -->
+      <!-- from 0 to 255, so the output can be as high as 510.  To -->
+      <!-- represent the output, then, we will need 9 bits.  This is in -->
+      <!-- practice broken into the low 8 bits being one output of width 8 -->
+      <!-- called Q, and the 9th bit being represented by a separate output -->
+      <!-- of width 1 called C (which stands for `carry', as this bit is -->
+      <!-- the carry bit).  </p> -->
+
+      <!-- <figure sk="sk6_11.png"><description></description><caption>The ADD component with several -->
+      <!-- different input combinations</caption></figure> -->
+
+    <p>Now, in our microarchitecture, we will make use of four primary
+    types of components:</p>
+
+    <p><b>Memories: </b>These will be circuit components with the
+      following inputs: Address, Input data, and write enable.  The
+      address and data inputs will be the appropriate width for the
+      size of the memory.  The write enable input is one wire.  When
+      this input is high, the input data value will be stored in the
+      slot given by the address input.  When the write enable input is
+      low, the data input affects nothing, and the address input
+      affects the output.  There is one output--the data output--which
+      will always reflect the value stored in the memory slot whose
+    address is given on the address input.  </p>
+    
+      <figure sk="sk6_12.png"><description>
+      </description><caption></caption></figure>
+      
+      <p><b>Arithmetic logic unit: </b>Remember how one of the
+      basic things a computer can do is arithmetic?  <def
+      term="ALU">The <b>Arithmetic logic unit</b>, or <b>ALU</b></def>
+      is the piece of circuitry that accomplishes this.  It has four
+      inputs: two called A and B respectively for the incoming numbers
+      to be operated on, one called op to indicate what operation, and
+      one called carry_in which is a slight extra thing so we can tell
+      the ALU whether the previous operation resulted in a carry.
+      This is important for some instructions, like ADC, but isn't
+      important to think about most of the time.  </p>
+
+      <p>Now recall that inputs to any circuit are just collections of
+      wires, and in this chapter we're thinking about the values
+      coming in on those wires as the binary representation of a
+      number.  In particular, the op input has to be a number.  So we
+      need to assign numbers to the various operations when designing
+      the ALU.  We can just make one up, but here is one that will
+      turn out to be well-adapted to the ISA encoding (TODO: Check
+      this):
+
+      <table>
+	<tr><td>Number</td><td>Operation</td></tr>
+	<tr><td>0</td><td>Addition</td></tr>
+	<tr><td>1</td><td>Addition with carry</td></tr>
+	<tr><td>2</td><td>Subtraction</td></tr>
+	<tr><td>3</td><td>Subtraction with carrt</td></tr>
+	<tr><td>4</td><td>Binary and</td></tr>
+	<tr><td>5</td><td>Binary or</td></tr>
+	<tr><td>6</td><td>Binary xor</td></tr>
+	<tr><td>7</td><td>Binary nor</td></tr>
+      </table>
+
+      So for example, the component looks like:</p>
+
+      <figure
+	  sk="sk6_13.png"><description></description><caption></caption></figure>
+
+      <p>And we can use it for the various operations by doing thing
+      like:</p>
+      
+      <figure
+	  sk="sk6_14.png"><description></description><caption></caption></figure>
+      
+      <p><b>State machine controller: </b>As we said, a state
+      machine is an abstract machine.  So once we have our description
+      of our processor as a state machine, we'll need to be able to
+      convert this to actual circuitry.  The circuit that does this is
+      called a state machine controller.  It has one input and some
+      possibly large number of outputs depending on the state machine
+      it is implementing.  The way in which the outputs correspond to
+      the states is complicated, and will be addressed when we
+      describe our microarchitecture as a circuit later in this chapter.
+      
+      </p>
+
+      <p><b>Multiplexer: </b>The multiplexer is perhaps the most
+      basic piece of circuitry we'll describe, but also one of the
+      most versatile.  It is how you `make choices' in circuits such
+      as `if the instruction is an add instruction I want to read some
+      registers and put them through the ALU, but if the instruction
+      is a st instruction then I want to write some register value to
+      RAM instead'.  </p>
+
+      <p>For such a daunting task, the actual specification of a
+      multiplexer is quite simple: It has some number of inputs
+      designated as data inputs of whatever width you like, one input
+      called the `selector', and one output, whose width is the same
+      as that of the data inputs.  A multiplexer with N data inputs
+      all of width W would be called an `N-by-W multipliexer'.  The
+      output's value is found by taking whatever's on the selector
+      input--say this is x--and taking the xth data input as the
+      output.</p>
+
+      
+      <figure sk="sk6_15.png"><description></description><caption></caption></figure>
+
+      <p>Of course, using this device for the decision-making in
+      circuitry is a bit of a trick, and we'll discuss that in detail
+      later, but you should already get the idea that this might be
+      the circuit for the task, at least.  </p>
+    </text>
+    
+    </section>
+
+</section>
+
+<section><title>Our microarchitecture as a state machine</title><text>
+
+<p>Earlier, we described at a high level the sequence of operations
+that go into executing an instruction: We fetch the instruction from
+program memory, decode what precisely it means, perform any
+computation and memory operations it requires, and then save any
+results where needed.</p>
+
+<p>Now we can flesh these out into precise substeps using a state diagram
+as the main organisational tool.  The input to the state machine will
+be the current instruction, and the states will be various small
+operations, organised into the five stages outlined above, which when
+performed in sequence accomplish the job of the input instruction.
+Thus, when the input instruction is ldi, this will cause the state
+machine to go through a particular sequence of states--i.e. of
+operations--that will cause the correct thing to happen (an immediate
+value being loaded into a specified register), and then, once this is
+done, the final state will cause the input to the state machine to be
+changed to the next instruction, whereupon the process will begin
+anew.</p>
+
+<p>In order to start constructing this state machine, then, we need to
+know first: 'What sorts of operations is a state allowed to do?'</p>
+
+<p>The answer, for the moment, is very simply: Read and write to any
+of the available memories, and perform computations on any values we
+get.  So we can include the operation 'Write the number 2 to REG', or
+'Write the number 67 to r11' or 'Add 2 and 5 and store the result in
+memory at address 463'.  However we can also take values from other
+memory slots and use those as addresses or values for memory
+operations.  For example, 'Write the number stored in VAL to register
+with address REG' is also a valid operation.  We will abbreviate this
+as RF[REG] = VAL.  We can also do things like 'Add VAL and VAL2 and
+store the result in VAL'.  (The rules for exactly what operations are
+allowed are quite vague because really the rules are 'anything for
+which we are willing to create a piece of circuitry'.  But if we
+maintain a reasonably simple set of operations, then our circuitry
+will be relatively simple.)  So a valid set of operations to perform
+in a single state is: VAL = VAL1 + VAL2, and REG2 = RF[REG1].</p>
+
+<p>The sort of things we want to avoid having together in a single state
+include multiple operations where the input of one depends on the
+result of another.  So, for instance, REG = VAL1 + VAL2 and VAL =
+RF[REG] could not go in the same state.  The reason for this will
+become more clear when we discuss the workings of memory circuits in
+detail in the next chapter, but in brief, the idea is that all states
+are circuits, and there is a prescribed amount of time set in which
+the electrons should all traverse the circuit, and the correct answer
+(VAL1 + VAL2 and RF[REG1], in this case) come out as the outputs of
+the circuit.  It is only right at the end of this prescribed time slot
+when the auxiliary registers REG and VAL actually get written, and
+they get written simultaneously.  Thus the output of the RF[REG]
+circuit will be the value in the register file at register number
+'whatever was in REG before this state started running', rather than
+at register number VAL1 + VAL2, because that sum will only be written
+to REG at the end of the circuit's time slot.</p></text>
+
+<section><title>ldi</title><text>
+
+<p>Let us start by constructing a state diagram for a machine that
+only understands ldi instructions.
+
+First, we need to decide on the sequence of operations that need to
+happen in each stage.  </p>
+
+<p><b>Fetch: </b>The first stage that runs is fetch.  This is meant to
+retrieve the current instruction from the program memory.  Recall that
+the address of the current instruction is stored in PC, so it will
+read program memory at address PC.  However, future stages will
+obviously need access to the instruction that we get back from program
+memory, so we need to store it somewhere.  We will have an auxiliary
+register, then, for this purpose, called INST.  Thus the only
+operation in fetch is: 
+
+<pre>INST = PM[PC]</pre></p>
+
+<p><b>Decode: </b>Having got the instruction, which we are supposing for the moment is an ldi, we need to deduce from it what value will need to be written to which register.  This is certainly possible by looking at the value of INST, so we read from INST the register to store to and the value to store and we store these in REG and VAL, respectively.  Thus: 
+
+<pre>REG = the bits of INST that say which register to write to</pre>
+
+followed by:
+
+<pre>VAL = the bits of INST that say which value to write</pre>
+
+As a bit of notation, we know from the previous chapter which bits these are, namely REG = a 1 followed by bits 7, 6, 5, 4 of INST.  We will denote this like 
+
+<pre>1,INST[7:4]</pre>
+
+Further, VAL is bits 11-8 followed by bits 3-0 of INST, which we will denote like: 
+
+<pre>INST[11:8],INST[3:0]</pre>
+
+So in this shorthand, the two operations we perform, in order, are: 
+
+<pre>REG = 1,INST[7:4]</pre>
+
+and then 
+
+<pre>VAL = INST[11:8],INST[3:0]</pre>
+
+We'll say in the next section how one actually goes about doing these
+with real circuitry, but for the moment let us leave it like this and
+move on.</p>
+
+<p><b>Execute: </b>No arithmetic actually happens in an ldi instruction, so this stage does nothing</p>
+
+<p><b>Memory: </b>We do not touch the data memory in this instruction,
+so this stage also does nothing</p>
+
+<p><b>Writeback: </b>Finally, this is the stage where we are supposed
+to write any values to the register file, SREG, and PC.  Of these,
+SREG does not need updating, PC needs to be incremented, and the
+register file needs to be written to.  Specifically, the register at
+address REG needs to get value VAL.  Thus:
+
+<pre>RF[REG] = VAL</pre>
+
+and then:
+
+<pre>PC = PC + 1</pre>
+
+In summary: </p>
+
+<figure sk="sm_ldi.png"></figure>
+</text></section>
+
+<section><title>ld</title><text>
+
+<p>Now say we wish to add the ability to run both ldi and ld instructions.  Let us discuss what needs to be added to each of the stages: </p>
+
+<p><b>Fetch: </b>We're still just fetching the next instruction in this stage, so nothing changes.  </p>
+
+<p><b>Decode: </b>This is where it gets most interesting.  Now, the
+next state will have to be one of two different things--one will be
+for if INST was an ldi instruction, and this will proceed as before.
+The other will be for if it was an ld instruction, to start doing the
+things that will ultimately perform an ld operation.  </p>
+
+<p>ld is a different sort of instruction from ldi: Rather than
+providing a value and a register number and requiring that the value
+be written to the register, it provides a register number and an
+address, and requires that the address in memory be read, and that
+value stored into the register.  So the two pieces we need to split
+off it are the register number to write to, which we store in REG, and
+the address to read in data memory, which we store in a new auxiliary
+memory called ADDR:
+
+<pre>REG = bits of INST saying which register to write to
+ADDR = bits of INST saying which address in data memory to read</pre></p>
+
+<p><b>Execute: </b>Once again, no arithmetic is happening yet, so there is no need to do anything here</p>
+
+<p><b>Memory: </b>Now we need to do something memory-related for ld instructions, namely, we read from memory.  Having acquired the address to read from in ADDR, we can now read the value from data memory at address ADDR.  This we need to store somewhere--VAL will do.  Thus: 
+
+<pre>VAL = data_memory[ADDR]</pre></p>
+
+<p><b>Writeback: </b>This actually need not change, since for ldi, we would do 
+
+<pre>RF[REG] = VAL</pre>
+
+But if instead we were doing ld, VAL still contains by this point the value we want to write (it was read from data memory in the previous stage) and REG still contains the address we wish to write to.  Thus this will be the operation performed on either an ld or an ldi.  </p>
+
+<p>So the new state diagram for a machine that can understand and execute both ldi and ld instructions is: </p>
+
+<figure sk='sm_ldi,ld.png'></figure>
+
+</text></section>
+
+<section><title>st</title><text>
+
+<p><b>Decode: </b>In the decode stage, we can get the address to write to and the register to read from in exactly the same way, so we actually leave this state intact, and will end up in this state in case of either an ld or an st instruction.  However, whereas a ld instruction then just needs to read memory address ADDR and store the value in the register file, st needs to do more: It needs to read out the value from register number REG and store that in memory.  So the state branches into the memory read state for ld, and into 
+
+<pre>VAL = RF[REG]</pre>
+
+for st.</p>
+
+<p><b>Memory: </b>Now that we have VAL as the value from the register and ADDR as the address to write this to, we can happily send this data off to the data memory, as in the operation: 
+
+<pre>RAM[ADDR] = VAL</pre></p>
+
+<p><b>Writeback: </b>For a st instruction, we do nothing in the writeback phase except increment PC.</p>
+
+<figure sk='sm_ldi,ld,st.png'></figure>
+
+</text></section>
+
+<section><title>add, sub, cp</title><text>
+
+<p>Now we think about how to build in the functionality necessary to execute add instructions.  Recall that an add instruction is of the form 
+
+add reg1, reg2 
+
+which should set 
+
+reg1 = reg1 + reg2
+
+And it is encoded using the format: 
+
+000011SRRRRRSSSS
+
+where the S bits represent reg2 and the R bits reg1.  </p>
+
+<p><b>Fetch: </b>Once again, we can use the state we have here to get the current instruction.  </p>
+
+<p><b>Decode: </b>For an add instruction, we will need to pull off which two registers we are adding, and then read out the values stored in those registers.  The registers we are adding can be read off of the instruction as: 
+
+<pre>REG = INST[8:4]
+REG2 = INST[9],INST[3:0]</pre>
+
+Note that since we are now using two register addresses, we have added a new auxiliary register REG2 to store the second address, since REG is being used to store the first.  </p>
+
+<p>So after these two operations, REG and REG2 will contain the numbers of the registers to add (e.g. r5 and r17).  Next we need to read the values stored in those registers, now using new auxiliary registers VAL1 and VAL2 (VAL will be used to store the sum): 
+
+<pre>VAL1 = RF[REG]
+VAL2 = RF[REG2]</pre>
+
+However note that these two sets of operations have data dependencies: In order to get the correct result from VAL = RF[REG] we need first to have run REG = INST[8:4].  So these operations need to come in separate states.  Further, the register file only allows reading of one register at a time, so the two reads VAL = RF[REG] and VAL2 = RF[REG2] cannot happen in the same state.  So the decode stage for add instructions will consist of three states: 
+
+<pre>REG = INST[8:4]
+REG2 = INST[9],INST[3:0]</pre>
+
+followed by 
+
+<pre>VAL1 = RF[REG]</pre>
+
+and finally: 
+
+<pre>VAL2 = RF[REG2]</pre></p>
+
+<p><b>Execute: </b>
+
+For add instructions, we finally have some computation to do, namely, having read out the values in the two registers REG and REG2 into auxiliary registers VAL1 and VA2 respectively, we now need to add them and store the result somewhere, so we do the operation: 
+
+<pre>VAL = VAL1 + VAL2</pre>
+
+We also need to update the SREG flags accordingly, so we next perform
+the operation:
+
+<pre>Update SREG</pre></p>
+
+<p><b>Memory: </b>An add instruction doesn't touch memory, so this stage is unaffected.</p>
+
+<p><b>Writeback: </b>Now, exactly as in ldi, we want to write some value to a register, and we have the value stored in VAL and the register number in REG, so we can proceed to the same state as we had before: 
+
+<pre>RF[REG] = VAL</pre>
+
+Note that almost the exact same flow will execute sub instructions except we need in the execute stage to change the operation to subtraction: 
+
+<pre>VAL = VAL1 - VAL2</pre>
+</p>
+
+<p>Allowing for execution of further computational instructions that operate on two registers, such as and, or, eor, etc. is very similar.  One other sort of instruction that is similar is cp, which recall does exactly the same thing as sub except it doesn't save anything to the register file.  Thus only one new state transition is needed to add cp capabilities to our state machine: </p>
+
+<figure sk="sm_ldi,ld,st,add,sub,cp.png"></figure>
+</text></section>
+
+<section><title>subi, cpi</title><text>
+
+<p>We now turn to the cpi and subi instructions, which have formats
+
+<pre>0011IIIIRRRRIIII</pre>
+
+and 
+
+<pre>0101IIIIRRRRIIII</pre>
+
+respectively.  Both of these instructions take the register number
+1RRRR and subtract from it the immediate value given by the I bits.
+The only difference between these is that subi actually stores this
+value, whereas cpi merely updates the SREG.</p>
+
+<p><b>Decode: </b>Since we want again to take advantage of a
+pre-existing state--in this case VAL = VAL1 - VAL2--we will use the
+decode stage to set this up with REG = 1,INST[7:4] followed by VAL1 =
+RF[REG] and VAL2 = INST[11:8],INST[3:0].  </p>
+
+<p><b>Writeback: </b>In the case of subi, we will go to the usual
+register-writing state: RF[REG] = VAL and for cpi we skip this state
+and go straight to PC = PC + 1</p>
+
+<p>In summary, we have the diagram: </p>
+
+<figure sk='sm_ldi,ld,st,add,sub,cp,subi,cpi.png'></figure>
+
+</text></section>
+
+<section><title>rjmp</title><text>
+
+<p>rjmp instructions, we recall, are formatted as: 
+
+<pre>1100IIIIIIIIIIII</pre>
+
+and have the effect PC = PC + immediate value (encoded as the I bits of the instruction).</p>
+
+<p><b>Decode: </b>
+
+So since we already have a state that performs addition, namely VAL = VAL1 + VAL2, we'll simply reuse this to perform the addition.  This means that in the decode stage we need to do VAL1 = PC and VAL2 = the immediate, which we can read off from the instruction as INST[11:0].  So our decode state for rjmp is: 
+
+<pre>VAL1 = PC
+VAL2 = INST[11:0]</pre></p>
+
+<p><b>Writeback: </b>
+
+But now in the writeback stage, instead of the usual PC incrementing, we just want to set PC = VAL.  Thus: </p>
+
+<figure sk='sm_ldi,ld,st,add,sub,cp,subi,cpi,rjmp.png'></figure>
+</text></section>
+
+<section><title>breq</title><text>
+
+<p>breq is the final instruction whose implementation we will discuss separately.  Its format is: 
+
+<pre>111100IIIIIII001</pre>
+
+It is meant to execute PC = PC + immediate value in case the Z flag is
+1, and PC = PC + 1 otherwise.  </p>
+
+<p><b>Decode: </b>We will use VAL1 = PC, VAL2 = INST[9:3] in the
+decode stage, and then proceed to the VAL = VAL1 + VAL2 state in
+execute, and then the PC = VAL stage in writeback.  Except now we have
+a problem, since this will do the same thing as rjmp, whereas we only
+want that behaviour in the event that the Z flag is 1.  But the state
+machine doesn't have SREG as an input at the moment--only INST.  There
+are two solutions: We can change the second operation to something
+like:
+
+<pre>VAL2 = (ZZZZZZZ &amp; INST[9:3]) | ~Z</pre>
+
+or we can allow SREG to be an input into the state machine, in which
+case we can branch in decode based on the Z flag.
+
+Taking this approach, we get the state diagram: </p>
+
+<figure sk='sm_ldi,ld,st,add,sub,cp,subi,cpi,rjmp,breq.png'>
+<description>State machine</description><caption>Getting messy now...</caption>
+</figure>
+
+</text></section>
+
+<!-- <section><title>Putting it all together!</title> -->
+
+<!-- <text> -->
+
+<!-- <p>Now that we have the idea, we will show without too much further -->
+<!-- explanation one massive state diagram that actually includes all the -->
+<!-- instructions we introduced in the ISA chapter:</p> -->
+
+<!-- <figure><description>The big one</description><caption></caption></figure> -->
+
+<!-- <p>A couple of remarks about this: Note that while the decode stage is -->
+<!-- the stage that has to be able to understand all the different -->
+<!-- instructions, it doesn't have one branch per instruction.  Rather, its -->
+<!-- branches correspond to the various instruction formats, since e.g. we -->
+<!-- know that mov, add, sub, cp, and, or, etc all have INST[8:4] and -->
+<!-- INST[9],INST[3:0] as their two operands, we can use the same state in -->
+<!-- decode for all of these.  </p></text></section> -->
+
+</section>
+<section>
+  <title>Our microarchitecture as a circuit</title>
+  <text>
+    <p>Introduce components for register file, aux registers, RAM, PM,
+    and then make circuit for LDI.  Note that in the state machine,
+    the address to read from the RF can come from several places.  But
+    the RF only has one address input, so which do we connect to it?
+    Trick question--we connect all the possible things that might be
+    used for the address to a multiplexer and then connect that
+    multiplexer's output to the RF's address input.  </p>
+    
+  </text>
+  <section>
+    <title>Circuit components</title>
+    <text>
+      <p>In 7.1.2 we described the basic circuit components we would
+      be using.  Certainly we will need an ALU, some kind of state
+      machine controller, and many multiplexers, but what memories do
+      we need?  To answer this, we think back to our description in
+      chapter 5 of the AVR architecture: An AVR computer has the
+      following memories:
+      <ul>
+	<li>PM: The program memory for storing the instructions.
+	Because this is a read-only memory, its only input is "addr"
+	for specifying an address.  It permits a 16-bit address and
+	each address stores 16 bits, so both its address input and
+	data output are 16 bits wide.  (TODO add figure)</li>
+	<li>RAM: A memory for storing large amounts of data.  This
+	memory also allowed 16 bits of address, but each address
+	stores only 8 bits of data, so the address input is 16 bits
+	wide, but the data output is 8 bits wide.  Since the RAM is
+	writeable, it also has a data input 8 bits wide, and a
+	write-enable input, here shortened to "w_e": (TODO add figure)</li>
+	<li>RF: The register file for storing the 32 general-purpose
+	registers.  This is a writeable memory, but since there are 32
+	registers, the address input only needs to be 5 bits wide.
+	The data input and output are both 8 bits wide.  In addition,
+	it will be convenient to have a separate output for the value
+	denoted X in the ISA--that is, r27:r26.  This will be 16 bits
+	wide.  </li>
+	<li>PC and SREG: The two special-purpose registers for storing
+	the program counter and status, respectively.  Since these are
+	registers, they only have data and write_enable as inputs, and
+	only data as output.  The PC is 16 bits, while the SREG is 8
+	bits.  </li>
+	<li>Auxiliary registers: In addition, according to our state
+	machines, we had some additional registers we would use to
+	store intermediate values along the way to performing the
+	various instruction operations.  These will be registers, so
+	will looks exactly like PC and SREG, except for the widths.
+	The auxiliary registers we had were: 
+	<ul>
+	  <li>INST: For storing the current instruction, so of width 16</li>
+	  <li>REG: For storing a register number, so of width 5</li>
+	  <li>REG2: For storing another register number, so also of
+	  width 5</li>
+	  <li>VAL: For storing something that would be stored in RAM
+	  or a register.  Of width 8</li>
+	  <li>VAL1: For storing another thing that would be stored in
+	  RAM or a register.  Of width 8 </li>
+	  <li>VAL2: For storing another thing that would be stored in
+	  RAM or a register.  Of width 8 </li>
+	  <li>OFF: For storing an offset to jump to.  Of width 12</li>
+	  <li>ADDR: For storing a RAM address, so of width 16</li>
+	</ul>
+	</li>
+      </ul>
+      So before we do any thinking about how to hook them up, we know
+      our circuit will have to have these memories, an ALU, and
+      somewhere a state machine controller and some multiplexers.  Our
+      challenge now will be to work out how to hook these up to
+      implement the state machine above.
+      </p>
+    </text>
+  </section>
+  <section>
+    <title>ldi</title>
+    <text>
+      <p>We'll start by trying to build a circuit that can at least
+      handle ldi instructions.  Let's start by collecting the circuit
+      components we'll need: Of course we have to get the instruction,
+      so we'll need the program memory (PM) and the PC.  Also we'll be
+      storing something in a register, so we need the register file
+      (RF).  Finally, looking back at the <a
+      href="drawings/sm_ldi.png">state machine for ldi</a>, we'll need
+      the auxiliary registers INST, REG, and VAL.  Laying these all
+      out, ready to be connected, we get:</p>
+
+      <figure sk="c_ldi_none.png" />
+
+      <p>Further, without thinking too hard, we can see some of the
+      connections straight away: The basic flow of an ldi instruction
+      is that the PC stores the address of the current instruction, so
+      we need PC to feed into PM's addr input.  Then, we want to store
+      the current instruction--that is, PM's data output--in INST.  So
+      PM's data should be connected to INST's data input.</p>
+
+      <p>Now INST has 16 output wires coming out of it.  We want to
+      split off 4 of these--namely wires 4-7--to feed into REG's 5-bit
+      input (together with a 1 as the high bit), and we want to split
+      off wires 11-8 and 3-0 to feed into VAL's 8-bit input.</p>
+
+      <p>Also, REG should feed into the RF's address input, and VAL
+      should feed into RF's data input.</p>
+
+      <p>Finally, we need a way of getting PC + 1 stored into PC, so
+      we feed PC through a circuit component that adds 1 to its
+      input.  We feed the output of that component back into PC's data
+      input.  </p>
+
+      <p>This gives us the basic picture of:</p>
+
+      <figure sk="c_ldi_0.png" />
+
+      <p>From here, though, the only things that are left unconnected
+      in this picture are the write-enable wires!  Remember that just
+      because we connected e.g. VAL to RF's data input doesn't mean
+      that value will be written to any register--it only will if RF's
+      write-enable input is high.  This will provide us exactly the
+      mechanism we need for stepping through the states of the state
+      machine:</p>
+
+      <p><b>INST=PM[PC]</b>: </p>
+      <p>The first state writes the current
+      instruction at address PC in the program memory to the register
+      INST.  In particular, at this point we want none of the
+      registers to be written except for INST.  So we can simply set
+      all their write-enable inputs low except for INST's, and we get:</p>
+
+      <figure sk="c_ldi_1.png" />
+
+      <p>This will write whatever is in program memory at address PC into
+      the register called INST and will not change anything stored in
+      any other register.</p>
+
+      <p><b>REG=1,INST[7:4]</b>: </p>
+      <p>The next state sets REG to be some
+      bits of INST (and a high 1).  Since these wires are already
+      connected to REG's data input, all we have to do is set REG's
+      write-enable high at this point.  Since INST already has the
+      correct value because of the previous state, this will write the
+      correct thing into REG, so at this point, the circuit should
+      look like:</p>
+      
+      <figure sk="c_ldi_2.png" />
+      
+      <p><b>VAL=INST[11:8],INST[3:0]</b>: </p>
+      <p>Likewise, since the current
+      instruction is already in INST, the correct thing will be coming
+      into VAL's data input, so for this state we just need to set its
+      write-enable high: </p>
+
+      <figure sk="c_ldi_3.png" />
+      
+      <p><b>RF[REG]=VAL</b>: </p>
+      <p>Now that the value to write is coming out
+      of VAL's data output and the correct address for the register we
+      want to write is coming out of REG's data output, we are ready
+      to set RF's write-enable high to store the desired value in the
+      selected register: </p>
+      
+      <figure sk="c_ldi_4.png" />
+      
+      <p><b>PC=PC+1</b>: </p>
+      <p>Finally, to increment the PC, we set PC's
+      write-enable high so that the incoming value of PC+1 gets
+      written.</p>
+      
+      <figure sk="c_ldi_5.png" />
+      
+      <p><b>Putting it all together: </b></p>
+      
+      <p>Now that we've seen what each individual state is supposed to
+      look like, now we want to put all these together into a single
+      circuit.  The way we do this is by having the state machine
+      controller--that other circuit component we promised to explain
+      later--sitting behind our main circuit and connected to all the
+      write-enable inputs in the circuit, like so: </p>
+      
+      <figure sk="c_ldi.png" />
+
+      <p>So what precisely does this state machine controller do?
+      It's only input is inst_in, so it knows what the current
+      instruction is.  Using this information, it advances through the
+      states of the state machine automatically, keeping track
+      internally all the while of which state it is currently in.</p>
+
+      <p>When it is first turned on, then, it starts in the state
+      INST=PM[PC].  As we saw, to be in this state means that INST_we
+      is high, and the other outputs of the state machine are low.  In
+      other words, the circuit receives inputs as in 7.4.2.fig3.</p>
+
+      <p>Then, the state machine looks at its input--inst_in--and sees
+      what kind of instruction it is.  Since our circuit is only meant
+      to run ldi instructions for the moment, it sees (hopefully) an
+      ldi instruction.  According to the state machine diagram, this
+      means it should enter the state .  first looks at inst_in.
+      Because this is a machine that only runs ldi instructions, it
+      (hopefully) sees an ldi instruction, and so it enters the state
+      REG=1,INST[7:4].  In practical terms, this means the REG_we
+      output of the state machine controller is high, and the others
+      are low, giving a situation exactly as depicted in 7.4.2.fig4.
+      </p>
+
+      <p>As the only thing that changed as a result of the previous
+      state was REG, in particular INST has remained the same, so the
+      input is still the previous ldi instruction, so we proceed to
+      the next state: VAL=INST[11:8],INST[3:0].  Again, what it means
+      to be in this state is that the VAL_we output of the state
+      machine controller is high and its other outputs are low.  This
+      replicates the situation in 7.4.2.fig5.  </p>
+
+      <p>Next, the state machine controller enters the state
+      RF[REG]=VAL.  All this means, once again, is that the RF_we
+      output is high and the others are low, meaning that the
+      situation is as depicted in 7.4.2.fig6.  </p>
+
+      <p>Finally, the state PC=PC+1 is entered, meaning that the PC_we
+      output is high and the others are low as in 7.4.2.fig7.  This
+      causes PC to get overwritten with whatever's coming in on its
+      din input--in this case PC+1.  This causes the incremented PC to
+      get stored in the PC register, and also to go out on the PC
+      register's dout output.  This in turn goes to the PM and causes
+      it to spit out whatever instruction was stored at this new
+      address on the PM's dout output.  This goes to INST's din
+      input, ready to be stored.  Thus when the state machine advances
+      to the next state which is INST=PM[PC] and once again sets
+      INST_we high, the next instruction will be stored in the INST
+      register and therefore will be the new input to the state
+      machine, starting another cycle of the same process on the next
+      stored instruction.  </p>
+
+      <p>What we've seen through all of this is that the state machine
+      controller is just a circuit that steps through the states of
+      the state machine according to its input, except that for each
+      state, we have to specify what it means to be in that state in
+      terms of the state machine controller circuit's outputs.  In
+      this case, we can specify its behaviour entirely by saying, for
+      each state, what each output should be: </p>
+
+      <table class="sm">
+	<tr><td></td><td>PC_we</td><td>INST_we</td><td>REG_we</td><td>VAL_we</td><td>RF_we</td></tr>
+	<tr><td>INST=PM[PC]</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td>REG=1,INST[7:4]</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+	<tr><td>VAL=INST[11:8],INST[3:0]</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+	<tr><td>RF[REG]=VAL</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+	<tr><td>PC=PC+1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      </table>
+
+      <p>So the state machine diagram determines the states that the state machine goes through, and this table determines what output values of the state machine circuit correspond to the various states.  The end result is that the state machine diagram together with this table define the behaviour of the state machine circuit completely.  </p>
+      
+    </text>
+  </section>
+  <section>
+    <title>ld</title>
+    <text>
+      <p>Adding one additional instruction to our circuit will be the
+      hardest step.  Once we see how to do this, adding the remaining
+      instructions will follow easily.  So let us walk through the
+      states as we did for ldi and see what issues arise: </p>
+      
+      <p><b>INST=PM[PC]</b>: </p>
+      
+      <p>This is actually exactly the same, so no changes need to be
+      made at this point.  </p>
+
+      <p><b>REG=INST[8:4]</b>: </p>
+
+      <p>Now we see our first real problem: To execute an ldi
+      instruction, we need to feed 1,INST[7:4] into REG, but to
+      execute an ld instruction, we need to feed REG the value
+      INST[8:4].  But REG only has one data input, so which of these
+      do we connect?</p>
+
+      <figure sk="c_ldi,ld_mux1.png" />
+
+      <p>The answer is that we connect both of these inputs to a mux,
+      and connect that mux's output to REG's data input like so: </p>
+      
+      <figure sk="c_ldi,ld_mux2.png" />
+
+      <p>This way, just as the all-powerful state machine controller
+      got to choose which register was being written to at each time,
+      now it also gets also to choose at any given time which value is
+      written to the register!  But how does it decide?  It needs to
+      know the current instruction, so we add an input to the state
+      machine controller, into which we send INST--the current
+      instruction.</p>
+
+      <p><b>ADDR=X</b>: </p>
+
+      <p>Next, we need to set the address equal to the value X, which
+      is handily an output from the RF already.  So we just connect
+      RF's X output to ADDR's data input: </p>
+      
+      <figure sk="c_ldi,ld_ram.png" />
+
+      <p><b>VAL=RAM[ADDR]</b>: </p>
+      
+      <p>Now that we have fed ADDR into RAM's address input and the
+      value at that address in RAM will come out of its data output.
+      In this state, then, we only need to connect RAM's data output
+      to VAL's data input and we're home free.  Except wait--VAL
+      already has a data input for the event of an ldi insruction!  So
+      we repeat exactly the muxing strategy from before, and we come
+      up with the following:</p>
+
+      <figure sk="c_ldi,ld_muxes.png" />
+
+      <p><b>RF[REG]=VAL</b>: </p>
+
+      <p>This state is actually identical to what happens for ldi, so
+      we can use the same exact inputs as before: </p>
+
+      <figure sk="c_ldi,ld_pc.png" />
+      
+      <p><b>Putting it all together: </b></p>
+
+      <p>Once again, to advance through these states, we simply take
+      all the inputs that change depending on which state we're in--in
+      this case, that's all write-enable inputs and all mux select
+      lines--and connect them all to the overarching state machine
+      controller.  Since the state machine controller needs to know
+      which instruction is being executed in order to decide what
+      state to enter next (since now the instruction might either be
+      an ldi or an ld, whereas in the previous section the only
+      possibility was an ldi), it now needs to receive INST's data out
+      as its input.  All told, we get the following circuit diagram
+      for a computer that can execute both ldi and ld instructions: </p>
+      
+      <figure sk="c_ldi,ld.png" />
+
+      <p>Once again, we can describe the state machine controller's behaviour by reference to the appropriate state machine diagram--in this case 7.3.2.fig1--and a table explaining what the various outputs do in each state, which we supply here: </p>
+      
+      <table class="sm">
+	<tr><td></td><td>PC_we</td><td>INST_we</td><td>REG_we</td><td>REG_sel</td><td>VAL_we</td><td>VAL_sel</td><td>RF_we</td><td>ADDR_we</td><td>RAM_we</td></tr>
+	<tr><td>INST=PM[PC]</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td>REG=1,INST[7:4]</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td>REG=INST[8:4]</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td>ADDR=X</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+	<tr><td>VAL=INST[11:8],INST[3:0]</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td>VAL=RAM[ADDR]</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td>RF[REG]=VAL</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+	<tr><td>PC=PC+1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      </table>
+
+    </text>
+  </section>
+  <section>
+    <title>Everything else</title>
+    <text>
+      <p>At this point, we've actually seen all the tricks there are
+      to designing a state machine as a circuit: Every write-enable
+      input is connected to the state machine controller, as is every
+      mux's select line.  To execute a state that writes a specified
+      value to a specified memory, the state machine will set only
+      that memory's write-enable high and every other one low, and if
+      that memory's data and address input lines are coming from
+      muxes, the state machine controller will set those muxes' select
+      lines to give the memory the correct inputs.  </p>
+
+      <figure sk="c_all.png" />
+
+      As this is intended to represent a machine that handles all the instructions we're targeting in this chapter, the state machine should implement the full state machine from 7.3.7.fig1.  However to describe its behaviour we need not only describe how it transitions between states, but also what outputs it gives in each state.  To this end, we present these in the usual tabular format: 
+
+      <table class="sm big">
+<tr>
+<td></td>
+<td>PC_sel</td>
+<td>PC_we</td>
+<td>INST_we</td>
+<td>REG_sel</td>
+<td>REG_we</td>
+<td>OFF_we</td>
+<td>OFF_sel</td>
+<td>REG2_we</td>
+<td>RF_sel</td>
+<td>RF_we</td>
+<td>breq_sel</td>
+<td>VAL1_we</td>
+<td>VAL2_we</td>
+<td>ADDR_we</td>
+<td>A_sel</td>
+<td>B_sel</td>
+<td>ALU_op</td>
+<td>RAM_we</td>
+<td>SREG_we</td>
+<td>VAL_sel</td>
+<td>VAL_we</td>
+</tr>
+
+<tr>
+<td>INST=PM[PC]</td>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>REG=1,INST[7:4]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>REG=INST[8:4]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>OFF=00000,INST[9:3]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>OFF=INST[11:0]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>VAL=INST[11:8],INST[3:0]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>VAL=RF[REG]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>VAL1=RF[REG]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>VAL2=RF[REG2]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>ADDR=X</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>REG2=INST[9],INST[3:0]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>1</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>VAL=VAL1+VAL2</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>VAL=VAL1-VAL2</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Update SREG</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>VAL=OFF+PC</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>OFF=OFF&amp;ZZZZZZZZ | ~Z</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>VAL=RAM[ADDR]</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>RAM[ADDR] = VAL</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>RF[REG]=VAL</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>PC=PC+1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>PC=VAL</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+</tr>
+</table>
+
+    </text>
+  </section>
+</section>
+
+
+</section>
+

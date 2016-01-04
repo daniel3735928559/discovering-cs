@@ -1,0 +1,13 @@
+FROM ubuntu:latest
+RUN sudo apt-get update
+RUN sudo apt-get install nodejs npm
+
+# Bundle app source
+COPY . /src
+
+# Install app dependencies
+RUN cd /src; npm install
+
+EXPOSE  3797
+
+CMD ["node", "/src/app.js"]

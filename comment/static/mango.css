@@ -1,0 +1,28 @@
+div.entry{
+	padding:7px 0 7px 20px;
+	font-family: Monospace;
+	border-bottom:1px black solid
+}
+div.entry.even{
+	background-color: #FFFFFF;
+}
+div.entry.odd{
+	background-color: #EEEEBB;
+}
+
+div.short_description{
+	font-size:small;
+	display:inline-block;
+}
+
+div.long_entry{
+	padding:7px 0 7px 20px;
+	font-family: Monospace;
+	border-top:1px black solid;
+	display:inline-block;
+	width:100%;
+}
+
+li{
+	padding-bottom:10px
+}

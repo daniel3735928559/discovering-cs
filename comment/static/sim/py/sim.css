@@ -1,0 +1,155 @@
+.pysim{
+    display:inline-block;
+    width:100%;
+    padding: 5px;
+}
+
+.CodeMirror{
+    height:auto;
+}
+
+.pysim_vars{
+    float:left;
+    width:13em;
+    border:1px solid #aaa;
+    text-align:center;
+    margin-right:5px;
+}
+
+.pysim_outputs{
+    float:left;
+    width:13em;
+    border:1px solid #aaa;
+    text-align:center;
+    margin-right:5px;
+}
+
+.pysim_exec_flow{
+    float:left;
+    width:10em;
+    border:1px solid #aaa;
+    text-align:center;
+}
+
+.pysim_title{
+    width:100%;
+    text-align:center;
+    display:inline-block;
+    font-size:12pt;
+    margin:auto;
+    padding-bottom:5px;
+}
+
+.pysim_status{
+    display:inline-block;
+    /* padding:8px; */
+    /* background-color:#e66; */
+    /* border-radius:5px; */
+    height:25px;;
+    margin:5px;
+    font-size:9pt;
+    float:right;    
+}
+
+.pysim_label{
+    font-size:10pt;
+    color:#333;
+    display:inline-block;
+    width:2em;
+}
+
+.pysim_reg{
+    text-align:left;
+    display:inline-block;
+    padding:4px;
+    /*margin:0 2px 2px 0;*/
+    width:7em;
+}
+
+.pysim_output{
+    text-align:left;
+    display:inline-block;
+    padding:4px;
+    /*margin:0 2px 2px 0;*/
+    width:7em;
+}
+
+.pysim_controls{
+    display:inline-block;
+    width:90%;
+    min-height:50px;
+    border: 2px solid #ccc;
+    margin:auto;
+    margin-bottom:5px;
+}
+
+.pysim_main{
+    display:inline-block;
+    width:90%;
+    border: 1px solid #ccc;
+    margin:auto;
+}
+
+.pysim_programming{
+    display:inline-block;
+    float:left;
+    width:35%;
+    height:100%;
+}
+
+.pysim_simulator{
+    display:inline-block;
+    float:left;
+    width:55%;
+    height:100%;
+}
+
+.pysim_program{
+    height:85%;
+    width:90%;
+}
+
+.normal{
+    background-color:#c66;
+}
+
+.updated{
+    background-color:#6c6;
+}
+
+.active{
+    background-color:#cc6;
+}
+
+.pysim_display_button{
+    display:inline-block;
+    padding:2px;
+}
+
+.pysim_display_button:hover{
+    display:inline-block;
+    cursor:pointer;
+    color:#f33;
+}
+.pysim_input{
+    height:35px;
+    width:60px;
+    margin-top:10px;
+}
+
+.pysim_button{
+    display:inline-block;
+    padding:8px;
+    background-color:#66a;
+    border-radius:5px;
+    height:25px;;
+    color:white;
+    margin:5px;
+    cursor:pointer;
+}
+
+.pysim_button:hover{
+    display:inline-block;
+    cursor:pointer;
+    color:#f33;
+}

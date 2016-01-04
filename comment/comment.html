@@ -1,0 +1,23 @@
+
+<div ng-class="{'comments':true, 'active_comments':active_thread == par_id}" ng-style="{'z-index':active_thread == par_id ? 100 : 1}" ng-if="display_comments == true">
+  <div class="button" ng-if="active_thread != par_id">
+    <a ng-click="activate(par_id)">[show ({{count_comments(par_id)}})]</a>
+  </div>
+  <div ng-if="active_thread == par_id">
+    <div class="button" ng-click="deactivate(par_id)">[hide]</div>
+    <div class="comment" ng-repeat="c in comments[par_id]" ng-if="display_comments == true">
+      <span class="button" ng-click="remove_comment(c._id)"
+      style="font:9px" ng-if="username == c.author">[x]</span> <b>{{c.author}}</b>: {{c.text}}
+    </div><br />
+    <!-- <a class="button" ng-click="prep_comment(par_id)" ng-if="commenting_id != par_id">[+]</a> -->
+    <!-- <a class="button" ng-click="end_comment()" ng-if="commenting_id == par_id">[-]</a> -->
+    <!-- <div ng-if="commenting_id == par_id"> -->
+    <!--   <textarea width="350px" height="15" ng-model="comment[par_id]">Comment here</textarea><br /> -->
+    <!--   <a class="activation_button" ng-click="add_comment()">[submit]</a> -->
+    <!-- </div> -->
+    <div>
+      <textarea width="350px" height="15" id="commentbox_{{par_id}}" ng-model="comment[par_id]" ng-keydown="$event.which === 13 && $event.ctrlKey && add_comment()">Comment here</textarea><br />
+      <a class="button" ng-click="add_comment()">[submit]</a>
+    </div>
+  </div>
+</div>
