@@ -25,10 +25,15 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-manifest = ["fa15"];
+manifest = {"/fa15":"/tmp/old/fa15"};
 
-for(var i = 0; i < manifest.length; i++){
-    app.use('/'+manifest[i], express.static('/tmp/old/'+manifest[i]));
+for(var m in manifest){
+    console.log(m,manifest[m]);
+    app.use(m, express.static(manifest[m]));
+    app.get(m, function(req, res){
+        console.log(m,get_ip(req));
+        res.redirect(m+'/text/box.xml');
+    });
 }
 
 app.get('/', function(req, res){
