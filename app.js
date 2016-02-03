@@ -25,6 +25,11 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+manifest = ["fa15"];
+
+for(var i = 0; i < manifest.length; i++){
+    app.use('/'+manifest[i], express.static('/tmp/old/'+manifest[i]));
+}
 
 app.get('/', function(req, res){
     console.log(get_ip(req));
@@ -116,7 +121,7 @@ var get_user_data = function(req){
             //*/
 }
 
-server = http.createServer(app).listen(61453);
+server = http.createServer(app).listen(3797);
 
 if(args.length > 0){
     server.on('connection', function (sock) {
