@@ -126,17 +126,21 @@ var get_user_data = function(req){
             //*/
 }
 
-server = http.createServer(app).listen(61453);
-
-if(args.length > 0){
+if(args.length == 1){
+    server = http.createServer(app).listen(args[0]);
+    console.log("Server running on:" + args[0]);
+}
+else if(args.length == 2){
+    server = http.createServer(app).listen(args[0]);
     server.on('connection', function (sock) {
-	if(sock.remoteAddress != args[0]){
+	if(sock.remoteAddress != args[1]){
 	console.log("Denied: " + sock.remoteAddress);
 	    sock.end("Access denied");
 	}
     });
-    console.log("Server running on:" + args[0]);
+    console.log("Server running on:" + args[0] + " listening to "+args[1]);
 }
 else{
-    console.log("Server running!");
+    server = http.createServer(app).listen(61453);
+    console.log("Server running on :61453");
 }

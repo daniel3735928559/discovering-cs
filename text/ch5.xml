@@ -1842,34 +1842,54 @@ I: set</pre></td>
 </table>
 
 </text></section>
-<section><title></title>
+<section><title>Interacting with devices</title>
 <text>
 
-<p>What ultimately happens as a result of an input or output
-instruction depends on what kind of device is connected to the pins.
-For now, in the simulator, there are only two devices connected: The
-least significant 7 pins are connected to a screen that will output
-whatever number it sees (interpreted as a 7-bit non-negative integer),
-and the top pin is connected to a switch that can be either on or off.
+<p>The <icode>in</icode> and <icode>out</icode> instructions allow us
+to write data to the computer's pins, but what ultimately happens as a
+result of this depends on what kind of device is connected to the
+computer.  For now, in the simulator, there are four devices
+connected: A simple numeric output, a simple switch array, a full
+character display, and a virtual keyboard.</p>
 
-For example, take the following program:
+<p>These devices are all connected through a central hub, or "bus"
+that manages where the data you are sending will go.  <def
+term="bus">In general, a <b>bus</b> is a system that enables the
+transfer of data between different components of a computer.  </def>
+In our particular case, the bus is enabling communication between the
+central computer processor (what we have simply been calling "the
+computer"), and devices attached to it ("peripherals").  (In a normal
+desktop or laptop computer, the processor and many peripherals and
+their associated busses are packaged together on the same circuit
+board, called a "motherboard".  This entire package is what is
+colloquially referred to as "a computer".  There are further busses,
+such as the "universal serial bus" (USB) or "peripheral component
+interconnect bus" (PCI bus) on the motherboard with external
+connectors that allow further peripherals to be connected to the
+motherboard.)</p>
 
-<avrasm>ldi r31,127
-out 17,r31
-ldi r31,255
-out 18,r31  ; Will output only 127 since the top bit of DDRD is in input mode
-dec r31
-out 18,r31
-dec r31
-out 18,r31
-dec r31
-out 18,r31
-in r0,16    ; Try toggling the switch before these instructions
-in r0,16
-in r0,16
-in r0,16
-</avrasm>
-</p>
+<p>In the next section, we will discuss communication with the devices
+in detail, but we provide a brief introduction now: When you send data
+on the computer's pins, the bus takes the high 8 bits and interprets
+them as 8-bit unsigned number that represents which device you wish
+the data to go to.  The bus then sends the low 8 bits as actual data
+to the device specified.  For example, if we send the number 260 = 1:4
+on the computer's pins, then the bus will send the number 4 to device
+number 1.  </p>
+
+<p>Likewise, </p>
+
+<p>For example, take the following program:
+
+<avrasm>brfc I,-1
+in r1
+brfs I,-3
+ldih r1,3
+out r1
+rjmp -6</avrasm>
+
+This will wait for data input (whether from switches or keyboard) and
+will send that data to the screen.</p>
 
 </text>
 </section>
@@ -1882,19 +1902,23 @@ in r0,16
   operations in Python, we can now do them in the ISA.  There are some
   differences yet:
   <ul>
+    <li>We have no instructions for multiplication or division.</li>
     <li>We have not talked about using strings.</li>
     <li>Instead of printing things to the screen, we are outputting
     them on pins</li>
     <li>In Python, when we dealt with numbers, these could be
     arbitrarily large or decimal numbers or anything else.  In the
     ISA, registers are limited to integers 0-255.  </li>
-    <li>Python had several advanced features, such as arrays </li>
+    <li>Python had several advanced features, such as arrays and
+    functions, that may not be easily expressible in the ISA as we
+    understand it thus far.</li>
   </ul></p>
 
   <p>Now that we have an understanding of how instructions in the ISA
   work, we'll go into some advanced features that will help bring us
   the rest of the way to understanding how Python programs can be
-  completely turned into ISA programs.  </p>
+  completely turned into ISA programs.  The actual translation of
+  Python into the ISA will wait until the next chapter.</p>
 </text>
   </section>
 </section>
@@ -1902,7 +1926,7 @@ in r0,16
 <text><p>The above instructions are theoretically sufficient to do
 most things you would want to do, much like the subset of Python we
 learned in chapter 2 was enough to get by, at least in principle.  But
-just in chapter 3 we learned that Python had some more advanced
+just as in chapter 3 we learned that Python had some more advanced
 features that made our lives much easier, in this section we will see
 further instructions from the ISA that can simplify our lives when
 coding in the ISA.</p>
@@ -1974,19 +1998,6 @@ S: set if op1 &lt; op2 (signed)
 I: unchanged</pre></td>
 </tr></table>
 
-<p>Feel free to play around with these a little here:
-
-<avrasm>ldi r31,175
-subi r31,85
-cpi r31,5
-brne -3
-ldi r31,170
-andi r31,85
-ldi r31,99
-ori r31,-1</avrasm>
-
-</p>
-
 </text></section>
 
 <section><title>Add-with-carry</title>
@@ -2000,63 +2011,67 @@ us in this endeavour.</summary>
 
 <text>
 <p>In all the instructions we have described so far, we have only been
-able to operate on numbers in the range 0-255.  This may seem
-maddeningly limiting--we couldn't even run our 3x+1 example on the
-small input of 27 because the numbers involved get into the
-thousands.</p>
+able to operate on numbers in the range 0-65535.  This is enough for
+many purposes, but whereas in Python our factorial program could
+easily compute 10!, say, this would have no hope in the ISA since the
+answer is larger than 65535.</p>
 
-<p>However, recall that our registers are just 8-bit memories.  So if
-we want to store a 16-bit number, we can take any two registers and
-think of them as comprising one larger number by concatenation.  For
-example, we could take the registers r16 and r19 and use them together
-to store one 16-bit number, denoted as r16:r19, and which represents
-the number
+<p>However, recall that our registers are just 16-bit memories.  So if
+we want to store a larger number, say, a 32-bit number, we can take
+any two registers and think of them as comprising one larger number by
+concatenation.  For example, we could take the registers r1 and r2,
+say, and treat them in our program as representing the concatenation
+r2:r1, which, recall, refers to the number
 
-<code>r19 + 256*r16</code>
+<code>65536*r2 + r1</code>
 
-This is a lot like the "compound registers" X, Y, and Z that we
-learned about earlier.  But unlike X, Y, and Z, which are notations
-built into the SimpleAVR ISA, this compound that we've contrived doesn't
-have any supported notation.  It is just two registers, which we can
-manipulate separately using all the usual instructions, but which we
-are now thinking of as two parts of one big number.  </p>
+This is kind of a "virtual 32-bit register".  We haven't actually
+combined the two 16-bit registers in the ISA--they're still just two
+separate registers that we can manipulate separately using all the
+usual instructions, but which we are now simply thinking of as two
+parts of one big number.  That is, when we use r1 or r2 in a program,
+we will operate on them in a way that manipulates their combined value
+properly, rather than manipulating either one individually.  </p>
 
-<p>Now how would we operate on this number?  For the simplest example,
-how do we add 1 to it?  Suppose r19 and r16 are both 0.  These
-represent the number
+<p>For example, let us think about the simplest kind of operation.
+Say we're storing a 32-bit number in r1 and r2 together as above that
+represents someone's score in a game.  Perhaps in the course of the
+game, the player earns another point, so we must increment their
+score.  How do we add 1 to this combined value?  Suppose r1 and r2 are
+both 0.  These represent the number
 
-<code>0:0 = 0 + 256*0 = 0</code>
+<code>0:0 = 65536*0 + 0= 0</code>
 
 If we tried simply adding 1 to both registers as a way of incrementing
-the compound, then r16 and r19 will both be 1, so will together
+the compound, then r1 and r2 will both be 1, so will together
 represent the number
 
-<code>1:1 = 1 + 256*1 = 257</code>
+<code>1:1 = 65536*1 + 1 = 65537</code>
 
 That's not what should happen when we increment 0.  Clearly what we
-need to do is to add 1 to only r19.  Then we would get the number
+need to do is to add 1 to only r1.  Then we would get the number
 
-<code>0:1 = 1 + 256*0 = 1</code>
+<code>0:1 = 65536*0 + 1 = 1</code>
 
 Excellent.  So is the procedure for incrementing our big number just
-to add 1 to r19 and leave r16 alone?  Well, not entirely.  The problem
-happens when r19 = 255, and say r16 = 0.  Then if we add 1 to r19,
-this will set r19 to be 0.  But this is no good!  This means both r19
-and r16 will be 0, so our big number will be 0, whereas what we wanted
-was 256.  That is, we wanted r16 to be 1 and r19 to be 0.  So r19
-actually got the correct value, but in response to the overflow, we
-should have also incremented r16.</p>
+to add 1 to r1 and leave r2 alone?  Well, not entirely.  The problem
+happens when r1 = 65535, and say r2 = 0.  Then if we add 1 to r1, this
+will set r1 to be 0.  But this is no good!  This means both r1 and r2
+will be 0, so our big number will be 0, whereas what we wanted was
+65536.  That is, we wanted r2 to be 1 and r1 to be 0.  So r1 actually
+got the correct value, but in response to the overflow, we should have
+also incremented r2.</p>
 
-<p>The trick is to notice that when we added 1 to r19 above, and it
-overflowed back to 0, this caused the C flag to be set in the sreg.
-So what we want to do is not just 
+<p>The trick is to notice that when we added 1 to r1 when r1 = 65535
+and it subsequently overflowed back to 0, this caused the C flag to be
+set in the sreg.  So what we want to do is not just
 
-<code>r19 = r19 + 1</code>
+<code>r1 = r1 + 1</code>
 
 but rather 
 
-<code>r19 = r19 + 1
-r16 = r16 + C</code>
+<code>r1 = r1 + 1
+r2 = r2 + C</code>
 </p>
 
 <p>Happily, there is an instruction which does this and more--adc.  It
@@ -2067,25 +2082,25 @@ is 0, and if the C flag is instead 1, it performs normal addition and
 then increments the result by 1.  </p>
 
 <p>Thus we can use it to implement our increment operation by doing a
-normal add instruction to increment r19, and then using adc to add 0
-to r16.  This will leave r16 unchanged unless C is set, in which case
+normal addi instruction to increment r1, and then using adc to add 0
+to r2.  This will leave r16 unchanged unless C is set, in which case
 it will add 1 to r16--exactly what we wanted: 
 
-<code>ldi r31,0
-ldi r30,1
-add r16,r30
-adc r19,r31</code>
+<code>ldi r15,0
+addi r1,1
+adc r2,r15</code>
 
 This, finally, is ISA code that increments our combined number.  We
 will later write code to do more interesting operations to such
-combined numbers, like adding two such numbers.  </p>
+combined numbers, like adding two such combined numbers.  </p>
 
 <p>Note also that if this number has its largest possible value, where
-r19 = 255 and r16 = 255 (so the number is 65535), then incrementing it
-using this procedure first increments r19, making it 0 and setting C.
-But then r16 gets incremented since C was set, and because it is also
-255, it also gets set to 0.  So our big combined number exhibits the
-same 'wraparound' behavior at its maximum value of 65535.</p>
+r1 = 65535 and r2 = 63355 (so the number is 4294967295), then
+incrementing it using this procedure first increments r1, making it 0
+and setting C.  But then r2 gets incremented since C was set, and
+because it is also 65535, it also gets set to 0.  So our big combined
+number exhibits the same 'wraparound' behavior at its maximum value of
+4294967295.</p>
 
 <table class='ISA_table'><tr>
 <td>Instruction</td>
@@ -2106,63 +2121,7 @@ N: set if result is negative
 Z: set if result is 0
 C: set if op1 + op2 + C &gt; 255</pre></td>
 </tr>
-<tr>
-<td><pre>sbc</pre></td>
-<td>Subtract with carry</td>
-<td><pre>reg</pre></td>
-<td><pre>reg</pre></td>
-<td><pre>op1 = op1 - op2 - C</pre></td>
-<td><pre>pc: increment
-N: set if result is negative
-Z: set if result is 0
-C: set if op1 - op2 &gt; 255</pre></td>
-</tr>
 </table>
-
-<p>For example, we can use these to implement code that increments and
-then decrements a 16-bit number represented by r21:r20, say:
-
-<avrasm>ldi r31,0
-ldi r30,1
-; We need a 0 and a 1 stored
-; for later use
-
-ldi r20,53
-ldi r21,9
-; Now r21:r20 = 9:53 = 2357
-
-add r20,r30
-adc r21,r31
-; Now r21:r20 = 9:54 = 2358
-
-ldi r20,255
-ldi r21,2
-; Now r21:r20 = 2:255 = 767
-
-add r20,r30
-adc r21,r31
-; Now r21:r20 = 3:0 = 768
-
-ldi r20,54
-ldi r21,9
-; Now r21:r20 = 9:54 = 2358
-
-sub r20,r30
-sbc r21,r31
-; Now r21:r20 = 9:53 = 2357
-
-ldi r20,0
-ldi r21,3
-; Now r21:r20 = 3:0 = 768
-
-sub r20,r30
-sbc r21,r31
-; Now r21:r20 = 2:255 = 767
-</avrasm>
-
-
-We'll see later how to use these to do more complicated things to
-larger numbers</p>
 
 </text></section>
 
@@ -2178,14 +2137,14 @@ restore those values to the actual registers.  </summary>
 it exists in almost every ISA you'll come across.  The basic reason is
 that it is absolutely necessary for functions to work.  It can also be
 used more simply as a convenient way to stash some values in RAM for
-quick and easy retrieval later.  The feature that enables all this and
-more is called the "stack".  </p>
+quick and easy retrieval later.  This feature, which enables all this
+and more, is called the "stack".  </p>
 
-<p>The name comes from the natural metaphor: A stack of plates.  If I
-have a stack of plates, there are only really two things I can do: I
-can place another plate at the top, or I can pull a plate off the top.
-I cannot pull a plate out of the middle, nor can I insert a plate into
-the middle of the stack.</p>
+<p>The name comes from a metaphor: A stack of plates.  If we have a
+stack of plates, there are only really two things we can do: we can
+place another plate at the top, or we can pull a plate off the top.  I
+cannot pull a plate out of the middle, nor can I insert a plate into
+the middle of the stack without it falling over.</p>
 
 <p><def term="push">We will refer to the operation of putting a plate
 at the top as <b>pushing</b> a plate onto the stack, </def><def
@@ -2196,9 +2155,9 @@ off the stack.</def></p>
 pop, both of which take just any one register for an operand.  When
 you push a register, say:
 
-<code>push r0</code>
+<code>push r1</code>
 
-This will save the value in r0 somewhere by "pushing it onto the
+This will save the value in r1 somewhere by "pushing it onto the
 stack".  If you then do
 
 <code>pop r1</code>
@@ -2210,11 +2169,11 @@ this will take that stored value off of the stack and put it in r1.
 
 <code>push r1
 push r1
-push r0
+push r2
 push r5</code>
 
 then this saves the values of those registers in that order.  So if at
-this point we imagine r0 was 34, r1 was 99, and r5 was 18, then the
+this point we imagine r2 was 34, r1 was 99, and r5 was 18, then the
 stack looks like:</p>
 
 <table>
@@ -2257,44 +2216,45 @@ architecture.  So where does <icode>push</icode> actually store
 things?</p>
 
 <p>The answer is that it stores things in RAM.  But where in RAM?
-<def term='stack pointer'>There is a 16-bit register called the
-<b>stack pointer</b>, or often called <b>sp</b>, which stores the
-address in RAM of the top of the stack.</def> When we push a register,
-its value gets written to RAM at the address sp, and then sp gets
-decremented by 1 (yes--the top of the stack moves downward in RAM when
-you push).  When you pop a register, the stack pointer gets
+<def term='stack pointer'>It turns out that the register r0 is used by
+these instructions to refer to the address in RAM just before the
+value currently at the "top" of the stack.  For this reason, r0 is
+sometimes referred to as the <b>stack pointer</b>.</def> When we push
+a register, its value gets written to RAM at the address r0, and then
+r0 gets decremented by 1 (yes--the top of the stack moves downward in
+RAM when you push).  When you pop a register, the stack pointer gets
 incremented by 1 and then the register receives the value in RAM at
-the address sp.  </p>
+the address r0.  </p>
 
-<p>Let us take the above example again, with r0 = 34, r1 = 99, r5 =
-18, and let us say that at the beginning, sp = 5000.  So before we do
+<p>Let us take the above example again, with r2 = 34, r1 = 99, r5 =
+18, and let us say that at the beginning, r0 = 5000.  So before we do
 anything, the stack looks like:</p>
 
 <table>
 <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
-<tr><td>sp = 5000</td><td>??</td></tr>
+<tr><td>r0 = 5000</td><td>??</td></tr>
 </table>
 
 <p>(There is some value at this address, but we don't care what it is,
 so we show ?? in its place rather than a random number).</p>
 
 <p>Then we push r1.  This stores the value of r1 (99) in RAM at
-address sp (5000), and then decrements sp, so sp is now 499 and the
+address r0 (5000), and then decrements sp, so r0 is now 499 and the
 stack now looks like:</p>
 
 <p><table>
 <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
-<tr><td>sp = 4999</td><td>??</td></tr>
+<tr><td>r0 = 4999</td><td>??</td></tr>
 <tr><td>5000</td><td>99</td></tr>
 </table>
 (After push r1)</p>
 
-<p>Subsequently pushing r1 again, then r0, then r5 walk the stack
+<p>Subsequently pushing r1 again, then r2, then r5 walk the stack
 through states: </p>
 
 <p><table>
 <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
-<tr><td>sp = 4998</td><td>??</td></tr>
+<tr><td>r0 = 4998</td><td>??</td></tr>
 <tr><td>4999</td><td>99</td></tr>
 <tr><td>5000</td><td>99</td></tr>
 </table>
@@ -2302,7 +2262,7 @@ through states: </p>
 
 <p><table>
 <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
-<tr><td>sp = 4997</td><td>??</td></tr>
+<tr><td>r0 = 4997</td><td>??</td></tr>
 <tr><td>4998</td><td>34</td></tr>
 <tr><td>4999</td><td>99</td></tr>
 <tr><td>5000</td><td>99</td></tr>
@@ -2311,7 +2271,7 @@ through states: </p>
 
 <p><table>
 <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
-<tr><td>sp = 4996</td><td>??</td></tr>
+<tr><td>r0 = 4996</td><td>??</td></tr>
 <tr><td>4997</td><td>18</td></tr>
 <tr><td>4998</td><td>34</td></tr>
 <tr><td>4999</td><td>99</td></tr>
@@ -2325,7 +2285,7 @@ looks like: </p>
 
 <p><table>
 <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
-<tr><td>sp = 4997</td><td>??</td></tr>
+<tr><td>r0 = 4997</td><td>??</td></tr>
 <tr><td>4998</td><td>34</td></tr>
 <tr><td>4999</td><td>99</td></tr>
 <tr><td>5000</td><td>99</td></tr>
@@ -2338,54 +2298,26 @@ Just that this is no longer accessible to pop instructions (the next
 one will get the value 34) and it will be overwritten by a push
 instruction, so it no longer matters what it is specifically.</p>
 
-<p><b>What is the stack pointer?</b></p>
-
-<p>So push and pop behave as in the mental model while actually using
-a region in RAM to store the values.  But what, in turn, is this
-mysterious stack pointer?  We didn't see "sp" as a separate memory in
-the architecture either.  It turns out that the sp is actually stored
-in the I/O register file.  But sp is an address in RAM, and therefore
-must be 16 bits, and we said the I/O register file has width 8, so in
-fact sp is a combined number from two I/O registers (much like X was
-made up of two general-purpose registers).  Specifically, sp is the
-combination of I/O registers 61 and 62, which are known as SPL and SPH
-respectively (for "stack pointer, low 8 bits" and "stack pointer, high
-8 bits", respectively) as sp = SPH:SPL.  That is:
-
-<code>sp = IO[61] + 256*IO[62]</code>
-
-In particular, if we are going to use push and pop instructions, we
-have to first set the sp to some sensible place in RAM where it
-doesn't get in the way of anything else we want to do with RAM.  For
-example, maybe we decide to set it to 5000 as in the above example.
-We compute:
+<p>To actually see this code in action, we first compute:
 
 <code>5000 = 136 + 19*256</code>
 
-we need to set I/O register 61 to store value 136 and I/O register 62
-to have value 12.  Remember that we write the I/O registers using the
-"out" instruction, so we do:
+So we can set the stack pointer to 5000 by
 
-<code>ldi r31, 136
-out 61, r31
-ldi r31, 19
-out 62, r31</code>
+<code>ldi r0,136
+ldih r0,16</code>
 
-Now the stack is set up, and the first push will write to address 5000
-in RAM, the next push will write to address 4999, etc.  We may step
-through the code from our earlier example here:
+Thus:
 
-<avrasm>ldi r31, 136
-out 61, r31
-ldi r31, 19
-out 62, r31
-ldi r31,99
-ldi r30,34
-ldi r29,18
-push r31
-push r31
-push r30
-push r29
+<avrasm>ldi r0, 136
+ldih r0, 19
+ldi r1,99
+ldi r2,34
+ldi r3,18
+push r1
+push r1
+push r2
+push r3
 pop r1
 pop r2
 pop r0
@@ -2405,8 +2337,8 @@ pop r1</avrasm>
 <td>Push register to stack</td>
 <td><pre>reg</pre></td>
 <td><pre>none</pre></td>
-<td><pre>RAM[sp] = op1
-sp = sp - 1</pre></td>
+<td><pre>RAM[r0] = op1
+r0 = r0 - 1</pre></td>
 <td><pre>pc: increment
 sreg: unchanged</pre></td>
 </tr>
@@ -2415,8 +2347,8 @@ sreg: unchanged</pre></td>
 <td>Pop register off stack</td>
 <td><pre>reg</pre></td>
 <td><pre>none</pre></td>
-<td><pre>sp = sp + 1
-op1 = RAM[sp]</pre></td>
+<td><pre>r0 = r0 + 1
+op1 = RAM[r0]</pre></td>
 <td><pre>pc: increment
 sreg: unchanged</pre></td>
 </tr>
@@ -2429,51 +2361,60 @@ reuse a chunk of code in several places without just copying it.  The
 SimpleAVR ISA has support for this behavior in the form of its rcall and
 ret instructions.  </summary>
 <text>
+  
 <p>In Python, if we ever wrote a piece of code that we want to reuse
 elsewhere, we could package it up as a function and then call it from
 multiple places elsewhere in our code.  In the ISA, we have already
 seen code that would be useful to treat this way: Our code for
-outputting a number (say, the contents of r30): 
+reading data in from the pins, say: 
 
-<code>ldi r31, 255
-out 26, r31
-out 27, r30</code>
+<code>brfc I,-1
+in r1</code>
 
-If we end up wanting to output more than one thing in our program,
-we'll have this snippet of code appearing everywhere, so if we could
-reuse it more efficiently that would be excellent.  However, it turns
-out that having a chunk of code that we can reuse in this way is
-tricky: The main challenge comes from the fact that we have to be able
-to jump to this chunk of code from anywhere, run the code, and then
-have the code jump back to wherever it was called from.  </p>
+or maybe our code for incrmenting the r2:r1 combined register:
 
-<p>This should sound like an decent use-case for the stack: We are
+<code>ldi r15,0
+addi r1,1
+adc r2,r15</code>
+
+If we end up wanting to read data or increment r2:r1 more than once in
+our program, we'll have these snippets appearing everywhere.  If
+instead we could have it just in one place in our program and reuse
+that code, that could be simpler.  However, it turns out that having
+a chunk of code that we can reuse in this way is tricky: The main
+challenge comes from the fact that we have to be able to jump to this
+chunk of code from anywhere, run the code, and then have the code jump
+back to wherever it was called from.</p>
+
+<p>This turns out to be an excellent use-case for the stack: We are
 going merrily along through our program, incrementing the pc, business
-as usual.  At some point we want to output a number using the above
+as usual.  At some point we want to increment r2:r1 using the above
 code, which already exists at some point in our program.  The basic
 procedure is that we quickly stash the current pc on the stack, jump
-to that code to have it output what we want, and then pop the pc back
-off the stack to return to where we started.</p>
+to that code to have it output what we want, and then have that code
+snippet that we jumped to pop the pc back off the stack to return
+to where we started.</p>
 
 <p>Of course, the push and pop instructions only take general-purpose
 registers as operands, so we cannot do this with our existing
-instructions.  So the SimpleAVR ISA comes with two further
-instructions--called rcall and ret--which accomplish this.  rcall is
-exactly like rjmp: It takes a single operand, which is a number in the
-range -2048 to 2047.  It adds this to the pc and then it increments
-the pc.  However, unlike rjmp, before it modifies the pc, it pushes
-onto the stack the value pc + 1, which is the address of the next
-instruction that should get executed when we finish with the function.
-So whereas rjmp irrevocably dumps us somewhere else in the program,
-rcall stashes in the stack the address that will bring us back.</p>
+instructions ("push pc" and "pop pc" are invalid).  So the SimpleAVR
+ISA comes with two further instructions--called rcall and ret--which
+accomplish this.  rcall is exactly like rjmp: It takes a single
+operand, which is a number in the range -512 to 511.  It adds this to
+the pc and then it increments the pc.  However, unlike rjmp, before it
+modifies the pc, it pushes onto the stack the value pc + 1, which is
+the address of the next instruction that should get executed when we
+finish with the function.  So whereas rjmp irrevocably dumps us
+somewhere else in the program, rcall stashes in the stack the address
+that will bring us back to where we jumped from.</p>
 
 <p>So we've <icode>rcall</icode>ed some other code.  That code
 executes, and now we want to resume normal execution back where rcall
 left off.  To do this, all we have to do is pop the pc off the stack,
-as then the pc will have its old value.  But the pop instruction
-doesn't allow the pc as an operand, so there is instead an instruction
-called ret.  ret takes no operands and very simply pops the pc off the
-stack, exactly as we wanted.  </p>
+as then the pc will have its old value.  But as we mentioned, the pop
+instruction doesn't allow the pc as an operand, so there is instead an
+instruction called ret.  ret takes no operands and very simply pops
+the pc off the stack, exactly as we wanted.  </p>
 
 <table class='ISA_table'><tr>
 <td>Instruction</td>
@@ -2509,12 +2450,10 @@ output code.  Let us consider writing code that first outputs the
 number 13, then multiplies it by 8 and outputs that.  We can start
 with the outline: 
 
-<code>ldi r30, 13
-[call to output code to output r30]
-add r30, r30
-add r30, r30
-add r30, r30
-[call to output code to output r30]
+<code>ldi r5, 13
+[call to output code to output r5]
+sh r5, 3
+[call to output code to output r5]
 </code>
 
 We need to put our code for outputting stuff somewhere, so maybe we'll
