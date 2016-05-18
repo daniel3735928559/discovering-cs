@@ -1,2300 +1,2112 @@
-<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="box.xsl" type="text/xsl"?><section number="6">
-  <title>Encodings: Everything is numbers</title>
-  <text></text>
-  <section>
-    <title>Where are we now?</title>
-    <text>
-      <p>In the previous chapter, we described a computer's
-      interface--the ISA-- and specifically the computer's
-      architecture (what various memories it has) and its instructions
-      (what it can do to that architecture).  But a computer is still
-      supposed to be a physical machine!  And so far, we've only
-      learned (chapter 4) how physical machines can store numbers, and
-      not how they can store these instructions.  For that matter,
-      we've talked about computers as storing much more than just
-      numbers--a search engine stores text and a game console stores
-      images.</p>
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet href="box.xsl" type="text/xsl"?><section number='6'>
+  <title>Assembly language, or "Turning Python code into ISA code"</title>
+<summary>Assembly language is the programming language that one often
+uses to write code in the ISA.  It is easy to convert from assembly to
+nothing but pure ISA instructions--a job that is done by an
+'assembler'--but because of a few key features, it is also easier to
+write assembly than the ISA itself.</summary>
 
-      <p>In this chapter, we shall bridge this final gap by
-      demonstrating that all these things: instructions, images,
-      graphics, and anything else we want to store, can be stored just
-      using numbers.  <def term="encoding">A mechanism for storing
-      numbers that correspond to a given kind of data is called an
-      <b>encoding</b> for that data.</def></p>
-    </text>
-  </section>
-
-  <section>
-    <title>Generalities about encodings</title>
-    <text>
-      <p><def term="decodable">There is essentially only one hard and
-      fast rule governing what constitutes a valid encoding: It must
-      be <b>unambiguous</b> or <b>decodable</b>.</def> That is, if we
-      tell someone our encoding scheme for some set of objects
-      (characters, instructions, whatever), and then we present them
-      with a list of bytes that encodes some of these objects using
-      that scheme, they should be able to use the scheme to determine
-      without ambiguity what objects we have encoded.</p>
-
-      <p>As long as the encoding can actually be successfully decoded,
-      anything else is a bonus.  <def term="efficient (encoding)">For
-      example, some encodings are more <b>efficient</b> than others in
-      that they usually require fewer bytes to encode the same
-      data.</def></p>
-      
-      <p><def term="error-resistant">As another example, some
-      encodings can be more <b>error-resistant</b> than others.  This
-      refers to what happens if we see a sequence of bytes encoding
-      some objects, but one or more of the bytes has been modified
-      accidentally.  An error-resistant encoding will allow us to
-      still determine what objects were originally intended, or at
-      least will lead us to an answer that isn't so far off what was
-      intended.  A less error-resistant encoding may have its
-      interpretation change dramatically with even just a small change
-      in the bytes representing it.</def>
-      </p>
-
-      <p>There are many other considerations that may apply depending
-      on how your encoding will be deployed.  Some encoding schemes
-      may rely on actually being completely undecodable unless the
-      person decoding them has some extra secret information (such as
-      a password).  These are usually called "encryption schemes".</p>
-
-      <aside title="Encodings in history">
-	<p>Nowadays, we regularly send encoded text over very large
-	distances without a second thought.  This text is usually
-	encoded as numbers simply because most of the infrastructure
-	we have, from hard drives to cellular towers to undersea fiber
-	optic cables, is built solely to store and transmit numbers
-	efficiently.  </p>
-
-	<p>In a time when this infrastructure didn't exist,
-	communicating data across large distances was often a massive
-	undertaking, and being able to do this quickly could have
-	dramatic monetary or strategic consequences.  Text was still
-	encoded for communication, not as numbers (since the
-	number-moving infrastructure wasn't in place yet) but in
-	various other ways that were adapted to the infrastructure
-	that did exist at the time.  </p>
-
-	<p>One such encoding was called "semaphore", which involved a
-	signaler standing someplace visible to the recipient and
-	holding out flags in various configurations representing
-	letters of the alphabet.  If the recipient were too far away
-	to see the sender, there would have to be intermediate
-	signalers to relay the original message.  Sometimes, there
-	were many relayers in a very long line.  In 18th century
-	France, relay towers were built with larger, more visible
-	mechanical arms.  They were constructed along lines that
-	spanned the whole width of the country, such that a commander
-	in Paris could receive news from Strasbourg in the far
-	north-east in just six minutes.  Napoleon Bonaparte even had
-	such a line constructed from Paris all the way to Venice.</p>
-	
-	<p>Another encoding that surfaced when electric lines started
-	to criss-cross whole countries (but did not yet carry digital
-	information) was Morse code.  One could connect an electrical
-	line to a buzzer, and as the sender on the other end connected
-	and disconnected the line with a button, the receiver could
-	listen to the buzzer and denote the short buzzes as dots, the
-	long buzzes as dashes, and longer pauses between buzzes as
-	separating the different letters.  Morse code was a system for
-	corresponding sequences of dots and dashes to letters.  In
-	this encoding, "-..-" (heard as "beeeeeeep beep beep
-	beeeeeeep") would have represented "X", whereas "." would have
-	represented "E".  This represented an early understanding of
-	efficiency in encodings: "E" is a much more common letter than
-	X, so it is more efficient to have it correspond to a simpler
-	sequence.</p>
-
-      </aside>
-    </text>
-
-    <section>
-      <title>Enumeration as encoding</title>
-      <text>
-	<p><def term="enumeration (encoding)">Before we get into any
-	specific encodings, we present the most basic strategy of all
-	for encoding: Enumeration.</def> To illustrate this strategy,
-	we return to our waffle bakery example:</p>
-	
-	<p>We're designing a computer program for the bakery.  We want
-	to represent the different waffle offerings they have using
-	numbers.  So we make a list of all the waffle offerings
-	(starting from 0 like good computer programmers): </p>
-
-	<code>
-	  0. Donut waffle
-	  1. Plain waffle
-	  2. Blueberry waffle
-	  3. Belgian waffle
-	  4. Whole-grain waffle
-	  5. Chocowaffle
-	  6. Catnip waffle
-	  ...
-	</code>
-
-	<p>And then we realize that this numbered list actually is an
-	encoding already--Blueberry waffles correspond to the number
-	2, chocolate to the number 5, and so on!  So when the user
-	selects "Catnip waffle" on the website, the website the number
-	6 to the server and the server takes recipe number 6 and sends
-	it to the kitchen for preparation, which is of course the
-	recipe for a catnip waffle.</p>
-
-	<p>This encoding is of course decodable: If we give someone
-	the sequence of bytes 4, 1, 3 then they can easily decode this
-	as "A whole-grain, a plain, and a Belgian".  But what happens
-	if the chef gets really creative and comes up with 300
-	recipes?  </p>
-
-	<code>
-	  0. Donut waffle
-	  1. Plain waffle
-	  2. Blueberry waffle
-	  3. Belgian waffle
-	  4. Whole-grain waffle
-	  5. Chocowaffle
-	  6. Catnip waffle
-	  ...
-	  259. Stroopwafel
-	  260. Maple bacon waffle
-	  261. Sunny-side up waffle
-	  ...
-	  297. Upside-down waffle
-	  298. Inside-out waffle
-	  299. Waffle waffle
-	</code>
-
-	<p>Now suddenly some of the numbers are too big for a byte
-	(remember bytes can only store 8 bits, or numbers 0-255).  "No
-	problem", we think.  "we'll just use two bytes for the bigger
-	ones using concatenation".  Since 259 = 1*256 + 3 = 1:3, we
-	can store the number 259 using the two bytes 1, 3.  But now we
-	have a decodability problem: What if we get the sequence of
-	bytes 4, 1, 3.  Does this mean "Whole-grain, plain, and
-	Belgian" or "Whole-grain and Stroopwafel"?  </p>
-
-	<p>So if we're going to use two bytes to encode some of the
-	waffles, we'd have to use two bytes to encode all of them.
-	Thus an order of "Plain, Stroopwafel, and Donut waffle" would
-	be encoded as 0, 1, 1, 3, 0, 0 (since Plain = 1 = 0:1,
-	Stroopwafel = 259 = 1:3, and Donut waffle = 0 = 0:0).  </p>
-
-	<p>So enumeration encodings can essentially always be used to
-	encode any finite list of objects as long as sufficient care
-	is given to ensure decodeability.</p>
-      </text>
-    </section>
-  </section>
-  
-  <section>
-    <title>Encoding of instructions</title>
-    <text>
-      <p>Our first example of an encoding is ISA instructions.  Recall
-      that the way the processor is set up, there is a memory for
-      storing instructions--the program memory--which has width 16,
-      meaning it can only store words (numbers 0-65535).  Somehow, we
-      can store some numbers in this memory to cause the program
-
-<code>ldi r30,89
-andi r30,6</code>
-
-      to be executed.</p>
-
-      <p>For the sake of example, let us look at one hypothetical way
-      that one could encode instructions:</p>
-
-    </text>
-    
-    <section>
-      <title>An enumeration-based instruction encoding</title>
-      <text>
-	<p>One very naive way to encode instructions is to simply
-	enumerate them.  In the previous chapter, we provided a list
-	of all possible instruction types--ldi, add, rcall, etc.
-	However each instruction could only take finitely many
-	possible operands, so we can in fact enumerate all the
-	possible instructions one could ever write in a (very long)
-	finite list.  For instance, all the possible incarnations of
-	ldi instructions are:
-
-<code>ldi r16,0
-ldi r16,1
-...
-ldi r16,255
-...
-ldi r31,255</code>
-
-        There are 256 instructions of the form ldi r16,[something],
-        and 16 different registers we can load a value into (recall
-        ldi doesn't let you load into registers 0-15), for a total of
-        4096 different instructions.  For an encoding, we could just
-        make them correspond to the numbers 0-4095 respectively.  Thus
-        ldi r16,0 will be encoded with the number 0, ldi r16,1 with
-        the number 1, ldi r17,0 with the number 256, and ldi r30,89
-        with the number 3673, etc.</p>
-
-	<p>Then we have the andi instructions
-
-<code>andi r0,0
-...
-andi r0,255
-andi r1,0
-...
-andi r1,255
-......
-andi r31,255</code>
-
-        This is another 8192 instructions.  We've already assigned
-        the numbers 0-4095 to correspond to the ldi instructions, so
-        we may as well take the next 8192 numbers--that is,
-        4096-12287--and make these correspond to the andi instructions
-        in the above order.  In the above list of andi instructions,
-        andi r30,6 will be the 7687th andi instruction, so it will be
-        assigned the number 11783 under this encoding scheme.</p>
-
-	<p>Thus, if we used the naive encoding above, then our program
-	would be stored as the two numbers 3673 and 11783.  Or, in
-	binary:
-
-<code>0000111001011001
-0010111000000111</code>
-
-as 3673 is the encoded version of ldi r30,89 and 11783 is the encoding
-of andi r30,6.  </p>
-
-<p>For all we know so far, this encoding might be as good as any
-other--for instance, we chose to start with the ldi and andi
-instructions, but maybe we could instead encode the ldi instructions
-using the first 4096 numbers, and then encode the mov instructions
-using the next 1024 numbers (1024 being the number of different
-possible mov instructions).</p>
-
-<p>But to see if we can be more systematic about it, let us see what
-this encoding actually means on the level of the binary
-representations.  Under this suggested scheme, we'll have encodings:</p>
-
-<p>
-<table><tr><td>Instruction</td><td>Decimal</td><td>16-bit binary</td></tr>
-<tr><td>ldi r16,0</td><td>0</td><td>0000000000000000</td></tr>
-<tr><td>ldi r16,1</td><td>1</td><td>0000000000000001</td></tr>
-<tr><td>ldi r16,60</td><td>60</td><td>0000000000111100</td></tr>
-<tr><td>ldi r16,145</td><td>145</td><td>0000000010010001</td></tr>
-<tr><td>ldi r16,255</td><td>255</td><td>0000000011111111</td></tr>
-<tr><td>ldi r17,0</td><td>256</td><td>0000000100000000</td></tr>
-<tr><td>ldi r18,0</td><td>512</td><td>0000001000000000</td></tr>
-<tr><td>ldi r19,0</td><td>768</td><td>0000001100000000</td></tr>
-<tr><td>ldi r26,0</td><td>2560</td><td>0000101000000000</td></tr>
-<tr><td>ldi r31,0</td><td>3840</td><td>0000111100000000</td></tr>
-<tr><td>ldi r31,5</td><td>3845</td><td>0000111100000101</td></tr>
-<tr><td>ldi r31,60</td><td>3900</td><td>0000111100111100</td></tr>
-<tr><td>ldi r31,255</td><td>4095</td><td>0000111111111111</td></tr>
-</table>
-</p>
-
-<p>A couple of things we notice from these examples: out of our 16
-bits, the low 8 bits are just the binary representation of the value
-that should be loaded.  For instance, if we want to load the value 60
-into some register, I take 60 as an 8-bit binary number: 00111100, and
-place that into the lower 8 bits of the instruction.  Observe that ldi
-r16,60 was
-
-<code>00000000<b>00111100</b></code>
-
-whereas ldi r31,60 was
-
-<code>00001111<b>00111100</b></code>
-
-Then the next-lowest 4 bits tell us which register we're loading from: To store the value 145 (binary 10010001) into register 16, we do
-
-<code>0000<b>0000</b>10010001</code>
-
-whereas to store 145 into r26, we do
-
-<code>0000<b>1010</b>10010001</code>
-
-and into r31 would be
-
-<code>0000<b>1111</b>10010001</code>
-
-Observe that these four bits aren't literally the binary
-representation of the register number to be loaded:</p>
-
-<p><table><tr><td>To load to register number </td><td>(in binary)</td><td>Set bits 9-13 to: </td></tr>
-<tr><td>16</td><td>10000</td><td>0000</td></tr>
-<tr><td>26</td><td>11010</td><td>1010</td></tr>
-<tr><td>31</td><td>11111</td><td>1111</td></tr>
-</table></p>
-
-<p>Since the bits that select which register we load into only have to
-select between 16 different possibilities (registers 16-31) we only
-need 4 bits to represent this choice.  And if those four bits are,
-say, 1010, we see that we can get the actual register number being
-selected by just throwing a 1 on the front of it, giving 11010,
-i.e. 26.  </p>
-
-<p>So fundamentally, to specify an ldi instruction, we need to use 4
-bits for the register selection, and 8 bits for the immediate value
-that we wish to load.  Our naive encoding said that for ldi, we use
-the lowest 8 bits for the immediate value and the next 4 bits for the
-register select.  We shall denote this encoding in the following
-concise notation:
-
-<code>ldi: 0000RRRRIIIIIIII loads binary value IIIIIIII into register 1RRRR</code>
-
-What this means is that the bits labeled I comprise the binary value
-to be loaded, and the bits labeled R comprise the last four bits of
-the register select, with the first bit of the register select being
-always 1.  For example, if we get the instruction 0000101000011110, we
-can decode it thus:</p>
-
-<figure width="500px"><description>0000101000011110 with brackets over the 1010
-notated with 'Register to load value into is 11010, i.e. 26', and
-brackets over the 00011110 notated with 'Value to load into register
-is 00011110, i.e. 30'</description><caption>Decoding 0000101000011110
-as ldi r26, 30</caption></figure>
-
-      </text>
-    </section>
-    <section>
-      <title>The AVR ISA encoding</title>
-      <text>
-
-	<p>But now that we understand what's really required to choose
-	a representation for ldi instructions--we need to reserve one
-	4-bit blob and one 8-bit blob in the instruction for the
-	operands--we can do whatever we like.  For instance, we could
-	swap the order in which we did the above:
-
-	<code><b>ldi</b>: 0000IIIIIIIIRRRR loads binary value IIIIIIII into register 1RRRR</code>
-
-	And this might be an equally good choice.  So rather than
-	choosing an encoding by trying to enumerate all the
-	instructions and assign them numbers sequentially, we can be
-	more systematic by looking at all the types of instructions
-	(mov, ldi, andi, etc.) and boil them down to exactly what
-	information they require.  For example, we just saw that ldi
-	fundamentally requires only one 4-bit number and one 8-bit
-	number.</p>
-
-	<p>By contrast mov requires us to specify two registers--that
-	is, two numbers 0-31.  And in binary, it takes 5 bits to
-	represent a number 0-31.  So the basic information built into
-	a mov instruction is two 5-bit numbers.  So we could encode
-	mov instructions as:
-
-	<code><b>mov</b>: 000000RRRRRSSSSS moves value of register SSSSS into register RRRRR</code>
-
-	Thus the instruction 
-
-	<code>0000000011011110</code>
-
-	would have RRRRR being 00110 and SSSSS being 11110.  In
-	particular, this would put whatever was stored in register 30
-	into register 6.</p>
-
-	<p>But not so fast!  Back when we were using the enumeration
-	encoding, we were guaranteed decodability, since every
-	instruction was two bytes long.  But now that we've ventured
-	out on our own, we need to be careful.  We intended this word
-	to represent a mov, but as we've encoded it, this could also
-	be interpreted as the instruction ldi r16,222, (as 1RRRR is
-	10000 (decimal: 16) and IIIIIIII is 11011110 (decimal:
-	222)).</p>
-
-	<p>To resolve this particular ambiguity, we can take advantage
-	of the bits that are not storing actual information used by
-	the instruction--those zeroes out in front.  In our ldi
-	encoding, these are the first 4 bits, whereas in mov, this is
-	the first 6.  So if we instead use:
-
-	<code><b>ldi</b>: 0000IIIIIIIIRRRR loads binary value IIIIIIII into register 1RRRR
-mov: 000100RRRRRSSSSS moves value of register SSSSS into register RRRRR</code>
-
-	Now we can always tell which instruction was intended by
-	looking at the first four bits.  If we see 0001, it was a mov,
-	and if we see 0000, it was an ldi.  </p>
-
-	<p>Now we have all the background necessary to understand the
-	encoding used by actual AVR chips for the AVR ISA.  We'll
-	start by listing the types of instruction and what information
-	they fundamentally require:</p>
-
-
-	<p><table>
-	  <tr><td>Instruction</td><td>Required information</td></tr>
-
-
-	  <tr><td>ldi</td><td>4-bit register, 8-bit immediate</td></tr>
-	  <tr><td>mov</td><td>5-bit register, 5-bit register</td></tr>
-	  <tr><td>add</td><td>5-bit register, 5-bit register</td></tr>
-	  <tr><td>sub</td><td>5-bit register, 5-bit register</td></tr>
-	  <tr><td>inc</td><td>5-bit register</td></tr>
-	  <tr><td>dec</td><td>5-bit register</td></tr>
-	  <tr><td>and</td><td>5-bit register, 5-bit register</td></tr>
-	  <tr><td>andi</td><td>4-bit register, 8-bit immediate</td></tr>
-	  <tr><td>or</td><td>5-bit register, 5-bit register</td></tr>
-	  <tr><td>ori</td><td>4-bit register, 8-bit immediate</td></tr>
-	  <tr><td>com</td><td>5-bit register</td></tr>
-	  <tr><td>rjmp</td><td>12-bit immediate</td></tr>
-	  <tr><td>breq</td><td>7-bit immediate</td></tr>
-	  <tr><td>brne</td><td>7-bit immediate</td></tr>
-	  <tr><td>brsh</td><td>7-bit immediate</td></tr>
-	  <tr><td>brlo</td><td>7-bit immediate</td></tr>
-	  <tr><td>ld (X)</td><td>5-bit register</td></tr>
-	  <tr><td>st (X)</td><td>5-bit register</td></tr>
-	  <tr><td>cp</td><td>5-bit register, 5-bit register</td></tr>
-	  <tr><td>cpi</td><td>4-bit register, 8-bit immediate</td></tr>
-	  <tr><td>subi</td><td>4-bit register, 8-bit immediate</td></tr>
-	</table></p>
-	
-	<p>
-
-	We come out with the groupings:
-	</p>
-	<p>
-	
-
-<table border="1">
-  <tr>
-    <td align="left" valign="top">
-      Required information
-    </td>
-    <td align="left" valign="top">
-      Instructions requiring this information
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      4-bit register, 8-bit immediate
-    </td>
-    <td align="left" valign="top">
-      ldi, andi, ori, subi, cpi
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      5-bit register, 5-bit register                                        
-    </td>
-    <td align="left" valign="top">
-      mov, add, sub, and, or, cp                                            
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      5-bit register                                                        
-    </td>
-    <td align="left" valign="top">
-      inc, dec, com, ld, st
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      12-bit immediate
-    </td>
-    <td align="left" valign="top">
-      rjmp
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      7-bit immediate
-    </td>
-    <td align="left" valign="top">
-      breq, brne, brsh, brlo
-    </td>
-  </tr>
-</table></p>
-
-<p>We just need to take each of these types and specify which bits of
-the encoding are used for which operands in each of them.  For
-instance, the AVR encoding for the first type of instruction is
-defined by the following arrangement:
-
-<code>CCCCIIIIRRRRIIII</code>
-
-This means we use the lowest 4 bits for the low 4 bits of the
-immediate operand, the next 4 bits for the register, and then the next
-4 bits for the high 4 bits of the immediate.  This leaves us with 4
-additional bits which we have marked as C.  </p>
-
-<p><def term="opcode">Note that we have four different instructions
-that take a 4-bit register and an 8-bit immediate.  The C bits are
-used to distinguish between these.  For instance, for any ldi
-instruction, the C bits are always set to 1110.  This set of bits,
-which specifies not the operand, but rather which type of instruction
-is being run, is called the <b>opcode</b>.</def> </p>
-
-<p>Thus if we receive the instruction
-
-<code>1110101000101110</code>
-
-then we break it up: 
-
-<code>C: <b>1110</b>101000101110
-I: 1110<b>1010</b>0010<b>1110</b>
-R: 11101010<b>0010</b>1110</code>
-
-So the opcode is 1110, which tells us we're doing an ldi instruction.  The immediate is 10101110 (decimal: 174), and the register is 0010 (decimal: 2).  So this instruction should be ldi r2,174.  Note that in this format, the largest possible immediate we can load is by setting all the I bits to be 1, as in: 
-
-<code>1110111100001111</code>
-
-which corresponds to ldi r16,255.  </p>
-
-<p>We now summarize the bit-level layouts of the other groups of
-instructions that are used in the AVR ISA encoding: </p>
-
-<p><table border="1">
-  <tr>
-    <td align="left" valign="top">Instruction type    </td>
-    <td align="left" valign="top">
-      Format                                            
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      4-bit register, 8-bit immediate                   
-    </td>
-    <td align="left" valign="top">
-      <pre>CCCCIIIIRRRRIIII</pre>                                  
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      5-bit register, 5-bit register                    
-    </td>
-    <td align="left" valign="top">
-      <pre>CCCCCCSRRRRRSSSS</pre>                                  
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      5-bit register                                    
-    </td>
-    <td align="left" valign="top">
-      <pre>CCCCCCCRRRRRCCCC</pre>                                  
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      12-bit immediate                                  
-    </td>
-    <td align="left" valign="top">
-      <pre>CCCCIIIIIIIIIIII</pre>                                  
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      7-bit immediate                                   
-    </td>
-    <td align="left" valign="top">
-      <pre>CCCCCCIIIIIIICCC</pre>                                  
-    </td>
-  </tr>
-</table></p>
-
-<p>In each grouping, we need also to say what the opcodes for the
-various instructions within that grouping are:: </p>
-
-<p><table border="1">
-  <tr>
-    <td align="left" valign="top">
-      Instruction 
-    </td>
-    <td align="left" valign="top">
-      Opcode      
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      ldi         
-    </td>
-    <td align="left" valign="top">
-      1110        
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      mov         
-    </td>
-    <td align="left" valign="top">
-      001011      
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      add         
-    </td>
-    <td align="left" valign="top">
-      000011      
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      sub         
-    </td>
-    <td align="left" valign="top">
-      000110      
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      inc         
-    </td>
-    <td align="left" valign="top">
-      10010100011 
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      dec         
-    </td>
-    <td align="left" valign="top">
-      10010101010 
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      and         
-    </td>
-    <td align="left" valign="top">
-      001000      
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      andi        
-    </td>
-    <td align="left" valign="top">
-      0111        
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      or          
-    </td>
-    <td align="left" valign="top">
-      001010      
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      ori         
-    </td>
-    <td align="left" valign="top">
-      0110        
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      com         
-    </td>
-    <td align="left" valign="top">
-      10010100000 
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      rjmp        
-    </td>
-    <td align="left" valign="top">
-      1100        
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      breq        
-    </td>
-    <td align="left" valign="top">
-      111100001   
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      brne        
-    </td>
-    <td align="left" valign="top">
-      111101001   
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      brsh        
-    </td>
-    <td align="left" valign="top">
-      111101000   
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      brlo        
-    </td>
-    <td align="left" valign="top">
-      111100000   
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      cp          
-    </td>
-    <td align="left" valign="top">
-      000101      
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      cpi         
-    </td>
-    <td align="left" valign="top">
-      0011        
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      subi         
-    </td>
-    <td align="left" valign="top">
-      0101        
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      ld
-    </td>
-    <td align="left" valign="top">
-      10010001100
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      st
-    </td>
-    <td align="left" valign="top">
-      10010011100
-    </td>
-  </tr>
-</table>
-</p>
-
-<p>Thus, to encode a mov instruction--say mov r30,r21--we use the
-opcode 001011, the source register r21, or 10101, and the target
-register 30, or 11100.  Using the recipe for this group of
-instructions:
-
-<code>CCCCCCSRRRRRSSSS</code>
-
-We arrive at the encoding
-
-<code>0010111111000101</code>
-
-where the components of the instruction are found as: </p>
-
-<figure width="500px"><description></description><caption>The components of the mov instruction</caption></figure>
-
-<p>Similarly, to encode the instruction breq 56, we use the opcode
-111100001 and immediate value 0111000, and put these together
-according to the recipe for instructions involving a 7-bit immediate
-value, which was:
-
-<code>CCCCCCIIIIIIICCC</code>
-
-So we arrive at the encoding
-
-<code>1111000111000001</code>
-
-</p>
-
-<figure width="500px"><description></description><caption>Breakdown of the breq instruction</caption></figure>
-
-<p>So this is great from a programmer's perspective--we now know how
-to feed numbers into the processor (which is all the processor
-understands) that will correspond to whatever instructions we want.
-But because this is no longer an enumeration encoding, we must give
-some thought to decodability.</p>
-
-<p>For instance, suppose the computer receives from the program memory
-the number
-
-<code>0010111011110111</code>
-
-Can it actually tell unambiguously which instruction this is?  </p>
-
-<p>To make this apparent, we list the opcodes for our instruction
-types once more, but this time, with we'll replace the bits that
-specify the operands with "?", since the instruction should be
-interpretable regardless of the values of these bits.  </p>
-
-<table border="1">
-  <tr>
-    <td align="left" valign="top">
-      Instruction 
-    </td>
-    <td align="left" valign="top">
-      Opcode          
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      add         
-    </td>
-    <td align="left" valign="top">
-      <pre>000011??????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      cp          
-    </td>
-    <td align="left" valign="top">
-      <pre>000101??????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      sub         
-    </td>
-    <td align="left" valign="top">
-      <pre>000110??????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      and         
-    </td>
-    <td align="left" valign="top">
-      <pre>001000??????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      or          
-    </td>
-    <td align="left" valign="top">
-      <pre>001010??????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      mov         
-    </td>
-    <td align="left" valign="top">
-      <pre>001011??????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      cpi         
-    </td>
-    <td align="left" valign="top">
-      <pre>0011????????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      subi         
-    </td>
-    <td align="left" valign="top">
-      <pre>0101????????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      ori         
-    </td>
-    <td align="left" valign="top">
-      <pre>0110????????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      andi        
-    </td>
-    <td align="left" valign="top">
-      <pre>0111????????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      dec         
-    </td>
-    <td align="left" valign="top">
-      <pre>1001010?????1010</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      com         
-    </td>
-    <td align="left" valign="top">
-      <pre>1001010?????0000</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      inc         
-    </td>
-    <td align="left" valign="top">
-      <pre>1001010?????0011</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      ld         
-    </td>
-    <td align="left" valign="top">
-      <pre>1001000?????1100</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      st         
-    </td>
-    <td align="left" valign="top">
-      <pre>1001001?????1100</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      rjmp        
-    </td>
-    <td align="left" valign="top">
-      <pre>1100????????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      ldi         
-    </td>
-    <td align="left" valign="top">
-      <pre>1110????????????</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      brlo        
-    </td>
-    <td align="left" valign="top">
-      <pre>111100???????000</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      breq        
-    </td>
-    <td align="left" valign="top">
-      <pre>111100???????001</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      brsh        
-    </td>
-    <td align="left" valign="top">
-      <pre>111101???????000</pre>
-    </td>
-  </tr>
-  <tr>
-    <td align="left" valign="top">
-      brne
-    </td>
-    <td align="left" valign="top">
-      <pre>111101???????001</pre>
-    </td>
-  </tr>
-</table>
-
-<p>So if we take our input of 
-
-<code>0010111011110111</code>
-
-to this table, we check it against each of these patterns and discover
-that the only one that matches it is mov.  So then we can break it up
-as before: </p>
-
-<figure width="500px"><description></description> <caption>Decoding the instruction
-as a mov</caption></figure>
-
-<p>So this is the instruction mov r15,r23.  </p>
-
-<p>Similarly, if we get the instruction
-
-<code>1001010000000011</code>
-
-then we go to the table and see that only inc, dec, and com can
-possibly start with 1001010.  But these are distinguished by the three
-bits they end with.  And only inc ends with 011.  So this is an inc
-instruction, and the R bits are all 0, so this must be inc r0.  </p>
-
-<p>The fact that this encoding can be decoded is no longer ensured by
-enumeration, but simply by the cleverness of the AVR ISA designers.
-Why this particular encoding was chosen (for instance, why the S bits
-in a mov instruction are split up like that) may have to do with what
-was most convenient for the people implementing the processor, or with
-the way programmers worked at the time the encoding was designed.  So
-while this choice of encoding feels a little arbitrary or needlessly
-complicated, its original designers certainly had more constraints to
-satisfy than were presented here.  </p>
-
-      </text>
-    </section>
-  </section>
-  <section>
-    <title>Search engine: The encoding of text</title>
-    <text>
-      <p>Now we return to our search engine case-study in an attempt
-      to understand it at a lower level than before.  The basic
-      operation that happens in searching is comparing strings.  But
-      really, to compare two strings, we can just compare each letter
-      of the strings one after the other.  So what is this operation
-      of comparing letters?  After all, we now know all the operations
-      that our computer can actually do, and none of them even mention
-      letters.  What gives?</p>
-
-      <p>As with instructions, and really everything else, the computer
-      represents letters with bits.  That is, when you enter the
-      string "banana".  The computer is not dealing with the string
-      itself, but rather with a sequence of numbers that encode the
-      string.  In this case, the sequence is:
-
-      <code>98,97,110,97,110,97</code>
-
-      Depending on the need, there are different ways of encoding
-      letters using numbers, two of which we'll introduce now: ASCII,
-      and UTF-8.</p>
-
-    </text>
-    
-    <section>
-      <title>Text--ASCII</title>
-      <text>
-	<p>In the early days of computing, computers were used mostly
-	in the English speaking world, so the characters people wanted
-	to be able to use was limited to a small set of about 98
-	different symbols--the 56 coming from 0-9, a-z, and
-	A-Z, and punctuation characters.</p>
-	
-	<p>Of course, since a computer can only store numbers, there
-	had to be a universal encoding for text that all computers
-	could use.  What came out of this was the ASCII character
-	encoding, which (basically) an enumeration of the relevant
-	symbols:</p>
-
-	<code>
-<b>Number  Character</b>
-9       [tab]
-10      [newline]
-32      [space]
-33      !
-34      "
-35      #
-36      $
-37      %
-38      &amp;
-39      '
-40      (
-41      )
-42      *
-43      +
-44      ,
-45      -
-46      .
-47      /
-48      0
-49      1
-50      2
-51      3
-52      4
-53      5
-54      6
-55      7
-56      8
-57      9
-58      :
-59      ;
-60      &lt;
-61      =
-62      >
-63      ?
-64      @
-65      A
-66      B
-67      C
-68      D
-69      E
-70      F
-71      G
-72      H
-73      I
-74      J
-75      K
-76      L
-77      M
-78      N
-79      O
-80      P
-81      Q
-82      R
-83      S
-84      T
-85      U
-86      V
-87      W
-88      X
-89      Y
-90      Z
-91      [
-92      \
-93      ]
-94      ^
-95      _
-96      `
-97      a
-98      b
-99      c
-100     d
-101     e
-102     f
-103     g
-104     h
-105     i
-106     j
-107     k
-108     l
-109     m
-110     n
-111     o
-112     p
-113     q
-114     r
-115     s
-116     t
-117     u
-118     v
-119     w
-120     x
-121     y
-122     z
-123     {
-124     |
-125     }
-126     ~</code>
-
-<p>This encoding despite being designed for a more or less bygone era
-is still used extremely widely.  For instance, if you are reading this
-book online, most of the text you are reading was encoded in ASCII to
-be transmitted to your computer.  The reason is mostly inertia:
-Software written back when there was only ASCII would have to be
-rewritten if we switched to a more modern encoding.  </p>
-
-<p>As an enumeration encoding, ASCII is definitely decodable.  In
-fact, every character it encodes can be represented by a single byte,
-so if we see the list of bytes
-
-<code>72,101,108,108,111,32,87,111,114,108,100,33</code>
-
-we can reference the table and readily decode this as the string
-
-<code>Hello world!</code></p>
-
-<p><def term="backwards compatible">However, we still definitely want
-improvements on ASCII--accented vowels, letters from non-Roman
-alphabets, and the like.  This brings up another feature of encodings:
-backwards-compatibility: Suppose we have a nice fancy encoding that
-encodes Chinese characters and the Cyrillic alphabet and more.  But
-suppose also that for a particular application, all we're doing is
-encoding English text (still using this fancy encoding).  If for this
-task (for which ASCII would have sufficed) the new encoding generates
-the same output as ASCII would, then older software can still accept
-input in the new encoding as long as that input is just English.  In
-this case we say that the new encoding is <b>backwards-compatible</b>.
-</def></p>
-
-<aside title="What are the missing characters?">
-  <p>ASCII is kind of an enumeration encoding, but the enumeration
-  we've given here skips some numbers.  What gives?  The actual ASCII
-  enumeration doesn't skip any numbers; it's just that some of the
-  things they chose to encode are rarely useful anymore, and so we
-  skipped them for presentation purposes here.  As a historical
-  curiosity, though, we might wonder what were these other
-  characters.</p>
-
-  <p>Many old computers were just text terminals: All you could do was
-  input text (no mouse) and all it could do was output text.  The
-  specific way it outputted text was (roughly) the following: There
-  was always a cursor on the screen.  When the user pressed the "A"
-  key, this was translated to the ASCII number for "A", i.e. 65 and
-  sent to the screen.  Since "A" is a normal character, the screen
-  simply placed a picture of an "A" where the cursor was and moved the
-  cursor one space forward.</p>
-
-  <p>But what happened when the user pressed "Backspace", say?  This
-  was represented in fact by with ASCII number 8, and when the screen
-  got the number 8, it moved the cursor backward by one space.  When
-  the user pressed "Enter", first the number 10 (newline) was sent to
-  the screen causing the cursor to move down a line.  But we are used
-  to the cursor also going to the beginning of the next line when we
-  press enter.  To accomplish this, the enter key actually sent two
-  numbers: 10 (for "go to the next line") and 13 (for "go to the
-  beginning of the line").  </p>
-
-  <p>Likewise there were other numbers for moving the cursor around in
-  various ways, numbers corresponding to the shift key, sequences of
-  ASCII characters that could change the color of the characters being
-  printed, and even a character, encoded with the number 7 (not to be
-  confused with the character "7", which is encoded with the number
-  55) that would cause the computer to emit a "beep" when it was sent
-  to the screen!  In fact, there are still terminal programs (such as
-  those on Linux or OS X) that will beep when you print ASCII
-  character number 7, such as with a command like:
-
-  <code>printf '\x7'</code>
-
-  Sadly, many of these terminal programs have this feature turned
-  off by default.</p>
-</aside>
-
-      </text>
-    </section>
-    <section>
-      <title>Text--Unicode</title>
-      <text>
-	<p>ASCII is convenient when we want to be able to use a single
-	byte to represent every character, but there are only 256
-	different bytes and there are definitely languages that simply
-	have more than 256 characters, or characters not covered by
-	the ASCII encoding.  ASCII is not enough even if you just want
-	to store proper French text, and an encoding that uses one
-	byte per character will never work if you want to be able to
-	store text in Chinese.</p>
-
-	<p>Thus a more comprehensive character encoding is needed, and
-	several standards exist as attempts to fill the gap.  By far
-	the most popular as of this writing is one called UTF-8
-	("Universal character set Transition Format--8-bit").</p>
-
-	<p><def term="codepoint">As with ASCII, UTF-8 assigns to every
-	character a unique number, called that character's
-	<b>codepoint</b>.</def>  For example, the character pictured
-	here</p>
-
-	<figure width="100px"><caption>Unicode codepoint 16706: &#16706;</caption></figure>
-
-	<p>has codepoint 16706.  But then how does the computer actually
-	store this character as a sequence of bytes?  If we simply
-	convert 16706 to binary, getting 100000101000010, we could
-	store this as the bytes 01000001 01000010.  But when when the
-	computer goes to figure out what this means, how does it
-	distinguish between the two-byte character representing
-	codepoint 16706 and two one-byte characters representing
-	codepoints 65 and 66 respectively (in ASCII, "A" and "B")?</p>
-
-	<p><def term="UTF-32">This is where a few possible encoding
-	schemes take different ideas.  One called <b>UTF-32</b> simply
-	declares that every character must take 4 bytes.  In UTF-32,
-	then, this character becomes 00000000 00000000 01000001
-	01000010.</def> However this means that every single character
-	is now 4 bytes--even simple English text that ASCII could
-	encode in 1 byte per character.  There are other issues with
-	this encoding also that we will not detail here.</p>
-
-	<p>At this point, UTF-8 steps up as a reasonable solution: Any
-	byte that matches one in the ASCII table will have that same
-	ASCII interpretation when interpreted under the UTF-8 scheme,
-	but characters that require more bytes to represent them will
-	also be possible.  The trick that allows it to accomplish this
-	is to notice that in ASCII, every byte that is defined in the
-	table has the most significant bit always 0.  </p>
-
-	<p>The short description of UTF-8 is this: Take the first byte
-	of a character.  If the MSB is 0, then that byte is
-	interpreted according to the ASCII table.  If the MSB is 1,
-	though, then count off how many 1s there are until the first 0
-	of the byte.  That is how many bytes are involved with this
-	character.  So if the first byte is 11100101, then because
-	this byte starts with three 1s, it indicates that this byte
-	and the next two bytes together represent a single character.
-	These next bytes that are part of the same character must
-	further begin with the bits 10.  So some of the bits in a
-	UTF-8-encoded character (the "1110" in the first byte, and the
-	"10"s in the following bytes) are for determining which bytes
-	are involved in that character.  The bits that remain are
-	combined to determine the codepoint itself.</p>
-
-
-<p>For a simple example, a single character in UTF-8 would be:
-
-<code><b>1110</b>0010
-<b>10</b>011100
-<b>10</b>001000</code>
-
-Here we have bolded the bits that help determine what bytes are
-involved: The 1110 starting the first byte tells us that the character
-is comprised of three bytes in total.  The 10s starting off the next
-bytes simply indicate that those bytes are not the start of a new
-character but are part of a character that starts at an earlier
-byte.</p>
-
-<p>The bits that remain, then, are 0010011100001000, representing the
-number 9992.  If we look up this codepoint in a Unicode table, we get
-the character &#9992;</p>
-
-<p>For a multi-character example, then, say we have the sequence of bytes:
-
-<code>00100001
-11000011
-10110111
-11100010
-10011000
-10111010</code>
-
-Then the first byte 00100001 starts with a 0, so is a full character
-on its own (in fact, the character "!"), and thus the next byte must
-be the start of the next character.  </p>
-
-<p>The second byte starts with 110, which indicates that this next
-character occupies two bytes--this one and the byte after it.  And
-indeed the byte after it--10110111--starts with 10, so whatever this
-character is, it is represented by the bytes
-
-<code>11000011
-10110111</code>
-
-Since the 110 starting the first byte and the 10 starting the second
-are just there to indicate that these bytes together form one
-character, the remaining bytes--00011110111--together specify which
-character it is.  To find out which character, we can look these up in
-the UTF-8 table.  Since in decimal, this binary number is 247, we look
-at the 247th entry and find that this is the division sign: ÷.</p>
-
-<p>The next byte is 11100010, suggesting that the following two bytes
-are also a part of this character.  So the character is comprised of
-the bytes:
-
-<code>11100010
-10011000
-10111010</code>
-
-Of these, some of the bytes are again being used to pick out this blob
-of three bytes as one character:
-
-<code><b>1110</b>0010
-<b>10</b>011000
-<b>10</b>111010</code>
-
-and the rest--0010011000111010--are specifying which character it is.
-In decimal this is 9786, so we can look up this entry in the UTF-8
-tables to discover that this character is a smiley face.</p>
-</text>
-</section>
-<section><title>Which encoding to use?</title>
 <text>
-<p>So with all of these encodings and many that we haven't mentioned,
-which is the best?  As always, "best" can only be defined relative to
-a stated purpose.  In this case, we need to think about how we plan to
-use the characters that we are encoding.  For example, if we are
-programming a text editor, we may be storing a large number of bytes
-representing encoded characters, and may wish at some point to
-identify how many characters are actually present.</p>
+<p>Writing useful code using the ISA can be a pain.  Of course,
+because of the limited work done by each individual instruction,
+coding at this level is going to be difficult no matter what.  At the
+same time, there are some things that people found succifiently
+annoying that they created a very slight additional layer on top of
+the ISA.  This layer is known as "assembly language".  </p>
 
-<p>With ASCII this is easy: Each character is one byte, so the number
-of bytes in the text is the number of characters.  With UTF-32, this
-is also easy: Every character is 4 bytes, so the number of characters
-is the number of bytes divided by 4.  With UTF-8, this is not so
-easy--if I have 100 bytes, it might be 100 one-byte characters, or it
-might be 50 two-byte characters, or possibly some mix of several
-different length characters.  To find out the true answer, we have
-essentially no choice but to walk through each character and count
-them.</p>
+<p><def term='assembly language'><b>Assembly language </b> is a
+programming language, and as such is defined in terms of its syntax
+and semantics.  Assembly language's particular syntax mostly consists
+of raw ISA instruction mnemonics exactly as we learned them in the
+previous section, with just a few additional features to simplify some
+of the more painful tasks when programming in the ISA directly.
+</def> The specific tasks that assembly language simplifies are the
+following:
 
-<p>On the other hand, suppose we're making a web browser.  In this
-case, we may find ourselves having to start decoding a string of
-characters somewhere in the middle--maybe for a text chat application.
-In this case, we may be missing some of the bytes from the beginning
-of the representation.  In ASCII this is fine--the result will be
-interpreted as if we just left off some characters.  </p>
+<ul>
+<li><b>Specifying offsets for relative jumps and branches: </b>Recall
+our example rcall code: We have multiple rcalls all calling back to a
+single place in the code.  But because rcall requires an offset, we
+had to recompute the operand for each individual rcall.  Further, if
+we ever want to add anything to the middle of the program, we would
+have to recalculate all these offsets again!  Assembly language
+includes a mechanism called labels for naming locations in the code,
+and allows these to be provided as operands to rjmp and rcall instead
+so that we can effectively think "jump to this point in the code"
+rather than "jump 3 instructions backward".</li>
+<li><b>Initializing RAM with specified data: </b>Currently, if we want a
+large amount of data stored in RAM, then since the only way of storing
+data we have is with the st instructions, we will have to do one st
+instruction for each number we want stored.  This can get tedious if we
+have hundreds of things to store, so assembly provides a mechanism to
+pre-populate RAM at specified locations with whatever values are
+desired.</li>
+<li><b>Strings: </b>We haven't yet discussed how Python's strings can
+be realized in the ISA.  This discussion will largely be deferred to
+the next chapter, but for now we mention that there is some way to
+correspond letters in a string to numbers 0-255.  So storing a string
+would involve looking up which letters correspond to which numbers and
+using st instructions to store the appropriate sequence of numbers.
+Assembly includes syntax to let us simply type the desired string and
+have the assembler convert this to numbers for storage. </li>
+</ul>
+</p>
 
-<p>In UTF-32, however, this can go very very poorly: Imagine we had
-the string "Hello", represented in UTF-32 as:
+<p><def term='assembler'>Now, with assembly language, we're still
+trying to program the computer--that is, recall, we're trying to get
+the right numbers corresponding to our desired instructions into the
+computer's RAM.  When we write a program in assembly language, another
+program called an <b>assembler</b> (analogous to the Python compiler)
+will convert our program into numbers for storage into the program
+memory.</def> Moreover, assembly language not only allows you to
+populate program memory with numbers corresponding to instructions,
+but also allows you to pre-populate RAM with numbers if desired.</p>
 
-<code>
-00000000 00000000 00000000 01001000 
-00000000 00000000 00000000 01100101 
-00000000 00000000 00000000 01101010 
-00000000 00000000 00000000 01101010 
-00000000 00000000 00000000 01101111 
-</code>
-
-And suppose the first two bytes were removed, leaving us with 
-
-
-<code>
-00000000 01001000 00000000 00000000 
-00000000 01100101 00000000 00000000 
-00000000 01101010 00000000 00000000 
-00000000 01101010 00000000 00000000 
-00000000 01101111 
-</code>
-
-Now, if we try to interpret this as UTF-32, we get dramatically
-different results, as these 4-byte blobs represent massive codepoints
-with unknown characters.</p>
-
-<p>By contrast, if you chop off the first two bytes of a UTF-8
-representation, say:
-
-<code>01100101
-11110000
-10011111
-10010000
-10110001
-11110000
-10011111
-10011011
-10100111</code>
-
-leaving us only with
-
-<code>
-10011111
-10010000
-10110001
-11110000
-10011111
-10011011
-10100111</code>
-
-Then we see the first three bytes all start with "10".  10 can never
-be the starting bits of a character, so we know immediately that these
-are missing something, and can discard them and start interpreting
-from the next valid character start: 11110000.  In this case, we lose
-some characters off the beginning like in the case of ASCII, but we do
-not lose all meaning entirely.</p>
+<p>As mentioned, assembly language is a programming language, so just
+as we explained the Python programming language in terms of its
+syntax--what constructions are legal, and its semantics--what the
+constructions mean, we can do this with assembly.  Further, since all
+an assembly language program is meant to do is turn into certain
+numbers that will go into program memory and certain other numbers
+that go into RAM, describing the semantics of an element of assembly
+language is as easy as explaining what numbers it corresponds to and
+where in memory those numbers are stored.  </p>
 
 
-
-      </text>
-    </section>
-  </section>
-  <section>
-    <title>Game console: The encoding of graphics</title>
-    <text>
-      <p>We've just seen how text files can indeed be stored in a
-      computer's memory (even though that memory can only store bytes)
-      by means of various character encodings.  We now turn to a more
-      complicated sort of data, which we'll need if we ever want a
-      hope of making games beyond the text-based format: Images.</p>
-
-      <p>Just as there are several ways of storing plain text, there are
-      many ways of storing image data, each with its own advantages
-      and disadvantages.  Before we get into the ways of storing an
-      entire image, we'll discuss the most basic component of all
-      images: Just as strings were comprised of characters, images are
-      (usually) comprised of pixels.</p>
-
-      <p>A computer screen is a grid of lights each of which can be set
-      to any color you want individually.  Each one of these lights
-      is called a pixel.  To display an image on screen, then, is
-      nothing more than to take the pixels in the location where you
-      want to display the image and set them all to be the appropriate
-      colors so that the desired image appears.</p>
-
-    </text>
-    
-    <section>
-      <title>Pixels--RGB</title>
-      <text>
-	<p>So the first problem to solve is how do we specify a color
-	using just numbers?  It turns out that the physical design of
-	an individual pixel sort of gives us a way of doing this
-	already: </p>
-
-	<figure><description>Close-up photograph of pixels on an LCD</description><caption></caption></figure>
-
-	<p>As you can see, each pixel is not a single light at all, but
-	in fact three lights--one red, one green, and one blue.
-	Combinations of light of these colors can be used to create
-	any other color:</p>
-
-	<figure width="400px"><description>Three colored lights merging in the
-	usual three-circle Venn-diagram-like
-	way</description><caption>Taken from Wikipedia</caption></figure>
-
-	<p>and by specifying the intensity of each of the three colors,
-	we can specify what color we want the pixel to appear as.
-	One common way of doing this is by specifying each intensity
-	with a single byte, so the full color of a single pixel
-	requires three bytes to specify.  </p>
-
-	<p>Some common colors with their corresponding RGB values are
-	given in the table below: </p>
-
-	<table><tr><td>Color name</td><td>Red<br
-	/>value</td><td>Green<br />value</td><td>Blue<br />value</td><td>Color</td><td>Magnified<br />pixel
-	</td></tr>
-	
-	<tr><td>White</td>
-	<td>255</td><td>255</td><td>255</td>
-	<td><div class="pixel_rep" style="background-color:#fff"></div></td>
-	<td>
-	  <div class="subpixel_rep" style="background-color:#f00"></div><div class="subpixel_rep" style="background-color:#0f0"></div><div class="subpixel_rep" style="background-color:#00f"></div>
-	</td></tr>
-	
-	<tr><td>Red</td>
-	<td>255</td><td>0</td><td>0</td>
-	<td><div class="pixel_rep" style="background-color:#f00"></div></td>
-	<td>
-	  <div class="subpixel_rep" style="background-color:#f00"></div><div class="subpixel_rep" style="background-color:#000"></div><div class="subpixel_rep" style="background-color:#000"></div>
-	</td></tr>
-	
-	<tr><td>Green</td>
-	<td>0</td><td>255</td><td>0</td>
-	<td><div class="pixel_rep" style="background-color:#0f0"></div></td>
-	<td>
-	  <div class="subpixel_rep" style="background-color:#000"></div><div class="subpixel_rep" style="background-color:#0f0"></div><div class="subpixel_rep" style="background-color:#000"></div>
-	</td></tr>
-	
-	<tr><td>Blue</td>
-	<td>0</td><td>0</td><td>255</td>
-	<td><div class="pixel_rep" style="background-color:#00f"></div></td>
-	<td>
-	  <div class="subpixel_rep" style="background-color:#000"></div><div class="subpixel_rep" style="background-color:#000"></div><div class="subpixel_rep" style="background-color:#00f"></div>
-	</td></tr>
-	
-	<tr><td>Grey</td>
-	<td>204</td><td>204</td><td>204</td>
-	<td><div class="pixel_rep" style="background-color:#ccc"></div></td>
-	<td>
-	  <div class="subpixel_rep" style="background-color:#c00"></div><div class="subpixel_rep" style="background-color:#0c0"></div><div class="subpixel_rep" style="background-color:#00c"></div>
-	</td></tr>
-	
-	<tr><td>Magenta</td>
-	<td>255</td><td>0</td><td>255</td>
-	<td><div class="pixel_rep" style="background-color:#f0f"></div></td>
-	<td>
-	  <div class="subpixel_rep" style="background-color:#f00"></div><div class="subpixel_rep" style="background-color:#000"></div><div class="subpixel_rep" style="background-color:#00f"></div>
-	</td></tr>
-	
-	<tr><td>Puce</td>
-	<td>114</td><td>47</td><td>55</td>
-	<td><div class="pixel_rep" style="background-color:#722f37"></div></td>
-	<td>
-	  <div class="subpixel_rep" style="background-color:#720000"></div><div class="subpixel_rep" style="background-color:#002f00"></div><div class="subpixel_rep" style="background-color:#000037"></div>
-	</td></tr>
-		
+	<table>
+	  <tr>
+	    <td>Line</td>
+	    <td>Syntax</td>
+	    <td>Semantics</td>
+	    <td>Examples</td>
+	  </tr>
+	  
+	  <tr>
+	    <td>ISA operation</td>
+	    <td>An ISA operation can be any of the normal operations
+	    we described.  The added features in assembly language
+	    are: <ul><li>In place of any operand that represents an
+	    offset, you may use a label name</li><li>In place of an
+	    immediate operand you may use a character or
+	    lo8(labelname) or hi8(labelname)</li></ul></td>
+	    <td>Performs the specified ISA operation.</td>
+	    <td>
+	      <pre>ldi r31, 51</pre>
+	      <pre>cpi r14, 'A'</pre>
+	      <pre>breq -17</pre>
+	      <pre>rjmp hello</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Label line</td>
+	    <td><pre><i>labelname</i>:</pre></td>
+	    <td>Marks this offset in the program as being named by the
+	    given label name.  A label name may be any combination of
+	    letters, numbers, and underscores (no spaces), except that
+	    a label name cannot begin with a number.</td>
+	    <td>
+	      <pre>hello: </pre>
+	      <pre>this_is_a_label_2: </pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>word directive</td>
+	    <td><pre>.word <i>words</i></pre></td>
+	    <td>Instructs that these words should be inserted into RAM
+	    in the program in the specified place within the program.</td>
+	    <td>
+	      <pre>.word 444, 0, 7000, 10056</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>string directive</td>
+	    <td>
+	      <pre>.string <i>string</i></pre>
+	    </td>
+	    <td>Translates each character in the string into a number
+	    and inserts those bytes into RAM at the current
+	    location.</td>
+	    <td><pre>.string "Hello world!"</pre>
+	    <pre>.string "AAA&amp;AAAA!!"</pre></td>
+	  </tr>
+	  <tr>
+	    <td>Comments</td>
+	    <td>Anything on a line after a semicolon (;).</td>
+	    <td>Comments can be anything and are ignored by the assembler</td>
+	    <td>
+	      <pre>; rhbuybshdbfkjshbfIFB
+pop r0
+ldi r31,40     ;loads value 40
+	       ;into register r31</pre>
+	    </td>
+	  </tr>
 	</table>
 
-	<p>One convenient thing about this representation is every
-	color is represented by three bytes.  Since a byte is 8
-	binary digits, therefore two hexadecimal digits, we can
-	represent a color by six hexadecimal digits.  This is a very
-	common idiom in website programming, to say that e.g. puce is
-	the color "722f37", because 0x72 = 114, 0x2f = 47, and 0x37 =
-	55.  We shall actually adopt this idiom for the rest of the
-	section, so in the next section when we give lists of colors
-	or list of bytes, they will all be in hexadecimal.</p>
+	<p>As with Python, assembly language has in fact many features
+	beyond those explained here, but they are much less powerful
+	than the extra features of Python, and from this book we shall
+	elide them entirely.</p>
+</text>
+<section><title>Labels</title>
+<text>
+  <p>Labels can be inserted directly into the program as lines that
+  look like:
 
-      </text>
-    </section>
-    <section>
-      <title>Images--BMP</title>
-      <text>
-	<p>Now that we know how to encode the color of an individual
-	pixel, we consider what information is needed to turn a
-	sequence of these into an image.  For instance, if we just
-	specify the list of colors:
-
-	<code>
-	  ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,
-	  ffffff,ff0000,ffffff,ff0000,ffffff,ffffff,ffffff,ffffff,
-	  ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,
-	  ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,ffffff,
-	  ffffff,ffffff,ffffff,ffffff,000000,ffffff,ffffff,ffffff,
-	  000000,ffffff,ffffff,ffffff,000000,000000,000000,ffffff,
-	  ffffff
-	</code>
-
-	  We don't know which of the following images this list represents: </p>
-
-	  <figure width="500px"><description>All pixels in a horizontal line, in two
-	  rows, or in 7 rows</description></figure>
-
-	  <p>So we need some additional information to specify the
-	  height and width, among other things.</p>
-
-	  <p>The BMP file format is one of the simplest ways of
-	  arranging pixel data so that it can be understood for
-	  display unambiguously.</p>
-
-	  <p>Here is an example of a BMP image (here it has been blown
-	  up 10x in height and width; click it to get a link to the
-	  original image file): </p>
-
-	  <a href="figures/smile.bmp"><img src="figures/smile_big.bmp" /></a>
-
-	  <p>And here is the actual sequence of bytes that the
-	  computer is storing in this file:
-
-	  <code>42 4d de 00 00 00 00 00 00 00 36 00 00 00 28 00
-00 00 07 00 00 00 07 00 00 00 01 00 18 00 00 00
-00 00 a8 00 00 00 13 0b 00 00 13 0b 00 00 00 00
-00 00 00 00 00 00 ff ff ff ff ff ff ff ff ff ff
-ff ff ff ff ff ff ff ff ff ff ff 00 00 00 ff ff
-ff ff ff ff 00 00 00 00 00 00 00 00 00 ff ff ff
-ff ff ff 00 00 00 ff ff ff 00 00 00 ff ff ff ff
-ff ff ff ff ff 00 00 00 ff ff ff 00 00 00 ff ff
-ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-ff ff ff 00 00 00 ff ff ff ff ff ff ff ff ff ff
-ff ff ff ff ff ff ff ff ff ff ff 00 00 00 ff ff
-ff ff ff ff 00 00 00 ff ff ff 00 00 00 ff ff ff
-ff ff ff 00 00 00 ff ff ff ff ff ff ff ff ff ff
-ff ff ff ff ff ff ff ff ff ff ff 00 00 00</code>
-
-	  </p>
-
-	  <p>The first two bytes are the ASCII values for the
-	  characters B and M, respectively.  This allows the computer
-	  to look at the file and determine that it is a BMP file even
-	  if the filename weren't something so informative as
-	  "smile.bmp".</p>
-
-	  <p><def term="metadata">The 11th byte tells us where the
-	  actual pixel data is stored.  Since in this case it is 0x36
-	  (decimal: 54) this means that the bytes that actually
-	  represent pixel colors start at byte number 54 onward.  The
-	  rest of the bytes up to byte number 54 are there to
-	  describe the image--how many pixels tall and wide it is,
-	  etc.  Incidentally, this "data about the data" is called
-	  <b>metadata</b>.</def> Bytes 19-23 stores the width of the
-	  image--in this case 0x7, or, in decimal, 7.  The next 4
-	  bytes store the height--again 7, so the image is as
-	  advertised, 7x7.</p>
-	  
-	  <p>The bytes we've skipped give some further technical
-	  information about the image that we won't go into here, but
-	  then starting at byte 54, we start to get the actual image
-	  data, which we conveniently group into 3-byte blocks for the
-	  individual pixel colors and arrange into 7 columns: </p>
-
-	  
-	  <code>ffffff ffffff ffffff ffffff ffffff ffffff ffffff
-000000 ffffff ffffff 000000 000000 000000 ffffff
-ffffff 000000 ffffff 000000 ffffff ffffff ffffff
-000000 ffffff 000000 ffffff ffffff ffffff ffffff
-ffffff ffffff ffffff 000000 ffffff ffffff ffffff
-ffffff ffffff ffffff ffffff 000000 ffffff ffffff
-000000 ffffff 000000 ffffff ffffff 000000 ffffff
-ffffff ffffff ffffff ffffff ffffff ffffff 000000
-	  </code>
-
-	  <p>Oddly, even after squinting at this representation, it
-	  doesn't look anything like the smiley face we'd expect.  In
-	  fact, this arrangement actually had 8 rows, so something
-	  really is amiss.  The trick is that the BMP encoding also
-	  requires that each row of pixels must store a multiple of
-	  four pixels.  If the image width isn't a multiple of four,
-	  extra 0s will be added to fill out each row.</p>
-
-	  <p>Since our image is 7 pixels wide, the BMP image will
-	  include one extra pixel full of 0s at the end of each row to
-	  round the row size off to the nearest multiple of 4, namely
-	  8.  Rearranging these pixels then to 7 rows of 8, we see: </p>
-	  
-	  
-	  <code>
-	    ffffff ffffff ffffff ffffff ffffff ffffff ffffff 000000
-	    ffffff ffffff 000000 000000 000000 ffffff ffffff 000000
-	    ffffff 000000 ffffff ffffff ffffff 000000 ffffff 000000
-	    ffffff ffffff ffffff ffffff ffffff ffffff ffffff 000000
-	    ffffff ffffff ffffff ffffff ffffff ffffff ffffff 000000
-	    ffffff ffffff 000000 ffffff 000000 ffffff ffffff 000000
-	    ffffff ffffff ffffff ffffff ffffff ffffff ffffff 000000
-	  </code>
-
-	  <p>Now, squinting enough, we actually do see a smiley!  But
-	  upside down?  This comes to the last oddity (that we'll
-	  discuss, anyway) about the BMP encoding, namely that the
-	  first pixel stored is the bottom right pixel, and then the
-	  pixels proceed right-to-left, bottom-to-top.  (So in fact,
-	  if we had selected a less symmetric image, it would not only
-	  be upside-down, but would also be mirror-imaged.)</p>
-
-	  <p>BMP is only one encoding for images.  It is simple to
-	  understand (which is why we included it) but it is not
-	  particularly efficient and thus sees little use in the wild
-	  these days, with preference given to encodings such as GIF,
-	  PNG, JPEG, and WEBP.  To illustrate the basic idea behind
-	  the inefficiency of BMP, we could describe the image above
-	  completely and decodably by the much shorter sequence of
-	  bytes:
-
-	  <code>7x7 image
-The pixels in order are (w=white, b=black):
-9w, 1b, 1w, 1b, 17w, 1b, 3w, 1b, 3w, 3b, 9w</code>
-
-          This is a simple example of what is known as
-          "compression"--expressing the same data more efficiently.
-          Various sophisticated compression algorithms form the basis
-          for the other image encodings we mentioned, but we'll not go
-	  into further detail here.</p>
-      </text>
-    </section>
-  </section>
+    <code><i>label_name</i>: </code>
+    
+    Where a label name can be exactly what a variable name in Python
+    could be: Anything containing only letters, numbers, or underscores,
+    except it cannot start with a number.</p>
   
-  <section>
-    <title>Mobile phone: The encoding of sensor data</title>
-    <summary>In the foregoing sections, the challenge of encoding data
-    was always how to assign numbers to the data in a usable way.  In
-    this example, there is an obvious way to encode the data: We're
-    sending three numbers for acceleration along the three axes, so
-    just represent these numbers as binary and send them along!
-    However, if the wires along which we are sending these wires are
-    considered unreliable, then using the obvious encoding may end up
-    with our receiving misleading data.  To mitigate this, we give our
-    first (and, for this book, only) example of an encoding that not
-    only has to unambiguously communicate the desired information, but
-    that must account for other considerations beyond ease of
-    decoding.</summary>
+  <p>Labels are used to mark a place in the program to refer to in
+  actual instructions, as in the examples of the previous section.
+  They do not themselves constitute actual instructions.  For example,
+  the two programs below are identical in terms of the instructions
+  that will be stored in program memory: 
+
+  <avrasm>ldi r30, 255
+out 26, r30
+ldi r30, \'H\'
+out 27, r30
+ldi r30, 255
+out 26, r30
+ldi r30, \'i\'
+out 27, r30</avrasm>
+
+
+<avrasm>hello:
+ldi r30, 255
+out 26, r30
+ldi r30, \'H\'
+some_label: 
+out 27, r30
+ldi r30, 255
+babel: 
+out 26, r30
+ldi r30, \'i\'
+out 27, r30</avrasm>
+
+Any such label has a value, which is defined to be the address in
+program memory of the first instruction after the label.  So in the
+above example, the value of the label <icode>hello</icode> is 0, of
+<icode>some_label</icode> is 3, and of <icode>babel</icode> is 5.
+  
+  </p>
+
+
+  <p><def term="byte directive">Labels can also be defined by
+    byte or string directives.  A <b>byte directive</b> is a way of
+    pre-filling RAM with a given sequence of values, and giving the
+    address of those values a name.  Specifically, a byte directive
+    looks like:
+
     
-    <text>
-      <p>A cell phone presents many further encoding challenges.  Here,
-      we'll focus on for now are how to encode the acceleration data
-      collected by the accelerometer for transmission to the
-      processor.  </p>
-
-      <p>On the one hand, we can say that the accelerometer just
-      outputs three bytes--one representing the amount of acceleration
-      for acceleration in each of the cardinal directions.</p>
-
-      <figure width="400px"><description>Graphic of phone with three
-      axes</description></figure>
-
-      <p>However, sending a byte to the processor could mean that
-      there are 8 wires going between the accelerometer and the
-      processor.  But since the device is also a phone, it's got an
-      antenna transmitting as well, which means that all of these
-      wires are very close to some decently powerful radio
-      transmissions.  And radio waves near a wire can cause current to
-      flow through that wire--this is, after all, how an antenna works
-      in the first place.  So we run the risk of at least one of the
-      signals on one of the wires being changed to something other
-      than what the accelerometer device intended to send.</p>
-
-      <p>So, for example, if we were trying to send the x-acceleration
-      as the number 23, i.e. as 00010111 on the 8 wires, the radio
-      interference could flip one of these bits in transit and the
-      processor could receive the value 01010111, or 87, instead.</p>
-
-      <p>Thus the simple encoding of: "Turn the number into binary and
-      then send out the bits on wires" may be inadequate to ensure
-      successful communication.</p>
-
-    </text>
+    <code>.byte(<i>label name</i>) <i>[Comma-separated list of bytes]</i></code>
     
-    <section>
-      <title>Sensor data with repetition for error-detection</title>
-      <text>
-	<p>One simple (if somewhat heavy-handed) change would be to
-	have instead of 8 wires, have three sets of 8 wires, and send
-	the same number out on all three.  The calculation is that
-	while there is a chance of one bit being flipped, there is a
-	much lower chance of two or more being flipped.  So if we are
-	trying to send the number 23, we will send
+    It will write the given sequence of bytes (separated by commas) in
+    the list into RAM at some address and will create a label whose
+    value is that address.  </def></p>
 
-<code>00010111
-00010111
-00010111</code>
+    <p>For example, the directive
+    
+    <code>.byte(hello) 12,189,200,0,0</code>
+    
+    might create the following situation in RAM:</p>
+    
+    <table>
+      <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+      <tr><td>1231</td><td>12</td></tr>
+      <tr><td>1232</td><td>189</td></tr>
+      <tr><td>1233</td><td>200</td></tr>
+      <tr><td>1234</td><td>0</td></tr>
+      <tr><td>1235</td><td>0</td></tr>
+    </table>
 
-If the processor receives this, then it can be reasonably confident that the intended number was indeed 23.  But maybe there was interference and the processor receives: 
+    <p>In this case, the label <icode>hello</icode> will have the
+    value 1231.</p>
 
-<code>00010111
-01010111
-00010111</code>
+    <p><def term="string directive">Finally, exactly analogous to
+    the byte directive is the <b>string directive</b>, which looks
+    like: 
 
-Now it can be reasonably sure of all but the second bit.  But either
-this second bit was transmitted as a 0 three times and one of those
-got flipped to a 1, or it was transmitted as a 1 three times and two
-of those got flipped to 0.  Because we're estimating that even one bit
-getting flipped is not so likely, the odds of it being the former
-situation vastly outweigh the odds of it being the latter.  So we can
-make the educated guess that it was probably sent as a 0 and just one
-of the three transmissions got flipped.  Thus, even though there was
-interference, the processor can still safely conclude the number
-transmitted was 00010111.  </p>
+    <code>.string(<i>label name</i>) <i>[string]</i></code>
 
-<p><def term="error-correcting code">This is an example of an
-<b>error-correcting code</b>--that is, an encoding for the data that
-is done in such a way that even if some bits of the data were
-accidentally (or maliciously!) flipped in transit, the intended
-message can still be deduced from the error-filled data that the
-processor received.</def></p>
+    This will convert each character of the string into its
+    corresponding byte, place these bytes into RAM, and create a new
+    label whose value is the address of the first byte of this string.
+    It will also leave a 0 byte at the end of the string that it
+    stores in RAM.  </def></p>
 
-<p>It is worth mentioning that this error-correcting code can correct
-up to 8 errors, if they happen to all fall in the right places.  For
-instance, if the intended message was again
+    <p>For example, the directive
+    
+    <code>.string(story) "Once upon a time"</code>
+    
+    might create the following situation in RAM:</p>
+    
+    <table>
+      <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+      <tr><td>1904</td><td>79</td></tr>
+      <tr><td>1905</td><td>110</td></tr>
+      <tr><td>1906</td><td>99</td></tr>
+      <tr><td>1907</td><td>101</td></tr>
+      <tr><td>1908</td><td>32</td></tr>
+      <tr><td>1909</td><td>117</td></tr>
+      <tr><td>1910</td><td>112</td></tr>
+      <tr><td>1911</td><td>111</td></tr>
+      <tr><td>1912</td><td>110</td></tr>
+      <tr><td>1913</td><td>32</td></tr>
+      <tr><td>1914</td><td>97</td></tr>
+      <tr><td>1915</td><td>32</td></tr>
+      <tr><td>1916</td><td>116</td></tr>
+      <tr><td>1917</td><td>105</td></tr>
+      <tr><td>1918</td><td>109</td></tr>
+      <tr><td>1919</td><td>101</td></tr>
+      <tr><td>1920</td><td>0</td></tr>
+    </table>
 
-<code>00010111
-00010111
-00010111</code>
+    <p>In this case, the label <icode>story</icode> will have the
+    value 1904.</p>
+  
+</text></section>
 
-But the processor receives 
 
-<code>10100111
-01010111
-00011101</code>
+<section><title>ISA Operations</title>
+<text>
+  <p>We have already discussed in detail the syntax and semantics of
+  the various ISA operations.  The only thing new in assembly language
+  is the ability to replace certain operands with characters or
+  labels.  Specifically:
+  <ul>
+    <li><p>Any operand designated above as an 'offset' can be replaced
+    with the name of a label.  This includes the operands to rjmp,
+    rcall, and all the branch instructions.  The assembler will then
+    compute the difference between the address of the jump/branch
+    instruction and the value of the label, and will substitute that
+    difference as the actual operand.  </p>
 
-then it can still analyze this by taking, for each bit, the majority value.  For instance, the first bit was sent as 1 once and as 0 twice, so the processor assumes this was a 0.  Continuing thus, we get: 
+    <p>For example, take the program:
 
-<code>10100111
-01010111
-00011101
-00010111</code>
+    <avrasm>ldi r31,0
+hello:
+cpi r31,8
+breq stuff
+inc r31
+rjmp hello
+stuff:
+dec r31
+cpi r31,3
+brne stuff</avrasm>
 
-However, if the errors happened to line up so that one bit got flipped twice, as in 
+The label <icode>stuff</icode> in this program has value 5.  The
+<icode>breq stuff</icode> instruction occurs at address 2, so in order
+to jump from <icode>breq stuff</icode> to the instruction after the
+<icode>stuff</icode> label, the assembler computes that it has to jump
+ahead 3 instructions.  This is accomplished by replacing the first
+<icode>breq stuff</icode> with <icode>breq 2</icode> (as, remember,
+the PC will get incremented after the instruction runs).  </p>
+    
+    <p>On the other hand, the instruction <icode>brne stuff</icode>
+    has address 7, and so to jump back to the label stuff would
+    require a jump of -2.  Because (again) branch instructions
+    increment the PC, this is accomplished by replacing the
+    <icode>brne stuff</icode> line with <icode>breq -3</icode>.
+    Likewise, <icode>rjmp hello</icode> gets replaced by <icode>rjmp
+    -5</icode>.  So the above program is equivalent to:
 
-<code>01010111
-01011111
-00000111</code>
 
-then the processor would deduce an intended value of 01010111, which
-would be incorrect.  So an error-correcting code cannot correct
-arbitrary errors.  They are therefore designed to correct for as many
-errors as are considered both plausible and intolerable in the
-situation they are designed for.  In the case of a mobile phone
-accelerometer, an error may result in your phone's screen rotating
-when it shouldn't once in a while, so if errors are so rare that this
-will only happen on average once per year, say, there may not be much
-reason to use any error-correction.  On the other hand, systems used
-in satellites are exposed to all the radiation and associated
-interference from the sun (as they are unprotected by our
-atmosphere), and they can have more mission-critical applications, so
-they may have some very beefy error-correcting codes indeed.</p>
+<avrasm>ldi r31,0  
+cpi r31,8  
+breq 2  
+inc r31  
+rjmp -5  
+dec r31  
+cpi r31,3  
+brne -3</avrasm>
 
-	
-      </text>
-    </section>
-    <section>
-      <title>Sensor data with parity-bit error detection</title>
-      <text>
-	<p>The above scheme of sending the same value three times
-	required rather a lot of work: In fact it required tripling
-	the number of transmissions being made.  If you have a lot of
-	money and cannot afford error, this may be the way to go, but
-	if you cannot justify tripling the cost of your hardware, then
-	a slightly lighter-weight method may be more appropriate.  One
-	such method is to use a <b>parity bit</b>.</p>
+Of course, writing the program using labels means we don't have to
+adjust all the offsets of our jumps and branches if we change the
+program a little, so labels do indeed solve that problem.
+    </p>
+    </li>
+    <li>Any character corresponds to a byte in a standard way.  So
+    with just the naive ISA operations, we could already do string
+    manipulation by taking any string we wanted to use, figuring out
+    which bytes its characters corresponded to, and using those
+    numbers in place of the actual string.  This would make the
+    purpose of a program rather hard to divine, however.  Imagine:
 
-	<p><def term='parity bit'>In this encoding scheme, we send
-	only one extra bit in addition to the required 8, rather than
-	an additional 16.  This extra bit will be sent as 0 if the
-	number of 1s in the transmitted number is even, and 0 if it is
-	odd.  If we intend to send the number 23, i.e. 00010111, then
-	because this has an even number of 1s, we actually send the
-	number 00010111<b>0</b>, where this last bit is the so-called
-	parity bit.</def></p>
+    <avrasm>ldi r30, 255
+out 17, r30
+ldi r30, 72
+out 18, r30
+ldi r30, 255
+out 17, r30
+ldi r30, 105
+out 18, r30</avrasm>
 
-	<p>So if the processor receives the transmission 010101110,
-	then it notices that the number has an odd number of 1s, but
-	the parity bit is 0.  Therefore it concludes that some bit in
-	the transmission was corrupted.  Unlike in the previous
-	scheme, it cannot tell which bit was corrupted.  The intended
-	transmission might have been 010001110 but then the 4th bit
-	got flipped.  Or it might have been 010101111 and the parity
-	bit got flipped!  All the processor can determine is that the
-	transmission was likely in some way corrupted in transit.
-	<def term="error-detecting">This is an example of an
-	<b>error-detecting encoding</b>--it allows us to determine
-	that there was an error, but not to fix it.</def> This may be
-	suitable in cases where errors are not too harmful, and where
-	the cost of re-sending the data is low.</p>
+    We know from earlier that this is outputting the numbers 72 and
+    105, but these numbers turn out to correspond to the characters
+    'H' and 'i', respectively.  So this is outputting the text 'Hi',
+    and we can make this more evident by replacing the numbers with
+    the characters they correspond to:  
 
-	<p>But in this example, this is fine, since the processor can
-	in this event just ask the accelerometer for a new reading
-	until it gets one with a correct parity bit.</p>
-
-	<p>Note that just like in the previous example, if two bits
-	happen get flipped in transit, e.g. 000101101 then the error
-	will go unnoticed, since the number now has 3 1s and the
-	parity bit is correspondingly 1, as we expected.  Once again,
-	encodings that are robust against transmission error are
-	always designed to protect against specified levels of
-	corruption depending on the application.  They can never
-	defend against all possible errors.</p>
-
-	
-      </text>
-    </section>
-  </section>
-
-  <section>
-    <title>Case-studies revisited</title>
-    <text>
-
-      <!-- Figure: Cat walking up to laptop, with gaming system and
-           smartphone in background-->
+    <avrasm>ldi r30, 255
+out 17, r30
+ldi r30, \'H\'
+out 18, r30
+ldi r30, 255
+out 18, r30
+ldi r30, \'i\'
+out 18, r30</avrasm>
+    The assembler will turn this into the earlier program anyway,
+    since ldi of course requires a number as its second operand, but
+    we are free to use characters when they are more convenient than
+    the raw numbers and let the assembler take care of the
+    conversion.</li>
+    
+    <li>
+      <p>Finally, there is one further piece of syntax that the
+      assembler allows.  Imagine we've stored some data in RAM with a
+      directive such as:
       
-      <p>We've now at long last completed our study of the layers that
-      allow complex systems to be built on top of computers!  In the
-      next chapter we'll launch into the world of how these computers
-      are actually built, but to round off the systems part of this
-      text, we'll conclude by revisiting our three case-studies.
-      </p>
+      <code>.byte(fibonacci) 1,1,2,3,5,8,13,21,34,55</code>
 
-      <p>At the very beginning of this text, we made the claim that a
-      computer, with only four basic kinds of instructions, can form
-      the foundation for these three applications.  Now that we know
-      in detail what a computer can do, we'll take one simple example
-      of usage for each application and make a quick trip through the
-      inner workings of the application to see that computers, in our
-      very narrow sense, are all that are needed to make these usages
-      possible.</p>
-    </text>
-    <section><title>Search engine: Life cycle of a search</title>
-    <text>
-      <p>For our search engine example, we'll presuppose a search
-      engine has already crawled the internet and all the documents we
-      want to be able to search.  Into this world walks our user, who
-      has opened a browser on a computer and subsequently types a
-      query.  This is supposed to cause links to webpages that match
-      this query to appear on the computer's screen.  Let's watch how
-      this happens in detail:</p>
+      And say we want to add add up all these numbers (for whatever
+      reason--maybe we really want to know what is the sum of the
+      first 10 fibonacci numbers).  The value of the label
+      <icode>fibonacci</icode> is the address in RAM of the first byte
+      in this sequence.  If we want to load from this address, then
+      remember that this will involve using the <icode>ld</icode>
+      instruction to load from address X (or Y or Z) into a register.
+      So we need to get the value of <icode>fibonacci</icode> into,
+      say, X.  But we don't have instructions for loading into X
+      directly.  We can only use <icode>ldi</icode> to load one
+      register at a time.  Since X = r27:r26, we'll need two ldi
+      instructions: one to get the right value into r26 and one to get
+      the right value into r27.  </p>
+      
+      <p>But what is the right value?  The value of
+      <icode>fibonacci</icode> is an address in RAM, so is a 16-bit
+      number.  We cannot load it into a register directly, then.
+      Rather, we want to load the low 8-bits into r26, and the high
+      8-bits into r27.  This can be accomplished with the final piece
+      of syntax for ISA operations:
+
+      <code>lo8(<i>label name</i>)</code>
+
+      will refer to the lower 8 bits of the value of a label that
+      refers to a RAM address, and
+
+      <code>hi8(<i>label name</i>)</code> will refer to the high 8
+      bits.  </p>
+      
+      <p>These two can be used in place of any immediate operand.
+      Specifically, they can be used as the second operands to ldi,
+      ori, cpi, andi, or subi.</p>
+      
+      <p>Thus:
+
+      <code>ldi r26,lo8(fibonacci)
+ldi r27,hi8(fibonacci)</code>
+
+      will together load the value of <icode>fibonacci</icode> into
+      X.  </p>
       
       <p>
-	<ul>
-	  <!-- Figure: Cat walking across laptop keyboard with
-	       nonsense appearing in search box-->
-	  <li>User presses buttons on keyboard.  </li>
-
-	  
-	  <!-- Figure: Keyboard -> CPU with numbers going along wire
-	       -->
-	  <li>Keyboard hardware outputs corresponding numbers numbers
-	  and sends them to the computer.</li>
-
-	  <li>
-	    Browser program was written in a high-level language and
-	    uses something like the Python input() command (though a
-	    bit more refined) to accept the user's text.  This was
-	    compiled to ISA instructions, which are running on the
-	    user's computer.  The input() command was compiled to
-	    input ISA instructions (like "in") being run in a loop,
-	    waiting to receive inputs from the keyboard.  Since the
-	    keyboard is now sending numbers, these input instructions
-	    receive numbers.
-	  </li>
-
-	  <li>
-	    The browser stores the ASCII (or perhaps UTF-8) character
-	    encodings corresponding to the buttons the user has
-	    pressed in RAM (so that it will be ready to send the
-	    user's query when "Enter" is pressed).
-	  </li>
-	  
-	  <li>
-	    The browser should also display the letters the user is
-	    typing as they are typed.  To this end, the browser
-	    program has already stored in RAM encoded graphics (much
-	    like the smiley-face example above) for all the possible
-	    letters.  (This set of pictures is called a "font".)
-	    Having got the numbers from the keyboard, the browser
-	    executes "load from RAM" instructions to load the
-	    corresponding encoded pictures from RAM.  It then executes
-	    output instructions to send these encoded pictures to the
-	    screen, causing the letters that the user typed to be
-	    displayed.
-	  </li>
-
-	  
-	  <!-- Figure: cat sitting on "Enter" key
-	       -->
-	  <li>
-	    The browser eventually receives numbers corresponding to
-	    "Enter" button keypress.  It now executes output
-	    instructions to send the encoded (ASCII or UTF-8, say)
-	    search query to the network card along with some
-	    additional metadata telling the network card to send these
-	    numbers out on the network specifically to the search
-	    engine server.
-	  </li>
-
-	  
-	  <li>
-	    Search engine server network card receives query and
-	    communicates them to the search engine computer.
-	  </li>
-	  <li>
-	    The search engine computer is constantly executing input
-	    instructions to check for input and receives the query in
-	    the course of doing so.
-	  </li>
-	  <li>
-	    The search engine computer then executes input
-	    instructions to read from a hard drive the various
-	    documents it has stored (all, of course, encoded as well).
-	  </li>
-	  <li>
-	    The search engine computer then executes comparison
-	    instructions to compare the numbers that encode the query
-	    string with the stored numbers that encode the searchable
-	    documents.  As it does this, it also executes arithmetic
-	    instructions to count how many matches it finds in each
-	    document and makes a note of the highest few counts it has
-	    seen thus far.
-	  </li>
-	  <li>
-	    The search engine computer then outputs numbers that
-	    encode links to the highest-scoring documents to its
-	    network card with instructions to please send these
-	    numbers to the computer that sent the original request.
-	  </li>
-	  <li>
-	    The search engine computer's network sends these numbers
-	    back to the user's computer on the network.
-	  </li>
-	  <li>
-	    The browser program is waiting for the search results to
-	    come back, and so is repeatedly executing input
-	    instructions.  It therefore receives the input coming in
-	    from the network card, which are numbers that encode the .
-	  </li>
-	  <li>
-	    The browser then takes these numbers, loads from
-	    RAM up the corresponding pictures of letters for each
-	    number, and displays those pictures on the screen, which
-	    the user can read as search results.
-	  </li>
-	</ul>
+      For example, if <icode>fibonacci</icode> is RAM address 1000,
+      then we first compute that 1000 = 3:232.  Or equivalently: As a
+      16-bit binary number, 1000 = 0000001111101000, so the high 8
+      bits are 00000011 = 3, and the low 8 bits are 11101000 = 232.
+      So <icode>lo8(fibonacci)</icode> will be 232 and
+      <icode>hi8(fibonacci)</icode> will be 3, and so the instructions
+      
+      <code>ldi r26,lo8(fibonacci)
+ldi r27,hi8(fibonacci)</code>
+      
+will indeed store 1000 into X.
       </p>
-    </text>
-    </section>
-    
-    <section><title>Game console: Life cycle of a button press</title>
-    <text>
-      <p>The user presses a button on the game console's controller.
-      This is supposed to cause a character on screen to move forward.
-      If the character in doing so knocks something to the ground, the
-      player gets points.</p>
+    </li>
+  </ul>
+  </p>
+  
+  <p>As we mentioned, the assembler's job is to put numbers into
+  program memory corresponding to the specified instructions.  We've
+  seen how to specify ISA operations, even using labels and characters
+  when convenient, but have not discussed the conversion of ISA
+  operations into numbers.  This will be the topic of the next
+  chapter, and for now all we mention is that there is some
+  correspondence.  For example, the instruction
 
-      <p>From the user's perspective, they press the button and the
-      picture on the screen changes in a way that looks like their
-      character moving and a points counter possibly incrementing.  If
-      all this is the work of a computer, then somehow all that
-      happened was rapid manipulation of electronic representations of
-      numbers.  Let us now consider what this looks like: </p>
+  <code>ori r22,88</code>
 
-      <p>
-	<ul>
-	  <li>
-	    User presses button
-	  </li>
-	  <li>
-	    Game was written in high-level language and calls a
-	    library function to listen for button presses.
-	  </li>
-	  <li>
-	    The compiled version of this function is executing input
-	    instructions that eventually receive the information about
-	    the button press.
-	  </li>
-	  <li>
-	    The program then takes the button press and runs code to
-	    model the change in game state.  Since the character
-	    should move forward, this means the x-coordinate of the
-	    player should be increased.  In high-level code, this
-	    looks like:
+  corresponds to the number 26725.  
+  </p>
+  
+</text></section>
 
-	    <code>player_x = player_x + 5</code>
+<section><title>Word directives</title>
+<text>
 
-	    But the code that is actually being run on the computer is
-	    of course the compiled version of this--something more
-	    like
-	    
-	    <code>ldi r31, 5
-add r30,r31</code>
-	  </li>
-	  <li>
-	    After updating the player's position, the game has to
-	    determine whether the player has collided with anything
-	    (and if so, to either move that something if it is
-	    movable, or to bump the player back if it is not).  The
-	    program does this by comparing the positions of the
-	    character's outermost edges with the positions of all
-	    nearby objects (naturally, using comparison instructions)
-	    and updating positions accordingly.  The programmer who
-	    wrote the game would have coded this with if statements
-	    like
+<p>We have seen how to get values into RAM using byte and string
+directives.  <def term="word directive">There is a further directive,
+called a <b>word directive</b>, which has the form
 
-	    <code>if(object_is_movable[1]):
-   object_x_coordinate = object_x_coordinate + 5
+<code>.word <i>comma-separated list of numbers</i></code>
+
+and is used not to write bytes into RAM, but to write words into
+program memory directly.</def></p>
+
+<p>Remember that program memory is, at the end of the day, just a
+normal width-16 memory, meaning all it stores are numbers 0-65535.
+When we write ISA operations these do not get stored directly in
+program memory, but are first converted to numbers and stored.  The
+computer then is designed to interpret these numbers as tasks that it
+should perform.  In the next chapter, we will learn precisely how
+instructions correspond to numbers by learning what is called the
+ISA's "encoding."  However, for now, we can at least see what numbers
+correspond to various instructions by using the simulator's "decimal"
+view of program memory.  </p>
+
+<p>For example, let us look back to the 3x+1 program from earlier:
+
+<avrasm>ldi r16,20
+ldi r17,1
+ldi r31,-1
+out 17,r31
+out 18,r16
+cp r16,r17
+breq 11
+mov r18,r16
+andi r18,1
+cp r18,r17
+breq 2
+asr r16
+rjmp -9
+mov r19,r16
+add r19,r19
+add r16,r19
+inc r16
+rjmp -14</avrasm>
+
+If you run this example and then, in the box for the program memory,
+click the "[dec]" button, you will see the actual numbers that gets
+stored in program memory for these instructions.  In this case, we see
+the following sequence of numbers stored: 
+
+<code>57604  
+57361  
+61439  
+47903  
+47904  
+5889  
+61529  
+12064  
+28705  
+5921  
+61457  
+38149  
+53239  
+12080  
+3891  
+3843
+38147  
+53234</code>
+
+The word directive lets us simply insert these numbers into the
+program memory directly rather than writing mnemonics for the
+instructions.  For example, the following is another way of writing
+the 3x+1 program:
+
+<avrasm>.word 57604,57361,61439,47903,47904,5889,61529,12064,28705,5921,61457,38149,53239,12080,3891,3843,38147,53234</avrasm>
+
+
+</p>
+
+
+
+</text></section>
+
+<section><title>Python-to-assembly recipes</title>
+<text><p>Since Python never actually runs on a computer, but is simply
+translated into the ISA, it must be true that everything we could do
+in Python, we can do in the ISA.  Since assembly translates directly
+to the ISA, we only need to substantiate the claim that everything we
+can do in Python, we could instead do in assembly language.  To this
+end, we shall take a few constructs from Python and see how they can
+be realized using SimpleAVR assembly language in this section.  In effect,
+we will manually be doing the job of a compiler in order to start to
+learn how a compiler does what it does.</p>
+</text>
+
+<section><title>Assignment</title>
+<text>
+  <p>Recall that assignment lines in Python were our principal means
+  for performing storage and computation operations.  Take, for example:
+
+  <code>x = 18-(5+1)</code>
+
+  In the ISA, we have two choices for where to store values like this:
+  we can use registers or we can use RAM.  But remember that to store
+  something in RAM, we had to first have it in a register anyway, and
+  then we would use a <icode>st</icode> instruction to get it into
+  RAM.  </p>
+  
+  <p>To store a value in a register, we have the <icode>ldi</icode>
+  instruction, but we cannot do, for example,
+
+  <code>ldi r16,18-(5+1)</code>
+
+  since ldi accepts only numbers -127 through 128 as its operands and
+  not sums or any complex expression of any kind.  Rather, these
+  expressions need to be computed with further ISA operations.
+  Typically, we would start by storing something from the inner-most
+  part of the expression.  In this case, that might be 5:
+
+  <code>ldi r16,5</code>
+
+  and then performing various further operations on this to execute
+  the steps outlined by the expression.  For example, the next thing
+  is to add 1 to this value, which we can do with the
+  <icode>inc</icode> instruction:
+
+  <code>ldi r16,5
+inc r16</code>
+
+Then we need to negate what we have:
+
+  <code>ldi r16,5
+inc r16
+neg r16</code>
+
+  Finally, we need to add 18 to it.  Since the add instruction
+  requires its second operand to be a register, we need to put 18 in
+  another register first, and then we can add it to r16:
+  
+  <code>ldi r16,5
+inc r16
+neg r16
+ldi r17,18
+add r16,r17</code>
+
+This seems like a lot of work for the same result, and indeed it is a
+lot more code.  High-level languages exist to prevent programmers from
+having to write such tedious lists of operations to get even simple
+things done.  The point of the ISA isn't to actually write
+large programs using it (though one can, and indeed, historically many
+people have).  Rather, the point of the ISA is that it can both
+express all the computations we want to be able to do (however
+clumsily) <i>and</i> it can be actually run by a physical machine.
+After all, what good is a high-level programming langauge if the
+programmer has to manually walk through the steps of running it?  </p>
+</text>
+</section>
+
+<section><title>Large numbers</title>
+<text>
+  <p>We've seen how to take assignment lines in Python and break up
+  their expressions into computational steps performed by the ISA.
+  Sometimes in Python, however, these computations would yield very
+  large numbers.  In the simplest case,
+
+  <code>x = 999999999</code>
+
+  is a perfectly valid line of Python code that will work as you would
+  expect.  By contrast, all ISA operations only act on registers,
+  which, in turn, only store numbers up to 255.  So how can we
+  possibly turn a line like the above into ISA operations?</p>
+  
+  <p>In fact we've already see some hints of this: RAM addresses were
+  numbers larger than 255 sometimes, and so we used combinations of
+  registers such as Z = r31:r30 to deal with these.  In general, the
+  method for handling larger numbers is to use a collection of
+  registers as all together to store the various parts of a single
+  large number.  For example, in binary:
+
+  <code>999999999 = 111011100110101100100111111111</code>
+
+  We can break this up into bytes:
+  
+  <code>00111011:10011010:11001001:11111111 = 59:154:201:255</code>
+
+  and we can store each of these bytes in separate registers, say r16
+  through r19, where r16 stores the least significant bits and r19 the
+  most:
+
+  <code>ldi r16,255
+ldi r17,201
+ldi r18,154
+  ldi r19,59</code>
+  </p>
+
+  <p>However, just being able to store a large number is not
+  enough--we want to be able to do things like add two such numbers.
+  Say r16-r19 are being used to store one such number, and r20-r23 are
+  being used to store another.  We have an ISA instruction to add a
+  register to a register, but not one to add a four-register number to
+  another four-register number.  </p>
+
+  <p>One first guess might be that we can add the constituent
+  registers individually using the add instruction:
+
+  <code>add r16,r20
+add r17,r21
+add r18,r22
+add r19,r23</code>
+
+  This actually works in certain cases: for instance, for adding the
+  numbers 1:1:1:1 = 16843009 and 4:3:2:1 = 67305985, if we simply add
+  the constituent registers, we get 5:4:3:2 = 84148994, which is the
+  sum of the two represented numbers.</p>
+
+  <p>Essentially this will work until we try to add the registers and
+  we get an overflow.  For the simplest example, suppose we are trying
+  to add 0:0:0:255 = 255 and 0:0:0:1 = 1.  In this case, adding the
+  registers individually yields and answer of 0:0:0:0 = 0, rather than
+  the desired answer of 256 = 0:0:1:0.  </p>
+
+  <p>The solution reflects the addition procedure many people are
+  taught in grade school: To add two numbers, you don't just add their
+  digits blindly, but you add the digits and you "carry the 1" over to
+  the next pair of digits if need be.  In our case, when we add two
+  registers, if there is a carry, the C flag in the sreg gets set, and
+  in that case, the sum of the next two registers also needs a 1 added
+  to it.  But this is precisely what the adc instruction does!  So all
+  we have to do is:
+
+  <code>add r16,r20
+adc r17,r21
+adc r18,r22
+adc r19,r23</code></p>
+
+  <p>This whole scheme might seem a little uncomfortable--we're not
+  actually storing the large numbers we claim to be, but simply
+  storing pieces and somehow "understanding" those pieces to
+  collectively represent the big numbers.  In a sense, though, this
+  isn't unlike how we when we write down the number "3889", we write
+  it as four separate parts: "3", "8", "8", and "9", and somehow that
+  represents the number three-thousand eight-hundred eighty-nine.
+  </p>
+  
+</text></section>
+
+<section><title>if statements</title>
+<text>
+  <p>In Python, we had an easy way of executing certain chunks of code
+  conditionally using the if-else construct.  For example, if we have
+  two variables x and y and we want one chunk of code to run if they
+  are equal and a different chunk to run if they are not equal, we
+  could do: </p>
+
+  
+  <code>if (x == y):
+   <i>stuff to do if equal</i>
 else:
-   player_x = player_x - 5</code>
+   <i>stuff to do if not equal</i></code>
 
-            which will be compiled to ISA code using branch
-            instructions that will actually be run on the console
-            computer.
-	  </li>
-	  <li>
-	    Now that the scene is modeled, the score needs to be
-	    updated.  To determine how to modify the score, further
-	    comparisons are done between objects and the ground like:
+   <p>In assembly, we don't have such a construct, but we can mimic
+   its behavior using our conditional branches--specifically breq
+   which branches if the Z flag is set.  Broadly, the structure of
+   such a program would look like: </p>
 
-	    <code>if(object_y_coordinate[1] &lt;= 0):
-   player_score = player_score + 1</code>
+<code><i>compare the two numbers and set the Z flag if they're equal</i>
+breq jump_here_if_equal
+<i>stuff to do if not equal</i>
+<i>jump to end_of_conditional_code (so that we don't also do the stuff to do if equal)</i>
+jump_here_if_equal:
+<i>stuff to do if equal</i>
+end_of_conditional_code:</code>
 
-            This is, as usual, stored as encoded ISA instructions
-            involving comparisons and branching.
-	  </li>
-	  <li>
-	    Now the scene is set: The program has numbers that
-	    describe the coordinates of all the objects on screen, and
-	    the program has stored encoded graphics of all the
-	    characters and objects that should appear.  It could run
-	    some further processing code to combine all of these to
-	    one image and output that image to screen, but a game
-	    console usually has specialized rendering hardware.  So
-	    instead, it can execute output instructions to output the
-	    information about the individual character and object
-	    graphics, their locations, and the text describing the
-	    current score all to some specialized hardware that
-	    combines them and in turn outputs the image to the screen.
-	  </li>
-	</ul>
-      </p>
-    </text>
-    </section>
+<p>Under this setup, if the numbers are equal, then the branch skips
+over the things we want to happen if they aren't equal.  On the other
+hand, if they weren't equal, then the branch is not taken and the code
+goes straight into the stuff that should happen if they are not equal,
+but then at the end of that code, it jumps over the code following,
+which should only happen if the two numbers were equal.  </p>
+
+<p>Replacing English descriptions with assembly language where
+possible, we get: </p>
+
+<code>cp r0,r1
+breq jump_here_if_equal
+<i>stuff to do if not equal</i>
+rjmp end_of_conditional_code
+jump_here_if_equal:
+<i>stuff to do if equal</i>
+end_of_conditional_code:</code>
+
+<p>We can easily modify this to represent different tests such as
+
+<code>if(x &gt;= y)</code>
+
+or
+
+<code>if(x &lt; y)</code>
+
+by changing the branch to, say, brge, or brlo, as we shall see in our
+examples section.</p>
+
+</text></section>
+
+<section><title>while loops</title>
+<text>
+
+  <p>Similarly, the Python while loop construct allowed us to repeat a
+  chunk of code for as long as a given condition remained true.  For
+  example, to do some things as long as two variables x and y have the
+  same values: </p>
+  
+  <code>while(x == y):
+   <i>do stuff</i></code>
+
+<p>To do this in assembly (again supposing that the two numbers we wish
+to compare are stored in registers r0 and r1), we can use branches and
+jumps again.  For example, we could say &quot;First test if r0 and r1
+are different.  If not, the continue on to the 'do stuff' code, after
+which we should jump back to the comparison at we started with.  If
+they were different, on the other hand, we should branch to the end of
+the whole thing.&quot;</p>
+
+<p>In code: </p>
+   
+<code>begin_loop:
+cp r0,r1
+brne end_loop
+<i>do stuff</i>
+rjmp begin_loop
+end_loop:</code>
+
+<p>In general, if we have a while loop like:
+
+  
+  <code>while(<i>test</i>):
+   <i>do stuff</i></code>
+
+   then the translation to assembly will look like:
+
+   
+<code>begin_loop:
+<i>run the test</i>
+<i>branch to end_while if the test failed</i>
+<i>do stuff</i>
+rjmp begin_loop
+end_loop:</code>
+
+So, for example, if our loop is:
+
+<code>while(x &gt; y):
+   <i>do stuff</i></code>
+
+then in assembly, (supposing we've stored x in r16 and y in r17) we
+would compare x and y with <icode>cp</icode> instruction.  Now, we
+want to skip to the end of the loop if x is not greater than y.  That
+is, if y >= x.  Recall from the table at the end of section 5.4.6 that
+we can test if r17 >= r16 by
+
+<code>cp r17,r16
+brsh ...</code>
+
+thus our loop should look like:
+
+<code>begin_loop:
+cp r17,r16
+brsh end_loop
+<i>do stuff</i>
+rjmp begin_loop
+end_loop:</code>
+
+</p>
+
+</text></section>
+
+<section><title>Functions</title>
+<text>
+  <p>The basic idea of functions in Python was to have a chunk of code
+  that could be called on to execute at various times throughout the
+  program.  In pure ISA, we've seen that we could accomplish a similar
+  thing with rcall and ret.  Now that we have learned how to more
+  easily create the offsets for things like rcall using labels, we can
+  revisit functions using assembly language to come up with a reasonably
+  organized pattern for translating general Python functions to
+  machine code.</p>
+
+  <p>Consider, for example, a function in Python like this:
+
+  <code>def f(x):
+   return 3*x+1</code>
+
+   In assembly, we first need a piece of code that performs the
+   calculation that the function does.  Suppose r16 is the register
+   that stores x.  Then this might look like:
+
+   <code>mov r1,r31
+add r31,r31
+add r31,r1
+inc r31</code>
+
+   Then, to place this in a function, we'll put a label at the start
+   which we can use to call it later, and a <icode>ret</icode>
+   instruction at the end so that after we've called it, we can return
+   from it to whatever we were doing before:
+
+   <code>f:
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+ret</code>
+
+   This function assumes that r31 contains the number that we want to
+   triple and then increment.  However notice that this code also
+   overwrites whatever was in r1.  In general, the fewer registers we
+   overwrite, the better, so we can have this code push r1 before it
+   runs (saving its original value) and then pop r1 before it returns
+   (restoring its original value):
+
+   <code>f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret</code>
+
+  </p>
+  
+  <p>
+   Finally, this code has to go somewhere.  A common choice would be
+   at the beginning of our program.  So the full Python program
+
+  <code>def f(x):
+   return 3*x+1
+
+x = f(27)</code>
+ 
+   might look like: 
+
+   <code>f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+ldi r31,27
+rcall f</code>
+
+   But wait!  This way, the first thing this program does will be to
+   run the function's code.  We want the <icode>ldi r31,27</icode>
+   instruction to be run first.  If we put our functions at the start
+   of the program, then we have to make sure the first instruction in
+   the program jumps over all the function code:
+
+   <code>rjmp real_program_start
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+real_program_start:
+ldi r31,27
+rcall f</code>
+
+   There is one more problem, though.  We're using the stack, so we
+   should set the stack pointer to have some sensible value.  Earlier,
+   we picked 5000 = 19:136, so we'll use this again.  Thus the program
+   will first set the stack pointer then it will jump over all the
+   function code, then getting to the real meat of the program.  Thus
+   our final functioning compiled version of the simple Python program
+   will be: 
+
+   <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; Set r31 back to 0
+rjmp real_program_start
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+real_program_start:
+ldi r31,27
+rcall f</avrasm>
+
+
+   This way, we can have multiple functions at the beginning and can
+   simply jump over them all.  For example, another piece of code that
+   we've used a lot is the "output a number code":
+
+   <code>ldi r30,255
+out 17,r30
+out 18,<i>value to be outputted</i></code>
+
+   This kind of behaves like the print function did in Python, so if
+   we were trying to compile to assembly the Python program:
+
+   <code>def f(x):
+   return 3*x+1
+
+print(f(27))</code>
+ 
+   then we would need two functions: <icode>f</icode> (which we
+   compiled above) and <icode>print</icode>, which might be translated
+   similarly as:
+
+   
+   <code>print: 
+push r30      ; save r30, since we will use it
+ldi r30,255
+out 17,r30    ; set D to output mode
+out 18,r31    ; output the argument
+pop r31
+ret</code>
+
+
+   <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+print: 
+push r30      ; save r30, since we will use it
+ldi r30,255
+out 17,r30    ; set D to output mode
+out 18,r31    ; output the argument
+pop r31
+ret
+
+real_program_start:
+ldi r31,27
+rcall f      ; this will make r31 be f(27)
+rcall print</avrasm>
+   
+  </p>
+</text></section>
+
+<section><title>Strings and arrays</title>
+<text>
+
+  <p>While registers are often used for storing single values that are
+  being used in computation, the entire register file can only store
+  32 bytes in total.  So if we want to perform the kinds of work that
+  we ultimately wanted to do in Python, with longer sections of text
+  and with arrays, we will need more storage than that.  For strings
+  and arrays, then, we use RAM.  </p>
+
+  <p>We've already seen how to get a string or a sequence of bytes
+  into RAM using the <icode>.string</icode> and <icode>.byte</icode>
+  directives.  But we will want to do more than just store strings and
+  arrays.  We want to be able to concatenate them, find their lengths,
+  test if two of them are the same, find values inside them, and so
+  on.  We'll save some of these for the next section, but we'll
+  discuss lengths and concatenation in this section to get a feel for
+  working with data stored in RAM.</p>
+
+  <p><b>String length</b>: Let's start by writing a string length
+  function.  That is, say we placed have the string "Mangoes are yummy." in
+  RAM:
+
+  <code>.string(fact) "Mangoes are yummy."</code>
+
+  Then the value of the label <icode>fact</icode> will be the address
+  of the start of this string in RAM.  Remember that the string
+  directive also appends a 0 byte to the end of the string, so if we
+  want to find the length of the string, we can start at the beginning
+  and walk through until we see a 0.</p>
+  
+  <p>In Python, this would be done with a while loop--something like:
+
+<code>while(<i>character</i> != 0):
+   <i>go to the next character</i></code>
+
+   And we just learned how to translate while loops into assembly.  In
+   this case, it will look like:
+
+<code><i>get the first character</i>
+search_loop:
+cp <i>first character</i>,0
+breq end_of_search_loop
+<i>get the next character</i>
+rjmp search_loop
+end_of_search_loop:  </code>
+
+   So: 
+
+  <avrasm>.string(fact) "Mangoes are yummy."
+ldi r30,lo8(fact)
+ldi r31,hi8(fact)   ; Now the start of the string is stored in Z
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  </avrasm>
+
+Once we're at the end of the loop, Z will hopefully be the address of
+the end of the string.  Sadly, because of the post-incrementing, it
+will actually 1 greater than that, so we should subtract 1 from it
+immediately after.  Recall we can do this with:
+
+<code>ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29</code>
+
+After this, Z will actually be the address of the end of the string.
+So now what?  Since the length of the string should be the difference
+between the start and end addresses, we want to compute <icode>Z -
+fact</icode> to get the length of the string.
+</p>
+  
+  <p>To begin with, we'd need to get the value of <icode>fact</icode>
+  into registers so that we can begin to compute with it:
+
+  <code>ldi r28,lo8(fact)
+ldi r29,hi8(fact)</code>
+
+   Then we need to subtract r29:r28 from r31:r30.  Analogously to how
+   we added large numbers comprised of several registers, we can
+   subtract them:
+
+   <code>sub r30,r28
+sbc r31,r29</code>
+
+leaving us with the code:
+
+  <avrasm>.string(fact) "Mangoes are yummy."
+ldi r30,lo8(fact)
+ldi r31,hi8(fact)   ; Now the start of the string is stored in Z
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  
+ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29
+ldi r28,lo8(fact)
+ldi r29,hi8(fact)
+sub r30,r28
+sbc r31,r29</avrasm>
+
+At the end of this, Z will store the length of the string.
+
+We can wrap this as a function that takes now both r31 and r30 as
+arguments and modifies them so that r31:r30 is the length of the
+string at the provided address:
+
+<code>string_length:
+push r16
+push r28
+push r29
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  
+ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29
+ldi r28,lo8(fact)
+ldi r29,hi8(fact)
+sub r30,r28
+sbc r31,r29
+pop r29
+pop r28
+pop r16
+ret</code>
+
+  </p>
+
+  <p>
+    <b>Array length: </b>OK, so we could get the lengths of strings.
+    What about more general arrays, such as:
+
+    <code>.byte(fibonacci) 1,1,2,3,5,8,13,21,34,55</code>
+
+    Unlike the .string directive, the .byte directive does not store a
+    0 at the end of the bytes.  The reason is that this would not
+    necessarily be meaningful: It is perfectly valid to store an array
+    with 0s in it:
     
-    <section><title>Mobile phone: Life cycle of a text message</title>
-    <text>
-      <p>The interface for text messaging is perhaps the simplest of
-      all: user enters a friend's phone number and some text on their
-      phone, presses send, and that text appears on the friend's
-      phone.  In terms of the fundamental intermediate steps that
-      enable this, this example is not too different from the others:
-      </p>
-      <p>
-	<ul>
-	  <li>
-	    Phone displays keyboard on its touchscreen.
-	  </li>
-	  <li>
-	    User presses areas on the touch screen
-	  </li>
-	  <li>
-	    Phone executes input instructions from the touch screen to
-	    get the coordinates where the user touched..
-	  </li>
-	  <li>
-	    Phone has stored the coordinates of all the keys it
-	    displayed, and executes comparison instructions to see
-	    whether the user pressed within one of the keys and if so,
-	    which one.
-	  </li>
-	  <li>
-	    Phone finds that user pressed "M" key.  Stores the number
-	    77 (ASCII for "M") into RAM as a part of the text message.
-	  </li>
-	  <li>
-	    User eventually finishes and pushes down on the part of
-	    the touch screen displaying a picture of the "Send"
-	    button.
-	  </li>
-	  <li>
-	    Phone performs more comparisons of coordinates and
-	    discovers that the user indeed pressed "Send".
-	  </li>
-	  <li>
-	    Phone takes the text message and prepares to output it to
-	    the radio.  Radio is a very noisy means of communication,
-	    and the cellular network tower may receive a corrupted
-	    version of what the phone's radio sends due to all kinds
-	    of interference from other phones, from gamma rays,
-	    distortion from the fact that the phone is moving as it
-	    sends the message, and who knows what else.  So before the
-	    phone outputs the encoded message to the radio, it further
-	    encodes it with an error-correcting code.  For example,
-	    the message "Meow", which would normally be encoded
-	    with
-	    <code>01001101
-01100101
-01101111
-01110111</code>
+    <code>.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</code>
 
-	    would be encoded using a three-repetition error-correcting
-	    code as:
+    So how can we find the end of an array if there's no way to tell
+    if we're at the end of the array?  The answer is that we cannot:
+    Unlike strings, simply the starting address of an array is not
+    enough to let us find its length.  So for an array, we would need
+    to somehow store the length or the ending address as well.  One
+    way to do this would be to simply put it in RAM: 
+    
+    <code>.byte(length_of_digits_of_aperys_constant) 16
+.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</code>
 
-<code>01001101
-01001101
-01001101
-01100101
-01100101
-01100101
-01101111
-01101111
-01101111
-01110111
-01110111
-01110111</code>
-	  </li>
-	  <li>
-	    Phone now outputs the text message, encoded in ASCII and
-	    then encoded further in an error-correcting code, to the
-	    radio.
-	  </li>
-	  <li>
-	    Friend's phone is executing input instructions and
-	    receives a message on its radio indicating the presence of
-	    a new text message.  It executes input instructions to get
-	    the encoded message into its RAM.
-	  </li>
-	  <li>
-	    Friend's phone then checks that in every block of three
-	    bytes, all the bits are identical.  It finds that in one
-	    of them--the three bytes representing the second
-	    character--there are differences:
-	    <code>
-01100101
-01000101
-01100100
-	    </code>
-	    
-	    Since two of the bytes have third bit 1, however, it
-	    concludes that the other byte must have originally had
-	    third bit 1 as well.  Likewise for the 8th bit, and it
-	    therefore uses 01100101 as its interpretation of the
-	    character.
+One feature of this technique is that if we ever want to modify the
+array--deleting or adding an element--we also have to update the
+stored length.  This is fine, but it does cause us to worry: what if
+we add so many elements that we cannot fit the length in a single
+byte?  We could protect against this case by storing two bytes for the
+length:
+  
+    <code>.byte(length_of_digits_of_aperys_constant) 0,16
+.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</code>
 
-	    <br /><br />
+where now for the purpose of updating the array we'll treat these two
+  bytes as a 16-bit number.</p>
 
-	    For example, the programmer would have written something
-	    like:
+  <warning title="Strings need metadata too"><p>Now that we did all
+  that work to compute the lengths of strings and then we simply
+  cheated our way out of doing the same for arrays we could ask: Why
+  can't we just also store the length of a string?  The answer is that
+  we actually can!  Moreover, it is almost uniformly more efficient to
+  do so.  </p>
 
-	    <code>if(byte1 == byte2 and byte2 == byte3):
-   text_message[i] = byte1</code>
+  <p>We introduce both techniques because there are programming
+  languages (most notably, one called C), in which strings are
+  actually stored as sequences of characters followed by a 0 byte.
+  When working with such languages, it can be important to realize
+  that something as simple as asking for the length of the string may
+  actually involve a large number of operations to walk the entire
+  length of the string looking for the 0 byte.  </p>
+  
+  <p>This is one famous example of where the abstraction of a
+  high-level programming language can leak very badly.  Doing
+  <icode>len(my_string)</icode> in Python (which does separately store
+  the lengths of its strings), and <icode>strlen(my_string)</icode> in
+  C, while they look very similar and do the same thing, will actually
+  take very different amounts of time.</p></warning>
 
-            to say that if the three bytes are all the same, then just
-	    use the first byte as the corresponding character in the
-	    text message.
-	    
-	  </li>
-	  <li>
-	    Now having decoded the error-correcting code and having
-	    stored ASCII encoding of the characters corresponding to
-	    the original text message, the phone also has a font
-	    stored.  Since the first character is 77, it looks up the
-	    77th picture in the font and uses output instructions to
-	    communicate that picture to the screen, ultimately showing
-	    the user an 'M'.  The second character is the number 101,
-	    so it displays picture number 101 onto the screen, showing
-	    the user 'e', and so on until the user sees the whole
-	    message.
-	  </li>
-	</ul>
-      </p>
-    </text>
-    </section>
-  </section>
-  <section>
-    <title>Exercises</title>
-    <exercises />
-  </section>
+  <p><b>Deleting an element from an array</b>: Say we've got an array
+  like <icode>2,3,5,7,0,11,13,0,17</icode> and we want to remove the
+  first 0 from it.  </p>
+  
+  <p>Well, what does this actually look like in RAM?  We are starting
+  with the situation like: </p>
+
+  <table><tr><td>Address:</td><td>1024</td><td>1025</td><td>1026</td><td>1027</td><td>1028</td><td>1029</td><td>1030</td><td>1031</td><td>1032</td></tr>
+  <tr><td>Value:</td><td>2</td><td>3</td><td>5</td><td>7</td><td>0</td><td>11</td><td>13</td><td>0</td><td>17</td></tr>
+  </table>
+
+  <p>and end up with the situation: </p>
+  
+  <table><tr><td>Address:</td><td>1024</td><td>1025</td><td>1026</td><td>1027</td><td>1028</td><td>1029</td><td>1030</td><td>1031</td></tr>
+  <tr><td>Value:</td><td>2</td><td>3</td><td>5</td><td>7</td><td>11</td><td>13</td><td>0</td><td>17</td></tr>
+  </table>
+
+  <p>so while it seems like a small operation, what we see is that the
+  value at RAM address 1029 has to be moved to RAM address 1028, the
+  value at 1030 has to be moved to 1029, and so on.  So actually, this
+  simple operation requires us to shuffle around half the elements of
+  the list.  (And then, of course, we have to decrement its length.)</p>
+
+  <p>So let's suppose we are writing a function to do this.  It will
+  take as input r31 and r30 giving the address of the start of the
+  array, and also r29,r28 the address where the length is stored, and
+  finally r16 will be the index we wish to delete.  </p>
+
+  <p>Then the algorithm will be:
+
+  <ol>
+    <li>Set a counter to be length - index.  This is how many things we have to copy</li>
+    <li>Add the index to Z</li>
+    <li>Store Z in X.  X will be the address we are writing to</li>
+    <li>Increment Z.  Now X will always be 1 behind Z</li>
+    <li>While the counter >= 0:
+    <ol>
+      <li>Read from Z into a temporary location</li>
+      <li>Increment Z</li>
+      <li>Write the temporary value into X</li>
+      <li>Increment X</li>
+      <li>Decrement the counter</li>
+    </ol>
+
+    </li>
+  </ol>
+
+  Translating this to assembly, we'll let the counter be r17 and the
+  "temporary location" used in the loop be r18, then the rest of this
+  translates rather straightforwardly:
+
+  <code>array_delete:
+push r17
+push r18
+push r19
+ld r17,Y      ; Y is the counter address, so now r17 is the length
+sub r17,r16   ; r16 is the index, so now r17 is length - index
+ldi r18,0     ; we need this to compute index + Z
+add r30,r0
+adc r31,r17   ; Z += index
+mov r26,r30
+mov r27,r30   ; X = Z
+ldi r18,1
+ldi r19,0     ; now r19:r18 = 1 and we can add this to Z to increment it
+add r30,r18
+adc r31,r19   ; Z = Z + 1
+loop_start:
+cpi r17,0
+breq loop_end ; if r17 == 0 then we are done
+ld r18,Z+     ; read Z into temp location and then increment Z
+st X+,r18     ; store temp value at X and then increment X
+dec r17       ; decrement the counter
+loop_end:
+pop r19
+pop r18
+pop r17
+ret</code>
+
+
+<p>We can try applying this to our previous example, adding also the
+appropriate preamble to set up the stack and skip the function code initially:</p>
+
+
+<avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+array_delete:
+push r17
+push r18
+push r19
+ld r17,Y      ; Y is the counter address, so now r17 is the length
+sub r17,r16   ; r16 is the index, so now r17 is length - index
+dec r17       ; Preventing an off-by-one error
+ldi r18,0     ; we need this to compute index + Z
+add r30,r17
+adc r31,r18   ; Z += index
+mov r26,r30
+mov r27,r31   ; X = Z
+ldi r18,1
+ldi r19,0     ; now r19:r18 = 1 and we can add this to Z to increment it
+add r30,r18
+adc r31,r19   ; Z = Z + 1
+loop_start:
+cpi r17,0
+breq loop_end ; if r17 == 0 then we are done
+ld r18,Z+     ; read Z into temp location and then increment Z
+st X+,r18     ; store temp value at X and then increment X
+dec r17       ; decrement the counter
+rjmp loop_start
+loop_end:
+pop r19
+pop r18
+pop r17
+ret
+
+real_program_start:
+
+.byte(my_array_length) 9
+.byte(my_array) 2,3,5,7,0,11,13,0,17
+ldi r28,lo8(my_array_length)
+ldi r29,hi8(my_array_length)  ; Y is now the address of the length of the array
+ldi r30,lo8(my_array)
+ldi r31,hi8(my_array)         ; Z is now the address of the array
+ldi r16,4                     ; r16 is the index we want to remove
+rcall array_delete
+</avrasm>
+
+<warning title="Arrays and frequent deletion don't mix">
+  <p>Ultimately, the lesson here is that while deleting an element of
+  an array might look like a very simple operation, it in fact
+  requires us to shift the entire array following the element we're
+  deleting.  Imagine if we had a string of the text of an entire book
+  and we were deleting the first letter.  That would require moving
+  all the other letters one step back!</p>
+  
+  <p>In general, if we have <icode>k</icode> things to delete from an
+  array of <icode>N</icode> elements, then we might think that this
+  will take <icode>k</icode> steps--one for each deletion.  In fact it
+  may take as many as <icode>k*N</icode> steps, as each deletion may
+  require shifting up to N elements of the array.</p>
+  
+  <p>For this reason, using simple arrays like those we have described
+  to store data that will require many deletions of elements is
+  actually quite inefficient.  There are other, cleverer ways to store
+  data that may require many delete operations.  One way that suits
+  this purpose is called a "linked list", where the elements of the
+  list are stored in possibly completely unrelated locations in RAM,
+  but each element also includes the RAM address of the next
+  element.  This way, to delete element number 4 in the list, we only
+  need to update the "next element" address stored with element 3 to
+  be the address of element 5.</p>
+  
+  <p>This is just one example of how the particular scheme used for
+  storing data can very meaningfully affect efficiency, and of how
+  what you want to do with the data can affect how you decide to store
+  it.  There are many schemes for storing data, all tailored to
+  slightly different use-cases.  Such schemes are called "data
+  structures", and you may have an entire class to learn about some of
+  them (and maybe you will even design your own!) in your future
+  computer programming life.</p>
+</warning>
+</p>
+
+  <p><b>Comparing strings</b>: What about just comparing two strings?
+  Maybe we have two strings in RAM--one that the user typed in and the
+  other, a password.  We then want to see if they match in order to
+  authenticate the user.  In Python we could just do something like:
+
+  <code>if(password_entered == password_stored):
+   <i>do stuff</i></code>
+
+  We've already seen how to compare numbers like this in assembly
+  using the cp operation, but haven't yet seen this for strings.  </p>
+  
+  <p><b>Algorithm: </b></p>
+  <p>The idea isn't too far removed, however, from comparing numbers.
+  After all, strings are just sequences of numbers.  So if we have
+  strings stored at, say, addresses 200 and 650 in RAM, then we can
+  start by comparing the numbers at those addresses.  If they don't
+  match, then the strings are definitely different.  But if they do
+  match, then we need to compare the numbers at addresses 201 and 651.
+  Then the numbers at 202 and 652.  If at any point we don't get a
+  match, then we know the strings are different.  If, on the other
+  hand, the two numbers match and are both 0, then that means we
+  reached the end of both strings simultaneously, and so we're
+  done, and only then can we conclude that the strings themselves
+  actually match</p>
+
+  <p>Put into steps:
+
+  <ol>
+    <li>Put Y = [address of string 1]</li>
+    <li>Put Z = [address of string 2]</li>
+    <li>Read RAM address Y into r0 and increment Y</li>
+    <li>Read RAM address Z into r1 and increment Z</li>
+    <li>Compare r0 and r1</li>
+    <li>
+      If they're the same, do the following:
+      <ol>
+	<li>Compare r0 with 0</li>
+	<li>If they're the same, then the strings are equal!</li>
+      </ol>
+    </li>
+    <li>Jump back to step 3</li>
+    <li>If we've got here, then the strings differ</li>
+  </ol>
+
+  We only have to decide what to do if the strings differ.  Lets say
+  we'll return the answer in r31: It will be 1 if they are the same,
+  and 0 if they are different.  </p>
+
+  <p><b>Program: </b></p>
+
+  <p>Turning the above into a program is relatively straightforward,
+  bearing in mind the constructs from the previous sections about how
+  to do conditional execution and while loops:</p>
+  
+  <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+compare_strings:
+push r0
+push r1
+push r2
+eor r2,r2    ; set r2 to be 0
+loop_start:
+ld r0,Y+
+ld r1,Z+
+cp r0,r1
+brne strings_not_equal
+cp r0,r2
+breq strings_equal
+rjmp loop_start
+strings_not_equal:
+ldi r31,0
+rjmp end_of_comparison
+strings_equal:
+ldi r31,1
+end_of_comparison:
+pop r2
+pop r1
+pop r0
+ret
+
+real_program_start:
+
+.string(string1) "password123"
+.string(string2) "password12#"
+.string(string3) "password12#"
+.string(string4) "password12#"
+ldi r28,lo8(string1)
+ldi r29,hi8(string1)
+ldi r30,lo8(string2)
+ldi r31,hi8(string2)
+rcall compare_strings
+
+ldi r28,lo8(string3)
+ldi r29,hi8(string3)
+ldi r30,lo8(string4)
+ldi r31,hi8(string4)
+rcall compare_strings</avrasm>
+
+  <p><b>Array concatenation: </b> The last example we'll do is array
+  concatenation.  Say we've put two arrays--or even two strings--into
+  RAM like:
+
+  <code>.string(string1) "'Tis hard to say, if greater want of skill\nAppear in writing or in judging ill;\n"
+.string(string2) "But, of the two, less dang'rous is th' offence\nTo tire our patience, than mislead our sense."</code>
+
+   These two strings occur at separate locations in RAM, potentially
+   with other things in between them.  We want to construct a single
+   string that consists of the contents of string 1 followed by the
+   contents of string 2, say followed by a 0 (as is the convention
+  with strings).  </p>
+  
+  <p>Once we phrase the problem this way, a procedure presents
+  itself rather simply:
+  
+  <ol>
+    <li>Find a free space in RAM</li>
+    <li>Copy string1 to that space</li>
+    <li>Copy string2 to that space, starting at the end of string1</li>
+  </ol>
+
+  So first of all, how do we find a free spot in RAM to put our
+  combined string?  Well, directives start filling RAM at address
+  1024, and the bottom of the stack is at 5000 (so the stack occupies
+  only address 5000 and below).  So this should leave any addresses
+  above 5000 free for use.  </p>
+
+  <p>But we cannot just always use 5001 as a free address.  The first
+  time we want to concatenate in a program, this will be fine, but the
+  second time it will not--that space will be used by the result of
+  our first concatenation!  So we can start at 5001, but if our first
+  concatenation uses 100 bytes, then our next concatenation should
+  start at address 5101.  So when we do anything with that space above
+  5000, we should always keep track of how much we've used so far.  To
+  do this, we'll mark off a spot in RAM to store for this address.
+  Since we have to store the address in bytes, we compute 5001 =
+  19:137 and then store: 
+
+  <code>.byte(first_free_address) 19,137</code>
+
+  So now the algorithm can be made more precise:
+  
+  <ol>
+    <li>Load <icode>first_free_address</icode> into X</li>
+    <li>Load address of string1 into Y</li>
+    <li>Loop through the characters starting at Y, copying them to
+    address X and incrementing X along the way, until we see a 0</li>
+    <li>Load address of string2 into Y</li>
+    <li>Loop through the characters starting at Y, copying them to
+    address X and incrementing X along the way, until we see a 0</li>
+    <li>Put a 0 at the current address X and increment X one last time
+    (so it points to the address just after the 0)</li>
+    <li>Store the current value of X at address <icode>first_free_address</icode></li>
+  </ol>
+  </p>
+  
+  <p>We can then start converting this to code immediately:
+
+  <avrasm>.byte(first_free_address) 19,137
+.string(string1) "\'Tis hard to say, if greater want of skill\\nAppear in writing or in judging ill;\\n"
+.string(string2) "But, of the two, less dang\'rous is th\' offence\\nTo tire our patience, than mislead our sense."
+ldi r30,lo8(first_free_address)
+ldi r31,hi8(first_free_address) ; Z = value of label first_free_address
+ld r27,Z+
+ld r26,Z                        ; X = what was stored at first_free_address, i.e., 5001
+ldi r28,lo8(string1)
+ldi r29,hi8(string1)            ; Y = string1
+loop1_start:
+ld r16,Y+                       ; r16 = char at address Y, and inc Y
+cpi r16,0
+breq string2_start              ; if r16 is 0, move on to string2
+st X+,r16                       ; store r16 ad address X, and inc X
+rjmp loop1_start
+string2_start:
+ldi r28,lo8(string2)
+ldi r29,hi8(string2)            ; Y = string2
+loop2_start:
+ld r16,Y+                       ; r16 = char at address Y, and inc Y
+cpi r16,0
+breq done                       ; if r16 is 0, we\'re done!
+st X+,r16                       ; store r16 at address X, and inc X
+rjmp loop2_start
+done:
+st X+,r16                       ; store one last 0 at the end of the concatenation, and inc X
+st Z,r26
+st -Z,r27                       ; Store X back at address first_free_address (which is still in Z)</avrasm>
+  </p>
+
+  <warning title="Frequent concatenation means frequent copying">
+    <p>Note that to concatenate two arrays meant copying the contents
+    of both of them!  This means that our harmless little "append an
+    element to an array" code from chapter 3:
+
+    <icode>my_array += [6]</icode>
+
+    may not just be a single ISA operation to plop 6 at the end of the
+    array, but might require a whole copy of the entire array first!
+    Now, if we knew in advance that we were going to have to append
+    things to our array, we could ensure that enough bytes after the
+    array in RAM are also unused so that we could just plop the right
+    values immediately after the array and append to it that way.</p>
+    
+    <p>Once again, the details of exactly how our data is stored
+    (beyond what we can see just by knowing the high-level prgramming
+    language) can affect the efficiency of our high-level programs and
+    what code we write.</p>
+  </warning>
+
+  <aside title="Free RAM is expensive">
+    <p>In the above algorithm, we had this step of "Find some unused
+    area in RAM", and we dispatched it in a relatively simple way:
+    Have a single barrier above which everything is considered
+    "unused" and below which everything is "used".  This is great if
+    there is unlimited RAM and our program is simple, but real
+    computers have to deal with a circumstance where a program might
+    use some RAM for a while and then decide it no longer needs that
+    RAM.</p>
+
+    <p>For example, suppose we did a concatenation which used 100
+    bytes, taking up the space from 5001 through 5100.  Then we did
+    another concatenation using the next 100 bytes from 5101 to 5200.
+    Then we decided we were done using te bytes 5001 to 5100 (maybe we
+    printed that string out to the user and no longer need to store
+    it, say).  </p>
+    
+    <p>We would like in these circumtances to keep track of the fact
+    that next time we need some unused RAM (provided we ask for 100
+    bytes or fewer) we have the option of using the byte 5101 to 5100,
+    rather than just continuing onward from 5201 where we left
+    off.</p>
+
+    <p>In general, there might be many small chunks of unused RAM in
+    our "heap" of used RAM, and keeping track of all of them in a
+    non-wasteful way is a challenging problem whose solutions can make
+    use of quite complicated data structures.  Code that controls this
+    process is called a "memory allocator", which you may learn about
+    if your studies take you in the direction of learning about
+    operating systems or the C programming language.</p>
+  </aside>
+  </text></section>
+
+</section>
+
+<section><title>Simple examples</title>
+<text>
+  <p>We'll now revisit versions of our simple examples from chapter 2,
+  but this time attempt them in assembly language.  We'll approach
+  this by first writing Python programs to do the job, and then using
+  the above recipes to convert them to assembly.  </p>
+</text>
+
+<section><title>Summing the first n integers</title>
+<text>
+  <p><b>Introduction: </b></p>
+
+  <p>In the earlier factorial example, we wrote a program to receive
+  as input a positive integer n and to output the product 1*2*3*...*n.
+  In this section, we'll discuss how to do this in ISA, except because
+  we lack a multiplication instruction (there is one on certain SimpleAVR
+  processors, but not on all), we'll do the problem with addition
+  instead: Given an n, compute 1+2+3+...+n.  </p>
+
+  <p><b>Python program: </b></p>
+
+  <p>Having done the factorial example earlier, we can quite readily
+  imagine a Python program doing this task.  We would have a variable
+  storing n, a counter variable that starts at 1, and a variable for
+  storing the sum.  We could then use a while loop that increments the
+  counter until it reaches n, and on each iteration of the loop it
+  adds the counter to the variable storing the sum.  To wit:
+
+  <code>n = 20
+counter = 1
+sum = 0
+while(counter &lt;= n):
+   sum = sum + counter
+   counter = counter + 1
+print(sum)</code>
+
+  </p>
+
+  <p><b>Converting to assembly: </b> The first three lines are
+  assignment lines that store numbers.  This directly translates to
+  ldi instructions as long as we pick some registers to play the roles
+  of <icode>n</icode>, <icode>counter</icode>, and
+  <icode>sum</icode>.  Since ldi can only load into registers r16 and
+  up, we'll pick r16, r17, and r18 for these:
+
+  <code>ldi r16,20
+ldi r17,1
+ldi r18,0</code>
+
+  </p>
+  
+  <p>Now, the next portion is a while loop.  We've seen that we can
+  get this behavior using the ISA with a structure like:
+
+<code>begin_while:
+<i>do comparison</i>
+<i>[branch if condition fails]</i> end_while
+<i>do stuff</i>
+rjmp begin_while
+end_while:</code>
+
+  Here, the condition is <icode>counter &lt;= n</icode>.  This means
+  the condition fails if <icode>counter > n</icode>.  We saw earlier
+  (at the end of 5.4.6) that the comparison <icode>r17 > r16</icode>
+  could be tested with:
+
+  <code>cpi r16,r17
+brlo ...</code>
+
+  (This is testing "is r17 the same as or higher than r16", i.e., <icode>r17 >= r16</icode> which
+  is equivalent to the condition in question.)
+
+</p>
+<p>Thus our code now looks like:
+
+<code>ldi r16,20
+ldi r17,1    ; r17 will store the counter
+ldi r18,0    ; r18 will store the sum
+begin_while:
+cp r16,r17
+brlo end_while
+<i>do stuff</i>
+rjmp begin_while
+end_while:</code>
+
+   So all that remains is to figure out what "do stuff" should be.
+   But this is relatively straightforward: Since the sum is r18 and
+   the counter is r17, <icode>sum = sum+counter</icode> can just be
+   <icode>add r18,r17</icode>, and <icode>counter = counter+1</icode>
+   can just be <icode>inc r17</icode>.  Thus:
+
+
+<avrasm>ldi r16,20
+ldi r17,1    ; r17 will store the counter
+ldi r18,0    ; r18 will store the sum
+begin_while:
+cp r16,r17
+brlo end_while
+add r18,r17
+inc r17
+rjmp begin_while
+end_while:</avrasm>   
+
+  </p>
+
+<p><b>Debrief: </b>
+
+Note that 1+2+...+22 is the largest such sum we can compute without
+overflow.  We could have stored the sum using two registers such as
+r19:r18 to compute much larger sums.</p>
+
+<p><b>Assembly, mark II: </b> This time, we'll try to get the sum from
+1 to 100.  This will require the use of 16 bits to store the sum
+(i.e., at least two registers).  To choose at random, we'll have r17
+store the counter, and r31:r30 store the sum:
+
+<avrasm>ldi r16,100
+ldi r17,1    ; counter = 1
+ldi r30,0
+ldi r31,0    ; sum = r31:r30 = 0:0 = 0
+begin_while:
+cp r16,r17   
+brlo end_while
+; We shall add r17 to r31:r30, but the usual method
+; requires adding numbers of the same width, so we
+; set up r18 as 0 so that r18:r17 is just the 16-bit
+; version of r17:
+ldi r18,0    
+add r30,r17
+adc r31,r18  ; r31:r30 = r31:r30 + r18:r17
+inc r17
+rjmp begin_while
+end_while:</avrasm>
+
+Note that because we've used r31:r30, we can view the counter's
+progress in the Z register.
+
+</p>
+
+
+<p><b>Debrief: </b>
+
+Unlike factorial, there is a simple formula for the sum of the first n
+integers, namely n*(n+1)/2.  We already know how to divide by 2 using
+asr, so if we knew how to multiply registers this might have been a
+lot simpler.  We'll explore this business in the next example.</p>
+
+</text></section>
+
+<section><title>Multiplication</title>
+<text>
+  <p><b>Introduction: </b> The SimpleAVR instruction set does include an
+  instruction called mul for multiplying registers, but many cheaper
+  SimpleAVR chips you can buy do not actually support this instruction.  So
+  if we want to multiply numbers, we have to do it ourselves.</p>
+
+  <p>One issue that arises is that multiplying numbers is a good way
+  to get large numbers: it is likely that even if we only multiply two
+  single-register numbers, the result will not fit in a register.  For
+  example, 20*20 = 400 which is already too big.  So in this case
+  we're almost forced to store the result in two registers.</p>
+  
+  <p><b>Python program: </b> Otherwise, the most obvious algorithm
+  seems like a straightforward loop: To compute <icode>a*b</icode> we
+  simply start with storing 0 somewhere and add <icode>b</icode> to it
+  <icode>a</icode> times (say, using a while loop with a counter):
+
+  <code>product = 0
+counter = 0
+while(counter &lt; a):
+   product = product + b
+   counter = counter + 1</code>
+
+   If we decide the product should be stored in r31:r30 and the
+   counter will be r19, <icode>a</icode> will be r16, and
+   <icode>b</icode> will be r17, then we can write this rather simply
+   as a function even:
+
+   <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+multiply:
+push r18
+push r19
+ldi r18,0    ; counter = 0
+ldi r19,0    ; since product is r31:r30 and we are going to add
+             ; b to it, b should be two bytes also.
+             ; We pick r19:r17
+ldi r30,0
+ldi r31,0    ; product = 0
+mul_loop_start:
+cp r18,r16   ; while(counter &lt; a)
+brsh mul_loop_end
+add r30,r17
+adc r31,r19  ; product = product + b
+inc r18      ; counter = counter + 1
+rjmp mul_loop_start
+mul_loop_end:
+pop r19
+pop r18
+ret
+
+real_program_start:
+
+ldi r16,29
+ldi r17,41
+rcall multiply ; after this, Z is the product</avrasm>
+  </p>
+
+<p><b>Debrief:</b> This is actually a somewhat horrendous algorithm
+for multiplying two numbers.  For a start, it only takes two steps to
+computer 2*255, but takes 255 steps to compute 255*2.  While 255 steps
+is not so bad if we only have to do it every once in a while, there is
+a more clever algorithm that we shall leave in an aside for the
+curious.</p>
+
+<aside title="The proper way to multiply numbers by hand">
+  <p>The trick is that we can very easily multiply numbers by 2: Just
+  add a number to itself!  This even works for tow-register numbers:
+  To multiply r29:r28 by 2, just do:
+
+  <code>add r28,r28
+adc r29,r29</code>
+
+  So how does multiplying by 2 help us?  Let us think about writing
+  <icode>b</icode> in binary: Maybe it is, say, 00100110 or
+  2<sup>5</sup> + 2<sup>2</sup> + 2<sup>1</sup>.  Then to compute a*b,
+  we only have to compute a*(2<sup>5</sup> + 2<sup>2</sup> +
+  2<sup>1</sup>).  Using the distributive law, this means we only have
+  to compute a*2, a*2*2, and a*2*2*2*2*2 and add them up.</p>
+  
+  <p>Put another way, this means we can do:
+  <ol>
+    <li>Store 0 in r31:r30.  This will be the answer by the end of the
+    algorithm</li>
+    <li>Store a in r29:r28</li>
+    <li>For each bit of b, do the following:
+    <ol>
+      <li>If the bit of b is set, then add r29:r28 to r31:r30</li>
+      <li>Multiply r29:r28 by 2</li>
+    </ol>
+    </li>
+  </ol>
+  
+  OK, but how do we test if each bit of b is set?  This is where the
+  AND operation will help us: We can "b AND 1" will be nonzero exactly when the first
+  bit is set, "b AND 2" will be nonzero exactly when the second bit is
+  set, "b AND 4" will be nonzero exactly when the third bit is set,
+  and so on.  So we can keep another counter that we keep doubling and
+  ANDing with b for this test.  </p>
+
+  
+  
+   <avrasm>ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+multiply:
+push r29
+push r28
+push r22
+push r21
+push r20
+ldi r31,0
+ldi r30,0        ; store 0 in r31:r30, which will become the answer
+ldi r29,0
+mov r28,r16      ; store a in r29:r28
+ldi r20,0        ; counter = 0
+ldi r21,8        ; there are 8 digits
+ldi r22,1        ; r22 will double each time to test the bits
+mul_loop_start:
+cp r20,r21
+brsh mul_loop_end
+mov r23,r22
+and r23,r17      ; b AND r17
+breq bit_not_set
+add r30,r28      ; add our doubling version of a to the answer
+adc r31,r29      ; if the bit was set
+bit_not_set:
+add r22,r22      ; double r22
+add r28,r28
+adc r29,r29      ; double a
+inc r20          ; increment the counter
+rjmp mul_loop_start
+mul_loop_end:
+pop r20
+pop r21
+pop r22
+pop r28
+pop r29
+ret
+
+real_program_start:
+
+ldi r16,29
+ldi r17,41
+rcall multiply ; after this, Z is the product</avrasm>
+
+</aside>
+
+</text></section>
+
+
+<!-- <section><title>Applications</title> -->
+<!-- <text> -->
+<!--   <p>The large-scale systems we have been describing are largely -->
+<!--   programmed using high-level languages like Python, with few to none -->
+<!--   of the pieces constructed by doing actual ISA programming.  Having -->
+<!--   said that, Python is an abstraction over the ISA layer, and like all -->
+<!--   abstractions, this one sometimes leaks.  That is, to make decisions -->
+<!--   about our Python programming, we need to understand what happens at -->
+<!--   the ISA level.  We give some examples of that in this section.</p> -->
+<!-- </text> -->
+
+<!-- <section><title>Search engine - Searching for a word in a string</title> -->
+<!-- <text> -->
+<!--   <p><b>Introduction: </b></p> -->
+<!--   <p>In Python, we identified -->
+
+<!--   <code>if("banana" in s): -->
+<!--   <i>do stuff</i></code> -->
+
+<!--   So in Python, testing if "banana" is found somewhere in a given -->
+<!--   string looks simple enough-it's just one command!  But its being -->
+<!--   one command in Python doesn't mean that it takes the computer one -->
+<!--   step.  Remember that the computer only runs ISA operations, and any -->
+<!--   Python code we write has to be turned into ISA operations before it -->
+<!--   can be run.  So to understand what this very simple-looking Python -->
+<!--   is hiding, we need to understand what ISA operations this command -->
+<!--   corresponds to.</p> -->
+
+<!--   <p>To this end, let us think about how to search for "banana" inside -->
+<!--   another string using the ISA.  First, the strings have to be stored -->
+<!--   somewhere, and RAM is a natural location for them.  So our first -->
+<!--   step will be to store the strings into RAM.  Once all the strings -->
+<!--   are in RAM, then we want to use ISA operations to search for -->
+<!--   "banana" in the longer string.  </p> -->
+  
+<!--   <p><b>Algorithm: </b></p> -->
+<!--   <p>As we discussed, the first step of our algorithm will be to put -->
+<!--   the strings into RAM.  But having done that, we now need to search -->
+<!--   for "banana".  Because we know how to compare two strings -->
+<!--   already- -that is, given two addresses, we know how to write ISA -->
+<!--   operations that detect whether the string starting at the one -->
+<!--   address is the same as the string starting at the other.  Searching -->
+<!--   for one string inside another can be understood as doing this -->
+<!--   repeatedly: </p> -->
+
+<!--   <p>Let Y be the address of the string "banana" stored in RAM, and Z -->
+<!--   be the address of the string we're searching through.  Then we can -->
+<!--   search by comparing, byte-by-byte, the bytes from address Y to -->
+<!--   address Y+6 with the bytes from address Z to address Z+6.  This will -->
+<!--   determine whether "banana" appears at the start of the string.  Then -->
+<!--   we can compare the string "banana" with the bytes at Z+1 to Z+7, -->
+<!--   testing whether it appears one character after the start.  And we -->
+<!--   can repeat this indefinitely until we reach the end of the string.  </p> -->
+
+<!--   <p>So our strategy- -our algorithm- -will be to take all the possible -->
+<!--   places where "banana" might appear in the string, and to perform the -->
+<!--   string comparison to check this.  In particular, if the string has -->
+<!--   length L, then "banana" might appear starting anywhere from position 0 -->
+<!--   in the string to position L-6.  So we do:  -->
+  
+<!--   <ol> -->
+<!--     <li>Put the strings into RAM</li> -->
+<!--     <li>Check whether "banana" occurs at offset 0 in the string</li> -->
+<!--     <li>Check whether "banana" occurs at offset 1 in the string</li> -->
+<!--     <li>...</li> -->
+<!--     <li>Check whether "banana" occurs at offset L-6 in the string</li> -->
+<!--   </ol> -->
+
+<!--   Phrased without ellipsis: -->
+  
+<!--   <ol> -->
+<!--     <li>Put the strings into RAM</li> -->
+<!--     <li>Set a counter to 0</li> -->
+<!--     <li> -->
+<!--       As long as the counter is less than L-6, do the following: -->
+<!--       <ol> -->
+<!-- 	<li>Check whether "banana" occurs at address Z+counter</li> -->
+<!-- 	<li>If so, the answer is yes and we're done</li> -->
+<!-- 	<li>If not, then increment the counter</li> -->
+<!--       </ol> -->
+<!--     </li> -->
+<!--   </ol> -->
+
+<!--   </p> -->
+  
+<!--   <p><b>Program: </b> -->
+
+<!-- <code> -->
+<!-- rjmp start -->
+<!-- target: -->
+<!-- .ascii "banana" -->
+<!-- src: -->
+<!-- .ascii "I like watermelons, kiwis, and bananas" -->
+<!-- start: -->
+<!-- ...[move data into RAM] -->
+<!-- ldi r17,0 -->
+<!-- ldi r20,0 -->
+<!-- loop_start: -->
+<!-- cpi r17,32 -->
+<!-- breq loop_end -->
+<!-- ldi r18,0 -->
+<!-- inner_loop_start: -->
+<!-- cpi r18,6 -->
+<!-- breq inner_loop_end_found -->
+<!-- ld r0,Y+ -->
+<!-- ld r1,Z+ -->
+<!-- cp r0,r1 -->
+<!-- brne inner_loop_end_not_found -->
+<!-- inc r18 -->
+<!-- rjmp inner_loop_start -->
+<!-- inner_loop_end_found: -->
+<!-- ldi r20,1 -->
+<!-- rjmp loop_end -->
+<!-- inner_loop_end_not_found: -->
+<!-- inc r17 -->
+<!-- rjmp loop_start -->
+<!-- loop_end: -->
+<!-- cpi  -->
+<!-- </code> -->
+
+<!-- </p> -->
+
+<!-- <aside> -->
+<!--   <p>It is worth doing a back-of-the-envelope calculation to see whether -->
+<!--   the search-engine code we built in chapter 3 could function in an -->
+<!--   environment like the Google search engine.  This program is going to -->
+<!--   perform at least 6 ISA operations for every character in the target -->
+<!--   string.  As of 2014, Google had collected 200 trillion bytes of data -->
+<!--   from the internet.  So to search all of these for "banana", we would -->
+<!--   have to perform 200*6 = 1200 trillion ISA operations in total.  The -->
+<!--   fastest computer could perform maybe 4 billion of these a second, -->
+<!--   meaning it would take such a computer 300000 seconds- -or over 3 -->
+<!--   days- -to perform this search.  </p> -->
+
+<!--   <p>In contrast, an actual Google search for "banana" claims to -->
+<!--   complete in .25 seconds.  Of course, Google has a lot of computers, -->
+<!--   but to go from 300000 seconds to .25 seconds, they would have to use -->
+<!--   300000/.25 = 1200000 computers- -all that just for a single search. -->
+<!--   In practice, they're handling well into the thousands of searches -->
+<!--   per second, so it is clear rather than simply needing more -->
+<!--   computers, they need a better algorithm.  Just using the Python 'in' -->
+<!--   test, it is not immediately obvious what the ramifications are until -->
+<!--   we think of the operation in terms of the ISA.  </p> -->
+
+<!--   <p>In fact, the ISA code that Python uses to run the 'in' operation -->
+<!--   is quite sophisticated and substantially faster than the code -->
+<!--   described above, and does have a decent running time.  The point is -->
+<!--   that the operation hides exactly what is happening and hence -->
+<!--   judging its use as appropriate based on the fact that the code -->
+<!--   looks simple can be quite misleading.  </p> -->
+<!-- </aside> -->
+
+<!-- </text></section> -->
+
+<!-- <section><title>Game console: Integer overflow</title> -->
+<!-- <text> -->
+<!--   <p><b>Introduction: </b></p> -->
+
+  
+
+<!--   <p><b>Algorithm: </b></p> -->
+  
+<!--   <p><b>Program: </b></p> -->
+
+<!-- </text></section> -->
+
+
+<!-- </section> -->
+
+
+<section>
+  <title>Exercises</title>
+  <exercises />
+</section>
+</section>
 </section>

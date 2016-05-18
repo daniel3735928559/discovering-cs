@@ -320,9 +320,11 @@
 	    <tr><td>3</td><td><a href="/text/ch3.xml">Advanced Programming</a> (<a class="print_link" href="/text/print/ch3.pdf">PDF</a>)</td></tr>
 	    <tr><td>4</td><td><a href="/text/ch4.xml">Numbers</a> (<a class="print_link" href="/text/print/ch4.pdf">PDF</a>)</td></tr>
 	    <tr><td>5</td><td><a href="/text/ch5.xml">ISA</a> (<a class="print_link" href="/text/print/ch5.pdf">PDF</a>)</td></tr>
-	    <tr><td>6</td><td><a href="/text/ch6.xml">Encodings</a> (<a class="print_link" href="/text/print/ch6.pdf">PDF</a>)</td></tr>
-	    <tr><td>7</td><td><a href="/text/ch7.xml">Micro&#173;architecture</a> (<a class="print_link" href="/text/print/ch7.pdf">PDF</a>)</td></tr>
-	    <tr><td>8</td><td><a href="/text/ch8.xml">Digital Logic</a> (<a class="print_link" href="/text/print/ch8.pdf">PDF</a>)</td></tr>
+	    <tr><td>6</td><td><a href="/text/ch6.xml">Assembly</a> (<a class="print_link" href="/text/print/ch6.pdf">PDF</a>)</td></tr>
+	    <tr><td>7</td><td><a href="/text/ch7.xml">Encodings</a> (<a class="print_link" href="/text/print/ch7.pdf">PDF</a>)</td></tr>
+	    <tr><td>8</td><td><a href="/text/ch8.xml">Micro&#173;architecture</a> (<a class="print_link" href="/text/print/ch8.pdf">PDF</a>)</td></tr>
+	    <tr><td>9</td><td><a href="/text/ch9.xml">Digital Logic</a> (<a class="print_link" href="/text/print/ch9.pdf">PDF</a>)</td></tr>
+	    <tr><td>10</td><td><a href="/text/ch10.xml">Transistors</a> (<a class="print_link" href="/text/print/ch10.pdf">PDF</a>)</td></tr>
 	    </table>
 	    
 	    <xsl:if test="number(/section/@number) >= 1">

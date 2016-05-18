@@ -2446,28 +2446,24 @@ sreg: unchanged</pre></td>
 </table>
 
 <p>For example, we can now try to write code that reuses our above
-output code.  Let us consider writing code that first outputs the
-number 13, then multiplies it by 8 and outputs that.  We can start
-with the outline: 
+input and output code.  Let us consider writing code that first
+outputs the number 13, then multiplies it by 8 and outputs that.  We
+can start with the outline:
 
-<code>ldi r5, 13
-[call to output code to output r5]
-sh r5, 3
-[call to output code to output r5]
+<code>ldi r1, 13
+[call code to output r1]
+sh r1, 3
+[call code to output r1]
 </code>
 
 We need to put our code for outputting stuff somewhere, so maybe we'll
 put it at the beginning:
 
-<code>ldi r31, 255
-out 17, r31
-out 18, r30
-ldi r30, 13
-[call to output code to output r30]
-add r30, r30
-add r30, r30
-add r30, r30
-[call to output code to output r30]
+<code>[code to output r1]
+ldi r1, 13
+[call code to output r1]
+sh r1,3
+[call code to output r1]
 </code>
 
 But now when we first run this program, our output code will get run
@@ -2478,78 +2474,119 @@ finished.  To resolve this, we make the first instruction an rjmp
 which skips over the output code to the first line of our computation
 code:
 
-<code>rjmp 3
-ldi r31, 255
-out 17, r31
-out 18, r30
-ldi r30, 13
-[call to output code to output r30]
-add r30, r30
-add r30, r30
-add r30, r30
-[call to output code to output r30]
-</code>
+
+<code>rjmp [length of output code]
+[code to output r1]
+ldi r1, 13
+[call code to output r1]
+sh r1,3
+[call code to output r1]</code>
+
+Let us start with the output code.  This should be:
+
+<code>brfc I,2              ; If I flag clear, we are go to output
+[call code to read input]
+rjmp -3
+out r1</code>
+
+Whereas the input code is: 
+
+<code>brfs I,-1
+in r2</code>
+
+So we need to put this at the beginning too, and our code now is:
+
+<code>rjmp 6
+brfc I,2
+[call code to read input]
+rjmp -3
+out r1
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+
+ldi r1, 13
+[call code to output r1]
+sh r1,3
+[call code to output r1]</code>
+
 
 Now we can fill in the call lines: the first one is making a call 4
 instructions back, so it will be rcall -5, and the second call needs
 to call the code 8 instructions back, so it will be rcall -9: 
 
-<code>rjmp 3
-ldi r31, 255
-out 17, r31
-out 18, r30
-ldi r30, 13
-rcall -5
-add r30, r30
-add r30, r30
-add r30, r30
-rcall -9
-</code>
+<code>rjmp 6
+brfc I,2
+rcall 2
+rjmp -3
+out r1
 
-But this is no good still--once we rcall -5, we jump back to the line 
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
 
-<code>ldi r31, 255</code>
+ldi r1, 13
+rcall -8
+sh r1,3
+rcall -10</code>
 
-and then the program continues execution from there--basically
-starting the program over.  Rather, we want our output code to use the
-ret instruction once it finishes:
+But this is no good still--once we rcall -8, we jump back to the line 
 
-<code>rjmp 4
-ldi r31, 255
-out 17, r31
-out 18, r30
+<code>brfc I,2</code>
+
+and then the program continues execution from there--running both the
+output code and then the input code and then the main bit of the
+program from the beginning!  Rather, we want our output code to use
+the ret instruction once it finishes:
+
+
+<code>rjmp 6
+brfc I,2
+rcall 3
+rjmp -3
+out r1
 ret
-ldi r30, 13
-rcall -6
-add r30, r30
-add r30, r30
-add r30, r30
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+ret
+
+ldi r1, 13
 rcall -10
-</code>
+sh r1,3
+rcall -12</code>
 
 (Note we've had to shift all the rcall and rjmp operands.)</p>
 
 <p>This is now great, but there is another issue: rcall is using the
-stack, but we don't actually know at this point that sp is an address
-that makes sense (remember that RAM addresses 0-92 are reserved, so if
-the sp defaults to address 0, then we may get unexpected behavior),
-since we never set it up.  So we do this as the first thing:
+stack, but we don't actually know at this point that r0 contains an
+address that makes sense, since we never set it up.  So we do this as
+the first thing:
 
-<avrasm>ldi r31, 136
-out 61, r31
-ldi r31, 19
-out 62, r31
-rjmp 4
-ldi r31, 255
-out 17, r31
-out 18, r30
+<avrasm>ldi r0,136
+ldih r0,19
+rjmp 6
+brfc I,2
+rcall 3
+rjmp -3
+out r1
 ret
-ldi r30, 13
-rcall -6
-add r30, r30
-add r30, r30
-add r30, r30
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+ret
+
+ldi r1, 13
 rcall -10
+sh r1,3
+rcall -12
 </avrasm>
 
 And now, finally, we've got things set up so that we can reuse the
@@ -2559,10 +2596,10 @@ outputting code as we'd hoped.</p>
 record for future reference our code-reuse checklist: 
 
 <ul>
-  <li>Ensure that the sp is set to something sensible</li>
+  <li>Ensure that the r0 is set to something sensible</li>
   <li>Place the reuseable code somewhere where it won't get executed
-  without rcalling it, for example by placing it at the beginning and jumping
-  over it.</li>
+  without rcalling it, for example by placing it at the beginning and
+  using the first instruction to jump over it.</li>
   <li>Ensure the reuseable code ends with a ret instruction</li>
   <li>Call the code using rcall with an operand that shifts you to the
   start of the reuseable code, being careful to update these offsets
@@ -2571,15 +2608,37 @@ record for future reference our code-reuse checklist:
 
 <p><b>Caller vs. callee-saved registers: </b></p>
 
-<p>There is one further issue that doesn't actually cause a problem in
-the above example, but can easily become a problem in more complicated
-examples, namely that the reusable code modifies the r31 register.
-Specifically, it fills it with a value that it uses for its own
-purposes, overwriting whatever value was in it before.  </p>
+<p>There is one further issue with our code above, and specifically
+with the code to read input.  We can call this code as often as we
+like using rcall as we wanted.  However, this code overwrites whatever
+is in the r3 register with whatever value it reads from the pins.  In
+particular, if </p>
 
-<p>To see this in action, suppose instead of multiplying r30 by 8, we
-wanted to add the number 41 to it two times, output r30, and then add
-41 to it three more times and output the result of that:
+<p>Suppose we are doing a calculation and at some point we want the
+user to input a number, which we will compare to 19 and output it if
+it is different.
+
+<avrasm>ldi r0,136
+ldih r0,19
+rjmp 6
+brfc I,2
+rcall 3
+rjmp -3
+out r1
+ret
+
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+ret
+
+ldi r3,19
+rcall -7
+
+</avrasm>
+
 
 <avrasm>ldi r31, 136
 out 61, r31
@@ -2681,13 +2740,8 @@ save its value.  In this case, the register is known as a
 if they want its value preserved.</def></p>
 
 <aside title="Abusing rcall"><p>You'll have noted that most of our
-operations thus far only act on general-purpose registers.  If we
-really wanted, we could make them act on sreg or sp by reading these
-from the appropriate I/O registers into the general-purpose registers,
-computing with these general-purpose registers, and then writing the
-results back to the relevant I/O registers.  But none of our
-instructions can take pc as an operand, and pc doesn't actually live
-in the I/O register file either.  </p>
+operations thus far only act on general-purpose registers, which the
+pc is not.  </p>
 
 <p>So if we're merrily going through a program and for whatever reason
 we want to get the current pc in a register, there is not an
@@ -2698,15 +2752,13 @@ instruction that reads a value off the stack into a register--namely
 pop.  So we can do:
 
 <code>rcall 0
-pop r0
 pop r1</code>
 
-and this will put the stored pc into registers r1 and r0, placing the
-low 8 bits in r0 and the high 8 bits in r1, so PC = r1:r0.  Note that
-this stored pc is the address of the first pop instruction in program
-memory, but we can subsequently adjust r0 with arithmetic operations
-to get r0 to be the address of whatever instruction we're actually
-interested in.  </p></aside>
+and this will put the stored pc into register r1.  Note that this
+stored pc is the address of the pop instruction in RAM, but we can
+subsequently adjust r1 with arithmetic operations to get it to be the
+address of whatever instruction we're actually interested in.
+</p></aside>
 
 </text></section>
 </section>
