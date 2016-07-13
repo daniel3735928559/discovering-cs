@@ -681,6 +681,47 @@ But if instead we were doing ld, VAL still contains by this point the value we w
 
 </text></section>
 
+<section><title>addi, cpi</title><text>
+
+<p>One thing that should be clear by now is that the decode stage,
+which is responsible for pulling the needed data out of the
+binary-encoded instructions, can be more or less organised by the
+instruction formats.  ldi and ldih are Reg-Imm format instructions, so
+the first steps are to pull our the register and immediate value on
+which we are acting, which always reside in the same bits of the
+instruction for any Reg-Imm format instruction.  So we should be able
+to easily proceed with the other Reg-Imm instructions, addi and cpi.
+Since the format is, as usual, 
+
+<code>CCCCRRRRIIIIIIII</code>
+
+Both of these instructions take the register INST[11:8] and will
+either add or compare it to the immediate value given by the I bits in
+INST[7:0].</p>
+
+<p><b>Decode: </b>Once again, we can reuse the states for recoding
+Reg-Imm instructions:
+
+<code>DEST = INST[11:8]
+IMM = INST[7:0]</code>
+
+</p>
+
+
+<p><b>Execute: </b>In the case of addi, In the case of subi, we will go to the usual
+register-writing state: RF[REG] = VAL and for cpi we skip this state
+and go straight to PC = PC + 1</p>
+
+<p><b>Writeback: </b>In the case of subi, we will go to the usual
+register-writing state: RF[REG] = VAL and for cpi we skip this state
+and go straight to PC = PC + 1</p>
+
+<p>In summary, we have the diagram: </p>
+
+<figure sk='sm_ldi,ld,st,add,sub,cp,subi,cpi.png'></figure>
+
+</text></section>
+
 <section><title>st</title><text>
 
 <p><b>Decode: </b>In the decode stage, we can get the address to write to and the register to read from in exactly the same way, so we actually leave this state intact, and will end up in this state in case of either an ld or an st instruction.  However, whereas a ld instruction then just needs to read memory address ADDR and store the value in the register file, st needs to do more: It needs to read out the value from register number REG and store that in memory.  So the state branches into the memory read state for ld, and into 
@@ -695,7 +736,7 @@ for st.</p>
 
 <p><b>Writeback: </b>For a st instruction, we do nothing in the writeback phase except increment PC.</p>
 
-<figure sk='sm_ldi,ld,st.png'></figure>
+<figure sk='sm_ldi,ld,addi,cpi,st.png'></figure>
 
 </text></section>
 
@@ -767,36 +808,6 @@ Note that almost the exact same flow will execute sub instructions except we nee
 <p>Allowing for execution of further computational instructions that operate on two registers, such as and, or, eor, etc. is very similar.  One other sort of instruction that is similar is cp, which recall does exactly the same thing as sub except it doesn't save anything to the register file.  Thus only one new state transition is needed to add cp capabilities to our state machine: </p>
 
 <figure sk="sm_ldi,ld,st,add,sub,cp.png"></figure>
-</text></section>
-
-<section><title>subi, cpi</title><text>
-
-<p>We now turn to the cpi and subi instructions, which have formats
-
-<code>0011IIIIRRRRIIII</code>
-
-and 
-
-<code>0101IIIIRRRRIIII</code>
-
-respectively.  Both of these instructions take the register number
-1RRRR and subtract from it the immediate value given by the I bits.
-The only difference between these is that subi actually stores this
-value, whereas cpi merely updates the SREG.</p>
-
-<p><b>Decode: </b>Since we want again to take advantage of a
-pre-existing state--in this case VAL = VAL1 - VAL2--we will use the
-decode stage to set this up with REG = 1,INST[7:4] followed by VAL1 =
-RF[REG] and VAL2 = INST[11:8],INST[3:0].  </p>
-
-<p><b>Writeback: </b>In the case of subi, we will go to the usual
-register-writing state: RF[REG] = VAL and for cpi we skip this state
-and go straight to PC = PC + 1</p>
-
-<p>In summary, we have the diagram: </p>
-
-<figure sk='sm_ldi,ld,st,add,sub,cp,subi,cpi.png'></figure>
-
 </text></section>
 
 <section><title>rjmp</title><text>
