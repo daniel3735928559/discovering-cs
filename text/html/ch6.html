@@ -1,0 +1,1782 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="/sim/cm/codemirror.js"></script><link rel="stylesheet" type="text/css" href="/lib/jsavr/sim.css"><script type="text/javascript" src="/lib/jsavr/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="sidebar"><div class="sidebar_header">Book:</div><table class="chapter_links"><tr><td>0</td><td><a href="/text/box.xml">Title page</a></td></tr><tr><td>1</td><td><a href="/text/ch1.xml">Introduction</a> (<a class="print_link" href="/text/print/ch1.pdf">PDF</a>)</td></tr><tr><td>2</td><td><a href="/text/ch2.xml">Programming</a> (<a class="print_link" href="/text/print/ch2.pdf">PDF</a>)</td></tr><tr><td>3</td><td><a href="/text/ch3.xml">Advanced Programming</a> (<a class="print_link" href="/text/print/ch3.pdf">PDF</a>)</td></tr><tr><td>4</td><td><a href="/text/ch4.xml">Numbers</a> (<a class="print_link" href="/text/print/ch4.pdf">PDF</a>)</td></tr><tr><td>5</td><td><a href="/text/ch5.xml">ISA</a> (<a class="print_link" href="/text/print/ch5.pdf">PDF</a>)</td></tr><tr><td>6</td><td><a href="/text/ch6.xml">Assembly</a> (<a class="print_link" href="/text/print/ch6.pdf">PDF</a>)</td></tr><tr><td>7</td><td><a href="/text/ch7.xml">Encodings</a> (<a class="print_link" href="/text/print/ch7.pdf">PDF</a>)</td></tr><tr><td>8</td><td><a href="/text/ch8.xml">Micro­architecture</a> (<a class="print_link" href="/text/print/ch8.pdf">PDF</a>)</td></tr><tr><td>9</td><td><a href="/text/ch9.xml">Digital Logic</a> (<a class="print_link" href="/text/print/ch9.pdf">PDF</a>)</td></tr><tr><td>10</td><td><a href="/text/ch10.xml">Transistors</a> (<a class="print_link" href="/text/print/ch10.pdf">PDF</a>)</td></tr></table><div class="sidebar_header">This chapter:</div><a href="#" ng-click="show_index()"><div class="sidebar_link">Outline</div></a><a href="#" ng-click="show_definitions()"><div class="sidebar_link">Definitions</div></a><div class="sidebar_header">Course:</div><a href="http://pages.cs.wisc.edu/~karu/courses/cs252/fall2015/wiki/index.php"><div class="sidebar_link">Homepage</div></a><a href="/homework"><div class="sidebar_link">Online HW</div></a><a href="/homework/rating.html"><div class="sidebar_link">Rate lecture</div></a><div class="sidebar_header">Simulators:</div><a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a><a href="/sim/bin/bin.html"><div class="sidebar_link">Binary</div></a><a href="/sim/avr/avr.html"><div class="sidebar_link">AVR</div></a><a href="/sim/uarch/uarch.html"><div class="sidebar_link">Micro­architecture</div></a><div class="sidebar_header">Additional:</div><a href="/text/info/authors.xml"><div class="sidebar_link">Authors</div></a><a href="/text/info/acknowledgements.xml"><div class="sidebar_link">Contributors</div></a><a href="/text/info/copyright.xml"><div class="sidebar_link">Copyright</div></a><a href="/text/info/links.xml"><div class="sidebar_link">Links</div></a></div><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6')">6: Assembly language, or "Turning Python code into ISA code"</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_1')">6.1: Labels</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_2')">6.2: ISA Operations</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_3')">6.3: Word directives</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_4')">6.4: Python-to-assembly recipes</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_4_1')">6.4.1: Assignment</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_4_2')">6.4.2: Large numbers</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_4_3')">6.4.3: if statements</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_4_4')">6.4.4: while loops</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_4_5')">6.4.5: Functions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_4_6')">6.4.6: Strings and arrays</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_6_5')">6.5: Simple examples</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_6_5_1')">6.5.1: Summing the first n integers</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_5_2')">6.5.2: Multiplication</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_6_5_3')">6.5.3: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_assembly language')">assembly language</a><br><a href="#" ng-click="goto_loc('def_assembler')">assembler</a><br><a href="#" ng-click="goto_loc('def_byte directive')">byte directive</a><br><a href="#" ng-click="goto_loc('def_string directive')">string directive</a><br><a href="#" ng-click="goto_loc('def_word directive')">word directive</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_6"></div><div class="text"><div class="header">6: 
+	  Assembly language, or "Turning Python code into ISA code"</div><div class="summary"><b>Summary: </b>Assembly language is the programming language that one often
+uses to write code in the ISA.  It is easy to convert from assembly to
+nothing but pure ISA instructions--a job that is done by an
+'assembler'--but because of a few key features, it is also easier to
+write assembly than the ISA itself.<br><br><b>Definitions: </b><a href="#def_assembly%20language">assembly language</a>, <a href="#def_assembler">assembler</a></div><p>Writing useful code using the ISA can be a pain.  Of course,
+because of the limited work done by each individual instruction,
+coding at this level is going to be difficult no matter what.  At the
+same time, there are some things that people found succifiently
+annoying that they created a very slight additional layer on top of
+the ISA.  This layer is known as "assembly language".  </p><p><span id="def_assembly language" class="definition"></span><b>Assembly language </b> is a
+programming language, and as such is defined in terms of its syntax
+and semantics.  Assembly language's particular syntax mostly consists
+of raw ISA instruction mnemonics exactly as we learned them in the
+previous section, with just a few additional features to simplify some
+of the more painful tasks when programming in the ISA directly.
+ The specific tasks that assembly language simplifies are the
+following:
+
+<ul>
+<li><b>Specifying offsets for relative jumps and branches: </b>Recall
+our example rcall code: We have multiple rcalls all calling back to a
+single place in the code.  But because rcall requires an offset, we
+had to recompute the operand for each individual rcall.  Further, if
+we ever want to add anything to the middle of the program, we would
+have to recalculate all these offsets again!  Assembly language
+includes a mechanism called labels for naming locations in the code,
+and allows these to be provided as operands to rjmp and rcall instead
+so that we can effectively think "jump to this point in the code"
+rather than "jump 3 instructions backward".</li>
+<li><b>Initializing RAM with specified data: </b>Currently, if we want a
+large amount of data stored in RAM, then since the only way of storing
+data we have is with the st instructions, we will have to do one st
+instruction for each number we want stored.  This can get tedious if we
+have hundreds of things to store, so assembly provides a mechanism to
+pre-populate RAM at specified locations with whatever values are
+desired.</li>
+<li><b>Strings: </b>We haven't yet discussed how Python's strings can
+be realized in the ISA.  This discussion will largely be deferred to
+the next chapter, but for now we mention that there is some way to
+correspond letters in a string to numbers 0-255.  So storing a string
+would involve looking up which letters correspond to which numbers and
+using st instructions to store the appropriate sequence of numbers.
+Assembly includes syntax to let us simply type the desired string and
+have the assembler convert this to numbers for storage. </li>
+</ul>
+</p><p><span id="def_assembler" class="definition"></span>Now, with assembly language, we're still
+trying to program the computer--that is, recall, we're trying to get
+the right numbers corresponding to our desired instructions into the
+computer's RAM.  When we write a program in assembly language, another
+program called an <b>assembler</b> (analogous to the Python compiler)
+will convert our program into numbers for storage into the program
+memory. Moreover, assembly language not only allows you to
+populate program memory with numbers corresponding to instructions,
+but also allows you to pre-populate RAM with numbers if desired.</p><p>As mentioned, assembly language is a programming language, so just
+as we explained the Python programming language in terms of its
+syntax--what constructions are legal, and its semantics--what the
+constructions mean, we can do this with assembly.  Further, since all
+an assembly language program is meant to do is turn into certain
+numbers that will go into program memory and certain other numbers
+that go into RAM, describing the semantics of an element of assembly
+language is as easy as explaining what numbers it corresponds to and
+where in memory those numbers are stored.  </p><table>
+	  <tr>
+	    <td>Line</td>
+	    <td>Syntax</td>
+	    <td>Semantics</td>
+	    <td>Examples</td>
+	  </tr>
+	  
+	  <tr>
+	    <td>ISA operation</td>
+	    <td>An ISA operation can be any of the normal operations
+	    we described.  The added features in assembly language
+	    are: <ul><li>In place of any operand that represents an
+	    offset, you may use a label name</li><li>In place of an
+	    immediate operand you may use a character or
+	    lo8(labelname) or hi8(labelname)</li></ul></td>
+	    <td>Performs the specified ISA operation.</td>
+	    <td>
+	      <pre>ldi r31, 51</pre>
+	      <pre>cpi r14, 'A'</pre>
+	      <pre>breq -17</pre>
+	      <pre>rjmp hello</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Label line</td>
+	    <td><pre><i>labelname</i>:</pre></td>
+	    <td>Marks this offset in the program as being named by the
+	    given label name.  A label name may be any combination of
+	    letters, numbers, and underscores (no spaces), except that
+	    a label name cannot begin with a number.</td>
+	    <td>
+	      <pre>hello: </pre>
+	      <pre>this_is_a_label_2: </pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>word directive</td>
+	    <td><pre>.word <i>words</i></pre></td>
+	    <td>Instructs that these words should be inserted into RAM
+	    in the program in the specified place within the program.</td>
+	    <td>
+	      <pre>.word 444, 0, 7000, 10056</pre>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>string directive</td>
+	    <td>
+	      <pre>.string <i>string</i></pre>
+	    </td>
+	    <td>Translates each character in the string into a number
+	    and inserts those bytes into RAM at the current
+	    location.</td>
+	    <td><pre>.string "Hello world!"</pre>
+	    <pre>.string "AAA&amp;AAAA!!"</pre></td>
+	  </tr>
+	  <tr>
+	    <td>Comments</td>
+	    <td>Anything on a line after a semicolon (;).</td>
+	    <td>Comments can be anything and are ignored by the assembler</td>
+	    <td>
+	      <pre>; rhbuybshdbfkjshbfIFB
+pop r0
+ldi r31,40     ;loads value 40
+	       ;into register r31</pre>
+	    </td>
+	  </tr>
+	</table><p>As with Python, assembly language has in fact many features
+	beyond those explained here, but they are much less powerful
+	than the extra features of Python, and from this book we shall
+	elide them entirely.</p></div></div><div class="section"><div id="sec_6_1"></div><div class="text"><div class="header">6.1: 
+	  Labels</div><p>Labels can be inserted directly into the program as lines that
+  look like:
+
+    <div class="code"><pre><i>label_name</i>: </pre></div>
+    
+    Where a label name can be exactly what a variable name in Python
+    could be: Anything containing only letters, numbers, or underscores,
+    except it cannot start with a number.</p><p>Labels are used to mark a place in the program to refer to in
+  actual instructions, as in the examples of the previous section.
+  They do not themselves constitute actual instructions.  For example,
+  the two programs below are identical in terms of the instructions
+  that will be stored in program memory: 
+
+  <sim-avr text="'ldi r30, 255
+out 26, r30
+ldi r30, \'H\'
+out 27, r30
+ldi r30, 255
+out 26, r30
+ldi r30, \'i\'
+out 27, r30'" size="auto" reset="yes" simid="0" template="/lib/jsavr/simavr.html"></sim-avr>
+
+
+<sim-avr text="'hello:
+ldi r30, 255
+out 26, r30
+ldi r30, \'H\'
+some_label: 
+out 27, r30
+ldi r30, 255
+babel: 
+out 26, r30
+ldi r30, \'i\'
+out 27, r30'" size="auto" reset="yes" simid="1" template="/lib/jsavr/simavr.html"></sim-avr>
+
+Any such label has a value, which is defined to be the address in
+program memory of the first instruction after the label.  So in the
+above example, the value of the label <span class="icode">hello</span> is 0, of
+<span class="icode">some_label</span> is 3, and of <span class="icode">babel</span> is 5.
+  
+  </p><p><span id="def_byte directive" class="definition"></span>Labels can also be defined by
+    byte or string directives.  A <b>byte directive</b> is a way of
+    pre-filling RAM with a given sequence of values, and giving the
+    address of those values a name.  Specifically, a byte directive
+    looks like:
+
+    
+    <div class="code"><pre>.byte(<i>label name</i>) <i>[Comma-separated list of bytes]</i></pre></div>
+    
+    It will write the given sequence of bytes (separated by commas) in
+    the list into RAM at some address and will create a label whose
+    value is that address.  </p><p>For example, the directive
+    
+    <div class="code"><pre>.byte(hello) 12,189,200,0,0</pre></div>
+    
+    might create the following situation in RAM:</p><table>
+      <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+      <tr><td>1231</td><td>12</td></tr>
+      <tr><td>1232</td><td>189</td></tr>
+      <tr><td>1233</td><td>200</td></tr>
+      <tr><td>1234</td><td>0</td></tr>
+      <tr><td>1235</td><td>0</td></tr>
+    </table><p>In this case, the label <span class="icode">hello</span> will have the
+    value 1231.</p><p><span id="def_string directive" class="definition"></span>Finally, exactly analogous to
+    the byte directive is the <b>string directive</b>, which looks
+    like: 
+
+    <div class="code"><pre>.string(<i>label name</i>) <i>[string]</i></pre></div>
+
+    This will convert each character of the string into its
+    corresponding byte, place these bytes into RAM, and create a new
+    label whose value is the address of the first byte of this string.
+    It will also leave a 0 byte at the end of the string that it
+    stores in RAM.  </p><p>For example, the directive
+    
+    <div class="code"><pre>.string(story) "Once upon a time"</pre></div>
+    
+    might create the following situation in RAM:</p><table>
+      <tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+      <tr><td>1904</td><td>79</td></tr>
+      <tr><td>1905</td><td>110</td></tr>
+      <tr><td>1906</td><td>99</td></tr>
+      <tr><td>1907</td><td>101</td></tr>
+      <tr><td>1908</td><td>32</td></tr>
+      <tr><td>1909</td><td>117</td></tr>
+      <tr><td>1910</td><td>112</td></tr>
+      <tr><td>1911</td><td>111</td></tr>
+      <tr><td>1912</td><td>110</td></tr>
+      <tr><td>1913</td><td>32</td></tr>
+      <tr><td>1914</td><td>97</td></tr>
+      <tr><td>1915</td><td>32</td></tr>
+      <tr><td>1916</td><td>116</td></tr>
+      <tr><td>1917</td><td>105</td></tr>
+      <tr><td>1918</td><td>109</td></tr>
+      <tr><td>1919</td><td>101</td></tr>
+      <tr><td>1920</td><td>0</td></tr>
+    </table><p>In this case, the label <span class="icode">story</span> will have the
+    value 1904.</p></div></div><div class="section"><div id="sec_6_2"></div><div class="text"><div class="header">6.2: 
+	  ISA Operations</div><p>We have already discussed in detail the syntax and semantics of
+  the various ISA operations.  The only thing new in assembly language
+  is the ability to replace certain operands with characters or
+  labels.  Specifically:
+  <ul>
+    <li><p>Any operand designated above as an 'offset' can be replaced
+    with the name of a label.  This includes the operands to rjmp,
+    rcall, and all the branch instructions.  The assembler will then
+    compute the difference between the address of the jump/branch
+    instruction and the value of the label, and will substitute that
+    difference as the actual operand.  </p>
+
+    <p>For example, take the program:
+
+    <sim-avr text="'ldi r31,0
+hello:
+cpi r31,8
+breq stuff
+inc r31
+rjmp hello
+stuff:
+dec r31
+cpi r31,3
+brne stuff'" size="auto" reset="yes" simid="2" template="/lib/jsavr/simavr.html"></sim-avr>
+
+The label <span class="icode">stuff</span> in this program has value 5.  The
+<span class="icode">breq stuff</span> instruction occurs at address 2, so in order
+to jump from <span class="icode">breq stuff</span> to the instruction after the
+<span class="icode">stuff</span> label, the assembler computes that it has to jump
+ahead 3 instructions.  This is accomplished by replacing the first
+<span class="icode">breq stuff</span> with <span class="icode">breq 2</span> (as, remember,
+the PC will get incremented after the instruction runs).  </p>
+    
+    <p>On the other hand, the instruction <span class="icode">brne stuff</span>
+    has address 7, and so to jump back to the label stuff would
+    require a jump of -2.  Because (again) branch instructions
+    increment the PC, this is accomplished by replacing the
+    <span class="icode">brne stuff</span> line with <span class="icode">breq -3</span>.
+    Likewise, <span class="icode">rjmp hello</span> gets replaced by <span class="icode">rjmp
+    -5</span>.  So the above program is equivalent to:
+
+
+<sim-avr text="'ldi r31,0  
+cpi r31,8  
+breq 2  
+inc r31  
+rjmp -5  
+dec r31  
+cpi r31,3  
+brne -3'" size="auto" reset="yes" simid="3" template="/lib/jsavr/simavr.html"></sim-avr>
+
+Of course, writing the program using labels means we don't have to
+adjust all the offsets of our jumps and branches if we change the
+program a little, so labels do indeed solve that problem.
+    </p>
+    </li>
+    <li>Any character corresponds to a byte in a standard way.  So
+    with just the naive ISA operations, we could already do string
+    manipulation by taking any string we wanted to use, figuring out
+    which bytes its characters corresponded to, and using those
+    numbers in place of the actual string.  This would make the
+    purpose of a program rather hard to divine, however.  Imagine:
+
+    <sim-avr text="'ldi r30, 255
+out 17, r30
+ldi r30, 72
+out 18, r30
+ldi r30, 255
+out 17, r30
+ldi r30, 105
+out 18, r30'" size="auto" reset="yes" simid="4" template="/lib/jsavr/simavr.html"></sim-avr>
+
+    We know from earlier that this is outputting the numbers 72 and
+    105, but these numbers turn out to correspond to the characters
+    'H' and 'i', respectively.  So this is outputting the text 'Hi',
+    and we can make this more evident by replacing the numbers with
+    the characters they correspond to:  
+
+    <sim-avr text="'ldi r30, 255
+out 17, r30
+ldi r30, \'H\'
+out 18, r30
+ldi r30, 255
+out 18, r30
+ldi r30, \'i\'
+out 18, r30'" size="auto" reset="yes" simid="5" template="/lib/jsavr/simavr.html"></sim-avr>
+    The assembler will turn this into the earlier program anyway,
+    since ldi of course requires a number as its second operand, but
+    we are free to use characters when they are more convenient than
+    the raw numbers and let the assembler take care of the
+    conversion.</li>
+    
+    <li>
+      <p>Finally, there is one further piece of syntax that the
+      assembler allows.  Imagine we've stored some data in RAM with a
+      directive such as:
+      
+      <div class="code"><pre>.byte(fibonacci) 1,1,2,3,5,8,13,21,34,55</pre></div>
+
+      And say we want to add add up all these numbers (for whatever
+      reason--maybe we really want to know what is the sum of the
+      first 10 fibonacci numbers).  The value of the label
+      <span class="icode">fibonacci</span> is the address in RAM of the first byte
+      in this sequence.  If we want to load from this address, then
+      remember that this will involve using the <span class="icode">ld</span>
+      instruction to load from address X (or Y or Z) into a register.
+      So we need to get the value of <span class="icode">fibonacci</span> into,
+      say, X.  But we don't have instructions for loading into X
+      directly.  We can only use <span class="icode">ldi</span> to load one
+      register at a time.  Since X = r27:r26, we'll need two ldi
+      instructions: one to get the right value into r26 and one to get
+      the right value into r27.  </p>
+      
+      <p>But what is the right value?  The value of
+      <span class="icode">fibonacci</span> is an address in RAM, so is a 16-bit
+      number.  We cannot load it into a register directly, then.
+      Rather, we want to load the low 8-bits into r26, and the high
+      8-bits into r27.  This can be accomplished with the final piece
+      of syntax for ISA operations:
+
+      <div class="code"><pre>lo8(<i>label name</i>)</pre></div>
+
+      will refer to the lower 8 bits of the value of a label that
+      refers to a RAM address, and
+
+      <div class="code"><pre>hi8(<i>label name</i>)</pre></div> will refer to the high 8
+      bits.  </p>
+      
+      <p>These two can be used in place of any immediate operand.
+      Specifically, they can be used as the second operands to ldi,
+      ori, cpi, andi, or subi.</p>
+      
+      <p>Thus:
+
+      <div class="code"><pre>ldi r26,lo8(fibonacci)
+ldi r27,hi8(fibonacci)</pre></div>
+
+      will together load the value of <span class="icode">fibonacci</span> into
+      X.  </p>
+      
+      <p>
+      For example, if <span class="icode">fibonacci</span> is RAM address 1000,
+      then we first compute that 1000 = 3:232.  Or equivalently: As a
+      16-bit binary number, 1000 = 0000001111101000, so the high 8
+      bits are 00000011 = 3, and the low 8 bits are 11101000 = 232.
+      So <span class="icode">lo8(fibonacci)</span> will be 232 and
+      <span class="icode">hi8(fibonacci)</span> will be 3, and so the instructions
+      
+      <div class="code"><pre>ldi r26,lo8(fibonacci)
+ldi r27,hi8(fibonacci)</pre></div>
+      
+will indeed store 1000 into X.
+      </p>
+    </li>
+  </ul>
+  </p><p>As we mentioned, the assembler's job is to put numbers into
+  program memory corresponding to the specified instructions.  We've
+  seen how to specify ISA operations, even using labels and characters
+  when convenient, but have not discussed the conversion of ISA
+  operations into numbers.  This will be the topic of the next
+  chapter, and for now all we mention is that there is some
+  correspondence.  For example, the instruction
+
+  <div class="code"><pre>ori r22,88</pre></div>
+
+  corresponds to the number 26725.  
+  </p></div></div><div class="section"><div id="sec_6_3"></div><div class="text"><div class="header">6.3: 
+	  Word directives</div><p>We have seen how to get values into RAM using byte and string
+directives.  <span id="def_word directive" class="definition"></span>There is a further directive,
+called a <b>word directive</b>, which has the form
+
+<div class="code"><pre>.word <i>comma-separated list of numbers</i></pre></div>
+
+and is used not to write bytes into RAM, but to write words into
+program memory directly.</p><p>Remember that program memory is, at the end of the day, just a
+normal width-16 memory, meaning all it stores are numbers 0-65535.
+When we write ISA operations these do not get stored directly in
+program memory, but are first converted to numbers and stored.  The
+computer then is designed to interpret these numbers as tasks that it
+should perform.  In the next chapter, we will learn precisely how
+instructions correspond to numbers by learning what is called the
+ISA's "encoding."  However, for now, we can at least see what numbers
+correspond to various instructions by using the simulator's "decimal"
+view of program memory.  </p><p>For example, let us look back to the 3x+1 program from earlier:
+
+<sim-avr text="'ldi r16,20
+ldi r17,1
+ldi r31,-1
+out 17,r31
+out 18,r16
+cp r16,r17
+breq 11
+mov r18,r16
+andi r18,1
+cp r18,r17
+breq 2
+asr r16
+rjmp -9
+mov r19,r16
+add r19,r19
+add r16,r19
+inc r16
+rjmp -14'" size="auto" reset="yes" simid="6" template="/lib/jsavr/simavr.html"></sim-avr>
+
+If you run this example and then, in the box for the program memory,
+click the "[dec]" button, you will see the actual numbers that gets
+stored in program memory for these instructions.  In this case, we see
+the following sequence of numbers stored: 
+
+<div class="code"><pre>57604  
+57361  
+61439  
+47903  
+47904  
+5889  
+61529  
+12064  
+28705  
+5921  
+61457  
+38149  
+53239  
+12080  
+3891  
+3843
+38147  
+53234</pre></div>
+
+The word directive lets us simply insert these numbers into the
+program memory directly rather than writing mnemonics for the
+instructions.  For example, the following is another way of writing
+the 3x+1 program:
+
+<sim-avr text="'.word 57604,57361,61439,47903,47904,5889,61529,12064,28705,5921,61457,38149,53239,12080,3891,3843,38147,53234'" size="auto" reset="yes" simid="7" template="/lib/jsavr/simavr.html"></sim-avr>
+
+
+</p></div></div><div class="section"><div id="sec_6_4"></div><div class="text"><div class="header">6.4: 
+	  Python-to-assembly recipes</div><p>Since Python never actually runs on a computer, but is simply
+translated into the ISA, it must be true that everything we could do
+in Python, we can do in the ISA.  Since assembly translates directly
+to the ISA, we only need to substantiate the claim that everything we
+can do in Python, we could instead do in assembly language.  To this
+end, we shall take a few constructs from Python and see how they can
+be realized using SimpleAVR assembly language in this section.  In effect,
+we will manually be doing the job of a compiler in order to start to
+learn how a compiler does what it does.</p></div></div><div class="section"><div id="sec_6_4_1"></div><div class="text"><div class="header">6.4.1: 
+	  Assignment</div><p>Recall that assignment lines in Python were our principal means
+  for performing storage and computation operations.  Take, for example:
+
+  <div class="code"><pre>x = 18-(5+1)</pre></div>
+
+  In the ISA, we have two choices for where to store values like this:
+  we can use registers or we can use RAM.  But remember that to store
+  something in RAM, we had to first have it in a register anyway, and
+  then we would use a <span class="icode">st</span> instruction to get it into
+  RAM.  </p><p>To store a value in a register, we have the <span class="icode">ldi</span>
+  instruction, but we cannot do, for example,
+
+  <div class="code"><pre>ldi r16,18-(5+1)</pre></div>
+
+  since ldi accepts only numbers -127 through 128 as its operands and
+  not sums or any complex expression of any kind.  Rather, these
+  expressions need to be computed with further ISA operations.
+  Typically, we would start by storing something from the inner-most
+  part of the expression.  In this case, that might be 5:
+
+  <div class="code"><pre>ldi r16,5</pre></div>
+
+  and then performing various further operations on this to execute
+  the steps outlined by the expression.  For example, the next thing
+  is to add 1 to this value, which we can do with the
+  <span class="icode">inc</span> instruction:
+
+  <div class="code"><pre>ldi r16,5
+inc r16</pre></div>
+
+Then we need to negate what we have:
+
+  <div class="code"><pre>ldi r16,5
+inc r16
+neg r16</pre></div>
+
+  Finally, we need to add 18 to it.  Since the add instruction
+  requires its second operand to be a register, we need to put 18 in
+  another register first, and then we can add it to r16:
+  
+  <div class="code"><pre>ldi r16,5
+inc r16
+neg r16
+ldi r17,18
+add r16,r17</pre></div>
+
+This seems like a lot of work for the same result, and indeed it is a
+lot more code.  High-level languages exist to prevent programmers from
+having to write such tedious lists of operations to get even simple
+things done.  The point of the ISA isn't to actually write
+large programs using it (though one can, and indeed, historically many
+people have).  Rather, the point of the ISA is that it can both
+express all the computations we want to be able to do (however
+clumsily) <i>and</i> it can be actually run by a physical machine.
+After all, what good is a high-level programming langauge if the
+programmer has to manually walk through the steps of running it?  </p></div></div><div class="section"><div id="sec_6_4_2"></div><div class="text"><div class="header">6.4.2: 
+	  Large numbers</div><p>We've seen how to take assignment lines in Python and break up
+  their expressions into computational steps performed by the ISA.
+  Sometimes in Python, however, these computations would yield very
+  large numbers.  In the simplest case,
+
+  <div class="code"><pre>x = 999999999</pre></div>
+
+  is a perfectly valid line of Python code that will work as you would
+  expect.  By contrast, all ISA operations only act on registers,
+  which, in turn, only store numbers up to 255.  So how can we
+  possibly turn a line like the above into ISA operations?</p><p>In fact we've already see some hints of this: RAM addresses were
+  numbers larger than 255 sometimes, and so we used combinations of
+  registers such as Z = r31:r30 to deal with these.  In general, the
+  method for handling larger numbers is to use a collection of
+  registers as all together to store the various parts of a single
+  large number.  For example, in binary:
+
+  <div class="code"><pre>999999999 = 111011100110101100100111111111</pre></div>
+
+  We can break this up into bytes:
+  
+  <div class="code"><pre>00111011:10011010:11001001:11111111 = 59:154:201:255</pre></div>
+
+  and we can store each of these bytes in separate registers, say r16
+  through r19, where r16 stores the least significant bits and r19 the
+  most:
+
+  <div class="code"><pre>ldi r16,255
+ldi r17,201
+ldi r18,154
+  ldi r19,59</pre></div>
+  </p><p>However, just being able to store a large number is not
+  enough--we want to be able to do things like add two such numbers.
+  Say r16-r19 are being used to store one such number, and r20-r23 are
+  being used to store another.  We have an ISA instruction to add a
+  register to a register, but not one to add a four-register number to
+  another four-register number.  </p><p>One first guess might be that we can add the constituent
+  registers individually using the add instruction:
+
+  <div class="code"><pre>add r16,r20
+add r17,r21
+add r18,r22
+add r19,r23</pre></div>
+
+  This actually works in certain cases: for instance, for adding the
+  numbers 1:1:1:1 = 16843009 and 4:3:2:1 = 67305985, if we simply add
+  the constituent registers, we get 5:4:3:2 = 84148994, which is the
+  sum of the two represented numbers.</p><p>Essentially this will work until we try to add the registers and
+  we get an overflow.  For the simplest example, suppose we are trying
+  to add 0:0:0:255 = 255 and 0:0:0:1 = 1.  In this case, adding the
+  registers individually yields and answer of 0:0:0:0 = 0, rather than
+  the desired answer of 256 = 0:0:1:0.  </p><p>The solution reflects the addition procedure many people are
+  taught in grade school: To add two numbers, you don't just add their
+  digits blindly, but you add the digits and you "carry the 1" over to
+  the next pair of digits if need be.  In our case, when we add two
+  registers, if there is a carry, the C flag in the sreg gets set, and
+  in that case, the sum of the next two registers also needs a 1 added
+  to it.  But this is precisely what the adc instruction does!  So all
+  we have to do is:
+
+  <div class="code"><pre>add r16,r20
+adc r17,r21
+adc r18,r22
+adc r19,r23</pre></div></p><p>This whole scheme might seem a little uncomfortable--we're not
+  actually storing the large numbers we claim to be, but simply
+  storing pieces and somehow "understanding" those pieces to
+  collectively represent the big numbers.  In a sense, though, this
+  isn't unlike how we when we write down the number "3889", we write
+  it as four separate parts: "3", "8", "8", and "9", and somehow that
+  represents the number three-thousand eight-hundred eighty-nine.
+  </p></div></div><div class="section"><div id="sec_6_4_3"></div><div class="text"><div class="header">6.4.3: 
+	  if statements</div><p>In Python, we had an easy way of executing certain chunks of code
+  conditionally using the if-else construct.  For example, if we have
+  two variables x and y and we want one chunk of code to run if they
+  are equal and a different chunk to run if they are not equal, we
+  could do: </p><div class="code"><pre>if (x == y):
+   <i>stuff to do if equal</i>
+else:
+   <i>stuff to do if not equal</i></pre></div><p>In assembly, we don't have such a construct, but we can mimic
+   its behavior using our conditional branches--specifically breq
+   which branches if the Z flag is set.  Broadly, the structure of
+   such a program would look like: </p><div class="code"><pre><i>compare the two numbers and set the Z flag if they're equal</i>
+breq jump_here_if_equal
+<i>stuff to do if not equal</i>
+<i>jump to end_of_conditional_code (so that we don't also do the stuff to do if equal)</i>
+jump_here_if_equal:
+<i>stuff to do if equal</i>
+end_of_conditional_code:</pre></div><p>Under this setup, if the numbers are equal, then the branch skips
+over the things we want to happen if they aren't equal.  On the other
+hand, if they weren't equal, then the branch is not taken and the code
+goes straight into the stuff that should happen if they are not equal,
+but then at the end of that code, it jumps over the code following,
+which should only happen if the two numbers were equal.  </p><p>Replacing English descriptions with assembly language where
+possible, we get: </p><div class="code"><pre>cp r0,r1
+breq jump_here_if_equal
+<i>stuff to do if not equal</i>
+rjmp end_of_conditional_code
+jump_here_if_equal:
+<i>stuff to do if equal</i>
+end_of_conditional_code:</pre></div><p>We can easily modify this to represent different tests such as
+
+<div class="code"><pre>if(x &gt;= y)</pre></div>
+
+or
+
+<div class="code"><pre>if(x &lt; y)</pre></div>
+
+by changing the branch to, say, brge, or brlo, as we shall see in our
+examples section.</p></div></div><div class="section"><div id="sec_6_4_4"></div><div class="text"><div class="header">6.4.4: 
+	  while loops</div><p>Similarly, the Python while loop construct allowed us to repeat a
+  chunk of code for as long as a given condition remained true.  For
+  example, to do some things as long as two variables x and y have the
+  same values: </p><div class="code"><pre>while(x == y):
+   <i>do stuff</i></pre></div><p>To do this in assembly (again supposing that the two numbers we wish
+to compare are stored in registers r0 and r1), we can use branches and
+jumps again.  For example, we could say "First test if r0 and r1
+are different.  If not, the continue on to the 'do stuff' code, after
+which we should jump back to the comparison at we started with.  If
+they were different, on the other hand, we should branch to the end of
+the whole thing."</p><p>In code: </p><div class="code"><pre>begin_loop:
+cp r0,r1
+brne end_loop
+<i>do stuff</i>
+rjmp begin_loop
+end_loop:</pre></div><p>In general, if we have a while loop like:
+
+  
+  <div class="code"><pre>while(<i>test</i>):
+   <i>do stuff</i></pre></div>
+
+   then the translation to assembly will look like:
+
+   
+<div class="code"><pre>begin_loop:
+<i>run the test</i>
+<i>branch to end_while if the test failed</i>
+<i>do stuff</i>
+rjmp begin_loop
+end_loop:</pre></div>
+
+So, for example, if our loop is:
+
+<div class="code"><pre>while(x &gt; y):
+   <i>do stuff</i></pre></div>
+
+then in assembly, (supposing we've stored x in r16 and y in r17) we
+would compare x and y with <span class="icode">cp</span> instruction.  Now, we
+want to skip to the end of the loop if x is not greater than y.  That
+is, if y &gt;= x.  Recall from the table at the end of section 5.4.6 that
+we can test if r17 &gt;= r16 by
+
+<div class="code"><pre>cp r17,r16
+brsh ...</pre></div>
+
+thus our loop should look like:
+
+<div class="code"><pre>begin_loop:
+cp r17,r16
+brsh end_loop
+<i>do stuff</i>
+rjmp begin_loop
+end_loop:</pre></div>
+
+</p></div></div><div class="section"><div id="sec_6_4_5"></div><div class="text"><div class="header">6.4.5: 
+	  Functions</div><p>The basic idea of functions in Python was to have a chunk of code
+  that could be called on to execute at various times throughout the
+  program.  In pure ISA, we've seen that we could accomplish a similar
+  thing with rcall and ret.  Now that we have learned how to more
+  easily create the offsets for things like rcall using labels, we can
+  revisit functions using assembly language to come up with a reasonably
+  organized pattern for translating general Python functions to
+  machine code.</p><p>Consider, for example, a function in Python like this:
+
+  <div class="code"><pre>def f(x):
+   return 3*x+1</pre></div>
+
+   In assembly, we first need a piece of code that performs the
+   calculation that the function does.  Suppose r16 is the register
+   that stores x.  Then this might look like:
+
+   <div class="code"><pre>mov r1,r31
+add r31,r31
+add r31,r1
+inc r31</pre></div>
+
+   Then, to place this in a function, we'll put a label at the start
+   which we can use to call it later, and a <span class="icode">ret</span>
+   instruction at the end so that after we've called it, we can return
+   from it to whatever we were doing before:
+
+   <div class="code"><pre>f:
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+ret</pre></div>
+
+   This function assumes that r31 contains the number that we want to
+   triple and then increment.  However notice that this code also
+   overwrites whatever was in r1.  In general, the fewer registers we
+   overwrite, the better, so we can have this code push r1 before it
+   runs (saving its original value) and then pop r1 before it returns
+   (restoring its original value):
+
+   <div class="code"><pre>f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret</pre></div>
+
+  </p><p>
+   Finally, this code has to go somewhere.  A common choice would be
+   at the beginning of our program.  So the full Python program
+
+  <div class="code"><pre>def f(x):
+   return 3*x+1
+
+x = f(27)</pre></div>
+ 
+   might look like: 
+
+   <div class="code"><pre>f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+ldi r31,27
+rcall f</pre></div>
+
+   But wait!  This way, the first thing this program does will be to
+   run the function's code.  We want the <span class="icode">ldi r31,27</span>
+   instruction to be run first.  If we put our functions at the start
+   of the program, then we have to make sure the first instruction in
+   the program jumps over all the function code:
+
+   <div class="code"><pre>rjmp real_program_start
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+real_program_start:
+ldi r31,27
+rcall f</pre></div>
+
+   There is one more problem, though.  We're using the stack, so we
+   should set the stack pointer to have some sensible value.  Earlier,
+   we picked 5000 = 19:136, so we'll use this again.  Thus the program
+   will first set the stack pointer then it will jump over all the
+   function code, then getting to the real meat of the program.  Thus
+   our final functioning compiled version of the simple Python program
+   will be: 
+
+   <sim-avr text="'ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; Set r31 back to 0
+rjmp real_program_start
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+real_program_start:
+ldi r31,27
+rcall f'" size="auto" reset="yes" simid="8" template="/lib/jsavr/simavr.html"></sim-avr>
+
+
+   This way, we can have multiple functions at the beginning and can
+   simply jump over them all.  For example, another piece of code that
+   we've used a lot is the "output a number code":
+
+   <div class="code"><pre>ldi r30,255
+out 17,r30
+out 18,<i>value to be outputted</i></pre></div>
+
+   This kind of behaves like the print function did in Python, so if
+   we were trying to compile to assembly the Python program:
+
+   <div class="code"><pre>def f(x):
+   return 3*x+1
+
+print(f(27))</pre></div>
+ 
+   then we would need two functions: <span class="icode">f</span> (which we
+   compiled above) and <span class="icode">print</span>, which might be translated
+   similarly as:
+
+   
+   <div class="code"><pre>print: 
+push r30      ; save r30, since we will use it
+ldi r30,255
+out 17,r30    ; set D to output mode
+out 18,r31    ; output the argument
+pop r31
+ret</pre></div>
+
+
+   <sim-avr text="'ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+f:
+push r1
+mov r1,r31
+add r31,r31
+add r31,r1
+inc r31
+pop r1
+ret
+
+print: 
+push r30      ; save r30, since we will use it
+ldi r30,255
+out 17,r30    ; set D to output mode
+out 18,r31    ; output the argument
+pop r31
+ret
+
+real_program_start:
+ldi r31,27
+rcall f      ; this will make r31 be f(27)
+rcall print'" size="auto" reset="yes" simid="9" template="/lib/jsavr/simavr.html"></sim-avr>
+   
+  </p></div></div><div class="section"><div id="sec_6_4_6"></div><div class="text"><div class="header">6.4.6: 
+	  Strings and arrays</div><p>While registers are often used for storing single values that are
+  being used in computation, the entire register file can only store
+  32 bytes in total.  So if we want to perform the kinds of work that
+  we ultimately wanted to do in Python, with longer sections of text
+  and with arrays, we will need more storage than that.  For strings
+  and arrays, then, we use RAM.  </p><p>We've already seen how to get a string or a sequence of bytes
+  into RAM using the <span class="icode">.string</span> and <span class="icode">.byte</span>
+  directives.  But we will want to do more than just store strings and
+  arrays.  We want to be able to concatenate them, find their lengths,
+  test if two of them are the same, find values inside them, and so
+  on.  We'll save some of these for the next section, but we'll
+  discuss lengths and concatenation in this section to get a feel for
+  working with data stored in RAM.</p><p><b>String length</b>: Let's start by writing a string length
+  function.  That is, say we placed have the string "Mangoes are yummy." in
+  RAM:
+
+  <div class="code"><pre>.string(fact) "Mangoes are yummy."</pre></div>
+
+  Then the value of the label <span class="icode">fact</span> will be the address
+  of the start of this string in RAM.  Remember that the string
+  directive also appends a 0 byte to the end of the string, so if we
+  want to find the length of the string, we can start at the beginning
+  and walk through until we see a 0.</p><p>In Python, this would be done with a while loop--something like:
+
+<div class="code"><pre>while(<i>character</i> != 0):
+   <i>go to the next character</i></pre></div>
+
+   And we just learned how to translate while loops into assembly.  In
+   this case, it will look like:
+
+<div class="code"><pre><i>get the first character</i>
+search_loop:
+cp <i>first character</i>,0
+breq end_of_search_loop
+<i>get the next character</i>
+rjmp search_loop
+end_of_search_loop:  </pre></div>
+
+   So: 
+
+  <sim-avr text="'.string(fact) &quot;Mangoes are yummy.&quot;
+ldi r30,lo8(fact)
+ldi r31,hi8(fact)   ; Now the start of the string is stored in Z
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  '" size="auto" reset="yes" simid="10" template="/lib/jsavr/simavr.html"></sim-avr>
+
+Once we're at the end of the loop, Z will hopefully be the address of
+the end of the string.  Sadly, because of the post-incrementing, it
+will actually 1 greater than that, so we should subtract 1 from it
+immediately after.  Recall we can do this with:
+
+<div class="code"><pre>ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29</pre></div>
+
+After this, Z will actually be the address of the end of the string.
+So now what?  Since the length of the string should be the difference
+between the start and end addresses, we want to compute <span class="icode">Z -
+fact</span> to get the length of the string.
+</p><p>To begin with, we'd need to get the value of <span class="icode">fact</span>
+  into registers so that we can begin to compute with it:
+
+  <div class="code"><pre>ldi r28,lo8(fact)
+ldi r29,hi8(fact)</pre></div>
+
+   Then we need to subtract r29:r28 from r31:r30.  Analogously to how
+   we added large numbers comprised of several registers, we can
+   subtract them:
+
+   <div class="code"><pre>sub r30,r28
+sbc r31,r29</pre></div>
+
+leaving us with the code:
+
+  <sim-avr text="'.string(fact) &quot;Mangoes are yummy.&quot;
+ldi r30,lo8(fact)
+ldi r31,hi8(fact)   ; Now the start of the string is stored in Z
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  
+ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29
+ldi r28,lo8(fact)
+ldi r29,hi8(fact)
+sub r30,r28
+sbc r31,r29'" size="auto" reset="yes" simid="11" template="/lib/jsavr/simavr.html"></sim-avr>
+
+At the end of this, Z will store the length of the string.
+
+We can wrap this as a function that takes now both r31 and r30 as
+arguments and modifies them so that r31:r30 is the length of the
+string at the provided address:
+
+<div class="code"><pre>string_length:
+push r16
+push r28
+push r29
+ld r16,Z            ; Get the first character of the string
+search_loop:
+cpi r16,0
+breq end_of_search_loop
+ld r16,Z+           ; Put the current character of the string into r16 and increment Z
+rjmp search_loop
+end_of_search_loop:  
+ldi r28,1
+ldi r29,0
+sub r30,r28
+sbc r31,r29
+ldi r28,lo8(fact)
+ldi r29,hi8(fact)
+sub r30,r28
+sbc r31,r29
+pop r29
+pop r28
+pop r16
+ret</pre></div>
+
+  </p><p>
+    <b>Array length: </b>OK, so we could get the lengths of strings.
+    What about more general arrays, such as:
+
+    <div class="code"><pre>.byte(fibonacci) 1,1,2,3,5,8,13,21,34,55</pre></div>
+
+    Unlike the .string directive, the .byte directive does not store a
+    0 at the end of the bytes.  The reason is that this would not
+    necessarily be meaningful: It is perfectly valid to store an array
+    with 0s in it:
+    
+    <div class="code"><pre>.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</pre></div>
+
+    So how can we find the end of an array if there's no way to tell
+    if we're at the end of the array?  The answer is that we cannot:
+    Unlike strings, simply the starting address of an array is not
+    enough to let us find its length.  So for an array, we would need
+    to somehow store the length or the ending address as well.  One
+    way to do this would be to simply put it in RAM: 
+    
+    <div class="code"><pre>.byte(length_of_digits_of_aperys_constant) 16
+.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</pre></div>
+
+One feature of this technique is that if we ever want to modify the
+array--deleting or adding an element--we also have to update the
+stored length.  This is fine, but it does cause us to worry: what if
+we add so many elements that we cannot fit the length in a single
+byte?  We could protect against this case by storing two bytes for the
+length:
+  
+    <div class="code"><pre>.byte(length_of_digits_of_aperys_constant) 0,16
+.byte(digits_of_aperys_constant) 1,2,0,2,0,5,6,9,0,3,1,5,9,5,9,4</pre></div>
+
+where now for the purpose of updating the array we'll treat these two
+  bytes as a 16-bit number.</p><div class="warning"><b>Warning: Strings need metadata too</b><p>Now that we did all
+  that work to compute the lengths of strings and then we simply
+  cheated our way out of doing the same for arrays we could ask: Why
+  can't we just also store the length of a string?  The answer is that
+  we actually can!  Moreover, it is almost uniformly more efficient to
+  do so.  </p>
+
+  <p>We introduce both techniques because there are programming
+  languages (most notably, one called C), in which strings are
+  actually stored as sequences of characters followed by a 0 byte.
+  When working with such languages, it can be important to realize
+  that something as simple as asking for the length of the string may
+  actually involve a large number of operations to walk the entire
+  length of the string looking for the 0 byte.  </p>
+  
+  <p>This is one famous example of where the abstraction of a
+  high-level programming language can leak very badly.  Doing
+  <span class="icode">len(my_string)</span> in Python (which does separately store
+  the lengths of its strings), and <span class="icode">strlen(my_string)</span> in
+  C, while they look very similar and do the same thing, will actually
+  take very different amounts of time.</p></div><p><b>Deleting an element from an array</b>: Say we've got an array
+  like <span class="icode">2,3,5,7,0,11,13,0,17</span> and we want to remove the
+  first 0 from it.  </p><p>Well, what does this actually look like in RAM?  We are starting
+  with the situation like: </p><table><tr><td>Address:</td><td>1024</td><td>1025</td><td>1026</td><td>1027</td><td>1028</td><td>1029</td><td>1030</td><td>1031</td><td>1032</td></tr>
+  <tr><td>Value:</td><td>2</td><td>3</td><td>5</td><td>7</td><td>0</td><td>11</td><td>13</td><td>0</td><td>17</td></tr>
+  </table><p>and end up with the situation: </p><table><tr><td>Address:</td><td>1024</td><td>1025</td><td>1026</td><td>1027</td><td>1028</td><td>1029</td><td>1030</td><td>1031</td></tr>
+  <tr><td>Value:</td><td>2</td><td>3</td><td>5</td><td>7</td><td>11</td><td>13</td><td>0</td><td>17</td></tr>
+  </table><p>so while it seems like a small operation, what we see is that the
+  value at RAM address 1029 has to be moved to RAM address 1028, the
+  value at 1030 has to be moved to 1029, and so on.  So actually, this
+  simple operation requires us to shuffle around half the elements of
+  the list.  (And then, of course, we have to decrement its length.)</p><p>So let's suppose we are writing a function to do this.  It will
+  take as input r31 and r30 giving the address of the start of the
+  array, and also r29,r28 the address where the length is stored, and
+  finally r16 will be the index we wish to delete.  </p><p>Then the algorithm will be:
+
+  <ol>
+    <li>Set a counter to be length - index.  This is how many things we have to copy</li>
+    <li>Add the index to Z</li>
+    <li>Store Z in X.  X will be the address we are writing to</li>
+    <li>Increment Z.  Now X will always be 1 behind Z</li>
+    <li>While the counter &gt;= 0:
+    <ol>
+      <li>Read from Z into a temporary location</li>
+      <li>Increment Z</li>
+      <li>Write the temporary value into X</li>
+      <li>Increment X</li>
+      <li>Decrement the counter</li>
+    </ol>
+
+    </li>
+  </ol>
+
+  Translating this to assembly, we'll let the counter be r17 and the
+  "temporary location" used in the loop be r18, then the rest of this
+  translates rather straightforwardly:
+
+  <div class="code"><pre>array_delete:
+push r17
+push r18
+push r19
+ld r17,Y      ; Y is the counter address, so now r17 is the length
+sub r17,r16   ; r16 is the index, so now r17 is length - index
+ldi r18,0     ; we need this to compute index + Z
+add r30,r0
+adc r31,r17   ; Z += index
+mov r26,r30
+mov r27,r30   ; X = Z
+ldi r18,1
+ldi r19,0     ; now r19:r18 = 1 and we can add this to Z to increment it
+add r30,r18
+adc r31,r19   ; Z = Z + 1
+loop_start:
+cpi r17,0
+breq loop_end ; if r17 == 0 then we are done
+ld r18,Z+     ; read Z into temp location and then increment Z
+st X+,r18     ; store temp value at X and then increment X
+dec r17       ; decrement the counter
+loop_end:
+pop r19
+pop r18
+pop r17
+ret</pre></div>
+
+
+<p>We can try applying this to our previous example, adding also the
+appropriate preamble to set up the stack and skip the function code initially:</p>
+
+
+<sim-avr text="'ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+array_delete:
+push r17
+push r18
+push r19
+ld r17,Y      ; Y is the counter address, so now r17 is the length
+sub r17,r16   ; r16 is the index, so now r17 is length - index
+dec r17       ; Preventing an off-by-one error
+ldi r18,0     ; we need this to compute index + Z
+add r30,r17
+adc r31,r18   ; Z += index
+mov r26,r30
+mov r27,r31   ; X = Z
+ldi r18,1
+ldi r19,0     ; now r19:r18 = 1 and we can add this to Z to increment it
+add r30,r18
+adc r31,r19   ; Z = Z + 1
+loop_start:
+cpi r17,0
+breq loop_end ; if r17 == 0 then we are done
+ld r18,Z+     ; read Z into temp location and then increment Z
+st X+,r18     ; store temp value at X and then increment X
+dec r17       ; decrement the counter
+rjmp loop_start
+loop_end:
+pop r19
+pop r18
+pop r17
+ret
+
+real_program_start:
+
+.byte(my_array_length) 9
+.byte(my_array) 2,3,5,7,0,11,13,0,17
+ldi r28,lo8(my_array_length)
+ldi r29,hi8(my_array_length)  ; Y is now the address of the length of the array
+ldi r30,lo8(my_array)
+ldi r31,hi8(my_array)         ; Z is now the address of the array
+ldi r16,4                     ; r16 is the index we want to remove
+rcall array_delete
+'" size="auto" reset="yes" simid="12" template="/lib/jsavr/simavr.html"></sim-avr>
+
+<div class="warning"><b>Warning: Arrays and frequent deletion don't mix</b>
+  <p>Ultimately, the lesson here is that while deleting an element of
+  an array might look like a very simple operation, it in fact
+  requires us to shift the entire array following the element we're
+  deleting.  Imagine if we had a string of the text of an entire book
+  and we were deleting the first letter.  That would require moving
+  all the other letters one step back!</p>
+  
+  <p>In general, if we have <span class="icode">k</span> things to delete from an
+  array of <span class="icode">N</span> elements, then we might think that this
+  will take <span class="icode">k</span> steps--one for each deletion.  In fact it
+  may take as many as <span class="icode">k*N</span> steps, as each deletion may
+  require shifting up to N elements of the array.</p>
+  
+  <p>For this reason, using simple arrays like those we have described
+  to store data that will require many deletions of elements is
+  actually quite inefficient.  There are other, cleverer ways to store
+  data that may require many delete operations.  One way that suits
+  this purpose is called a "linked list", where the elements of the
+  list are stored in possibly completely unrelated locations in RAM,
+  but each element also includes the RAM address of the next
+  element.  This way, to delete element number 4 in the list, we only
+  need to update the "next element" address stored with element 3 to
+  be the address of element 5.</p>
+  
+  <p>This is just one example of how the particular scheme used for
+  storing data can very meaningfully affect efficiency, and of how
+  what you want to do with the data can affect how you decide to store
+  it.  There are many schemes for storing data, all tailored to
+  slightly different use-cases.  Such schemes are called "data
+  structures", and you may have an entire class to learn about some of
+  them (and maybe you will even design your own!) in your future
+  computer programming life.</p>
+</div>
+</p><p><b>Comparing strings</b>: What about just comparing two strings?
+  Maybe we have two strings in RAM--one that the user typed in and the
+  other, a password.  We then want to see if they match in order to
+  authenticate the user.  In Python we could just do something like:
+
+  <div class="code"><pre>if(password_entered == password_stored):
+   <i>do stuff</i></pre></div>
+
+  We've already seen how to compare numbers like this in assembly
+  using the cp operation, but haven't yet seen this for strings.  </p><p><b>Algorithm: </b></p><p>The idea isn't too far removed, however, from comparing numbers.
+  After all, strings are just sequences of numbers.  So if we have
+  strings stored at, say, addresses 200 and 650 in RAM, then we can
+  start by comparing the numbers at those addresses.  If they don't
+  match, then the strings are definitely different.  But if they do
+  match, then we need to compare the numbers at addresses 201 and 651.
+  Then the numbers at 202 and 652.  If at any point we don't get a
+  match, then we know the strings are different.  If, on the other
+  hand, the two numbers match and are both 0, then that means we
+  reached the end of both strings simultaneously, and so we're
+  done, and only then can we conclude that the strings themselves
+  actually match</p><p>Put into steps:
+
+  <ol>
+    <li>Put Y = [address of string 1]</li>
+    <li>Put Z = [address of string 2]</li>
+    <li>Read RAM address Y into r0 and increment Y</li>
+    <li>Read RAM address Z into r1 and increment Z</li>
+    <li>Compare r0 and r1</li>
+    <li>
+      If they're the same, do the following:
+      <ol>
+	<li>Compare r0 with 0</li>
+	<li>If they're the same, then the strings are equal!</li>
+      </ol>
+    </li>
+    <li>Jump back to step 3</li>
+    <li>If we've got here, then the strings differ</li>
+  </ol>
+
+  We only have to decide what to do if the strings differ.  Lets say
+  we'll return the answer in r31: It will be 1 if they are the same,
+  and 0 if they are different.  </p><p><b>Program: </b></p><p>Turning the above into a program is relatively straightforward,
+  bearing in mind the constructs from the previous sections about how
+  to do conditional execution and while loops:</p><sim-avr text="'ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+compare_strings:
+push r0
+push r1
+push r2
+eor r2,r2    ; set r2 to be 0
+loop_start:
+ld r0,Y+
+ld r1,Z+
+cp r0,r1
+brne strings_not_equal
+cp r0,r2
+breq strings_equal
+rjmp loop_start
+strings_not_equal:
+ldi r31,0
+rjmp end_of_comparison
+strings_equal:
+ldi r31,1
+end_of_comparison:
+pop r2
+pop r1
+pop r0
+ret
+
+real_program_start:
+
+.string(string1) &quot;password123&quot;
+.string(string2) &quot;password12#&quot;
+.string(string3) &quot;password12#&quot;
+.string(string4) &quot;password12#&quot;
+ldi r28,lo8(string1)
+ldi r29,hi8(string1)
+ldi r30,lo8(string2)
+ldi r31,hi8(string2)
+rcall compare_strings
+
+ldi r28,lo8(string3)
+ldi r29,hi8(string3)
+ldi r30,lo8(string4)
+ldi r31,hi8(string4)
+rcall compare_strings'" size="auto" reset="yes" simid="13" template="/lib/jsavr/simavr.html"></sim-avr><p><b>Array concatenation: </b> The last example we'll do is array
+  concatenation.  Say we've put two arrays--or even two strings--into
+  RAM like:
+
+  <div class="code"><pre>.string(string1) "'Tis hard to say, if greater want of skill\nAppear in writing or in judging ill;\n"
+.string(string2) "But, of the two, less dang'rous is th' offence\nTo tire our patience, than mislead our sense."</pre></div>
+
+   These two strings occur at separate locations in RAM, potentially
+   with other things in between them.  We want to construct a single
+   string that consists of the contents of string 1 followed by the
+   contents of string 2, say followed by a 0 (as is the convention
+  with strings).  </p><p>Once we phrase the problem this way, a procedure presents
+  itself rather simply:
+  
+  <ol>
+    <li>Find a free space in RAM</li>
+    <li>Copy string1 to that space</li>
+    <li>Copy string2 to that space, starting at the end of string1</li>
+  </ol>
+
+  So first of all, how do we find a free spot in RAM to put our
+  combined string?  Well, directives start filling RAM at address
+  1024, and the bottom of the stack is at 5000 (so the stack occupies
+  only address 5000 and below).  So this should leave any addresses
+  above 5000 free for use.  </p><p>But we cannot just always use 5001 as a free address.  The first
+  time we want to concatenate in a program, this will be fine, but the
+  second time it will not--that space will be used by the result of
+  our first concatenation!  So we can start at 5001, but if our first
+  concatenation uses 100 bytes, then our next concatenation should
+  start at address 5101.  So when we do anything with that space above
+  5000, we should always keep track of how much we've used so far.  To
+  do this, we'll mark off a spot in RAM to store for this address.
+  Since we have to store the address in bytes, we compute 5001 =
+  19:137 and then store: 
+
+  <div class="code"><pre>.byte(first_free_address) 19,137</pre></div>
+
+  So now the algorithm can be made more precise:
+  
+  <ol>
+    <li>Load <span class="icode">first_free_address</span> into X</li>
+    <li>Load address of string1 into Y</li>
+    <li>Loop through the characters starting at Y, copying them to
+    address X and incrementing X along the way, until we see a 0</li>
+    <li>Load address of string2 into Y</li>
+    <li>Loop through the characters starting at Y, copying them to
+    address X and incrementing X along the way, until we see a 0</li>
+    <li>Put a 0 at the current address X and increment X one last time
+    (so it points to the address just after the 0)</li>
+    <li>Store the current value of X at address <span class="icode">first_free_address</span></li>
+  </ol>
+  </p><p>We can then start converting this to code immediately:
+
+  <sim-avr text="'.byte(first_free_address) 19,137
+.string(string1) &quot;\'Tis hard to say, if greater want of skill\\nAppear in writing or in judging ill;\\n&quot;
+.string(string2) &quot;But, of the two, less dang\'rous is th\' offence\\nTo tire our patience, than mislead our sense.&quot;
+ldi r30,lo8(first_free_address)
+ldi r31,hi8(first_free_address) ; Z = value of label first_free_address
+ld r27,Z+
+ld r26,Z                        ; X = what was stored at first_free_address, i.e., 5001
+ldi r28,lo8(string1)
+ldi r29,hi8(string1)            ; Y = string1
+loop1_start:
+ld r16,Y+                       ; r16 = char at address Y, and inc Y
+cpi r16,0
+breq string2_start              ; if r16 is 0, move on to string2
+st X+,r16                       ; store r16 ad address X, and inc X
+rjmp loop1_start
+string2_start:
+ldi r28,lo8(string2)
+ldi r29,hi8(string2)            ; Y = string2
+loop2_start:
+ld r16,Y+                       ; r16 = char at address Y, and inc Y
+cpi r16,0
+breq done                       ; if r16 is 0, we\'re done!
+st X+,r16                       ; store r16 at address X, and inc X
+rjmp loop2_start
+done:
+st X+,r16                       ; store one last 0 at the end of the concatenation, and inc X
+st Z,r26
+st -Z,r27                       ; Store X back at address first_free_address (which is still in Z)'" size="auto" reset="yes" simid="14" template="/lib/jsavr/simavr.html"></sim-avr>
+  </p><div class="warning"><b>Warning: Frequent concatenation means frequent copying</b>
+    <p>Note that to concatenate two arrays meant copying the contents
+    of both of them!  This means that our harmless little "append an
+    element to an array" code from chapter 3:
+
+    <span class="icode">my_array += [6]</span>
+
+    may not just be a single ISA operation to plop 6 at the end of the
+    array, but might require a whole copy of the entire array first!
+    Now, if we knew in advance that we were going to have to append
+    things to our array, we could ensure that enough bytes after the
+    array in RAM are also unused so that we could just plop the right
+    values immediately after the array and append to it that way.</p>
+    
+    <p>Once again, the details of exactly how our data is stored
+    (beyond what we can see just by knowing the high-level prgramming
+    language) can affect the efficiency of our high-level programs and
+    what code we write.</p>
+  </div><div class="aside"><b>Aside: Free RAM is expensive</b>
+    <p>In the above algorithm, we had this step of "Find some unused
+    area in RAM", and we dispatched it in a relatively simple way:
+    Have a single barrier above which everything is considered
+    "unused" and below which everything is "used".  This is great if
+    there is unlimited RAM and our program is simple, but real
+    computers have to deal with a circumstance where a program might
+    use some RAM for a while and then decide it no longer needs that
+    RAM.</p>
+
+    <p>For example, suppose we did a concatenation which used 100
+    bytes, taking up the space from 5001 through 5100.  Then we did
+    another concatenation using the next 100 bytes from 5101 to 5200.
+    Then we decided we were done using te bytes 5001 to 5100 (maybe we
+    printed that string out to the user and no longer need to store
+    it, say).  </p>
+    
+    <p>We would like in these circumtances to keep track of the fact
+    that next time we need some unused RAM (provided we ask for 100
+    bytes or fewer) we have the option of using the byte 5101 to 5100,
+    rather than just continuing onward from 5201 where we left
+    off.</p>
+
+    <p>In general, there might be many small chunks of unused RAM in
+    our "heap" of used RAM, and keeping track of all of them in a
+    non-wasteful way is a challenging problem whose solutions can make
+    use of quite complicated data structures.  Code that controls this
+    process is called a "memory allocator", which you may learn about
+    if your studies take you in the direction of learning about
+    operating systems or the C programming language.</p>
+  </div></div></div><div class="section"><div id="sec_6_5"></div><div class="text"><div class="header">6.5: 
+	  Simple examples</div><p>We'll now revisit versions of our simple examples from chapter 2,
+  but this time attempt them in assembly language.  We'll approach
+  this by first writing Python programs to do the job, and then using
+  the above recipes to convert them to assembly.  </p></div></div><div class="section"><div id="sec_6_5_1"></div><div class="text"><div class="header">6.5.1: 
+	  Summing the first n integers</div><p><b>Introduction: </b></p><p>In the earlier factorial example, we wrote a program to receive
+  as input a positive integer n and to output the product 1*2*3*...*n.
+  In this section, we'll discuss how to do this in ISA, except because
+  we lack a multiplication instruction (there is one on certain SimpleAVR
+  processors, but not on all), we'll do the problem with addition
+  instead: Given an n, compute 1+2+3+...+n.  </p><p><b>Python program: </b></p><p>Having done the factorial example earlier, we can quite readily
+  imagine a Python program doing this task.  We would have a variable
+  storing n, a counter variable that starts at 1, and a variable for
+  storing the sum.  We could then use a while loop that increments the
+  counter until it reaches n, and on each iteration of the loop it
+  adds the counter to the variable storing the sum.  To wit:
+
+  <div class="code"><pre>n = 20
+counter = 1
+sum = 0
+while(counter &lt;= n):
+   sum = sum + counter
+   counter = counter + 1
+print(sum)</pre></div>
+
+  </p><p><b>Converting to assembly: </b> The first three lines are
+  assignment lines that store numbers.  This directly translates to
+  ldi instructions as long as we pick some registers to play the roles
+  of <span class="icode">n</span>, <span class="icode">counter</span>, and
+  <span class="icode">sum</span>.  Since ldi can only load into registers r16 and
+  up, we'll pick r16, r17, and r18 for these:
+
+  <div class="code"><pre>ldi r16,20
+ldi r17,1
+ldi r18,0</pre></div>
+
+  </p><p>Now, the next portion is a while loop.  We've seen that we can
+  get this behavior using the ISA with a structure like:
+
+<div class="code"><pre>begin_while:
+<i>do comparison</i>
+<i>[branch if condition fails]</i> end_while
+<i>do stuff</i>
+rjmp begin_while
+end_while:</pre></div>
+
+  Here, the condition is <span class="icode">counter &lt;= n</span>.  This means
+  the condition fails if <span class="icode">counter &gt; n</span>.  We saw earlier
+  (at the end of 5.4.6) that the comparison <span class="icode">r17 &gt; r16</span>
+  could be tested with:
+
+  <div class="code"><pre>cpi r16,r17
+brlo ...</pre></div>
+
+  (This is testing "is r17 the same as or higher than r16", i.e., <span class="icode">r17 &gt;= r16</span> which
+  is equivalent to the condition in question.)
+
+</p><p>Thus our code now looks like:
+
+<div class="code"><pre>ldi r16,20
+ldi r17,1    ; r17 will store the counter
+ldi r18,0    ; r18 will store the sum
+begin_while:
+cp r16,r17
+brlo end_while
+<i>do stuff</i>
+rjmp begin_while
+end_while:</pre></div>
+
+   So all that remains is to figure out what "do stuff" should be.
+   But this is relatively straightforward: Since the sum is r18 and
+   the counter is r17, <span class="icode">sum = sum+counter</span> can just be
+   <span class="icode">add r18,r17</span>, and <span class="icode">counter = counter+1</span>
+   can just be <span class="icode">inc r17</span>.  Thus:
+
+
+<sim-avr text="'ldi r16,20
+ldi r17,1    ; r17 will store the counter
+ldi r18,0    ; r18 will store the sum
+begin_while:
+cp r16,r17
+brlo end_while
+add r18,r17
+inc r17
+rjmp begin_while
+end_while:'" size="auto" reset="yes" simid="15" template="/lib/jsavr/simavr.html"></sim-avr>   
+
+  </p><p><b>Debrief: </b>
+
+Note that 1+2+...+22 is the largest such sum we can compute without
+overflow.  We could have stored the sum using two registers such as
+r19:r18 to compute much larger sums.</p><p><b>Assembly, mark II: </b> This time, we'll try to get the sum from
+1 to 100.  This will require the use of 16 bits to store the sum
+(i.e., at least two registers).  To choose at random, we'll have r17
+store the counter, and r31:r30 store the sum:
+
+<sim-avr text="'ldi r16,100
+ldi r17,1    ; counter = 1
+ldi r30,0
+ldi r31,0    ; sum = r31:r30 = 0:0 = 0
+begin_while:
+cp r16,r17   
+brlo end_while
+; We shall add r17 to r31:r30, but the usual method
+; requires adding numbers of the same width, so we
+; set up r18 as 0 so that r18:r17 is just the 16-bit
+; version of r17:
+ldi r18,0    
+add r30,r17
+adc r31,r18  ; r31:r30 = r31:r30 + r18:r17
+inc r17
+rjmp begin_while
+end_while:'" size="auto" reset="yes" simid="16" template="/lib/jsavr/simavr.html"></sim-avr>
+
+Note that because we've used r31:r30, we can view the counter's
+progress in the Z register.
+
+</p><p><b>Debrief: </b>
+
+Unlike factorial, there is a simple formula for the sum of the first n
+integers, namely n*(n+1)/2.  We already know how to divide by 2 using
+asr, so if we knew how to multiply registers this might have been a
+lot simpler.  We'll explore this business in the next example.</p></div></div><div class="section"><div id="sec_6_5_2"></div><div class="text"><div class="header">6.5.2: 
+	  Multiplication</div><p><b>Introduction: </b> The SimpleAVR instruction set does include an
+  instruction called mul for multiplying registers, but many cheaper
+  SimpleAVR chips you can buy do not actually support this instruction.  So
+  if we want to multiply numbers, we have to do it ourselves.</p><p>One issue that arises is that multiplying numbers is a good way
+  to get large numbers: it is likely that even if we only multiply two
+  single-register numbers, the result will not fit in a register.  For
+  example, 20*20 = 400 which is already too big.  So in this case
+  we're almost forced to store the result in two registers.</p><p><b>Python program: </b> Otherwise, the most obvious algorithm
+  seems like a straightforward loop: To compute <span class="icode">a*b</span> we
+  simply start with storing 0 somewhere and add <span class="icode">b</span> to it
+  <span class="icode">a</span> times (say, using a while loop with a counter):
+
+  <div class="code"><pre>product = 0
+counter = 0
+while(counter &lt; a):
+   product = product + b
+   counter = counter + 1</pre></div>
+
+   If we decide the product should be stored in r31:r30 and the
+   counter will be r19, <span class="icode">a</span> will be r16, and
+   <span class="icode">b</span> will be r17, then we can write this rather simply
+   as a function even:
+
+   <sim-avr text="'ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+multiply:
+push r18
+push r19
+ldi r18,0    ; counter = 0
+ldi r19,0    ; since product is r31:r30 and we are going to add
+             ; b to it, b should be two bytes also.
+             ; We pick r19:r17
+ldi r30,0
+ldi r31,0    ; product = 0
+mul_loop_start:
+cp r18,r16   ; while(counter &lt; a)
+brsh mul_loop_end
+add r30,r17
+adc r31,r19  ; product = product + b
+inc r18      ; counter = counter + 1
+rjmp mul_loop_start
+mul_loop_end:
+pop r19
+pop r18
+ret
+
+real_program_start:
+
+ldi r16,29
+ldi r17,41
+rcall multiply ; after this, Z is the product'" size="auto" reset="yes" simid="17" template="/lib/jsavr/simavr.html"></sim-avr>
+  </p><p><b>Debrief:</b> This is actually a somewhat horrendous algorithm
+for multiplying two numbers.  For a start, it only takes two steps to
+computer 2*255, but takes 255 steps to compute 255*2.  While 255 steps
+is not so bad if we only have to do it every once in a while, there is
+a more clever algorithm that we shall leave in an aside for the
+curious.</p><div class="aside"><b>Aside: The proper way to multiply numbers by hand</b>
+  <p>The trick is that we can very easily multiply numbers by 2: Just
+  add a number to itself!  This even works for tow-register numbers:
+  To multiply r29:r28 by 2, just do:
+
+  <div class="code"><pre>add r28,r28
+adc r29,r29</pre></div>
+
+  So how does multiplying by 2 help us?  Let us think about writing
+  <span class="icode">b</span> in binary: Maybe it is, say, 00100110 or
+  2<sup>5</sup> + 2<sup>2</sup> + 2<sup>1</sup>.  Then to compute a*b,
+  we only have to compute a*(2<sup>5</sup> + 2<sup>2</sup> +
+  2<sup>1</sup>).  Using the distributive law, this means we only have
+  to compute a*2, a*2*2, and a*2*2*2*2*2 and add them up.</p>
+  
+  <p>Put another way, this means we can do:
+  <ol>
+    <li>Store 0 in r31:r30.  This will be the answer by the end of the
+    algorithm</li>
+    <li>Store a in r29:r28</li>
+    <li>For each bit of b, do the following:
+    <ol>
+      <li>If the bit of b is set, then add r29:r28 to r31:r30</li>
+      <li>Multiply r29:r28 by 2</li>
+    </ol>
+    </li>
+  </ol>
+  
+  OK, but how do we test if each bit of b is set?  This is where the
+  AND operation will help us: We can "b AND 1" will be nonzero exactly when the first
+  bit is set, "b AND 2" will be nonzero exactly when the second bit is
+  set, "b AND 4" will be nonzero exactly when the third bit is set,
+  and so on.  So we can keep another counter that we keep doubling and
+  ANDing with b for this test.  </p>
+
+  
+  
+   <sim-avr text="'ldi r31, 136
+out 61, r31  ; set SPL to 136
+ldi r31, 19
+out 62, r31  ; set SPH to 19
+eor r31,r31  ; set r31 back to 0
+
+rjmp real_program_start
+
+multiply:
+push r29
+push r28
+push r22
+push r21
+push r20
+ldi r31,0
+ldi r30,0        ; store 0 in r31:r30, which will become the answer
+ldi r29,0
+mov r28,r16      ; store a in r29:r28
+ldi r20,0        ; counter = 0
+ldi r21,8        ; there are 8 digits
+ldi r22,1        ; r22 will double each time to test the bits
+mul_loop_start:
+cp r20,r21
+brsh mul_loop_end
+mov r23,r22
+and r23,r17      ; b AND r17
+breq bit_not_set
+add r30,r28      ; add our doubling version of a to the answer
+adc r31,r29      ; if the bit was set
+bit_not_set:
+add r22,r22      ; double r22
+add r28,r28
+adc r29,r29      ; double a
+inc r20          ; increment the counter
+rjmp mul_loop_start
+mul_loop_end:
+pop r20
+pop r21
+pop r22
+pop r28
+pop r29
+ret
+
+real_program_start:
+
+ldi r16,29
+ldi r17,41
+rcall multiply ; after this, Z is the product'" size="auto" reset="yes" simid="18" template="/lib/jsavr/simavr.html"></sim-avr>
+
+</div></div></div><div class="section"><div id="sec_6_5_3"></div><div class="text"><div class="header">6.5.3: 
+	  Exercises</div><div class="hwq"><div class="hwnum"><b>6.1: </b></div><div class="hwcontent">What is encoding? </div></div><div class="hwq"><div class="hwnum"><b>6.2: </b></div><div class="hwcontent">We create binary ______ to begin to encode AVR ISA instructions. 
+<ol>
+<li>functions</li>
+<li>representations</li>
+<li>methods</li>
+<li>casings</li></ol></div></div><div class="hwq"><div class="hwnum"><b>6.3: </b></div><div class="hwcontent">What are the five groups of information required used to differentiate different instructions?</div></div><div class="hwq"><div class="hwnum"><b>6.4: </b></div><div class="hwcontent">What is an opcode in AVR ISA instructions?</div></div><div class="hwq"><div class="hwnum"><b>6.5: </b></div><div class="hwcontent">The “C” bits of an AVR instruction represent its ____, which specifies _____.
+<ol>
+<li>operand; the source/destination registers or immediate value</li>
+<li>opcode; the source/destination registers or immediate value</li>
+<li>operand; which instruction is to be performed</li>
+<li>opcode; which instruction is to be performed</li></ol></div></div><div class="hwq"><div class="hwnum"><b>6.6: </b></div><div class="hwcontent">What differentiates the encodings for dec, com, and inc (e.g. how can you distinguish a 16-bit dec instruction from com, inc)? What do they have in common?</div></div><div class="hwq"><div class="hwnum"><b>6.7: </b></div><div class="hwcontent">Now provide an example of your answer by writing out the encodings for dec r1, com r1, and inc r1.</div></div><div class="hwq"><div class="hwnum"><b>6.8: </b></div><div class="hwcontent">What type of instructions follow the CCCCCCIIIIIIICCC format? What do the “I” bits represent?</div></div><div class="hwq"><div class="hwnum"><b>6.9: </b></div><div class="hwcontent">What is ASCII? How is it used to encode?</div></div><div class="hwq"><div class="hwnum"><b>6.10: </b></div><div class="hwcontent">What is UTF-8? How is it used to encode?</div></div><div class="hwq"><div class="hwnum"><b>6.11: </b></div><div class="hwcontent">What benefits are there of using UTF-8 over ASCII?</div></div><div class="hwq"><div class="hwnum"><b>6.12: </b></div><div class="hwcontent">Briefly explain why UTF-8 allows for many more characters than ASCII in terms of how many bytes they each allow for their encodings.</div></div><div class="hwq"><div class="hwnum"><b>6.13: </b></div><div class="hwcontent">What is the significance of a UTF-8 encoding that starts with a 0? Give an example to explain your answer.</div></div><div class="hwq"><div class="hwnum"><b>6.14: </b></div><div class="hwcontent">If a UTF-8 encoding starts with “11110”, what does this signify about the following 3 bytes?</div></div><div class="hwq"><div class="hwnum"><b>6.15: </b></div><div class="hwcontent">Just as letters are encoded in text, _____ are encoded in games.</div></div><div class="hwq"><div class="hwnum"><b>6.16: </b></div><div class="hwcontent">What is a pixel?</div></div><div class="hwq"><div class="hwnum"><b>6.17: </b></div><div class="hwcontent">How many bytes are used to represent colors which represent light for a computer?</div></div><div class="hwq"><div class="hwnum"><b>6.18: </b></div><div class="hwcontent">Fill in the red, green, and blue values for the following colors (refer to the table in 6.4.1) in their HEXADECIMAL representation. Fill the rightmost column in with their full RBG encoding.
+<table>
+<tr>
+<th>Color</th>
+<th>Red</th>
+<th>Blue</th>
+<th>Green</th>
+<th>RGB</th>
+</tr>
+<tr>
+<td>White</td>
+<td>0xFF</td>
+<td>0xFF</td>
+<td>0xFF</td>
+<td>0xFFFFFF</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>0xFF</td>
+<td>0x00</td>
+<td>0x00</td>
+<td>0xFF0000</td>
+</tr>
+<tr>
+<td>Green</td>
+<td>0x00</td>
+<td>0xFF</td>
+<td>0x00</td>
+<td>0x00FF00</td>
+</tr>
+<tr>
+<td>Blue</td>
+<td>0x00</td>
+<td>0x00</td>
+<td>0xFF</td>
+<td>0x0000FF</td>
+</tr>
+<tr>
+<td>Grey</td>
+<td>0xCC</td>
+<td>0xCC</td>
+<td>0xCC</td>
+<td>0xCCCCCC</td>
+</tr>
+<tr>
+<td>Magenta</td>
+<td>0xFF</td>
+<td>0x00</td>
+<td>0xFF</td>
+<td>0xFF00FF</td>
+</tr>
+<tr>
+<td>Puce</td>
+<td>0x72</td>
+<td>0x2F</td>
+<td>0x37</td>
+<td>0x722F37</td>
+</tr>
+<tr>
+<td>Black</td>
+<td>0x00</td>
+<td>0x00</td>
+<td>0x00</td>
+<td>0x000000</td>
+</tr>
+</table>
+</div></div><div class="hwq"><div class="hwnum"><b>6.19: </b></div><div class="hwcontent">What is error-correcting code and error-detecting encoding, and how
+are they similar and different?</div></div></div></div></div></div></body></html>

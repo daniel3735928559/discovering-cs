@@ -1,0 +1,2286 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="/sim/cm/codemirror.js"></script><link rel="stylesheet" type="text/css" href="/lib/jsavr/sim.css"><script type="text/javascript" src="/lib/jsavr/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="sidebar"><div class="sidebar_header">Book:</div><table class="chapter_links"><tr><td>0</td><td><a href="/text/box.xml">Title page</a></td></tr><tr><td>1</td><td><a href="/text/ch1.xml">Introduction</a> (<a class="print_link" href="/text/print/ch1.pdf">PDF</a>)</td></tr><tr><td>2</td><td><a href="/text/ch2.xml">Programming</a> (<a class="print_link" href="/text/print/ch2.pdf">PDF</a>)</td></tr><tr><td>3</td><td><a href="/text/ch3.xml">Advanced Programming</a> (<a class="print_link" href="/text/print/ch3.pdf">PDF</a>)</td></tr><tr><td>4</td><td><a href="/text/ch4.xml">Numbers</a> (<a class="print_link" href="/text/print/ch4.pdf">PDF</a>)</td></tr><tr><td>5</td><td><a href="/text/ch5.xml">ISA</a> (<a class="print_link" href="/text/print/ch5.pdf">PDF</a>)</td></tr><tr><td>6</td><td><a href="/text/ch6.xml">Assembly</a> (<a class="print_link" href="/text/print/ch6.pdf">PDF</a>)</td></tr><tr><td>7</td><td><a href="/text/ch7.xml">Encodings</a> (<a class="print_link" href="/text/print/ch7.pdf">PDF</a>)</td></tr><tr><td>8</td><td><a href="/text/ch8.xml">Micro­architecture</a> (<a class="print_link" href="/text/print/ch8.pdf">PDF</a>)</td></tr><tr><td>9</td><td><a href="/text/ch9.xml">Digital Logic</a> (<a class="print_link" href="/text/print/ch9.pdf">PDF</a>)</td></tr><tr><td>10</td><td><a href="/text/ch10.xml">Transistors</a> (<a class="print_link" href="/text/print/ch10.pdf">PDF</a>)</td></tr></table><div class="sidebar_header">This chapter:</div><a href="#" ng-click="show_index()"><div class="sidebar_link">Outline</div></a><a href="#" ng-click="show_definitions()"><div class="sidebar_link">Definitions</div></a><div class="sidebar_header">Course:</div><a href="http://pages.cs.wisc.edu/~karu/courses/cs252/fall2015/wiki/index.php"><div class="sidebar_link">Homepage</div></a><a href="/homework"><div class="sidebar_link">Online HW</div></a><a href="/homework/rating.html"><div class="sidebar_link">Rate lecture</div></a><div class="sidebar_header">Simulators:</div><a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a><a href="/sim/bin/bin.html"><div class="sidebar_link">Binary</div></a><a href="/sim/avr/avr.html"><div class="sidebar_link">AVR</div></a><a href="/sim/uarch/uarch.html"><div class="sidebar_link">Micro­architecture</div></a><div class="sidebar_header">Additional:</div><a href="/text/info/authors.xml"><div class="sidebar_link">Authors</div></a><a href="/text/info/acknowledgements.xml"><div class="sidebar_link">Contributors</div></a><a href="/text/info/copyright.xml"><div class="sidebar_link">Copyright</div></a><a href="/text/info/links.xml"><div class="sidebar_link">Links</div></a></div><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5')">5: The ISA -- The Computer's Native Language</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_1')">5.1: Where are we now?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_2')">5.2: What is an ISA?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3')">5.3: Computer architecture</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_3_1')">5.3.1: What is a memory?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_2')">5.3.2: RAM</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_3')">5.3.3: Register file</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_4')">5.3.4: Program counter</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_5')">5.3.5: Status register</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_3_6')">5.3.6: Input/Output</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_4')">5.4: The Instructions</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_4_1')">5.4.1: A simple example</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_2')">5.4.2: Introduction to ISA instructions</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_3')">5.4.3: Storage</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_4_3_1')">5.4.3.1: Register file storage</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_3_2')">5.4.3.2: RAM storage</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_4_4')">5.4.4: Computation</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_5')">5.4.5: Flow-control</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_4_5_1')">5.4.5.1: Unconditional flow-control</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_5_2')">5.4.5.2: Conditional flow-control</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_4_6')">5.4.6: Input/Output</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_4_6_1')">5.4.6.1: Interfacing with I/O connectors via the ISA</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_4_6_2')">5.4.6.2: Interacting with devices</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_4_7')">5.4.7: Debrief</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_5')">5.5: Advanced ISA features</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_5_5_1')">5.5.1: Immediate operands</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_2')">5.5.2: Add-with-carry</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_3')">5.5.3: The stack</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_5_5_4')">5.5.4: Functions</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_5_6')">5.6: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_architecture')">architecture</a><br><a href="#" ng-click="goto_loc('def_instruction set')">instruction set</a><br><a href="#" ng-click="goto_loc('def_mnemonic')">mnemonic</a><br><a href="#" ng-click="goto_loc('def_x86 architecture')">x86 architecture</a><br><a href="#" ng-click="goto_loc('def_ARM architecture')">ARM architecture</a><br><a href="#" ng-click="goto_loc('def_AVR architecture')">AVR architecture</a><br><a href="#" ng-click="goto_loc('def_assembler directives')">assembler directives</a><br><a href="#" ng-click="goto_loc('def_memory')">memory</a><br><a href="#" ng-click="goto_loc('def_size')">size</a><br><a href="#" ng-click="goto_loc('def_width')">width</a><br><a href="#" ng-click="goto_loc('def_address')">address</a><br><a href="#" ng-click="goto_loc('def_RAM')">RAM</a><br><a href="#" ng-click="goto_loc('def_register file')">register file</a><br><a href="#" ng-click="goto_loc('def_program counter')">program counter</a><br><a href="#" ng-click="goto_loc('def_status register')">status register</a><br><a href="#" ng-click="goto_loc('def_flag')">flag</a><br><a href="#" ng-click="goto_loc('def_setting/clearing')">setting/clearing</a><br><a href="#" ng-click="goto_loc('def_destination')">destination</a><br><a href="#" ng-click="goto_loc('def_source')">source</a><br><a href="#" ng-click="goto_loc('def_branch')">branch</a><br><a href="#" ng-click="goto_loc('def_bus')">bus</a><br><a href="#" ng-click="goto_loc('def_push')">push</a><br><a href="#" ng-click="goto_loc('def_pop')">pop</a><br><a href="#" ng-click="goto_loc('def_stack pointer')">stack pointer</a><br><a href="#" ng-click="goto_loc('def_callee-saved')">callee-saved</a><br><a href="#" ng-click="goto_loc('def_caller-saved')">caller-saved</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_5"></div><div class="text"><div class="header">5: 
+	  The ISA -- The Computer's Native Language</div><div class="summary"><b>Summary: </b>In this chapter, we'll start to move toward how to build a
+    computer.  This involves a substantial change in tack because building a
+    physical machine that understands Python code turns out to be very
+    difficult.  In this chapter, we will describe what the components of an
+    actual computer are--the computer's architecture--and then we will
+    describe a language for manipulating these components--the computer's
+    instruction set.  This instruction set will be the actual interface for
+    the computer, as opposed to the friendly interface exposed by the
+    compiler.</div></div></div><div class="section"><div id="sec_5_1"></div><div class="text"><div class="header">5.1: 
+	  Where are we now?</div><p>We now take another step down the tower of abstractions:</p><div class="figure"><img src="/text/figures/5.1.fig1.png" width="800px"><div class="caption">Figure 5.1.1: Our current position in the tower of abstractions</div></div><p>We have learned to program a computer using Python.  But the
+      computer is a machine, and it is very hard to build a machine
+      that understands Python.  So there is a simpler language, called
+      the ISA, that is well-suited to being understood by a machine,
+      which will be the language the computer actually understands.
+      That is, the ISA is the computer's true interface.
+      </p><p>As such, the ISA will finally truly answer the question "How
+      does one program a computer?".  We can program a computer in
+      Python, but in a sense we're not programming the computer
+      directly--we're letting a compiler program the computer by
+      turning our program into an ISA program and handing that off to
+      the computer.  </p><p>In this chapter, we will explore the ISA in detail and
+      understand how to program using it directly.  This will be
+      critically important for our approach to the second question
+      about how to build a computer, since if we're going to build a
+      machine, we have to know what kinds of inputs the machine should
+      accept and what it should do with them: the machine's interface.
+      So knowing the ISA will tell us exactly how the machine we want
+      to build should behave.</p></div></div><div class="section"><div id="sec_5_2"></div><div class="text"><div class="header">5.2: 
+	  What is an ISA?</div><p>We have already described one method for interacting with a
+computer--the Python programming language.  So why couldn't Python be
+the computer's interface?  It turns out that Python has a number of
+features that make it unsuitable for this purpose.  A computer is a
+physical machine made with physical components that have physical
+limitations like finite storage space and computation circuits that
+cannot handle infinitely large numbers.  In contrast, Python allowed
+us to assume things like:
+
+<ul><li>We have essentially infinite memory that we can access at
+will: Python doesn't specify a limit on how many variables we can
+have, or how large an array can be.  </li> 
+
+<li>We can access memory using our chosen variable names without
+worrying about precisely which slots in memory we are using: In Python
+we can blithely go 'x = 5' and not have to worry about where we're
+storing the number 5--we can trust that something (the Python
+compiler, in this case) figures out which memory slot to use.</li>
+
+<li>We can store arbitrarily large numbers and operate on them: Python
+will very happily compute and print the very, very large numbers we
+computed in our factorial program.  Now that we know numbers in a
+computer are actually made up of bits, and that any memory slot in a
+computer tends to have a fixed number of bits, we cannot expect that
+storing small numbers requiring 8 bits to be the same as storing large
+numbers that require 100 bits.  Python, however, allowed us to ignore
+this distinction altogether.</li></ul></p><p>So it would be very challenging to build a physical machine that
+itself could comprehend the Python language.  In this chapter, we will
+introduce the interface of a computer, known as that computer's
+<b>instruction set architecture</b>, or <b>ISA</b>.  Any ISA consists
+of three things:
+
+<ul><li><span id="def_architecture" class="definition"></span>The computer's
+<b>architecture</b>--that is, the basic physical components of the
+computer that we have at our disposal. For instance, we won't
+have an infinite memory whose slots can be given names and can store
+huge numbers or even text, as Python might have us believe, but we'll
+have some finite memory whose slots can be accessed by a numerical
+address and which can store numbers up to some bound.  </li>
+
+<li><span id="def_instruction set" class="definition"></span>The <b>instruction set</b>--that is,
+the list of instructions the computer understands, specified in terms
+of what they do to the various elements in the architecture. For
+example, the computer will have several different memory banks, and
+there will be an "add" instruction that takes the value from one
+memory bank and adds it to the value stored in another memory
+bank.</li>
+
+<li>The <b>encoding</b>.  In this chapter, we'll learn about the
+instructions using a human-readable notation.  For instance, the add
+instruction applied to memory slots 14 and 15 could be written
+
+<div class="code"><pre>add r14,r15</pre></div>
+
+<span id="def_mnemonic" class="definition"></span>Such a human-friendly representation of an
+instruction is called the instruction's <b>mnemonic</b>. We will
+use these to talk about and write the instructions.  However, when a
+computer receives its instructions, it cannot read them as mnemonics
+(else we would have to build a machine that can look at the above
+sequence of Roman letters and figure out what to do!).  Remember that
+computers deal only in numbers, and so our machine requires that the
+instructions be given to it as numbers.  The ISA therefore also
+includes a scheme for corresponding instructions to numbers suitable
+for storage in a computer.  This scheme is called the "encoding" of
+the instructions.  For example, we will see later that the above
+instruction corresponds to the number 495, and what the computer
+actually stores in place of this add instruction as part of a program
+is the binary representation of this number.</li>
+</ul>
+</p><p>As one might expect, there are many different designs for
+computers, all with very different ISAs.  <span id="def_x86 architecture" class="definition"></span>If you're reading this using a laptop or desktop
+computer in the vicinity of 2016, say, your computer processor's
+architecture is very likely one known as x86.  This is a very powerful
+and complicated architecture with many different components and a
+corresponding panoply of instructions that control all these
+components.  </p><div class="figure"><img src="/text/figures/5.2.fig1.png" width="800px"><div class="caption">Figure 5.2.1: A circuit board that would go inside a desktop
+computer with an x86 processor (two of them, in fact!), slots for
+adding in more memory, and connectors for input/output (for mouse,
+keyboard, internet, etc.)</div></div><p><span id="def_ARM architecture" class="definition"></span>If you're on a tablet or phone or
+particularly low-power laptop, your processor's architecture is more
+likely to be the ARM architecture, which is simpler than x86 but is
+still a modern processor with many features. </p><div class="figure"><img src="/text/figures/5.2.fig2.png" width="800px"><div class="caption">Figure 5.2.2: Photo of circuit board from inside an iPhone,
+which contains an ARM processor, as well as an accelerometer chip (as
+we've been describing) and several other modules for controlling the
+touch screen, accessing the internet, and connecting to the cellular
+network.</div></div><p>It turns out that while modern processors have way too many
+features for us to describe in this text, most of the advanced
+features of a complicated modern processor are expansions on top of a
+basic set of features that are common even among simpler computers.
+<span id="def_AVR architecture" class="definition"></span>In this text, then, we'll focus on the
+architecture of one such sort of simpler computer--the AVR family of
+microprocessors--that exemplifies the basic components but which lacks
+much of the added complication that is used to make desktop computers
+and phones as fast as they are. Actual AVR computers in the wild
+tend to be used for simpler things like the processor controlling your
+thermostat or blender or the lights on your car.  They are also the
+computer used in the Arduino boards, which have become popular among
+hobbyists.</p><div class="figure"><img src="/text/figures/5.2.fig3.png" width="800px"><div class="caption">Figure 5.2.3: Photo of an Arduino circuit board with an AVR
+processor.</div></div><p>In fact, even the AVR architecture is somewhat needlessly complex
+for our purposes because of its evolution over time.  So the actual
+architecture we shall discuss is a regularization of the AVR
+architecture known as SimpleAVR.  It is more or less as capable and
+still reflects the ideas of the actual AVR ISA quite closely, but has
+been trimmed down for ease of explanation without losing most of the
+functionality that is important for our purposes.</p><p>Once we understand the SimpleAVR ISA, we will want to actually
+program a computer using it.  Since the computer requires its
+instructions be given as numbers, but we would rather write the easier
+mnemonics, we will have a program to translate using the ISA's
+encoding our mnemonics to numbers that the computer will understand.
+This program is called an "assembler". </p><p><span id="def_assembler directives" class="definition"></span>Most assemblers are a little more
+sophisticated than just encoding instructions from mnemonics and have
+extra features that make writing the instructions a bit easier.  These
+extra features take the form of assembler <b>directives</b>.  For
+instance, if you want an instruction repeated 32 times, you don't have
+to write the instruction 32 times, but can write a directive preceding
+the instruction that will tell the assembler to make 32 copies of the
+instruction for you. The language that the assembler understands
+is a programming language called "assembly language".  The ISA
+instructions are a huge part of assembly language, but as we
+mentioned, there are is a small part beyond that consisting of the
+"assembler directives" which make assembly language very slightly more
+concise than just using the ISA instructions themselves.</p><p>In this chapter, we will start by discussing the SimpleAVR
+architecture (5.1) and instruction set (5.2 for basic instructions,
+5.3 for more complicated ones), electing to leave all discussion of
+the encoding to chapter 6.  We will then introduce the assembler and
+explain some features of assembly language that help with common tasks
+when writing instructions (5.4).  We then launch into a sequence of
+examples, first seeing how Python programs, complicated though they
+appear, can be realized as assembly language programs (5.5 and 5.6),
+and then seeing (5.7) how our applications from the preceding chapters
+look at the level of the machine's native language.</p></div></div><div class="section"><div id="sec_5_3"></div><div class="text"><div class="header">5.3: 
+	  Computer architecture</div><div class="summary"><b>Summary: </b>The SimpleAVR architecture consists of a collection of memories, all with
+different roles </div><p>As we described, a computer's architecture describes the actual
+pieces of the physical machine that the instructions will manipulate.
+In the SimpleAVR architecture, almost all of these pieces are memories: It
+has a large memory for storing all the data it needs for its
+operation, a second large memory for storing the instructions, a
+small, fast memory that stores the values we are currently operating
+on, and some additional small memories to store things like status and
+which instruction we should execute next, and that's it.  All the
+instructions will do is store values in the memories, move values
+between the memories, and add/subtract/etc. numbers stored in the
+memories.</p><div class="figure"><img src="/text/figures/5.3.fig1.png" width="800px"><div class="caption">Figure 5.3.1: Overview of the SimpleAVR
+architecture</div></div><p>Before we get to all this, though, it behooves us to describe what
+we mean by "memory" more precisely.</p></div></div><div class="section"><div id="sec_5_3_1"></div><div class="text"><div class="header">5.3.1: 
+	  What is a memory?</div><p>A note about what we mean when we talk about a memory is in order: </p><p><span id="def_memory" class="definition"></span>A <b>memory</b> is a component that can store
+integer numbers. It consists of a sequence of slots, each of
+which stores a single number consisting of a given number of bits.
+<span id="def_size" class="definition"></span>The number of slots that the memory has is called the
+memory's <b>size</b>.  <span id="def_width" class="definition"></span>The number of bits each
+slot stores is called that slot's <b>width</b>.</p><p>The SimpleAVR architecture has several types of memory for different
+purposes.  For example, the RAM, as we will see, has a size of 65536
+and a width of 8.  This means that it consists of 65536 slots to store
+numbers, each of which is 8 bits, as in:
+</p><table>
+<tr><td>Slot 0: </td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>Slot 1: </td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>... </td><td colspan="8">...</td></tr>
+<tr><td>Slot 65535: </td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+</table><p><span id="def_address" class="definition"></span>In this picture, we have numbered each of the
+65536 slots as 0-65535.  In general, we will use such a numbering to
+refer to which slot in a memory we are talking about.  The number
+corresponding to a slot is called the slot's <b>address</b>. In
+this example, address 1 in RAM contains the value 10100011,
+representing the number 163 (or, if it's being used as a two's
+complement representation, the number -93).</p><p>Of course, like all parts to the computer, RAM is actually a
+physical thing, so slot 1 actually consists of 8 physical devices each
+of which is capable of storing electrons.  In this example the first,
+third, seventh, and eighth of these actually contain electrons
+(represented by 1s) and the rest do not (represented by 0s).</p><p>The computer's architecture consists of several different memories,
+which we describe in terms of width and size, as well as how much time
+storage operations on the memories take, whether the memories can be
+edited while the computer is running, and what, generally speaking,
+the memories are used for: </p><p>
+<table><tr><td><b>Memory: </b></td><td>RAM</td><td>Register file (RF)</td><td>PC</td><td>SREG</td><td>PORT</td></tr>
+<tr><td><b>Width: </b></td><td>16</td><td>16</td><td>16</td><td>4</td><td>8</td></tr>
+<tr><td><b>Size: </b></td><td>65536</td><td>16</td><td>1</td><td>1</td></tr>
+<tr><td><b>Speed: </b></td><td>Slow</td><td>Very fast</td><td>Very fast</td><td>Very fast</td><td>depends</td></tr>
+<tr><td><b>Use: </b></td><td>Storing the instructions to execute and
+any large blocks of data those will use</td> <td>Storing any numbers
+that we are manipulating immediately</td><td>Storing the location in
+RAM of the instruction we are currently executing</td><td>Storing
+information about the most recent arithmetic or I/O operation the
+computer performed</td><td>Used for communicating between our computer
+and the external world.</td></tr>
+<tr><td><b>Examples: </b></td><td>If you need to store some names,
+they would generally be stored in RAM.</td><td>If you want to add two
+numbers, say, the numbers must be stored in registers</td><td>If this
+is 5, then the instruction that will be executed next is the
+instruction in RAM at address 5.</td><td>If the last computation was
+an addition and the result was too big to store in a register (i.e.,
+the result was bigger than 65535), then the status register will be
+modified in a way to indicate this.</td><td>If our computer has some
+electrical connections coming out of it, we can send electrons flowing
+on these or not by writing values to the I/O registers.</td></tr>
+</table>
+</p><p>In the next few sections, we'll give further details on each of these.</p></div></div><div class="section"><div id="sec_5_3_2"></div><div class="text"><div class="header">5.3.2: 
+	  RAM</div><div class="figure"><img src="/text/figures/5.3.2.fig1.png" width="800px"><div class="caption">Figure 5.3.2.1: The RAM in a SimpleAVR
+computer.</div></div><p>Computers regularly need to store a large amount of data.  For
+example, any complicated program will involve many instructions that
+all need to be stored somewhere.  Also, when playing a game with all
+its many thousands of triangles on the screen at once, the computer
+must be keeping track of where all these triangles are so that it can
+test, e.g., when two objects are colliding.  This requires it to store
+the coordinates of every triangle, so <span id="def_RAM" class="definition"></span>our computer has
+a memory of relatively large size in the form of is so-called
+<b>random access memory</b>, or <b>RAM</b>.</p><p>RAM typically lives outside the core processing circuitry, and so
+whenever the computer wants to interact with RAM it needs to send some
+electrons on a long journey away and wait for them to return.  This
+means that RAM is relatively slow (emphasis on 'relatively'--modern
+RAM can transfer on the order of 10 billion bytes per second which is
+pretty fast, but this is in part due to the bulk nature of the writes;
+writing a single byte to RAM is still slower than writing a single
+byte to the register file TODO).</p><p>In an SimpleAVR computer, RAM will be a memory of width 16.  That
+is, it can store numbers 0 to 65535 (if viewed as non-negative
+representations) or -32768 to 32767 (if viewed as two's complement).
+It has size 65536--that is, it can store 65536 of these numbers, with
+addresses 0-65535 (in practice, cheaper models of SimpleAVR chips will
+have less RAM available, but we'll proceed assuming we have the
+full-size RAM of size 65536).  There is a small caveat that in many
+SimpleAVR computers.</p></div></div><div class="section"><div id="sec_5_3_3"></div><div class="text"><div class="header">5.3.3: 
+	  Register file</div><div class="figure"><img src="/text/figures/5.3.3.fig1.png" width="800px"><div class="caption">Figure 5.3.3.1: The register file of a SimpleAVR
+computer.</div></div><p>Suppose we want to use our computer to add two numbers.  If RAM is
+the only editable data memory we have, then, well, those two numbers
+have to come from somewhere, so we make two trips to RAM, one for each
+of the numbers we want to fetch.  Then the processor adds them, but
+now it must put the result somewhere!  If the only option is RAM, then
+it will have to make a third round-trip to RAM to store the sum.</p><p><span id="def_register file" class="definition"></span>Since RAM (especially on a SimpleAVR
+computer) can be slow, and we want add operations to be fast, the
+processor has another memory built into it that is small but very
+fast, and which is what is actually used for arithmetic operations
+like adding.  This memory has width 16 and size 16, and is called the
+<b>register file</b>.</p><p>Because we will be referring to the register file a lot, we have a
+special notation for it: The first slot, i.e., the slot at address 0,
+is called r0, then address 1 is called r1, proceeding through address
+15 which is called r15.  This naming scheme allows us to think of
+these slots as separate one-slot memories, or "registers".  These
+particular registers are called the <b>general-purpose
+registers</b>.</p></div></div><div class="section"><div id="sec_5_3_4"></div><div class="text"><div class="header">5.3.4: 
+	  Program counter</div><div class="figure"><img src="/text/figures/5.3.4.fig1.png" width="800px"><div class="caption">Figure 5.3.4.1: The program counter in a SimpleAVR
+  computer.</div></div><p>We have seen that instructions are stored as numbers in the RAM.
+  As we know, a computer executes one instruction at a time, so at any
+  given time, there is one address in RAM for the instruction we are
+  executing at that time.  <span id="def_program counter" class="definition"></span>The address of
+  the currently executing instruction is stored in an additional
+  register called the <b>program counter</b>--or 'PC'. Since it
+  has to store a RAM address, it has to store numbers 0-65535, i.e.,
+  it has width 16.</p><p>The program counter cannot be written to directly like a
+  general-purpose register, but there are instructions that affect its
+  value.  In fact, since whem most instructions finish, the computer
+  advances to the instruction immediately following in RAM, most
+  instructions will as a side effect increment the pc by 1.  Thus the
+  program counter allows us to have the usual sequential execution of
+  instructions.  But it also allows more complicated branching
+  behavior: If we had the ability to, instead of incrementing the pc,
+  give it a whole new value--effectively jumping to a different point
+  in the code--subject to some conditions, then we would be able to do
+  the same sort of branching we did with the if and while statements
+  in Python.</p></div></div><div class="section"><div id="sec_5_3_5"></div><div class="text"><div class="header">5.3.5: 
+	  Status register</div><div class="figure"><img src="/text/figures/5.3.5.fig1.png" width="800px"><div class="caption">Figure 5.3.5.1: The status register in a SimpleAVR
+computer.</div></div><p><span id="def_status register" class="definition"></span>Another memory in the architecture is
+the <b>status register</b>--or <b>sreg</b>. This is a register
+of width 4--that is, it is comprised of 4 bits.  Unlike the other
+registers, we almost never think about the binary value of the sreg,
+but instead we think of each bit as a separate piece of information.
+For example, perhaps the 3rd bit represents whether some feature is
+active on the computer: the 3rd bit being 1 represents the feature
+being active and the 3rd bit being 0 represents that the feature is
+inactive.  <span id="def_flag" class="definition"></span>Bits that are treated this way, not as
+part of a binary representation of a number but as standalone
+true/false values are generally referred to as <b>flags</b>.
+<span id="def_setting/clearing" class="definition"></span>Storing a value of 1 in a flag is called
+<b>setting</b> the flag, and storing a value of 0 is called
+<b>clearing</b> it.</p><p>There are four flags in the status register, called Z, C, S, and I.
+We will cover their behaviour in detail when we describe the
+instructions, but the basic idea is that while we can
+add/subtract/etc. numbers in the general-purpose registers and store
+the results in registers, there is further information that cannot be
+communicated just by the numeric result of the operation.  For
+example, if we have the values 60000 and 10000 stored in
+general-purpose registers and we add them together, the result should
+be 70000.  But this result cannot be stored in a register--it requires
+17 bits to store it!  So what gets stored instead is the low 16 bits
+of the result, or in this case, 4464.  But the missing 17th bit is not
+lost--it is stored in one of the flags in the sreg (the C flag,
+specifically).
+</p><p>To get an idea of what each flag is for:
+
+<ul>
+
+<li>The Z flag generally gets set if the result of the previous
+operation was 0, and cleared otherwise.  For example, since the above
+addition did not result in an answer of 0, the result of that
+instruction would be to clear the Z flag.  </li>
+
+<li>The C flag generally gets set if there was an addition or
+subtraction operation involved with the instruction and that
+instruction and this operation overflowed.  In our above example of
+60000 + 10000, the addition would save a result of 4464 in the
+specified register, and would also set the C flag.  </li>
+
+<li>The S flag generally gets set if there was an addition or
+subtraction operation involved with the instruction and the result of
+that operation was a 2's complement overflow TODO(ensure this is
+discussed in ch4).  For example, if we have two registers wtih values
+30000 and 10000, then their sum will simply be 40000, i.e. the
+operation will store the binary representation 1001110001000000 in a
+register.  Because this does not overflow, it will clear the C flag.
+However, if we are treating the register's value as a 2's complement
+integer, then we would want to interpret this as the number -3840.  So
+we added two positive numbers and got a negative result.  This will be
+indicated by the S flag being set when this happens.</li>
+
+<li>The I flag relates to I/O operations, and generally gets cleared
+when an I/O operation is in progress and set when it completes.  For
+example, if we just sent a byte to some external device, the I flag
+will be cleared when we first send the byte, and we can repeatedly
+check the I flag until we see it get set, which will indicate the
+external device successfully received the byte.</li>
+</ul>
+
+We use the word "generally" in all of these descriptions because there
+are exceptions.  When introducing each instruction, we'll explain
+precisely how it affects each flag.  </p><p>Some instructions have no effect on certain flags.  For example,
+non-arithmetic operations will leave the Z, C, and S flags alone.  So
+if we perform a subtraction whose result is 0, then the Z flag will
+get set.  If we then perform a bunch of non-arithmetic operations, the
+Z flag will remain set through all of them.</p></div></div><div class="section"><div id="sec_5_3_6"></div><div class="text"><div class="header">5.3.6: 
+	  Input/Output</div><div class="figure"><img src="/text/figures/5.3.6.fig1.png" width="800px"><div class="caption">Figure 5.3.6.1: The PORT register of a SimpleAVR
+  computer.</div></div><p>There is one final piece to the architecture, which enables input
+  and output operations: The input/output port register.</p><p>A SimpleAVR chip has 8 electrical connectors that are used for
+  transmitting actual data, and one further connector that is used to
+  coordinate the transmission of data.  In the processor architecture,
+  then, the 8 connectors used for sending data correspond to an
+  architecture register called PORT, and the additional connector is
+  tied to the I flag in the sreg.  The PORT register behaves somewhat
+  like a normal register in that we can read from and write to it.
+  The difference is that when we write to a normal register, the value
+  we wrote gets stored somewhere, and reading the register recovers
+  whatever value we stored most recently.  Writing to the I/O port, on
+  the other hand, causes the data we wrote to drive current on the
+  physical connectors, and reading from an I/O port simply performs a
+  measurement of the current on the physical connectors (for example,
+  when this current is being set by an external device in order to
+  communicate with the computer, we receive the value it was
+  sending).</p><p>For a simple example, if we write the byte 126 (binary 01111110)
+  to <span class="icode">PORT</span>, this will send current on the middle 6
+  connectors, but not on the two end ones.  Of course, how is an
+  external device to know that it should look at its corresponding
+  connectors and observe this value?  The answer depends on the
+  external device.  However, most external devices will be watching
+  current on that other connector we mentioned above.  When we send
+  the data, we also set the I flag, which holds the voltage on that
+  connector high.  The device will pull it low when it has received
+  the data, clearing the I flag.  This will all be covered in detail
+  later when we actually perform I/O using the ISA operations.</p><p>It is also worth noting that this is but one scheme for doing
+  I/O.  There are several other techniques available that other
+  computers may use, and we shall digress to cover some of these later
+  in the chapter.</p><div class="figure"><img src="/text/figures/5.3.6.fig2.png" width="800px"><div class="caption">Figure 5.3.6.2: Schematic of a computer with a device
+    connected.</div></div></div></div><div class="section"><div id="sec_5_4"></div><div class="text"><div class="header">5.4: 
+	  The Instructions</div><div class="summary"><b>Summary: </b>Now that we've described the SimpleAVR computer
+architecture--the components that make up a SimpleAVR computer--we
+move on to the second thing in the ISA: The instructions.
+Specifically, now that we know what memories the computer has
+available to use, we now learn all the ways that the computer can use
+them.  As we said at the very start of this text, these will organised
+into: <ul><li>Storage operations (putting values into memories or
+moving values between memories--for us, this will usually be putting
+data into the RF or moving data between the RF and
+RAM).</li><li>Arithmetic operations (adding/subtracting/etc values in
+memories and putting the result in other memories--for us, this will
+be performing operations on values stored in the RF and saving the
+results in the RF as well).</li><li>Branching operations (deciding
+based on some value in memory what instruction should be executed
+next--for us, this will mean looking and the sreg and deciding what
+new value to store in the PC)</li><li>I/O operations (dealing with the
+I/O-related memories to interact with the external world--for us, this
+will mean operations that affect the PORT register).</li></ul>
+
+We will start with a basic introduction to what the instructions look
+like and then describe all of the instructions that an SimpleAVR
+computer understands, classifying them into these four
+types.</div><p>Having described the SimpleAVR architecture, we describe the instructions
+that comprise the SimpleAVR ISA, which will allow us to manipulate the
+components of the architecture--e.g., to store values in the various
+memories, add the contents of various registers, write values to I/O
+registers, etc.</p></div></div><div class="section"><div id="sec_5_4_1"></div><div class="text"><div class="header">5.4.1: 
+	  A simple example</div><p>As we did with Python, we'll start with an initial example of a
+program that runs the 3x+1 procedure on the number 20, this time using
+SimpleAVR instructions: </p><sim-avr text="'ldi r15,20
+
+out r15
+brfc I,-1
+
+ldi r14,1
+cpi r15,1
+brfs Z,10
+
+ldi r14,1
+and r14,r15
+brfc Z,2
+
+sh r16,1
+rjmp -7
+
+mov r15,r14
+add r14,r14
+add r15,r14
+addi r15,1
+rjmp -15
+
+halt'" size="auto" reset="yes" simid="0" template="/lib/jsavr/simavr.html"></sim-avr><p>This program is rather opaque, with few clues to what lines of code
+are doing what, but even without entirely understanding what is going
+on, a few things jump out at us:
+
+<ul><li>Every line is doing exactly one basic operation, in contrast
+to Python, where one line such as
+
+<div class="code"><pre>print(3*x+1)</pre></div>
+
+could perform two arithmetic operations and an output operation.  
+</li>
+
+<li>Many operations such as 'add', are followed by either flag names
+('Z'), register names ('r14', 'r15') or numbers.  </li>
+
+</ul>
+</p><p>This is a bit further removed than the corresponding Python program
+from the English language description of the algorithm, and there is
+little indication of what portions of the program perform what
+functions.  Just like in Python, where we could add comments by
+preceding them with a "#" symbol, we can comment ISA programs by
+preceding comments with the ";" symbol.  So to improve readability, we
+will annotate this program with comments to give some idea of what's
+going on:
+
+
+<div class="code"><pre>ldi r15,20  ; r15 = 20
+
+out r15
+brfc I,-1   ; Output r15 and wait for acknowledgement from the device
+
+ldi r14,1
+cpi r15,1
+brfs Z,10   ; If r15 is 1, jump to the 'halt' instruction
+
+ldi r14,1   
+and r14,r15
+brfc Z,2    ; If r15 is even, jump to the 'mov' line below
+
+sh r16,1
+rjmp -7     ; Divide r15 by 5 and jump back to the 'out' line above
+
+mov r15,r14
+add r14,r14
+add r15,r14
+addi r15,1
+rjmp -15    ; r15 = 3*r15 + 1 and jump back to the 'out' line above
+
+halt        ; end the program</pre></div>
+</p><p>So in fact, all the high-level operations we used in our Python
+program are present in this program, but because each ISA instruction
+only performs a single basic operation, each of these high-level
+operations takes more ISA instructions to express.  For instance, if
+we want to modify the value stored in r16 like according to the
+formula (not valid ISA code): </p><div class="code"><pre>r15 = 3*r15+1</pre></div><p>then we would use the following sequence of actual ISA operations (and
+since we haven't explained the meaning of the operations yet, we again
+sprinkle in some comments to explain what the instructions are doing):</p><div class="code"><pre>
+mov r14,r15     ; r14 = r15
+add r14,r14     ; r14 = r14 + r14
+add r15,r14     ; r15 = r15 + r14
+addi r15,1      ; r15 = r15 + 1</pre></div><p>If you stare at this for a moment, you see that the result of this
+is that it indeed triples r15 and then adds 1 to it.  But why did we
+have to take so many steps?  Isn't this less efficient than the
+one-line Python version?  The point is that the ISA operations are the
+only operations your computer can actually perform.  When you write a
+more nicer-looking Python program that just does
+
+<div class="code"><pre>x = 3*x+1</pre></div>
+
+the computer has no idea what this means, since it isn't in the ISA.
+So instead a compiler has to figure out how to turn this into ISA
+operations, and it will come up with something like the sequence of
+ISA operations above.  So one should not confuse brevity of code for
+savings in the amount of actual work that the computer will do in the
+end.  Ultimately, to understand how efficient a piece of code in any
+language actually is, one has to understand what ISA operations will
+be actually run as a result of the code you've written.  </p></div></div><div class="section"><div id="sec_5_4_2"></div><div class="text"><div class="header">5.4.2: 
+	  Introduction to ISA instructions</div><p>So it first behooves us to understand better what ISA operations
+there actually are, and how to write them.  In general, operations are
+written in the form
+
+<div class="code"><pre>[operation name] [list of operands, separated by commas]</pre></div>
+
+Operands are usually either flags, constants or general purpose
+registers, but each operation comes with a specification of exactly
+what operands are allowed.  For instance, to add two registers, we
+would use the add operation as we have already seen.  This operation
+specifies that its operands must be two general purpose registers, so
+we could legally do:
+
+<div class="code"><pre>add r10,r13</pre></div>
+
+to perform the operation 
+
+<div class="code"><pre>r10 = r10 + r13</pre></div>
+
+If, however, we wanted to add 1 to r10, we could not do 
+
+<div class="code"><pre>add r10,1</pre></div>
+
+since the add instruction requires two registers as its operands.
+There is a separate instruction, called addi, which takes as its
+operands a register and a constant, and add the constant to the
+register, so we could perform
+
+<div class="code"><pre>r10 = r10 + 1</pre></div>
+
+with the instruction:  
+
+<div class="code"><pre>addi r10,1</pre></div>
+</p><p>One convention that we see in action in these instructions (and which
+will be common in the instructions that follow) is that when an
+instruction takes two operands, the first operand is the one that gets
+modified, and the second provides the source for this modification.
+One could read
+
+<div class="code"><pre>ldi r13,129</pre></div>
+
+as "load into r13 the value 129".  Here, r13 is the value being
+modified, and 129 is the value we are using to modify it.  Likewise,
+
+<div class="code"><pre>st r10, r5</pre></div>
+
+could be read "store into RAM address r10 the value in r5".  Once again,
+the first operand--r10--describes what is being modified, and the second
+operand is where the modification comes from.  </p><p><span id="def_destination" class="definition"></span>For this reason, the first operand is often
+referred to as the instruction's <b>destination operand</b>,
+<span id="def_source" class="definition"></span>and the second operand as the <b>source
+operand</b>.</p><p>We have now almost described the syntax for ISA operations
+completely--every line is an operation followed by corresponding types
+of operands.  All that remains is to explain what are the valid
+operations, and what kinds of operands each operation may have.  Then,
+beyond syntax, we need to describe the semantics of each
+operation--what each operation actually does to the various memories
+in the computer (i.e., how each operation affects the architecture).
+</p><p>Before we actually present the operations, a word about the style
+of presentation: Because the format of an operation is so consistent,
+we can really just explain each operation by a table that shows:
+
+<ul><li>Operation name</li>
+<li>The permitted operands for that operation</li>
+<li>What the operation does with the operands</li>
+<li>What the operation does to the special registers pc and sreg.  </li>
+</ul>
+
+We will resort to using exclusively this summary form eventually, but
+to start out with, we'll explain the operations in some more detail
+than this, providing this summary afterward.  You will observe that in
+fact the summary contains ALL of the data found in the English
+explanation, and is more concise, and so would benefit from eventually
+getting comfortable programming by reference only to the
+summaries.</p><p>Now, on to the actual operations.  Recall in Python we had
+essentially three functions each line could perform: Assignment,
+printing, and flow-control.  Here, we will split the ISA instructions
+into four broad categories (recall these the four types of things we
+claimed a computer can do):
+
+<ul><li><b>Storage</b>, which generalizes the aspect of Python assignment
+where we stored values in memory</li>
+<li><b>Computation</b>, which generalizes the aspect of Python
+assignment where we computed the values to store using
+expressions</li>
+<li><b>Input/Output</b>, which generalizes printing in Python</li>
+<li><b>Flow-control</b>, which allows us to control which instruction
+was executed next.
+</li>
+</ul>
+</p></div></div><div class="section"><div id="sec_5_4_3"></div><div class="text"><div class="header">5.4.3: 
+	  Storage</div><p>We start with the analogues of Python's assignment lines (e.g., x =
+2).  In the ISA, however, there are two actual memories we might want
+to store things in: the RF and the RAM.  So our storage operations
+come in two flavours: Those that affect only the RF and those that
+deal with RAM.</p></div></div><div class="section"><div id="sec_5_4_3_1"></div><div class="text"><div class="header">5.4.3.1: 
+	  Register file storage</div><p>
+
+There is an instruction called ldi--short for 'load
+immediate'--which we can use to specify a number to store into a
+general-purpose register.  There is a limitation, however: We can only
+load numbers 0-255 into registers.  This may sound arbitrary and
+problematic, but we will discuss further instructions later that let
+us modify all 16 bits of each register.  The reason for this perhaps
+arbitrary looking limit will be discussed when we talk about
+instruction encoding.  </p><p>So the syntax for ldi is:
+
+<div class="code"><pre>ldi [general purpose register r0-r15],[number 0-255]</pre></div>
+
+And the semantic meaning of this instruction is what it does to the
+architecture:
+<ul>
+  <li>The specified register gets filled with the specified value</li>
+  <li>The pc increments (so that once this instruction is done we move
+  on to the next instruction)</li>
+  <li>The sreg is unchanged.</li>
+</ul></p><p>So, for example: 
+
+<div class="code"><pre>ldi r13,100</pre></div>
+
+will put the value 100 into register 13, whereas 
+
+<div class="code"><pre>ldi r15,300</pre></div>
+
+is not a legal ISA instruction--ldi can only load values 0-255 into
+registers.</p><p>But say we want to store the value 300 into r15--what then?  The
+16-bit binary representation of 300 is 0000000100101100.  We can get
+the low 8 bits of r15 to match this with
+
+<div class="code"><pre>ldi r15,44</pre></div>
+
+(the 8-bit binary representation of 44 being 00101100).  Then we need
+a way to load a value into the high 8 bits of r15.  This is the
+<b>ldih</b> instruction (standing for "load immediate into high
+bits").  This takes the same operands as ldi, but loads the 8-bit
+number into the high 8-bits, leaving the low 8 bits unchanged.  In our
+case, we want the high 8 bits to become 00000001, so the code
+
+<div class="code"><pre>ldi r15,44
+ldih r15,1</pre></div>
+
+will result in r15 holding the value 300.
+
+So if we want to load values 0-255 into registers, we may simply use
+ldi.  If we want to load values larger than that, we break them up
+into high and low 8-bit values (as we did 300 = 1:44) and load these
+with ldi and ldih, respectively.
+
+Now, what if we want to load -300?  The 16-bit 2's complement
+representation of -300 is 1111111011010100, so we could do
+
+<div class="code"><pre>ldi r15,254
+ldih r15,212</pre></div>
+
+and this would be successful, but demands a rather onerous computation
+of us every time we want to store a negative number.  For now, we will
+resign ourselves to this extra work, but in future we will have an
+easier way.
+
+Lastly, there is the "move value from one register into another"
+instruction, called "mov".  This instruction simply copies the value
+from its second operand into its first operand.
+
+<div class="code"><pre>ldi r10,9
+mov r1,r10</pre></div>
+
+The first is a legal ldi instruction, which does the operation 
+
+<div class="code"><pre>r11 = 9</pre></div>
+
+and the second is a legal mov instruction, which does
+
+<div class="code"><pre>r1 = r10</pre></div>
+
+And since we had previously set r10 to 9, this does the job of setting
+r1 to 9 as well without affecting the valkue of r10.
+
+</p><p>To summarize: </p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>ldi</pre></td>
+<td>Load immediate</td>
+<td><pre>reg 16-31</pre></td>
+<td><pre>8-bit value</pre></td>
+<td><pre>op1 = op2</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>ldih</pre></td>
+<td>Load immediate</td>
+<td><pre>reg 16-31</pre></td>
+<td><pre>8-bit value</pre></td>
+<td><pre>op1 = op2*256+op1</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>mov</pre></td>
+<td>Move</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>op1 = op2</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+</table></div></div><div class="section"><div id="sec_5_4_3_2"></div><div class="text"><div class="header">5.4.3.2: 
+	  RAM storage</div><p>Note that these instructions allow you to write to the
+general-purpose registers only.  In the architecture, the register
+file (which contains these registers) was the fast internal memory,
+but it was small--it only has 16 slots!  What if we need to store more
+than 16 numbers in our program?  We had another component of the
+architecture--the RAM--which allowed us to store a very large number
+of values indeed--up to 65536 of them!  The ldi and mov instructions
+don't write anything to RAM, so we need separate instructions for this
+job.  </p><p>Enter the "load" and "store" instructions--ld and st.  The
+instruction ld--or "load from RAM"--takes two operands.  The first one
+is any general-purpose register, which will receive the value we load
+from RAM.  The second is another register, which should contain the
+address of the slot in RAM that we want to load.  So this instruction can
+be used like, for example:
+
+<div class="code"><pre>ld r14, r15</pre></div>
+
+This will load a value from RAM into the register r14.  The value it
+loads will come from whatever RAM address corresponds to the number
+stored in r15.  For example, if we do:
+
+
+<sim-avr text="'ldi r15,44
+ldih r15,1
+ld r14,r15'" size="auto" reset="yes" simid="1" template="/lib/jsavr/simavr.html"></sim-avr>
+
+this will read whatever was stored in RAM address 300 and will write
+that to r14.
+</p><p>Complementary to ld is the st--or "store into RAM"--instruction.
+The operands are again both registers, but this time the first
+register should contain the RAM address we are writing to, and the
+second contains the value we are writing.  Thus, to store the value
+200 into RAM at address 999, we compute that 999 = 3*256 + 231 and can
+do, for example using Y this time:
+
+<sim-avr text="'ldi r15, 231
+ldih r15, 3
+ldi r14, 200
+st r15, r14'" size="auto" reset="yes" simid="2" template="/lib/jsavr/simavr.html"></sim-avr>
+
+The first two instructions will cause r15 to be 231 + 256*3 = 999.
+The third instruction will cause r14 to hold the value 200.  Then the
+st instruction will store whatever's in r14 (in this case 200), into
+the slot in RAM with address r15 (in this case 999).  </p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>ld</pre></td>
+<td>Load from RAM</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>op1 = RAM[op2]</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>st</pre></td>
+<td>Store in RAM</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>RAM[op1] = op2</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+</table><p>To see all of these instructions working together to store some
+values in RAM and in various registers, try stepping through the
+following ISA program:
+
+
+<sim-avr text="'ldi r15, 231
+ldih r15, 3
+ldi r14, 200
+st r15, r14
+ldi r15,44
+ldih r15,1
+ld r14,r15'" size="auto" reset="yes" simid="3" template="/lib/jsavr/simavr.html"></sim-avr>
+
+</p></div></div><div class="section"><div id="sec_5_4_4"></div><div class="text"><div class="header">5.4.4: 
+	  Computation</div><p>Recall that in a Python assignment statement we could use as the
+right-hand side not only a number, as in
+
+<div class="code"><pre>x = 9</pre></div>
+
+but also any expression:
+
+<div class="code"><pre>x = 9
+y = 7+x</pre></div>
+</p><p>ldi and mov allow us to accomplish the first thing for registers,
+but how does one accomplish something like the second, where we
+actually do some computation?  </p><p>For starters, there are instructions for adding and subtracting
+registers, called add and sub respectively.  These instructions take
+two operands--each of which can be any general-purpose register r0
+through r15.  For example,
+
+<div class="code"><pre>add r15, r0
+sub r9, r8</pre></div>
+
+are valid instructions.  The add instruction will take the value in
+the second operand and add it to the value stored in the first
+operand, updating the first operand with this new value.  So 
+
+<div class="code"><pre>add r15, r0</pre></div>
+
+performs the operation
+
+<div class="code"><pre>r15 = r15 + r0</pre></div>
+
+Likewise, sub subtracts the second operand from the first.
+</p><p>So to mimic the behavior of the Python code above which adds 9 and
+7, you could do, with r31 playing the role of x, and r30 the role of y: 
+
+ldi r15,9
+ldi r14,7
+add r15,r14</p><p>In addition to updating the destination register (and incrementing
+the pc, as usual), these operations also update the sreg--specifically
+the Z, C, and S flags.
+
+<ul>
+  <li>Z flag: Most simply, the Z flag is set to 1 if the result of the
+  operation is 0, and set to 0 otherwise.  Note that it is possible
+  for the result of an add operation to be 0: If we do 65535+1 where
+  the two values being added are 8-bit non-negative integers, then the
+  result will be 65536, which in binary is 10000000000000000.  The
+  value that gets stored as the result of this, then, is the last 16
+  bits, or 0000000000000000, representing an answer of 0.  </li>
+  <li>C flag: In the above case, what happened is that the addition
+  carried over to the 17th bit.  There is no 17th bit in the
+  destination register, of course, so this 17th bit is stored in the C
+  flag.  So in the example of 65535+1, the 17th bit is set to 1, i.e.,
+  the C flag will be set to 1.  In general, the C flag gets set if the
+  addition, interpreted as non-negative integers, gave a result
+  greater than 65536.</li>
+  <li>S flag: Like the C flag which gets set by the add instruction if
+  the sum exceeds the maximum value that can be stored, the S flag is
+  set to 1 if the sum would exceed the maximum two's complement value
+  that can be stored.  Specifically, 32767.  So the sum 32767 + 1 or,
+  in binary, 0111111111111111+0000000000000001 has an answer of
+  1000000000000000.  As an unsigned integer, this represents the
+  number 32768, and there is no overflow, which is why this addition
+  does not set the C flag.  However, if you are treating that register
+  as a two's complement value you might want to know that your
+  formerly positive number has been changed to have a value of
+  -32786--going from very positive to very negative.  Thus, the S flag
+  gets set.  </li>
+</ul>
+</p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>add</pre></td>
+<td>Add</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>op1 = op1 + op2</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: set if op1 + op2 &gt; 65535
+S: set if op1 + op2 &gt; 32767
+I: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>sub</pre></td>
+<td>Subtract</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>op1 = op1 - op2</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: set if op1 - op2 &lt; 0
+S: set if op1 - op2 &lt; -32768
+I: unchanged</pre></td>
+</tr>
+</table><p>Similarly to add and sub for arithmetic operations, we have
+operations for performing some of the bitwise boolean operations we
+described at the end of chapter 4: and, or, not, and bit-shifting.
+The operations <span class="icode">and</span> and <span class="icode">or</span> each take two
+register operands like <span class="icode">add</span>, and do not modify the C
+flag or the S flag.  <span class="icode">not</span> takes only one operand and
+inverts its bits, and again does not modify the C or the S flags.  And
+the shift operator <span class="icode">sh</span> takes one register operand and
+one 4-bit two's complement operand that represents how much you want
+to shift to the left.  For example,
+
+<div class="code"><pre>sh r0,1</pre></div>
+
+would shift r0 to the right by 1 bit (effectively multiplying r0 by
+2), whereas
+
+<div class="code"><pre>sh r0,-3</pre></div>
+
+would shift r0 to the right by 3 bits.
+</p><p>When you shift, some bits may fall off the end.  For example
+
+<div class="code"><pre>10101010 &gt;&gt; 2 = 00101010</pre></div>
+
+If, as in this example, any of the bits that disappears is nonzero, the
+C flag is set.  Otherwise, it is cleared.  The S flag is unchanged.</p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>and</pre></td>
+<td>And</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>op1 = op1 &amp; op2</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: unchanged
+S: unchanged
+I: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>or</pre></td>
+<td>Or</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>op1 = op1 | op2</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: unchanged
+S: unchanged
+I: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>sh</pre></td>
+<td>Shift</td>
+<td><pre>reg</pre></td>
+<td><pre>number -8 to 7</pre></td>
+<td><pre>op1 = op1 &lt;&lt; op2</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: set if any 1s are lost in the shift
+S: unchanged
+I: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>not</pre></td>
+<td>Not</td>
+<td><pre>reg</pre></td>
+<td><pre>[none]</pre></td>
+<td><pre>op1 = ~op1</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: unchanged
+S: unchanged
+I: unchanged</pre></td>
+</tr>
+</table><p>All the operations thus far treat their operands as non-negative
+representations of numbers.  We note for most purposes, this doesn't
+matter.  The definition of two's complement is such that the procedure
+to add (or subtract) two unsigned binary representations is the same as
+that to add (or subtract) two two's complement binary
+representations.</p><p>However, for other operations, the operation itself will change
+depending on how we want to treat the register value.  For example, if
+we want to implement integer division by 2 of unsigned integers, we
+can do
+
+<div class="code"><pre>sh r0,-1</pre></div>
+
+and this will turn, for example, 1110101001100000 (unsigned
+representation of 60000) into 0111010100110000 (unsigned
+representation of 30000).  Since 60000 divided by 2 is indeed 30000,
+this was successful.  </p><p>However, if we are doing the same operation but wanted to think of
+r0 as a signed integer, this would be turning 1110101001100000 (two's
+complement representation of -5536) into 0111010100110000 (two's
+complement representation of 30000).  Unhappily, -5536 divided by 2 is
+nothing close to 30000.  </p><p>So while the operations <span class="icode">add</span>, <span class="icode">sub</span>,
+<span class="icode">not</span>, <span class="icode">and</span>, and <span class="icode">or</span>
+operations achieve the desired results regardless of how we are using
+the operands, <span class="icode">sh</span> does not.  This means we are going to
+need a special version of <span class="icode">sh</span> for operations on
+registers that we're using as signed integers.  This operation is
+called "arithmetic shift", performed by the instruction
+<span class="icode">ash</span>.  </p><p>In the above example, the correct division of 1110101001100000 by 2
+would be 1111010100110000 which, we notice, is exactly what <span class="icode">sh
+r0,1</span> did except for the most significant bit.  Thus what
+<span class="icode">ash</span> should do when shifting right is, instead of
+shifting in 0s from the left, shift in whatever the most significant
+bit is.  So, for example, if r0 is 1000000000100001, then <span class="icode">ash
+r0,-3</span> should be 1111000000000100.</p><p>On the other hand, for shifting to the left, <span class="icode">ash</span>
+should do this as normal, except leave the most significant bit
+untouched.  So, for example, if r0 is again 1000000000100001, then
+<span class="icode">ash r0,3</span> should be 1000000100001000.</p><p>The <span class="icode">ash</span> operation has the same effect on sreg as
+<span class="icode">sh</span>.</p><p>Our final computation operation that also crucially treats its
+operands as two's complement representations is <span class="icode">neg</span>,
+which negates the value of its one operand and only affects the Z
+flag.</p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+  <tr>
+<td><pre>neg</pre></td>
+<td>Negate</td>
+<td><pre>reg</pre></td>
+<td><pre>[none]</pre></td>
+<td><pre>op1 = -op1</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: unchanged
+S: unchanged
+I: unchanged</pre></td>
+  </tr>
+  <tr>
+<td><pre>ash</pre></td>
+<td>Arithmetic shift</td>
+<td><pre>reg</pre></td>
+<td><pre>number -8 to 7</pre></td>
+<td><pre>op1 = op1 &lt;&lt; op2</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: set if any 1s are lost in the shift
+S: unchanged
+I: unchanged</pre></td>
+</tr>
+</table><p>Once again, we leave an example here for you walk through.  Pay
+particular attention to the evolution of the sreg flags: 
+
+<sim-avr text="'ldi r15,81
+mov r0,r15
+ldi r14,2
+ldi r13,1
+ldi r12,30
+ldi r11,255
+ldih r11,255
+ldi r10,5
+add r0,r12   ; Compute 30 + 81
+add r13,r11  ; Compute 65535 + 1
+ldi r0,0
+ldi r1,1
+sub r0,r1    ; Compute 0 - 1
+ldi r2,255
+ldih r2,128
+ldi r3,1
+add r3,r2    ; Compute 32767 + 1
+ldi r3,1
+sub r2,r3    ; Compute 32768 - 1'" size="auto" reset="yes" simid="4" template="/lib/jsavr/simavr.html"></sim-avr>
+</p><p>Worth noting is that all these computation instructions act only on
+registers.  This is standard--if we are going to be operating on some
+values, we need to store them in registers.  So if ever we want add
+two numbers that are stored in RAM, we need to first load those values
+into registers using ld, then add them using the add instruction, and
+then finally store the sum back into RAM with an st instruction.</p><p>This means that doing arithmetic on numbers stored in RAM takes
+more operations, and hence more time.  For this reason, we often avoid
+using RAM unless we definitely need to store more than 16 numbers.  A
+good heuristic is that when programming in the ISA, we use RAM when we
+would have used an array in Python, and use registers when we would
+have used single variables.  TODO: What if we're not doing arrays
+anymore?</p></div></div><div class="section"><div id="sec_5_4_5"></div><div class="text"><div class="header">5.4.5: 
+	  Flow-control</div><p>Flow control operations divide into two sorts: Those that modify
+  the flow of the program (i.e. that modify the pc) conditionally on
+  something being true, and those that simply modify the pc without
+  checking any conditions.  We refer to these as "conditional" and
+  "unconditional" flow-control operations, respectively.</p></div></div><div class="section"><div id="sec_5_4_5_1"></div><div class="text"><div class="header">5.4.5.1: 
+	  Unconditional flow-control</div><p>Flow control instructions tend to be those that affect the pc only.
+The simplest such is the "null operation" instrction
+<span class="icode">nop</span> which merely increments the pc.  That is, this
+instruction does nothing at all and is effectively skipped.</p><p>The next simplest is the instruction that stops the processor,
+called (appropriately) <span class="icode">halt</span>.  This will stop the pc
+from advancing altogether and suspend the processor in its current
+state until it is reset.</p><p>More interestingly, we have an instruction to jump to different
+points in the code unconditionally.  This is the "relative jump", or
+<span class="icode">rjmp</span> instruction.  It takes one operand--a number
+between -512 and 511--and simply adds this number to the current pc.
+One important caveat, however, is that just like all other
+instructions, the pc is incremented once the instruction is finished.
+So, for example,
+
+<div class="code"><pre>rjmp 5</pre></div>
+
+will add 5 to the pc, but will then increment the pc (just like after
+any other instruction), effectively jumping ahead 6 instructions.  So
+if we want to jump ahead by precisely 5 instructions, this will not
+do.  Instead, to advance 5 instructions we use rjmp 4 to add 4 to the
+pc, and then the final increment brings us up to 5.  </p><p>So, for example, 
+
+<div class="code"><pre>rjmp 0</pre></div>
+
+will add 0 to the pc, leaving it unchanged.  Then once this is done,
+the pc will be incremented.  So this instruction effectively does
+nothing.  On the other hand,
+
+<div class="code"><pre>rjmp -1</pre></div>
+
+will subtract 1 from the pc.  Then the pc will get incremented.  So
+after this instruction is done, the pc will still be the address of
+this rjmp instruction, and so it will get executed as the next
+instruction as well.  So this instruction actually jumps back to
+itself forever, causing an infinite loop.  </p><p>Play around a little with the following example to get a feel for
+this behavior: </p><sim-avr text="'ldi r0,0
+rjmp 1
+rjmp -1
+ldi r1,1
+add r0,r1
+add r0,r0
+rjmp -3'" size="auto" reset="yes" simid="5" template="/lib/jsavr/simavr.html"></sim-avr><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>rjmp</pre></td>
+<td>Relative jump</td>
+<td><pre>value -2048-2047</pre></td>
+<td><pre>none</pre></td>
+<td><pre>none</pre></td>
+<td><pre>pc = pc + op1
+pc increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>nop</pre></td>
+<td>Do nothing</td>
+<td><pre>none</pre></td>
+<td><pre>none</pre></td>
+<td><pre>none</pre></td>
+<td><pre>pc increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>halt</pre></td>
+<td>Halt the program</td>
+<td><pre>none</pre></td>
+<td><pre>none</pre></td>
+<td><pre>none</pre></td>
+<td><pre>Stop the processor</pre></td>
+</tr>
+</table></div></div><div class="section"><div id="sec_5_4_5_2"></div><div class="text"><div class="header">5.4.5.2: 
+	  Conditional flow-control</div><p>So far we have seen how the computer can perform certain
+    arithmetic and memory operations, but currently all we can do is
+    specify a sequence of these operations that will get executed in
+    order from start to end, maybe with some jumping around here and
+    there.  But as we have learned, a lot of the interesting behavior
+    of a computer comes from the ability to run different code
+    depending on the situation (e.g. depending on the value of a
+    variable or depending on input, etc.).  So now the fun begins:
+    We'll see how to execute different code depending on certain
+    conditions.</p><p>To see the "conditional jump" functionality that lies behind
+    e.g. Python's if statements, we introduce instructions that
+    perform relative jumps exactly like rjmp, except only under
+    certain conditions based on the flags in the sreg.  <span id="def_branch" class="definition"></span>Instructions that perform conditional jumps are
+    called <b>branch</b> instructions, since they split the program's
+    possible execution into two possible branches--one where the jump
+    is taken and one where it is not.   These instructions take
+    two operands: The name of a flag (either Z, C, S, or I) and a
+    number -512 to 511.  </p><p>There are two branch instructions: One for "branch if flag is
+    set", called <span class="icode">brfs</span>, and one for "branch if flag is
+    cleared", called <span class="icode">brfc</span>.  </p><p>For example, recall that the Z flag is set if the previous
+    computation operation had an answer of 0.  In the case of a sub
+    operation, that means the Z flag will be set if the two operands
+    were equal.  So we can perform different instructions depending on
+    whether two numbers were equal by performing a sub instruction and
+    then using
+
+    <div class="code"><pre>brfC Z,4</pre></div>
+
+    to, say, branch four instruction ahead if the two things we
+    subtracted were not equal.  </p><p>Here is this strategy being employed to increment a number 12
+    times:
+
+    <sim-avr text="'ldi r0,0
+ldi r1,1
+add r0,r1
+ldi r2,12
+sub r2,r0
+brfc Z,-4
+halt'" size="auto" reset="yes" simid="6" template="/lib/jsavr/simavr.html"></sim-avr>
+    </p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>brfs</pre></td>
+<td>Branch if flag is set</td>
+<td><pre>name of flag (Z, C, S, or I)</pre></td>
+<td><pre>value -512 to 511</pre></td>
+<td><pre>none</pre></td>
+<td><pre>If named flag is set, pc = pc + op1
+pc increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>brfc</pre></td>
+<td>Branch if flag is clear</td>
+<td><pre>name of flag (Z, C, S, or I)</pre></td>
+<td><pre>value -512 to 511</pre></td>
+<td><pre>none</pre></td>
+<td><pre>If named flag is clear, pc = pc + op1
+pc increment
+sreg: unchanged</pre></td>
+</tr>
+</table><p>We've already seen that this can be used to mimic python's "if"
+pattern:
+
+<div class="code"><pre><i>sub instruction</i>
+brfc Z,<i>length of the "if block"</i> ; skip the "if block" if the two were not equal
+<i>...
+code to execute if two things were equal   ; the "if block"
+...</i></pre></div>
+
+Or even, to mimic the if/else pattern: 
+
+<div class="code"><pre><i>sub instruction</i>
+brfc Z,<i>length of the "if block"</i> ; skip the "if block" if the two were not equal
+<i>...
+code to execute if two things were equal   ; the "if block"
+...</i>
+rjmp <i>length of the "else block</i> ; if we got here, we executed the "if block", so skip the "else block"
+<i>...
+code to execute if two things were not equal ; the "else block"
+...</i></pre></div>
+
+However, one problem with this example is that using a sub
+instruction to compare two numbers would overwrite the value of one of
+the registers.  This is sufficiently annoying that there is another
+instruction--called <span class="icode">cp</span>--which does the same exact thing
+as sub in every way except it doesn't modify either of its operands.
+Thus, "compare r10 and r11 and jump ahead if they are equal" can be
+accomplished with instructions like:
+
+<div class="code"><pre>cp r10, r11
+brfc Z,9</pre></div>
+
+And "jump ahead 10 instructions if r10 and r11 are not equal" can
+similarly be done with
+
+<div class="code"><pre>cp r10, r11
+brne 9</pre></div>
+</p><p>Like sub, cp also affects the C flag and S flag in exactly the same
+way.  For example, it sets the C flag if the second value (interpreted
+as unsigned)is bigger than the first.  So
+
+<div class="code"><pre>cp r10, r11</pre></div>
+
+will set the C flag if r10 &lt; r11, so we can get the functionality
+of "jump ahead 20 instructions if than r10 is smaller than r11" by
+using the branch instruction that jumps if C is set:
+
+<div class="code"><pre>cp r10, r11
+brfs C,20</pre></div>
+
+We can also get "jump ahead 5 instructions if r10 is greater than or
+equal to r11", since if r10 &gt;= r11, then in this case
+
+<div class="code"><pre>cp r10, r11</pre></div>
+
+will clear the C flag, thus
+
+<div class="code"><pre>cp r10, r11
+brfc C,5</pre></div>
+
+accomplishes the goal.</p><p>Note that we haven't mentioned the case of "jump 10 instructions
+ahead if r10 is greater than r11", but this is the same as "r11 is
+smaller than r10", so we would do this test with brlo like:
+
+<div class="code"><pre>cp r11, r10
+brlo 10</pre></div>
+
+The final case that we have not explicitly addressed of "jump if r10
+is less than or equal to r11", is an exercise for the reader.  </p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>cp</pre></td>
+<td>Compare two registers</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>none</pre></td>
+<td><pre>pc: increment
+Z: set if op1 - op2 is 0
+C: set if op1 &gt; op2 as unsigned integers
+S: set if op1 &gt; op2 as two's complement integers</pre></td>
+</tr>
+</table><p>In general, appropriate combinations of cp and various branch
+instructions allow us to perform conditional jumps corresponding to
+all of our comparison operators:
+
+<table>
+<tr><td>Comparison</td><td>ISA ops to jump ahead 50 instructions if
+the comparison holds</td></tr>
+<tr><td>r1 is equal to r2</td>
+<td><pre>cp r1, r2
+brfs Z,50</pre></td>
+</tr>
+<tr><td>r1 is not equal to r2</td>
+<td><pre>cp r1, r2
+brfc Z, 50</pre></td>
+</tr>
+<tr><td>r1 is less than r2</td>
+<td><pre>cp r1, r2
+brfs C,50</pre></td>
+</tr>
+<tr><td>r1 is greater than r2</td>
+<td><pre>cp r2, r1
+brfs C,50</pre></td>
+</tr>
+<tr><td>r1 is greater than or equal to r2</td>
+<td><pre>cp r1, r2
+brfc C,50</pre></td>
+</tr>
+<tr><td>r1 is less than or equal to r2</td>
+<td><pre>cp r2, r1
+brfc C,50</pre></td>
+</tr>
+</table>
+
+These comparisons are valid for unsigned comparisons.  The analogous
+signed comparisons can be run by using the S flag instead of the C
+flag.</p></div></div><div class="section"><div id="sec_5_4_6"></div><div class="text"><div class="header">5.4.6: 
+	  Input/Output</div><p>Now we have all the tools to write in the ISA all of the variable
+  creation and manipulation and computation code we could write in
+  Python.  (This might not be entirely evident yet, but we shall cover
+  this in detail in the next chapter.)  However, programs become much
+  more useful when they can not only compute things, but can interact
+  with the user.  In Python, we could output data to the user by
+  printing data to the screen, and receive data by from user's typing
+  on a keyboard.  </p><p>Now we are programming the processor directly.  The processor has
+  16 wires coming out of it, and the voltages on these wires represent
+  together a sequence of 16 bits (high voltage represents a "1", and
+  low a "0").  These wires may be in some way connected to multiple
+  devices (for example, a screnen, keyboard, mouse, and an
+  antenna).  To control these devices, we will need to know two
+  things:
+
+  <ul>
+  <li>How to read and write values on these wires.  </li>
+  <li>What sequence of values we need to write (or read) on the wires
+  in order to meaningfully interact with the devices connected to
+  those wires.  </li>
+  </ul>
+
+  We will largely leave this second question to the next chapter,
+  focusing now on how to control the values going out on the wires.
+  We will give without too much comment, however, recipes for writing
+  data to the virtual screen in the simulator, as well as reading from
+  the virtual keyboard.  </p></div></div><div class="section"><div id="sec_5_4_6_1"></div><div class="text"><div class="header">5.4.6.1: 
+	  Interfacing with I/O connectors via the ISA</div><p>The two elements of the architecture related to I/O are the
+  16-bit <span class="icode">PORT</span> register, and the I flag of the sreg.
+  The value of the PORT register is at all times equal to the sequence
+  of bits corresponding to the voltages on the pins.  There are
+  instructions <span class="icode">in</span> and <span class="icode">out</span>, each taking
+  one general-purpose register as an operand and, respectively,
+  reading and writing the value of <span class="icode">PORT</span> to or from the
+  named general-purpose register.  </p><p>This is simple enough, except we need a mechanism to ensure that
+  when a device is trying to send data to us on these wires, we do not
+  simultaneously try to send data out on these wires.  This mechanism
+  is the I flag of the status regiser.  In general, the I flag will be
+  set when data is being sent (either by a device to the computer, or
+  vice-versa) and will be cleared when no data is being sent.  </p><p>Thus, before we send data, we should verify that the I flag is
+  clear, and if it is not clear, this means data is being sent to us
+  and we should read the incoming data.  Otherwise, we can send the
+  data.  Sending the data will cause the I flag to be set while the
+  device reads the data, and when it is done, the I flag will again
+  become clear.  Thus, to send the value from r4, say, we should do:
+
+<div class="code"><pre>brfs I,<i>code to read data</i> ; if data is being sent to us, read it before sending our own data
+out r4 ; send data, (this will set the I flag in the process)
+brfs I,-1 ; wait here until data is received (i.e. as long as I flag remains set)</pre></div>
+
+Likewise, to receive data, we should check first that the I flag is
+set (meaning data is available).  If at that point in the program we
+simply want to wait for data from the device (such as happens with
+Python's <span class="icode">input</span> function), then we can use <span class="icode">brfc
+I,-1</span> to wait until the I flag gets set.  When it does, the
+program will advance beyond this instruction and we can read (say,
+into r6) with:
+
+<div class="code"><pre>brfc I,-1 ; wait here while I flag is clear
+in r6 ; now that I flag is set, read data, (this will clear the I flag)</pre></div>
+
+</p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>in</pre></td>
+<td>Read I/O register</td>
+<td><pre>reg</pre></td>
+<td><pre>none</pre></td>
+<td><pre>Read value of port into op1</pre></td>
+<td><pre>pc: increment
+Z: unchanged
+C: unchanged
+S: unchanged
+I: cleared</pre></td>
+</tr>
+<tr>
+<td><pre>out</pre></td>
+<td>Write to I/O register</td>
+<td><pre>reg</pre></td>
+<td><pre>none</pre></td>
+<td><pre>Write value value of op1 to port</pre></td>
+<td><pre>pc: increment
+Z: unchanged
+C: unchanged
+S: unchanged
+I: set</pre></td>
+</tr>
+</table></div></div><div class="section"><div id="sec_5_4_6_2"></div><div class="text"><div class="header">5.4.6.2: 
+	  Interacting with devices</div><p>The <span class="icode">in</span> and <span class="icode">out</span> instructions allow us
+to write data to the computer's pins, but what ultimately happens as a
+result of this depends on what kind of device is connected to the
+computer.  For now, in the simulator, there are four devices
+connected: A simple numeric output, a simple switch array, a full
+character display, and a virtual keyboard.</p><p>These devices are all connected through a central hub, or "bus"
+that manages where the data you are sending will go.  <span id="def_bus" class="definition"></span>In general, a <b>bus</b> is a system that enables the
+transfer of data between different components of a computer.  
+In our particular case, the bus is enabling communication between the
+central computer processor (what we have simply been calling "the
+computer"), and devices attached to it ("peripherals").  (In a normal
+desktop or laptop computer, the processor and many peripherals and
+their associated busses are packaged together on the same circuit
+board, called a "motherboard".  This entire package is what is
+colloquially referred to as "a computer".  There are further busses,
+such as the "universal serial bus" (USB) or "peripheral component
+interconnect bus" (PCI bus) on the motherboard with external
+connectors that allow further peripherals to be connected to the
+motherboard.)</p><p>In the next section, we will discuss communication with the devices
+in detail, but we provide a brief introduction now: When you send data
+on the computer's pins, the bus takes the high 8 bits and interprets
+them as 8-bit unsigned number that represents which device you wish
+the data to go to.  The bus then sends the low 8 bits as actual data
+to the device specified.  For example, if we send the number 260 = 1:4
+on the computer's pins, then the bus will send the number 4 to device
+number 1.  </p><p>Likewise, </p><p>For example, take the following program:
+
+<sim-avr text="'brfc I,-1
+in r1
+brfs I,-3
+ldih r1,3
+out r1
+rjmp -6'" size="auto" reset="yes" simid="7" template="/lib/jsavr/simavr.html"></sim-avr>
+
+This will wait for data input (whether from switches or keyboard) and
+will send that data to the screen.</p></div></div><div class="section"><div id="sec_5_4_7"></div><div class="text"><div class="header">5.4.7: 
+	  Debrief</div><p>These instructions are not all that there is to the SimpleAVR
+  ISA, but they comprise the basic examples of the four kinds of
+  operations it can perform.  Just as we could do these four kinds of
+  operations in Python, we can now do them in the ISA.  There are some
+  differences yet:
+  <ul>
+    <li>We have no instructions for multiplication or division.</li>
+    <li>We have not talked about using strings.</li>
+    <li>Instead of printing things to the screen, we are outputting
+    them on pins</li>
+    <li>In Python, when we dealt with numbers, these could be
+    arbitrarily large or decimal numbers or anything else.  In the
+    ISA, registers are limited to integers 0-255.  </li>
+    <li>Python had several advanced features, such as arrays and
+    functions, that may not be easily expressible in the ISA as we
+    understand it thus far.</li>
+  </ul></p><p>Now that we have an understanding of how instructions in the ISA
+  work, we'll go into some advanced features that will help bring us
+  the rest of the way to understanding how Python programs can be
+  completely turned into ISA programs.  The actual translation of
+  Python into the ISA will wait until the next chapter.</p></div></div><div class="section"><div id="sec_5_5"></div><div class="text"><div class="header">5.5: 
+	  Advanced ISA features</div><p>The above instructions are theoretically sufficient to do
+most things you would want to do, much like the subset of Python we
+learned in chapter 2 was enough to get by, at least in principle.  But
+just as in chapter 3 we learned that Python had some more advanced
+features that made our lives much easier, in this section we will see
+further instructions from the ISA that can simplify our lives when
+coding in the ISA.</p></div></div><div class="section"><div id="sec_5_5_1"></div><div class="text"><div class="header">5.5.1: 
+	  Immediate operands</div><div class="summary"><b>Summary: </b>Most of the computation instructions we learned about
+previously combined two registers.  Sometimes we just want to, say,
+subtract 2 from a number, but to do this we still had to load 2 into a
+register to use the sub instruction.  SimpleAVR, it turns out, also
+has instructions that allow us to e.g., perform the operation "add a
+given value to a specified register" without that value having to come
+from a register.  </div><p>When discussing computation instructions, we mentioned the
+restriction that if we wanted to add a number to a register, then that
+number has to also be in a register because the only addition
+instruction we have requires both its operands to be registers.  So
+for example, to add 5 to r0, we had to do:
+
+<div class="code"><pre>ldi r1, 5
+add r0, r1</pre></div>
+
+and cannot simply do
+
+<div class="code"><pre>add r0,5</pre></div>
+
+To simplify this, SimpleAVR has an instruction that subtracts a given
+number from a given register, called addi (for "subtract immediate").
+Its first operand is a register and the second operand is a value to
+add to that register.  The value we are adding can be any value in the
+range -512-511.  </p><p>The other immediate instruction we have is for comparing the value
+of a register to an immediate value, called "compare with immediate"
+or <span class="icode">cpi</span>.  cpi has the same operands as addi, and the
+same behaviour as cp.  </p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>addi</pre></td>
+<td>Subtract immediate</td>
+<td><pre>reg</pre></td>
+<td><pre>8-bit two's complement value</pre></td>
+<td><pre>op1 = op1 + op2</pre></td>
+<td><pre>pc: increment
+Z: set if result is 0
+C: set if op1 + op2 &gt; 65536 or &lt; 0
+C: set if op1 + op2 &gt; 32767 or &lt; -32768
+I: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>cpi</pre></td>
+<td>Compare with immediate</td>
+<td><pre>reg</pre></td>
+<td><pre>8-bit two's complement value</pre></td>
+<td><pre>none</pre></td>
+<td><pre>pc: increment
+Z: set if two operands are equal
+C: set if op1 &lt; op2 (unsigned)
+S: set if op1 &lt; op2 (signed)
+I: unchanged</pre></td>
+</tr></table></div></div><div class="section"><div id="sec_5_5_2"></div><div class="text"><div class="header">5.5.2: 
+	  Add-with-carry</div><div class="summary"><b>Summary: </b>In Python we could operate on numbers as large as we want.
+So far, we have only see the ability to add registers, which can only
+store 8-bit values.  To operate on numbers larger than 255, then, we
+can use a scheme to use multiple registers to all together represent
+one big number.  But then our basic add instruction isn't enough to
+add such numbers, so here we introduce the instructions that will help
+us in this endeavour.</div><p>In all the instructions we have described so far, we have only been
+able to operate on numbers in the range 0-65535.  This is enough for
+many purposes, but whereas in Python our factorial program could
+easily compute 10!, say, this would have no hope in the ISA since the
+answer is larger than 65535.</p><p>However, recall that our registers are just 16-bit memories.  So if
+we want to store a larger number, say, a 32-bit number, we can take
+any two registers and think of them as comprising one larger number by
+concatenation.  For example, we could take the registers r1 and r2,
+say, and treat them in our program as representing the concatenation
+r2:r1, which, recall, refers to the number
+
+<div class="code"><pre>65536*r2 + r1</pre></div>
+
+This is kind of a "virtual 32-bit register".  We haven't actually
+combined the two 16-bit registers in the ISA--they're still just two
+separate registers that we can manipulate separately using all the
+usual instructions, but which we are now simply thinking of as two
+parts of one big number.  That is, when we use r1 or r2 in a program,
+we will operate on them in a way that manipulates their combined value
+properly, rather than manipulating either one individually.  </p><p>For example, let us think about the simplest kind of operation.
+Say we're storing a 32-bit number in r1 and r2 together as above that
+represents someone's score in a game.  Perhaps in the course of the
+game, the player earns another point, so we must increment their
+score.  How do we add 1 to this combined value?  Suppose r1 and r2 are
+both 0.  These represent the number
+
+<div class="code"><pre>0:0 = 65536*0 + 0= 0</pre></div>
+
+If we tried simply adding 1 to both registers as a way of incrementing
+the compound, then r1 and r2 will both be 1, so will together
+represent the number
+
+<div class="code"><pre>1:1 = 65536*1 + 1 = 65537</pre></div>
+
+That's not what should happen when we increment 0.  Clearly what we
+need to do is to add 1 to only r1.  Then we would get the number
+
+<div class="code"><pre>0:1 = 65536*0 + 1 = 1</pre></div>
+
+Excellent.  So is the procedure for incrementing our big number just
+to add 1 to r1 and leave r2 alone?  Well, not entirely.  The problem
+happens when r1 = 65535, and say r2 = 0.  Then if we add 1 to r1, this
+will set r1 to be 0.  But this is no good!  This means both r1 and r2
+will be 0, so our big number will be 0, whereas what we wanted was
+65536.  That is, we wanted r2 to be 1 and r1 to be 0.  So r1 actually
+got the correct value, but in response to the overflow, we should have
+also incremented r2.</p><p>The trick is to notice that when we added 1 to r1 when r1 = 65535
+and it subsequently overflowed back to 0, this caused the C flag to be
+set in the sreg.  So what we want to do is not just
+
+<div class="code"><pre>r1 = r1 + 1</pre></div>
+
+but rather 
+
+<div class="code"><pre>r1 = r1 + 1
+r2 = r2 + C</pre></div>
+</p><p>Happily, there is an instruction which does this and more--adc.  It
+takes the same register operands as <span class="icode">add</span> and adds the
+two registers together, much as add did, but also adds the C flag on
+to the result.  That is, it performs normal addition to if the C flag
+is 0, and if the C flag is instead 1, it performs normal addition and
+then increments the result by 1.  </p><p>Thus we can use it to implement our increment operation by doing a
+normal addi instruction to increment r1, and then using adc to add 0
+to r2.  This will leave r16 unchanged unless C is set, in which case
+it will add 1 to r16--exactly what we wanted: 
+
+<div class="code"><pre>ldi r15,0
+addi r1,1
+adc r2,r15</pre></div>
+
+This, finally, is ISA code that increments our combined number.  We
+will later write code to do more interesting operations to such
+combined numbers, like adding two such combined numbers.  </p><p>Note also that if this number has its largest possible value, where
+r1 = 65535 and r2 = 63355 (so the number is 4294967295), then
+incrementing it using this procedure first increments r1, making it 0
+and setting C.  But then r2 gets incremented since C was set, and
+because it is also 65535, it also gets set to 0.  So our big combined
+number exhibits the same 'wraparound' behavior at its maximum value of
+4294967295.</p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>adc</pre></td>
+<td>Add with carry</td>
+<td><pre>reg</pre></td>
+<td><pre>reg</pre></td>
+<td><pre>op1 = op1 + op2 + C</pre></td>
+<td><pre>pc: increment
+N: set if result is negative
+Z: set if result is 0
+C: set if op1 + op2 + C &gt; 255</pre></td>
+</tr>
+</table></div></div><div class="section"><div id="sec_5_5_3"></div><div class="text"><div class="header">5.5.3: 
+	  The stack</div><div class="summary"><b>Summary: </b>SimpleAVR also provides a mechanism for quickly saving and
+restoring the values of registers by means of the stack.  The stack is
+a region in RAM that can be accessed by special instructions that make
+it convenient to store a bunch of register values there and later
+restore those values to the actual registers.  <br><br><b>Definitions: </b><a href="#def_push">push</a>, <a href="#def_pop">pop</a>, <a href="#def_stack%20pointer">stack pointer</a></div><p>This next ISA feature may seem oddly specific and unmotivated, but
+it exists in almost every ISA you'll come across.  The basic reason is
+that it is absolutely necessary for functions to work.  It can also be
+used more simply as a convenient way to stash some values in RAM for
+quick and easy retrieval later.  This feature, which enables all this
+and more, is called the "stack".  </p><p>The name comes from a metaphor: A stack of plates.  If we have a
+stack of plates, there are only really two things we can do: we can
+place another plate at the top, or we can pull a plate off the top.  I
+cannot pull a plate out of the middle, nor can I insert a plate into
+the middle of the stack without it falling over.</p><p><span id="def_push" class="definition"></span>We will refer to the operation of putting a plate
+at the top as <b>pushing</b> a plate onto the stack, <span id="def_pop" class="definition"></span>and of taking a plate off the top as <b>popping</b> a plate
+off the stack.</p><p>In the SimpleAVR ISA, we have likewise two instructions called push and
+pop, both of which take just any one register for an operand.  When
+you push a register, say:
+
+<div class="code"><pre>push r1</pre></div>
+
+This will save the value in r1 somewhere by "pushing it onto the
+stack".  If you then do
+
+<div class="code"><pre>pop r1</pre></div>
+
+this will take that stored value off of the stack and put it in r1.
+</p><p>If we instead push multiple registers, like: 
+
+<div class="code"><pre>push r1
+push r1
+push r2
+push r5</pre></div>
+
+then this saves the values of those registers in that order.  So if at
+this point we imagine r2 was 34, r1 was 99, and r5 was 18, then the
+stack looks like:</p><table>
+<tr><td>Top</td><td>18</td></tr>
+<tr><td></td><td>34</td></tr>
+<tr><td></td><td>99</td></tr>
+<tr><td>Bottom</td><td>99</td></tr>
+</table><p>The pop instruction will take one value off the top and place it
+into its operand register.  So if we do
+
+<div class="code"><pre>pop r10</pre></div>
+
+then this will take the top value--18--off the top of the stack and
+store it in r10.  The stack will now look like:
+
+<table>
+<tr><td>Top</td><td>34</td></tr>
+<tr><td></td><td>99</td></tr>
+<tr><td>Bottom</td><td>99</td></tr>
+</table>
+
+If we then do: 
+
+<div class="code"><pre>pop r11
+pop r12
+pop r13</pre></div>
+
+Then r11 will get the value 34, r12 will get 99, and r13 will get the
+value 99, and the stack will be empty.</p><p><b>How it actually works: </b></p><p>The stack of plates metaphor allows us to think effectively about
+what the push and pop instructions do, but what is the architectural
+reality behind this conceptual idea?  After all, we say that things we
+push get stored on the stack, but there wasn't a "stack" memory in the
+architecture.  So where does <span class="icode">push</span> actually store
+things?</p><p>The answer is that it stores things in RAM.  But where in RAM?
+<span id="def_stack pointer" class="definition"></span>It turns out that the register r0 is used by
+these instructions to refer to the address in RAM just before the
+value currently at the "top" of the stack.  For this reason, r0 is
+sometimes referred to as the <b>stack pointer</b>. When we push
+a register, its value gets written to RAM at the address r0, and then
+r0 gets decremented by 1 (yes--the top of the stack moves downward in
+RAM when you push).  When you pop a register, the stack pointer gets
+incremented by 1 and then the register receives the value in RAM at
+the address r0.  </p><p>Let us take the above example again, with r2 = 34, r1 = 99, r5 =
+18, and let us say that at the beginning, r0 = 5000.  So before we do
+anything, the stack looks like:</p><table>
+<tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+<tr><td>r0 = 5000</td><td>??</td></tr>
+</table><p>(There is some value at this address, but we don't care what it is,
+so we show ?? in its place rather than a random number).</p><p>Then we push r1.  This stores the value of r1 (99) in RAM at
+address r0 (5000), and then decrements sp, so r0 is now 499 and the
+stack now looks like:</p><p><table>
+<tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+<tr><td>r0 = 4999</td><td>??</td></tr>
+<tr><td>5000</td><td>99</td></tr>
+</table>
+(After push r1)</p><p>Subsequently pushing r1 again, then r2, then r5 walk the stack
+through states: </p><p><table>
+<tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+<tr><td>r0 = 4998</td><td>??</td></tr>
+<tr><td>4999</td><td>99</td></tr>
+<tr><td>5000</td><td>99</td></tr>
+</table>
+(After push r1)</p><p><table>
+<tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+<tr><td>r0 = 4997</td><td>??</td></tr>
+<tr><td>4998</td><td>34</td></tr>
+<tr><td>4999</td><td>99</td></tr>
+<tr><td>5000</td><td>99</td></tr>
+</table>
+(After push r0)</p><p><table>
+<tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+<tr><td>r0 = 4996</td><td>??</td></tr>
+<tr><td>4997</td><td>18</td></tr>
+<tr><td>4998</td><td>34</td></tr>
+<tr><td>4999</td><td>99</td></tr>
+<tr><td>5000</td><td>99</td></tr>
+</table>
+(After push r5)</p><p>Then we pop r11.  This first decrements the sp, so it is now 4997,
+and then reads the value there (18) into r11.  So afterward the stack
+looks like: </p><p><table>
+<tr><td><b>Address</b></td><td><b>Value</b></td></tr>
+<tr><td>r0 = 4997</td><td>??</td></tr>
+<tr><td>4998</td><td>34</td></tr>
+<tr><td>4999</td><td>99</td></tr>
+<tr><td>5000</td><td>99</td></tr>
+</table>
+(After pop r11)</p><p>And r11 contains the value 18.  We note that for clarity, we have
+written the value at address 4997 as ??, but it is actually still 18.
+Just that this is no longer accessible to pop instructions (the next
+one will get the value 34) and it will be overwritten by a push
+instruction, so it no longer matters what it is specifically.</p><p>To actually see this code in action, we first compute:
+
+<div class="code"><pre>5000 = 136 + 19*256</pre></div>
+
+So we can set the stack pointer to 5000 by
+
+<div class="code"><pre>ldi r0,136
+ldih r0,16</pre></div>
+
+Thus:
+
+<sim-avr text="'ldi r0, 136
+ldih r0, 19
+ldi r1,99
+ldi r2,34
+ldi r3,18
+push r1
+push r1
+push r2
+push r3
+pop r1
+pop r2
+pop r0
+pop r1'" size="auto" reset="yes" simid="8" template="/lib/jsavr/simavr.html"></sim-avr>
+</p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>push</pre></td>
+<td>Push register to stack</td>
+<td><pre>reg</pre></td>
+<td><pre>none</pre></td>
+<td><pre>RAM[r0] = op1
+r0 = r0 - 1</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>pop</pre></td>
+<td>Pop register off stack</td>
+<td><pre>reg</pre></td>
+<td><pre>none</pre></td>
+<td><pre>r0 = r0 + 1
+op1 = RAM[r0]</pre></td>
+<td><pre>pc: increment
+sreg: unchanged</pre></td>
+</tr>
+</table></div></div><div class="section"><div id="sec_5_5_4"></div><div class="text"><div class="header">5.5.4: 
+	  Functions</div><div class="summary"><b>Summary: </b>The construction of a function in Python was a useful way to
+reuse a chunk of code in several places without just copying it.  The
+SimpleAVR ISA has support for this behavior in the form of its rcall and
+ret instructions.  <br><br><b>Definitions: </b><a href="#def_callee-saved">callee-saved</a>, <a href="#def_caller-saved">caller-saved</a></div><p>In Python, if we ever wrote a piece of code that we want to reuse
+elsewhere, we could package it up as a function and then call it from
+multiple places elsewhere in our code.  In the ISA, we have already
+seen code that would be useful to treat this way: Our code for
+reading data in from the pins, say: 
+
+<div class="code"><pre>brfc I,-1
+in r1</pre></div>
+
+or maybe our code for incrmenting the r2:r1 combined register:
+
+<div class="code"><pre>ldi r15,0
+addi r1,1
+adc r2,r15</pre></div>
+
+If we end up wanting to read data or increment r2:r1 more than once in
+our program, we'll have these snippets appearing everywhere.  If
+instead we could have it just in one place in our program and reuse
+that code, that could be simpler.  However, it turns out that having
+a chunk of code that we can reuse in this way is tricky: The main
+challenge comes from the fact that we have to be able to jump to this
+chunk of code from anywhere, run the code, and then have the code jump
+back to wherever it was called from.</p><p>This turns out to be an excellent use-case for the stack: We are
+going merrily along through our program, incrementing the pc, business
+as usual.  At some point we want to increment r2:r1 using the above
+code, which already exists at some point in our program.  The basic
+procedure is that we quickly stash the current pc on the stack, jump
+to that code to have it output what we want, and then have that code
+snippet that we jumped to pop the pc back off the stack to return
+to where we started.</p><p>Of course, the push and pop instructions only take general-purpose
+registers as operands, so we cannot do this with our existing
+instructions ("push pc" and "pop pc" are invalid).  So the SimpleAVR
+ISA comes with two further instructions--called rcall and ret--which
+accomplish this.  rcall is exactly like rjmp: It takes a single
+operand, which is a number in the range -512 to 511.  It adds this to
+the pc and then it increments the pc.  However, unlike rjmp, before it
+modifies the pc, it pushes onto the stack the value pc + 1, which is
+the address of the next instruction that should get executed when we
+finish with the function.  So whereas rjmp irrevocably dumps us
+somewhere else in the program, rcall stashes in the stack the address
+that will bring us back to where we jumped from.</p><p>So we've <span class="icode">rcall</span>ed some other code.  That code
+executes, and now we want to resume normal execution back where rcall
+left off.  To do this, all we have to do is pop the pc off the stack,
+as then the pc will have its old value.  But as we mentioned, the pop
+instruction doesn't allow the pc as an operand, so there is instead an
+instruction called ret.  ret takes no operands and very simply pops
+the pc off the stack, exactly as we wanted.  </p><table class="ISA_table"><tr>
+<td>Instruction</td>
+<td>Description</td>
+<td>Operand 1</td>
+<td>Operand 2</td>
+<td>Effect on operands</td>
+<td>Effect on specials</td>
+</tr>
+<tr>
+<td><pre>rcall</pre></td>
+<td>Call relative address</td>
+<td><pre>value -2048 to 2047</pre></td>
+<td><pre>none</pre></td>
+<td><pre>push pc+1</pre></td>
+<td><pre>pc = pc + op1
+increment pc
+sreg: unchanged</pre></td>
+</tr>
+<tr>
+<td><pre>ret</pre></td>
+<td>Return from most recent call</td>
+<td><pre>none</pre></td>
+<td><pre>none</pre></td>
+<td><pre></pre></td>
+<td><pre>pop pc
+sreg: unchanged</pre></td>
+</tr>
+</table><p>For example, we can now try to write code that reuses our above
+input and output code.  Let us consider writing code that first
+outputs the number 13, then multiplies it by 8 and outputs that.  We
+can start with the outline:
+
+<div class="code"><pre>ldi r1, 13
+[call code to output r1]
+sh r1, 3
+[call code to output r1]
+</pre></div>
+
+We need to put our code for outputting stuff somewhere, so maybe we'll
+put it at the beginning:
+
+<div class="code"><pre>[code to output r1]
+ldi r1, 13
+[call code to output r1]
+sh r1,3
+[call code to output r1]
+</pre></div>
+
+But now when we first run this program, our output code will get run
+first, which is not what we wanted.  We could put it at the end, but
+then that just moves the problem to the end of the program, where the
+output code will be run an extra time once everything else is
+finished.  To resolve this, we make the first instruction an rjmp
+which skips over the output code to the first line of our computation
+code:
+
+
+<div class="code"><pre>rjmp [length of output code]
+[code to output r1]
+ldi r1, 13
+[call code to output r1]
+sh r1,3
+[call code to output r1]</pre></div>
+
+Let us start with the output code.  This should be:
+
+<div class="code"><pre>brfc I,2              ; If I flag clear, we are go to output
+[call code to read input]
+rjmp -3
+out r1</pre></div>
+
+Whereas the input code is: 
+
+<div class="code"><pre>brfs I,-1
+in r2</pre></div>
+
+So we need to put this at the beginning too, and our code now is:
+
+<div class="code"><pre>rjmp 6
+brfc I,2
+[call code to read input]
+rjmp -3
+out r1
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+
+ldi r1, 13
+[call code to output r1]
+sh r1,3
+[call code to output r1]</pre></div>
+
+
+Now we can fill in the call lines: the first one is making a call 4
+instructions back, so it will be rcall -5, and the second call needs
+to call the code 8 instructions back, so it will be rcall -9: 
+
+<div class="code"><pre>rjmp 6
+brfc I,2
+rcall 2
+rjmp -3
+out r1
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+
+ldi r1, 13
+rcall -8
+sh r1,3
+rcall -10</pre></div>
+
+But this is no good still--once we rcall -8, we jump back to the line 
+
+<div class="code"><pre>brfc I,2</pre></div>
+
+and then the program continues execution from there--running both the
+output code and then the input code and then the main bit of the
+program from the beginning!  Rather, we want our output code to use
+the ret instruction once it finishes:
+
+
+<div class="code"><pre>rjmp 6
+brfc I,2
+rcall 3
+rjmp -3
+out r1
+ret
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+ret
+
+ldi r1, 13
+rcall -10
+sh r1,3
+rcall -12</pre></div>
+
+(Note we've had to shift all the rcall and rjmp operands.)</p><p>This is now great, but there is another issue: rcall is using the
+stack, but we don't actually know at this point that r0 contains an
+address that makes sense, since we never set it up.  So we do this as
+the first thing:
+
+<sim-avr text="'ldi r0,136
+ldih r0,19
+rjmp 6
+brfc I,2
+rcall 3
+rjmp -3
+out r1
+ret
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+ret
+
+ldi r1, 13
+rcall -10
+sh r1,3
+rcall -12
+'" size="auto" reset="yes" simid="9" template="/lib/jsavr/simavr.html"></sim-avr>
+
+And now, finally, we've got things set up so that we can reuse the
+outputting code as we'd hoped.</p><p>There were quite a few pitfalls in getting this set up, so we
+record for future reference our code-reuse checklist: 
+
+<ul>
+  <li>Ensure that the r0 is set to something sensible</li>
+  <li>Place the reuseable code somewhere where it won't get executed
+  without rcalling it, for example by placing it at the beginning and
+  using the first instruction to jump over it.</li>
+  <li>Ensure the reuseable code ends with a ret instruction</li>
+  <li>Call the code using rcall with an operand that shifts you to the
+  start of the reuseable code, being careful to update these offsets
+  if you change any intervening code.</li>
+</ul></p><p><b>Caller vs. callee-saved registers: </b></p><p>There is one further issue with our code above, and specifically
+with the code to read input.  We can call this code as often as we
+like using rcall as we wanted.  However, this code overwrites whatever
+is in the r3 register with whatever value it reads from the pins.  In
+particular, if </p><p>Suppose we are doing a calculation and at some point we want the
+user to input a number, which we will compare to 19 and output it if
+it is different.
+
+<sim-avr text="'ldi r0,136
+ldih r0,19
+rjmp 6
+brfc I,2
+rcall 3
+rjmp -3
+out r1
+ret
+
+
+brfc I,-1
+in r3
+st r2,r3
+addi r2,1
+ret
+
+ldi r3,19
+rcall -7
+
+'" size="auto" reset="yes" simid="10" template="/lib/jsavr/simavr.html"></sim-avr>
+
+
+<sim-avr text="'ldi r31, 136
+out 61, r31
+ldi r31, 19
+out 62, r31
+rjmp 4
+ldi r31, 255
+out 17, r31
+out 18, r30
+ret
+ldi r30, 13
+rcall -6
+ldi r31, 41
+add r30, r31
+add r30, r31
+rcall -10
+add r30, r31
+add r30, r31
+add r30, r31
+rcall -14
+'" size="auto" reset="yes" simid="11" template="/lib/jsavr/simavr.html"></sim-avr>
+
+In this example, we use r31 to hold our value of 41 that we are adding
+to r30.  But after the line 
+
+<div class="code"><pre>rcall -10</pre></div>
+
+we continue adding r31 to r30, expecting that r31 still has the value
+41, oblivious to the fact that our output code overwrites r31 with the
+value 255!  </p><p>There are two possible remedies: We can make our output code save
+the previous value of r31 using the stack, and then restore it before
+it returns: </p><sim-avr text="'ldi r31, 136
+out 61, r31
+ldi r31, 19
+out 62, r31
+rjmp 6
+push r31
+ldi r31, 255
+out 17, r31
+out 18, r30
+pop r31
+ret
+ldi r30, 13
+rcall -8
+ldi r31, 41
+add r30, r31
+add r30, r31
+rcall -12
+add r30, r31
+add r30, r31
+add r30, r31
+rcall -16
+'" size="auto" reset="yes" simid="12" template="/lib/jsavr/simavr.html"></sim-avr><p>(Note again the need to adjust the operands to the jumps and
+calls.)</p><p><span id="def_callee-saved" class="definition"></span>In this case, r31 is being saved by the
+function we're calling, so r31 is referred to in this case as a
+<b>callee-saved register</b>: Anyone who calls this function is
+guaranteed that r31 will have the same value when the function returns
+as it had when it started.</p><p>The other option would be that before we call the code, we note
+that it will trash r31 and so we save it onto the stack before calling
+and then restore it after the code returns:
+
+<sim-avr text="'ldi r31, 136
+out 61, r31
+ldi r31, 19
+out 62, r31
+rjmp 4
+ldi r31, 255
+out 17, r31
+out 18, r30
+ret
+ldi r30, 13
+rcall -6
+ldi r31, 41
+add r30, r31
+add r30, r31
+push r31
+rcall -11
+pop r31
+add r30, r31
+add r30, r31
+add r30, r31
+rcall -16
+'" size="auto" reset="yes" simid="13" template="/lib/jsavr/simavr.html"></sim-avr>
+
+<span id="def_caller-saved" class="definition"></span>In this case, the output code will happily
+trash r31, and it is the responsibility of any code that calls it to
+save its value.  In this case, the register is known as a
+<b>caller-saved register</b>: Anyone who calls the code must save r31
+if they want its value preserved.</p><div class="aside"><b>Aside: Abusing rcall</b><p>You'll have noted that most of our
+operations thus far only act on general-purpose registers, which the
+pc is not.  </p>
+
+<p>So if we're merrily going through a program and for whatever reason
+we want to get the current pc in a register, there is not an
+instruction we can use that does this.  However, we can accomplish it
+in several instructions with a slight abuse of rcall: note that rcall
+places the address after the current pc on the stack.  And we have an
+instruction that reads a value off the stack into a register--namely
+pop.  So we can do:
+
+<div class="code"><pre>rcall 0
+pop r1</pre></div>
+
+and this will put the stored pc into register r1.  Note that this
+stored pc is the address of the pop instruction in RAM, but we can
+subsequently adjust r1 with arithmetic operations to get it to be the
+address of whatever instruction we're actually interested in.
+</p></div></div></div><div class="section"><div id="sec_5_6"></div><div class="text"><div class="header">5.6: 
+	  Exercises</div><div class="hwq"><div class="hwnum"><b>5.1: </b></div><div class="hwcontent">In what ways is programming in a high level language different than programming in ISA?
+</div></div><div class="hwq"><div class="hwnum"><b>5.2: </b></div><div class="hwcontent">What does an ISA consist of? Explain the different parts.
+</div></div><div class="hwq"><div class="hwnum"><b>5.3: </b></div><div class="hwcontent">List some different types of memory on the AVR chip as discussed in this text.
+</div></div><div class="hwq"><div class="hwnum"><b>5.4: </b></div><div class="hwcontent">What are the significant flags used in the status register and when are they set or cleared?
+</div></div><div class="hwq"><div class="hwnum"><b>5.5: </b></div><div class="hwcontent">What is persistent memory and why is it useful?
+</div></div><div class="hwq"><div class="hwnum"><b>5.6: </b></div><div class="hwcontent"> Explain three aspects of the ISA.
+</div></div><div class="hwq"><div class="hwnum"><b>5.7: </b></div><div class="hwcontent">Explain the task of the assembler.
+</div></div><div class="hwq"><div class="hwnum"><b>5.8: </b></div><div class="hwcontent">Define what the AVR processor’s memory size and width are?
+</div></div><div class="hwq"><div class="hwnum"><b>5.9: </b></div><div class="hwcontent">What registers can be used in the ldi instruction?
+</div></div><div class="hwq"><div class="hwnum"><b>5.10: </b></div><div class="hwcontent">Whereas Python had three main functions, assignment, printing, and flow-control, what categories does the ISA instructions split into?
+</div></div><div class="hwq"><div class="hwnum"><b>5.11: </b></div><div class="hwcontent">What type of instructions can be used to execute a non-sequential instruction?
+</div></div><div class="hwq"><div class="hwnum"><b>5.12: </b></div><div class="hwcontent">Which 7 specific ISA operations can alter the program counter by more than 1?
+</div></div><div class="hwq"><div class="hwnum"><b>5.13: </b></div><div class="hwcontent">Fill in each comment in the following AVR program saying which flag is set (N, Z, C, or none) after each of the specified lines finish executing
+<pre>ldi r16 255
+ldi r17 1
+ldi r18 1
+add r16 r17  ; __ flag is set
+sub r17 r16  ; __ flag is set
+sub r16 r18  ; __ flag is set
+add r17 r18  ; __ flag is set
+add r17 r16  ; __ flag is set
+dec r17      ; __ flag is set</pre>
+</div></div><div class="hwq"><div class="hwnum"><b>5.14: </b></div><div class="hwcontent">Can you think of a situation in which both the N and C flags would be set at the same time? N and Z? C and Z? What about all three flags?</div></div><div class="hwq"><div class="hwnum"><b>5.15: </b></div><div class="hwcontent">Explain how the following program implements a kind of “loop” behavior. Is this an infinite loop? If yes, what makes it infinite? If no, at what point will the loop stop? How would your answer change if the second line of the program was “ldi r17 11” instead? Which operation could you replace the “brne” with that would give the program the same exact functionality?
+<pre>ldi r16 10
+ldi r17 3
+inc r17
+cp r16 r17
+brne -3</pre>
+</div></div><div class="hwq"><div class="hwnum"><b>5.16: </b></div><div class="hwcontent">Explain why simply switching the cp operands in the table from section 5.3.4 switches the functionality from &gt;= to &lt;=
+</div></div><div class="hwq"><div class="hwnum"><b>5.17: </b></div><div class="hwcontent">What function does the immediate serve in immediate instructions?
+</div></div><div class="hwq"><div class="hwnum"><b>5.18: </b></div><div class="hwcontent">Briefly explain the stack.
+</div></div><div class="hwq"><div class="hwnum"><b>5.19: </b></div><div class="hwcontent">What is callee-saved registers and how do they differ from caller-saved registers?
+</div></div><div class="hwq"><div class="hwnum"><b>5.20: </b></div><div class="hwcontent">The following program is unnecessarily long. Shorten it by replacing some of the lines with the instructions that were introduced in section 5.4.1. Make sure you do not alter the overall functionality of the program
+<pre>ldi r16 2
+ldi r17 4
+ldi r18 6
+ldi r19 8
+sub r20 r16
+cp r21 r17
+sub r22 r18
+cp r23 r19</pre>
+</div></div><div class="hwq"><div class="hwnum"><b>5.21: </b></div><div class="hwcontent">What is AVR assembly language,what does it consist of, and how does it differ from AVR ISA operations?
+</div></div><div class="hwq"><div class="hwnum"><b>5.22: </b></div><div class="hwcontent">What do the following assembly statements do? Draw the relevant portion of RAM with any updates made because of the statement.
+<ol>
+<li><pre>.byte(1204) 12,189,200,0,0</pre></li>
+<li><pre>.byte(440) ‘H’,’e’,’l’,’l’,’o’</pre></li>
+<li><pre>.byte(440) 72,101,108,108,111</pre></li>
+<li><pre>.string(440) “Hello”</pre></li>
+</ol></div></div><div class="hwq"><div class="hwnum"><b>5.23: </b></div><div class="hwcontent">Explain how to operate with large numbers in AVR assembly language.
+</div></div><div class="hwq"><div class="hwnum"><b>5.24: </b></div><div class="hwcontent">Which branch instruction is used largely when mimicking an if/else statement?
+</div></div><div class="hwq"><div class="hwnum"><b>5.25: </b></div><div class="hwcontent">Why is complexity important when coding, using the search engine example as an example or springboard for your response?
+</div></div></div></div></div></div></body></html>

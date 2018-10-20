@@ -1,0 +1,65 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="/sim/cm/codemirror.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="sidebar"><div class="sidebar_header">Book:</div><table class="chapter_links"><tr><td>0</td><td><a href="/text/box.xml">Title page</a></td></tr><tr><td>1</td><td><a href="/text/ch1.xml">Introduction</a> (<a class="print_link" href="/text/print/ch1.pdf">PDF</a>)</td></tr><tr><td>2</td><td><a href="/text/ch2.xml">Programming</a> (<a class="print_link" href="/text/print/ch2.pdf">PDF</a>)</td></tr><tr><td>3</td><td><a href="/text/ch3.xml">Advanced Programming</a> (<a class="print_link" href="/text/print/ch3.pdf">PDF</a>)</td></tr><tr><td>4</td><td><a href="/text/ch4.xml">Numbers</a> (<a class="print_link" href="/text/print/ch4.pdf">PDF</a>)</td></tr><tr><td>5</td><td><a href="/text/ch5.xml">ISA</a> (<a class="print_link" href="/text/print/ch5.pdf">PDF</a>)</td></tr><tr><td>6</td><td><a href="/text/ch6.xml">Assembly</a> (<a class="print_link" href="/text/print/ch6.pdf">PDF</a>)</td></tr><tr><td>7</td><td><a href="/text/ch7.xml">Encodings</a> (<a class="print_link" href="/text/print/ch7.pdf">PDF</a>)</td></tr><tr><td>8</td><td><a href="/text/ch8.xml">Micro­architecture</a> (<a class="print_link" href="/text/print/ch8.pdf">PDF</a>)</td></tr><tr><td>9</td><td><a href="/text/ch9.xml">Digital Logic</a> (<a class="print_link" href="/text/print/ch9.pdf">PDF</a>)</td></tr><tr><td>10</td><td><a href="/text/ch10.xml">Transistors</a> (<a class="print_link" href="/text/print/ch10.pdf">PDF</a>)</td></tr></table><div class="sidebar_header">Course:</div><a href="http://pages.cs.wisc.edu/~karu/courses/cs252/fall2015/wiki/index.php"><div class="sidebar_link">Homepage</div></a><a href="/homework"><div class="sidebar_link">Online HW</div></a><a href="/homework/rating.html"><div class="sidebar_link">Rate lecture</div></a><div class="sidebar_header">Simulators:</div><a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a><a href="/sim/bin/bin.html"><div class="sidebar_link">Binary</div></a><a href="/sim/avr/avr.html"><div class="sidebar_link">AVR</div></a><a href="/sim/uarch/uarch.html"><div class="sidebar_link">Micro­architecture</div></a><div class="sidebar_header">Additional:</div><a href="/text/info/authors.xml"><div class="sidebar_link">Authors</div></a><a href="/text/info/acknowledgements.xml"><div class="sidebar_link">Contributors</div></a><a href="/text/info/copyright.xml"><div class="sidebar_link">Copyright</div></a><a href="/text/info/links.xml"><div class="sidebar_link">Links</div></a></div><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="text"><div class="book_title">Discovering Computer Science</div><div class="book_subtitle">An introduction to computer engineering<br><br>
+  <b>Daniel Ross</b>, <br><b>Karthikeyan Sankaralingam</b>,<br>
+  <b>Raghuraman Balasubramanian</b><br><br>
+
+  <font size="3pt"><a href="info/copyright.xml">Licensed under Creative Commons
+  BY-NC-SA</a></font><br>
+  
+  
+  </div><div class="header">Table of Contents</div><div class="chapter_index"><h2><a href="/text/ch1.xml">1: Introduction</a></h2><div class="description"><p>Chapter 1 introduces the course as a whole, starting with a
+      precise definition of what we mean by the word "computer".  This
+      will be a relatively simple notion, and the course will revolve
+      around two separate questions:
+      <ul><li>How can we program a computer?</li>
+      <li>How can we build a computer?</li></ul>
+
+      The first question will be addressed in chapters 2–6, and the
+      second in chapters 7–8.</p></div></div><div class="chapter_index"><h2><a href="/text/ch2.xml">2: Programming</a></h2><div class="description"><p>Chapter 2 starts in on the study of programming.  Programming
+      occurs in two steps: When we come up against a problem, the
+      first step is to describe a precise sequence of steps that will
+      solve it.  Such a set of steps, written in English (or human
+      language of choice) is called an algorithm, and is the focus of
+      section 2.2.  </p><p>Once we have an algorithm, the second step is to rewrite that
+      algorithm not in human language, but in a
+      computer-understandable language.  This will be the program.  In
+      section 2.3, we introduce a particular programming language--a
+      simplified version of Python--to illustrate this process.  </p></div></div><div class="chapter_index"><h2><a href="/text/ch3.xml">3: Advanced Programming</a></h2><div class="description"><p>In chapter 2, we learned a simple subset of the Python
+      programming language.  Its simplicity made it easier to explain,
+      but hard to use for any complicated or interesting tasks.
+      Chapter 3 is devoted to expanding our knowledge of Python so we
+      can work toward programs that actually behave like software as
+      we know it in the real world.  </p></div></div><div class="chapter_index"><h2><a href="/text/ch4.xml">4: Numbers in Computer Science</a></h2><div class="description"><p>Chapter 4 is a brief digression: As we descend to the level
+      of the computer hardware, we are going to need a new language to
+      talk about numbers <i>as a computer understands them</i>.  This
+      is accomplished by using binary representations for numbers, as
+      is explained in chapter 4.</p></div></div><div class="chapter_index"><h2><a href="/text/ch5.xml">5: ISA</a></h2><div class="description"><p>In chapters 2 and 3, we learned our first programming
+      language.  This language is not understood or used directly by
+      the computer.  Instead, the computer understands a much more
+      basic language, called the ISA, and our programs from chapters 2
+      and 3 had to be translated to this basic language before being
+      run by the computer.  </p><p>To truly understand what a computer does under the hood, we
+      need to learn to work with the ISA directly, which is the goal
+      of chapter 5.  This happens in two parts: We learn what the main
+      components inside the computer are (that is, the computer's
+      "architecture"), and then we learn what instructions the
+      computer itself natively understands for manipulating these
+      components (that is, the computer's "instruction set").</p></div></div><div class="chapter_index"><h2><a href="/text/ch6.xml">6: Encodings and the ISA</a></h2><div class="description"><p>Chapter 5 is another brief but fun digression to address the
+      question of, now that we know that the computer deals in
+      numbers, how is it that we can manipulate things like text and
+      images using computers as well?  The answer is that everything
+      that a computer with, from text to images to the ISA
+      instructions themselves, must actually be numbers behind the
+      scenes.  The schemes by which numbers are made to correspond to
+      text or to graphical data or to instructions are called
+      encodings, and we explore several different types of encoding in
+      this chapter.</p></div></div><div class="chapter_index"><h2><a href="/text/ch7.xml">7: Microarchitecture</a></h2><div class="description"><p>Chapter 7 switches to the second question of "How to build a
+      computer".  Since we now understand the ISA, we can do this by
+      taking the major tasks that the various ISA instructions need to
+      be able to accomplish, imagining we have some black-box circuit
+      components that perform these tasks, and examining how the
+      circuit components can be connected to create an actual machine
+      that accomplishes the ISA tasks--that is, a computer!  </p></div></div><div class="chapter_index"><h2><a href="/text/ch8.xml">8: Digital Logic and Transistors</a></h2><div class="description"><p>Once we have in hand a list of the circuit components we need
+      to build a machine capable of executing ISA instructions, all
+      that remains is to build these components.  To do this, we
+      examine in chapter 8 the building blocks of digital circuits:
+      Logic gates and, ultimately, transistors.  </p></div></div></div></div></div></body></html>

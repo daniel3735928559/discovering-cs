@@ -1,0 +1,1394 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><link rel="stylesheet" type="text/css" href="/text/box.css"><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script><script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script><script type="text/javascript" src="/text/box.js"></script><link rel="stylesheet" href="/sim/cm/codemirror.css"><link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css"><script type="text/javascript" src="/sim/cm/codemirror.js"></script><link rel="stylesheet" type="text/css" href="/sim/bin/sim.css"><script type="text/javascript" src="/sim/bin/sim.js"></script></head><body ng-app="app"><div id="super" ng-controller="BoxController"><div class="sidebar"><div class="sidebar_header">Book:</div><table class="chapter_links"><tr><td>0</td><td><a href="/text/box.xml">Title page</a></td></tr><tr><td>1</td><td><a href="/text/ch1.xml">Introduction</a> (<a class="print_link" href="/text/print/ch1.pdf">PDF</a>)</td></tr><tr><td>2</td><td><a href="/text/ch2.xml">Programming</a> (<a class="print_link" href="/text/print/ch2.pdf">PDF</a>)</td></tr><tr><td>3</td><td><a href="/text/ch3.xml">Advanced Programming</a> (<a class="print_link" href="/text/print/ch3.pdf">PDF</a>)</td></tr><tr><td>4</td><td><a href="/text/ch4.xml">Numbers</a> (<a class="print_link" href="/text/print/ch4.pdf">PDF</a>)</td></tr><tr><td>5</td><td><a href="/text/ch5.xml">ISA</a> (<a class="print_link" href="/text/print/ch5.pdf">PDF</a>)</td></tr><tr><td>6</td><td><a href="/text/ch6.xml">Assembly</a> (<a class="print_link" href="/text/print/ch6.pdf">PDF</a>)</td></tr><tr><td>7</td><td><a href="/text/ch7.xml">Encodings</a> (<a class="print_link" href="/text/print/ch7.pdf">PDF</a>)</td></tr><tr><td>8</td><td><a href="/text/ch8.xml">Micro­architecture</a> (<a class="print_link" href="/text/print/ch8.pdf">PDF</a>)</td></tr><tr><td>9</td><td><a href="/text/ch9.xml">Digital Logic</a> (<a class="print_link" href="/text/print/ch9.pdf">PDF</a>)</td></tr><tr><td>10</td><td><a href="/text/ch10.xml">Transistors</a> (<a class="print_link" href="/text/print/ch10.pdf">PDF</a>)</td></tr></table><div class="sidebar_header">This chapter:</div><a href="#" ng-click="show_index()"><div class="sidebar_link">Outline</div></a><a href="#" ng-click="show_definitions()"><div class="sidebar_link">Definitions</div></a><div class="sidebar_header">Course:</div><a href="http://pages.cs.wisc.edu/~karu/courses/cs252/fall2015/wiki/index.php"><div class="sidebar_link">Homepage</div></a><a href="/homework"><div class="sidebar_link">Online HW</div></a><a href="/homework/rating.html"><div class="sidebar_link">Rate lecture</div></a><div class="sidebar_header">Simulators:</div><a href="/sim/py/python.html"><div class="sidebar_link">Python</div></a><a href="/sim/bin/bin.html"><div class="sidebar_link">Binary</div></a><a href="/sim/avr/avr.html"><div class="sidebar_link">AVR</div></a><a href="/sim/uarch/uarch.html"><div class="sidebar_link">Micro­architecture</div></a><div class="sidebar_header">Additional:</div><a href="/text/info/authors.xml"><div class="sidebar_link">Authors</div></a><a href="/text/info/acknowledgements.xml"><div class="sidebar_link">Contributors</div></a><a href="/text/info/copyright.xml"><div class="sidebar_link">Copyright</div></a><a href="/text/info/links.xml"><div class="sidebar_link">Links</div></a></div><div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()"></div><div class="index" ng-if="display_index == true"><h2>Chapter Outline:</h2><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4')">4: Physical representations of numbers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_1')">4.1: Chapter organization</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_4_2')">4.2: Unary representation of numbers: A bouncy-ball-based
+    computer</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_2_1')">4.2.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_3')">4.3: Binary representation of non-negative integers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_3_1')">4.3.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_4')">4.4: Binary representation of negative integers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_4_1')">4.4.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_5')">4.5: Binary representation of real numbers</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_5_1')">4.5.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_6')">4.6: Hexadecimal</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_6_1')">4.6.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_7')">4.7: 8 bits--three different meanings?</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_4_8')">4.8: Integer operations on representations</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_8_1')">4.8.1: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_9')">4.9: Boolean operations</a><br><div style="margin-left:5px;" class="index_div"><a href="#" ng-click="goto_loc('sec_4_9_1')">4.9.1: Relation between boolean and arithmetic
+      operations</a><br><div style="margin-left:5px;" class="index_div"></div><a href="#" ng-click="goto_loc('sec_4_9_2')">4.9.2: Worked examples</a><br><div style="margin-left:5px;" class="index_div"></div></div><a href="#" ng-click="goto_loc('sec_4_10')">4.10: Exercises</a><br><div style="margin-left:5px;" class="index_div"></div></div></div></div><div class="index" ng-if="display_definitions == true"><h2>Terminology Index:</h2><a href="#" ng-click="goto_loc('def_unary')">unary</a><br><a href="#" ng-click="goto_loc('def_bit')">bit</a><br><a href="#" ng-click="goto_loc('def_unsigned')">unsigned</a><br><a href="#" ng-click="goto_loc('def_significant')">significant</a><br><a href="#" ng-click="goto_loc('def_LSB')">LSB</a><br><a href="#" ng-click="goto_loc('def_MSB')">MSB</a><br><a href="#" ng-click="goto_loc('def_width')">width</a><br><a href="#" ng-click="goto_loc('def_byte')">byte</a><br><a href="#" ng-click="goto_loc('def_word')">word</a><br><a href="#" ng-click="goto_loc('def_nibble')">nibble</a><br><a href="#" ng-click="goto_loc('def_sign bit')">sign bit</a><br><a href="#" ng-click="goto_loc('def_twos complement')">twos complement</a><br><a href="#" ng-click="goto_loc('def_fixed point')">fixed point</a><br><a href="#" ng-click="goto_loc('def_floating point')">floating point</a><br><a href="#" ng-click="goto_loc('def_concatenation')">concatenation</a><br><a href="#" ng-click="goto_loc('def_boolean logic')">boolean logic</a><br><a href="#" ng-click="goto_loc('def_truth table')">truth table</a></div><div class="super"><?xml-stylesheet href="box.xsl" type="text/xsl"><div class="section"><div id="sec_4"></div><div class="text"><div class="header">4: 
+	  Physical representations of numbers</div><div class="summary"><b>Summary: </b><p>Computers are devices that perform operations on numbers.
+  A computer is also supposed to be a real-world physical machine,
+  whereas a number is something abstract.  We will bridge that gap
+  in this chapter by introducing binary representations of
+  numbers.</p></div><p>Recall our two organizing questions: How do we program a
+    computer? How do we build a computer?  We've now addressed the
+    first question at a high level: We can program a computer using
+    the nice human-adapted programming language of Python and let
+    the compiler take care of the dirty work of actually telling the
+    machine the corresponding machine-friendly operations.  </p><p>In the next chapter, we'll start to address the question of
+    what those machine-friendly operations are.  In other words,
+    "How do we really program a computer?"  However, as we descend
+    closer to the level of the computer itself, we start to run into
+    questions related to the construction of computers.  (In other
+    words, the abstraction of a computer leaks!)  </p><p>It will be profitable to plateau on our journey down the
+    tower of abstractions and take a chapter to address one of these
+    in particular.  Specifically, consider the following conundrum:
+    A computer is supposed to be a physical machine, but it is also
+    supposed to be able to add and subtract numbers.  Numbers are
+    abstract, whereas the computer is physical, so when we say that
+    the computer "adds" two numbers, we must mean instead that it
+    takes two physical things--maybe pieces of paper with holes in
+    them, or electrons flowing through wires, or perhaps something
+    else entirely--that represent the two numbers it should add, and
+    it outputs somehow into a third physical thing (paper,
+    electrons, etc.) that represents the sum.</p><p>This will affect our understanding of how to program computers
+    at a low-level: Low-level arithmetic operations will act on
+    numbers, but they will be constrained and influenced by how the
+    computer actually represents the numbers that it is adding and
+    subtracting.  So we take a detour to study the following question:
+    How can we represent numbers and operations on numbers physically?
+    </p></div></div><div class="section"><div id="sec_4_1"></div><div class="text"><div class="header">4.1: 
+	  Chapter organization</div><p>This chapter introduces several systems for representing
+      various different classes of numbers.  Each system is introduced
+      with a section describing it conceptually, as well as the
+      associated terminology and the procedures for working with it.
+      Following these introductions, there will be sections containing
+      worked examples of manipulating numbers within that system.</p></div></div><div class="section"><div id="sec_4_2"></div><div class="text"><div class="header">4.2: 
+	  Unary representation of numbers: A bouncy-ball-based
+    computer</div><div class="summary"><b>Summary: </b><p>Before we get to binary--the main goal of this
+    chapter--we present the simplest possible way of realizing
+    numbers as physical things: To represent the number 15, say,
+    simply take 15 identical objects.  This is called a "unary"
+    representation, and it could be used to build a computer rather
+    easily.  This computer would be fundamentally limited in the
+    size of the numbers it could deal with, however.</p><br><br><b>Definitions: </b><a href="#def_unary">unary</a></div><p>A very simple way of representing numbers physically is to
+      have a large supply of identical small objects--say bouncy
+      balls, for example--and then to represent the operation of
+      storing a given number in a specific slot by taking that
+      number of bouncy balls and physically placing them in a slot
+      with the specified name.  So, for example, a machine might see
+      the program "x = 2" and physically take an empty container,
+      write "x" on it, and then fill it with 2 bouncy balls.</p><p>Adding numbers is also quite easy: For our computer to be
+      able to perform e.g., <span class="icode">x = x + 5</span> it needs to have
+      a contraption that, when it sees this operation, finds the
+      container marked "x", and places 5 more bouncy balls into it.
+      </p><p>For the purpose of writing down these representations, we
+      will use the digit "1" to stand in for a single bouncy ball.
+      For instance, we can write the bouncy-ball representation of 9
+      as: 
+
+      <div class="code"><pre>111111111</pre></div>
+
+      And the addition of 9 and 4 would be written:
+
+      <div class="code"><pre>111111111 + 1111 = 1111111111111</pre></div>
+
+      <span id="def_unary" class="definition"></span>This way of representing numbers is called
+      <b>unary</b>, so-called because the 'un-' prefix indicates
+      that we only need a single digit (1) to write down the
+      representation of any number (just as the usual system of
+      writing numbers is called "decimal", the prefix "deci-"
+      referring to the use of 10 digits: 0, 1, 2, 3, 4, 5, 6, 7, 8,
+      9). Unary is conceptually very convenient for
+      machine-building purposes--arithmetic operations are trivial
+      to describe--but it becomes terribly unwieldy when dealing
+      with numbers that are at all large.  For example, the number
+      that is so compactly written in decimal notation as 134 would
+      be written in unary as:
+
+      <div class="code"><pre>11111111111111111111111111111111111111111111111111111111111111111111111111111111
+111111111111111111111111111111111111111111111111111111</pre></div>
+
+      If we tried to run our factorial program on a unary-based
+      computer, we could easily need more bouncy balls than there
+      are atoms in the universe!  So unary might be nice for a
+      simple, slow computer, but not so much for the powerful and
+      compact computers we are used to.
+      </p></div></div><div class="section"><div id="sec_4_2_1"></div><div class="text"><div class="header">4.2.1: 
+	  Worked examples</div><p>As we've seen, representing numbers in unary is easy: Just
+	write that number of 1s.  So 17 is "11111111111111111".
+	In the other direction, decoding a unary representation into a
+	number is equally easy: Just count the 1s in the
+	representation.  So "1111111111111111111111111" is the
+	representation of 25.  </p><p>But remember that the point of this representation was to
+	be able to build a machine that stores and adds numbers for
+	us.  We've talked a little about how this can be done, but
+	we'll take this opportunity to flesh out some of those ideas a
+	little.</p><p>We can imagine the machine consisting of three basic parts
+	(as a call-out to the next chapter, these parts could be called
+	the machine's "architecture"):
+	
+	<ul>
+	  <li>20 trays for storing bouncy balls, numbered 0-19.</li>
+	  <li>Two inputs, labeled input "A" and input "B", for feeding in
+	  bouncy balls.</li>
+	  <li>Three buttons labeled:
+	  <ol>
+	    <li><span class="icode">Store input B into tray A</span></li>
+	    <li><span class="icode">Add input B to stored value in tray A</span></li>
+	    <li><span class="icode">Add tray B to tray A</span></li>
+	  </ol></li>
+	  <li>A very large reservoir of bouncy balls for use in
+	  computations.</li>
+	</ul>
+	
+	</p><p>At any point, you can place however many bouncy balls into
+	the two inputs.  We just need to specify what happens when you
+	press each of the buttons.  You should stop and consider what
+	might be reasonable, and even work through to whatever desired
+	level of detail how to construct a machine that behaves in the
+	way described.</p><div class="exc_toggle" ng-init="toggles['unary_store'] = false" ng-click="exc_toggle('unary_store')">What happens when you press "Store input B into tray A"?</div><div class="exc_toggleable" ng-if="toggles['unary_store'] == true">
+	    <p>When we press "Store input B into tray A", the machine
+	    looks at the number of bouncy balls in input A, finds the
+	    corresponding tray (for example, if we place 4 bouncy
+	    balls into input A, it finds tray number 4).  It then
+	    empties this tray of any balls it may have had previously
+	    (placing these into the reservoir), and dumps all the
+	    balls placed in input "B" into that tray.  </p>
+	
+	    <p>So if we place 5 balls in input "A", 10 in input "B",
+	    and press "Store", tray 5 will be emptied into the
+	    reservoir and then the 10 balls in "B" will be dumped into
+	    the newly empty tray 5.  </p></div><div class="exc_toggle" ng-init="toggles['unary_addto'] = false" ng-click="exc_toggle('unary_addto')">What happens when you press "Add input B to stored value in tray A"?</div><div class="exc_toggleable" ng-if="toggles['unary_addto'] == true">
+	  <p>When we press "Add input B to stored value in tray A",
+	  the balls in input "A" should select which stored container
+	  to use, and the balls in input "B" should be dumped into
+	  that container, exactly as in the case of the "Store"
+	  button, except without emptying it first.</p>
+
+	  <p>So if we place 19 balls in "A" and 6 in "B", then the
+	  machine will place the 6 balls from input "B" into container
+	  number 19, adding to however many were in that container to
+	  begin with.  </p>
+	  </div><div class="exc_toggle" ng-init="toggles[''] = false" ng-click="exc_toggle('')">What happens when you press "Add tray B to tray A"?</div><div class="exc_toggleable" ng-if="toggles[''] == true">
+	  <p>In this case, the two inputs both represent containers:
+	  The number of balls in input "A" tells is which container to
+	  add balls to, and the number of balls in input "B" tells us
+	  which container to add them from.  Except we don't want to
+	  remove those balls from the second container--we just want
+	  to add the same number to the first container.  </p>
+	  
+	  <p>So if we place 19 balls in "A" and 6 in "B", then the
+	  machine will look at containers 19 and 6.  Count how many
+	  balls are in container 6, and take the same number of balls
+	  from the reservoir, and add that many balls to container
+	  19.</p>
+	</div></div></div><div class="section"><div id="sec_4_3"></div><div class="text"><div class="header">4.3: 
+	  Binary representation of non-negative integers</div><div class="summary"><b>Summary: </b><p>Unary was convenient because it had only one digit, so
+    we could represent it easily with physical objects.  It was bad
+    at representing large numbers compactly, however.  Decimal, on
+    the other hand, is good at representing numbers compactly, but
+    it is sort of complicated--having 10 different possible digits.
+    Binary is a happy medium--a representation that is simple,
+    having only two different digits, but also compact.</p><br><br><b>Definitions: </b><a href="#def_bit">bit</a>, <a href="#def_unsigned">unsigned</a>, <a href="#def_significant">significant</a>, <a href="#def_LSB">LSB</a>, <a href="#def_MSB">MSB</a>, <a href="#def_width">width</a>, <a href="#def_byte">byte</a>, <a href="#def_word">word</a>, <a href="#def_nibble">nibble</a></div><p>A representation that is still simple enough to be suitable
+      for machines but also compact enough to represent large
+      numbers in less space is binary.  In binary, as the prefix
+      'bi-' suggests, we use two digits: 0 and 1.  </p><p>To understand precisely how it works, we can think back to
+      the decimal representation that we're used to: When we write
+      the number 134, all we've done is to put the digits 1, 3, and
+      4 next to each other, and somehow this can denotes a
+      relatively large number--134.  It does so by the notion of
+      place-value: The right-most digit--4--represents how many 1s
+      we have.  The next digit represents how many 10s we have.  The
+      next, how many 100s.  And so on.  So 134 means: four 1s, three 10s,
+      and one 100, which communicates the desired quantity:
+
+      <table border="1px" cellpadding="2px">
+	<tr><td>How many...</td><td>100s?</td><td>10s?</td><td>1s?</td></tr>
+	<tr><td>Decimal digits</td><td>1</td><td>3</td><td>4</td></tr>
+      </table>
+      </p><p>We used 1, 10, and 100 as the place values because these
+      are powers of 10.  Why we use powers of anything at all is an
+      interesting mathematical idea that we will leave aside for
+      now.  Why we use powers of 10 specifically had to do with the
+      fact that we were using 10 possible digits--0-9 (which in turn
+      had to do with the fact that most humans have 10 fingers to
+      use as a counting aid).  </p><p><span id="def_bit" class="definition"></span>Binary, by contrast, will only have two
+      digits--0 and 1.  (Binary digits are also called
+      <b>bits</b>.) And because we have two possible digits, we
+      will use the powers of 2 for our place values: 1, 2, 4, 8, 16,
+      32, 64, 128, 256, 1024, etc.  Thus the number in binary 11001
+      represents one 1, no 2s, no 4s, one 8, and one 16, for a total
+      of 25.</p><p>Similarly, the number that we wrote in decimal as 134 can be
+      written in binary by breaking it up into powers of 2: To make
+      134 we need one 128, one 4, and one 2.  So:
+
+      <table border="1px" cellpadding="2px">
+	<tr><td>How many...</td><td>128s?</td><td>64s?</td><td>32s?</td><td>16s?</td><td>8s?</td><td>4s?</td><td>2s?</td><td>1s?</td></tr>
+	<tr><td>Binary digits</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+
+      <p>Put more mathematically, if we have a binary number with bits
+      a<sub>n</sub>, ..., a<sub>1</sub>, a<sub>0</sub>, where
+      a<sub>i</sub> is the i-th digit from the right (so each
+      a<sub>i</sub> is either a 0 or a 1), then we have a formula for
+      the number this represents:
+	
+      <div class="code"><pre>a<sub>n</sub>...a<sub>1</sub>a<sub>0</sub> = a<sub>n</sub> * 2<sup>n</sup> + ... + a<sub>1</sub> * 2<sup>1</sup> + a<sub>0</sub> * 2<sup>0</sup></pre></div>
+
+      Since 134 = 128 + 4 + 2 = 2<sup>7</sup> + 2<sup>2</sup> +
+      2<sup>1</sup> = 1 * 2<sup>7</sup> + 0 * 2<sup>6</sup> + 0 * 2<sup>5</sup> + 0 * 2<sup>4</sup> + 0 * 2<sup>3</sup> + 1 * 2<sup>2</sup> + 1 * 2<sup>1</sup> + 0 * 2<sup>0</sup>, the binary representation of 134 is 10000110.  
+      </p>
+      
+      <span id="def_unsigned" class="definition"></span>Since we're
+      talking about non-negative integers, that is, integers where
+      there is no concern about sign--whether it is positive or
+      negative--this is sometimes called the representation of an
+      <b>unsigned integer</b>.
+      </p><p><span id="def_significant" class="definition"></span>As in decimal, the first bits in a
+      binary number have a much greater effect on the value: The
+      difference between 1561 and 1562 isn't that large, but the
+      difference between 1561 and 2561 is very large in comparison.
+      For this reason it is common to call the first bits of a
+      binary number more <b>significant</b>. Using this
+      terminology, the last two bits would be called the two "least
+      significant bits".  <span id="def_LSB" class="definition"></span>Especially common is
+      calling the last bit the <b>least significant bit</b> or
+      <b>LSB</b> <span id="def_MSB" class="definition"></span>and the first bit, the
+      <b>most significant bit</b> or <b>MSB</b>.</p><p>With 8 decimal digits, the largest number we can represent
+      is 99999999--i.e., one less than the next place value of
+      100000000.  With 8 binary digits, the largest number we can
+      represent is 11111111, or 255--one less than the next place
+      value of 256.  In general, if we have an <i>n</i>-bit binary
+      number, it can be a number anywhere from 0 through
+      2<sup>n</sup>-1.</p><p>To build a computer based on binary, we need a way to
+      represent bits physically.  This is also not too hard.  If we
+      wish to build our computer out of bouncy balls, then instead
+      of just having a tray that can hold however many bouncy balls,
+      we can have a tray subdivided into cells, and each cell can
+      hold at most one bouncy ball.  So to store 8 bits, we need a
+      container with 8 cells, and to store the value of 134, instead
+      of having 134 bouncy balls, we only need 3:</p><div class="figure"><img src="/text/figures/4.3.fig1.png" width="400px"><div class="caption">Figure 4.3.1: </div></div><p>In practice, computers are electrical devices, and bits are
+      stored using cells that can either store electrical charge or
+      not, where the presence of electrical charge stands for the
+      bit being a 1, and the absence of charge stands for it being
+      0.  We can then create an 8-bit storage container by taking 8
+      of these cells as we did with the bouncy balls.</p><p>However, if our computer's memory containers have only a
+      fixed number of bits--in this example, 8--then this means we
+      can only store numbers that can be represented with 8 bits.
+      As the largest 8-digit binary number is 11111111, or 255 in
+      decimal, this means 8-bit memories can only store numbers
+      0-255.  Of course, we could do better by using more
+      bits--modern processors often have 64-bit memories, which can
+      store numbers up to 2<sup>64</sup>-1, or around 16
+      quintillion.  But in general, the computer's internal storage
+      will be limited in this way to storing only numbers of a fixed
+      width, and then it is up to programmers to concoct ways to use
+      these limited memories to store larger numbers if they are
+      needed.</p><p><span id="def_width" class="definition"></span>The number of bits that an individual
+      memory slot can store is called its <b>width</b>.  A few
+      particular widths of memories come up frequently, and so have
+      special terminology associated with them:
+
+      <ul><li><span id="def_byte" class="definition"></span>A memory slot that can store an 8-bit
+      binary number is called a
+      <b>byte</b>.</li>
+      <li><span id="def_word" class="definition"></span>A memory slot that can store a 16-bit
+      binary number is called a <b>word</b>.</li>
+      <li><span id="def_nibble" class="definition"></span>A memory slot that can store a 4-bit
+      binary number is called a <b>nibble</b>.</li>
+      </ul>
+      </p></div></div><div class="section"><div id="sec_4_3_1"></div><div class="text"><div class="header">4.3.1: 
+	  Worked examples</div><p><b>Decoding binary representations:</b> </p><div class="exc_toggle" ng-init="toggles['bin_decode'] = false" ng-click="exc_toggle('bin_decode')">What number does the
+	binary 10100101 represent?</div><div class="exc_toggleable" ng-if="toggles['bin_decode'] == true">
+	  <p>Since the place values are the powers of 2, with
+	  2<sup>0</sup> being on the right and increasing from right
+	  to left, and since the digits tell us how many of the
+	  corresponding place value to include, we can make a table:</p>
+	  
+	  <table border="1px" cellpadding="2px">
+	    <tr><td>Place value</td><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+	    <tr><td>Digits</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+	  </table>
+
+	  <p>So this corresponds to 128 + 32 + 4 + 1 = 165.  </p>
+
+	  <p>Alternatively, we can use the formula:
+
+	  <div class="code"><pre>a<sub>n</sub>...a<sub>1</sub>a<sub>0</sub> = a<sub>n</sub> * 2<sup>n</sup> + ... + a<sub>1</sub> * 2<sup>1</sup> + a<sub>0</sub> * 2<sup>0</sup></pre></div>
+
+	  To get the answer of
+
+	  <div class="code"><pre>1*2<sup>7</sup> + 0*2<sup>6</sup> + 1*2<sup>5</sup> + 0*2<sup>4</sup> + 0*2<sup>3</sup> + 1*2<sup>2</sup> + 0*2<sup>1</sup> + 1*2<sup>0</sup> = 128 + 32 + 4 + 1 = 165</pre></div>
+	  </p>
+	</div><p><b>Representing a number in binary:</b> </p><div class="exc_toggle" ng-init="toggles['bin_encode'] = false" ng-click="exc_toggle('bin_encode')">Write down the
+	binary representation of the number 71</div><div class="exc_toggleable" ng-if="toggles['bin_encode'] == true"><p> Since each binary digit corresponds to whether or
+	not to include the corresponding power of 2, all we have to do
+	is work out which powers of 2 are needed to make up the given
+	number.  We can start by noticing that all powers of 2 such as
+	2<sup>7</sup> = 128 and above are too big and stand no chance
+	of being included.  </p>
+
+	<p>So we can start with 2<sup>6</sup> = 64.  If we include
+	that, then to make 71, we only need further powers of 2 to
+	make 7 more (as 71 - 64 = 7).  </p>
+
+	<p>To make this 7, we may therefore skip 2<sup>5</sup> = 32,
+	and 2<sup>4</sup> = 16 and 2<sup>3</sup> = 8, and the next
+	power of 2 that is small enough to be included is
+	2<sup>2</sup> = 4.  So now we've included 64 and 4, for a
+	total of 68.  To make the desired total of 71, we need 3
+	more.  </p>
+
+	<p>To make this 3, we start by including the next power of 2:
+	2<sup>1</sup> = 2.  Having included 64, 4, and 2, we have a
+	total of 70, which is just 1 shy of the desired 71.  </p>
+
+	<p>To make up for this missing 1, we include the last power of
+	2: 2<sup>0</sup> = 1.  So the powers of 2 we include are 64,
+	4, 2, and 1.  </p>
+
+	<p>What we've done is written 71 as
+	2<sup>6</sup>+2<sup>2</sup>+2<sup>1</sup>+2<sup>0</sup>.  Or,
+	more suggestively, this same thing can be written as:
+
+	<div class="code"><pre>71 = 1 * 2<sup>6</sup> + 0 * 2<sup>5</sup> + 0 * 2<sup>4</sup> + 0 * 2<sup>3</sup> + 1 * 2<sup>2</sup> + 1 * 2<sup>1</sup> + 1 * 2<sup>0</sup></pre></div>
+
+	Referring back to our formula, this means that the binary
+	representation for 71 is "1000111".  </p>
+
+	<p>To summarize the work we did here: We started with 71.  We
+	then proceeded down the powers of 2: 64, 32, 16, 8, 4, 2, 1,
+	and noted if we could take one away from what remained.  If we
+	could take away that power of 2, we did so and wrote a 1 in
+	the binary representation.  Otherwise, we wrote a 0.  To wit:
+	<ul>
+	  <li>71 remains.  First small enough power of 2 is 64.  This
+	  can be taken away, so add a 1 to the representation.  Take
+	  it away and have 7 remaining.  Representation so far:
+	  <b>1</b>.</li>
+	  <li>7 remains.  Next power of 2 is 32.  This cannot be taken
+	  away, so add a 0 to the representation.
+	  Representation so far: <b>10</b>.</li>
+	  <li>7 remains.  Next power of 2 is 16.  This cannot be taken
+	  away, so add a 0 to the representation.
+	  Representation so far: <b>100</b>.</li>
+	  <li>7 remains.  Next power of 2 is 8.  This cannot be taken
+	  away, so add a 0 to the representation.
+	  Representation so far: <b>1000</b>.</li>
+	  <li>7 remains.  Next power of 2 is 4.  This can be taken
+	  away, so add a 1 to the representation.  Take it away and 3
+	  remains.  Representation so far: <b>10001</b>.</li>
+	  <li>3 remains.  Next power of 2 is 2.  This can be taken
+	  away, so add a 1 to the representation.  Take it away and 1
+	  remains.  Representation so far: <b>100011</b>.</li>
+	  <li>1 remains.  Next power of 2 is 1.  This can be taken
+	  away, so add a 1 to the representation.  Take it away and 0
+	  remains.  Representation so far: <b>1000111</b>.</li>
+	  <li>0 remains.  We're done!  Final representation: <b>1000111</b>.</li>
+	</ul></p>
+
+	<p>It will be convenient to summarize this even more compactly
+	in tabular form:</p>
+
+	<p><table>
+	  <tr><td>What's left?</td><td>71</td><td>7</td><td>7</td><td>7</td><td>7</td><td>3</td><td>1</td></tr>
+	  <tr><td>Place value</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+	  <tr><td>Place value &lt; What's left?</td><td>Yes</td><td>No</td><td>No</td><td>No</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+	  <tr><td>Digit</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+	</table></p>
+	</div></div></div><div class="section"><div id="sec_4_4"></div><div class="text"><div class="header">4.4: 
+	  Binary representation of negative integers</div><div class="summary"><b>Summary: </b><p>Our main storage mechanism in a computer will be
+    devices that can store sequences of bits.  Most often, these
+    bits will be understood to represent non-negative integers
+    according to the above scheme.  However, it will be convenient
+    to represent other types of numbers using sequences of bits as
+    well.  In this section, we describe how to store general
+    integers that can be either positive or negative.  </p>
+
+    <p>The most common way of representing negative numbers is
+    called two's complement, and consists of taking the same
+    place-values as above except that the largest one is
+    negative.</p><br><br><b>Definitions: </b><a href="#def_sign%20bit">sign bit</a>, <a href="#def_twos%20complement">twos complement</a></div><p>There are two common ways of representing arbitrary
+      integers as sequences of bits: With a sign bit, and with two's
+      complement.  </p><p><span id="def_sign bit" class="definition"></span>The <b>sign bit</b> method is as
+      follows: Suppose we have an 8-bit memory and we want to treat
+      it as an integer with sign bit.  Then we treat the 7 least
+      significant bits as usual, but the 8th bit, instead of giving
+      it its usual place value of 128, we simply say that if it is
+      0, the number is positive, and if it is 1, the number is
+      negative.  </p><p>Thus, under this scheme, 00000001 represents the number 1,
+      and 10000001 represents -1.  The largest number we can
+      represent is 01111111, i.e., 127, and the lowest is 11111111,
+      or -127.  This should immediately raise our suspicious,
+      because there are only 255 numbers between -127 and 127
+      inclusive, but there are 256 different sequences of 8 bits.
+      That means that under this scheme, there are two sequences of
+      8 bits that represent the same number!  Stop for a minute
+      and think about what these are.</p><div class="exc_toggle" ng-init="toggles['signbit'] = false" ng-click="exc_toggle('signbit')">Click to toggle answer</div><div class="exc_toggleable" ng-if="toggles['signbit'] == true">Under this scheme 00000000 represents the number 0,
+	but so too does 10000000.
+	</div><p>Other issues with this method include the fact that the
+      method for adding them is rather complex, both in terms of how
+      to explain it and how to implement it with circuitry, but we'll
+      leave it be for now and instead discuss the more common
+      method employed in the wild:</p><p><span id="def_twos complement" class="definition"></span>The preferred method for
+      representing arbitrary integers in binary is called <b>two's
+      complement</b>, in which the place values are all the same
+      except the most significant bit's place value is the negative
+      of what it otherwise would be. In the case of 8-bit
+      integers, this means that the MSB has a place value of
+      -128.  Explicitly, this means that if the MSB is 0 then the
+      number has the same meaning as in the non-negative case, and i
+      the MSB is 1, then you determine its value by looking at the
+      other bits, computing what they represent as a non-negative
+      integer, and then adding -128.</p><p>For example, the numbers 00000000 (0), 00000001 (1),
+      through 01111111 (127) are all the same as before, but
+      10000000 then represents -128, and 10000001 is -127, all the
+      way until -11111111, which is -1.  Thus we can represent any
+      integer between -128 an 127 inclusive--or 256 different
+      values, so there are no repetitions.  </p><p>This scheme may look odd on paper, but on top of having no
+      redundancy, it will turn out that the same procedure we'll use
+      to add non-negative binary numbers can also be used to add two's
+      complement binary integers as well.</p></div></div><div class="section"><div id="sec_4_4_1"></div><div class="text"><div class="header">4.4.1: 
+	  Worked examples</div><p><b>Listing two's complement binary representations:</b></p><div class="exc_toggle" ng-init="toggles['twos_list'] = false" ng-click="exc_toggle('twos_list')">List all 5-bit two's
+	complement integers</div><div class="exc_toggleable" ng-if="toggles['twos_list'] == true"><table><tr><td>Binary</td><td>Integer</td></tr>
+	<tr><td>00000</td><td>0</td></tr>
+	<tr><td>00001</td><td>1</td></tr>
+	<tr><td>00010</td><td>2</td></tr>
+	<tr><td>00011</td><td>3</td></tr>
+	<tr><td>00100</td><td>4</td></tr>
+	<tr><td>00101</td><td>5</td></tr>
+	<tr><td>00110</td><td>6</td></tr>
+	<tr><td>00111</td><td>7</td></tr>
+	<tr><td>01000</td><td>8</td></tr>
+	<tr><td>01001</td><td>9</td></tr>
+	<tr><td>01010</td><td>10</td></tr>
+	<tr><td>01011</td><td>11</td></tr>
+	<tr><td>01100</td><td>12</td></tr>
+	<tr><td>01101</td><td>13</td></tr>
+	<tr><td>01110</td><td>14</td></tr>
+	<tr><td>01111</td><td>15</td></tr>
+	<tr><td>10000</td><td>-16</td></tr>
+	<tr><td>10001</td><td>-15</td></tr>
+	<tr><td>10010</td><td>-14</td></tr>
+	<tr><td>10011</td><td>-13</td></tr>
+	<tr><td>10100</td><td>-12</td></tr>
+	<tr><td>10101</td><td>-11</td></tr>
+	<tr><td>10110</td><td>-10</td></tr>
+	<tr><td>10111</td><td>-9</td></tr>
+	<tr><td>11000</td><td>-8</td></tr>
+	<tr><td>11001</td><td>-7</td></tr>
+	<tr><td>11010</td><td>-6</td></tr>
+	<tr><td>11011</td><td>-5</td></tr>
+	<tr><td>11100</td><td>-4</td></tr>
+	<tr><td>11101</td><td>-3</td></tr>
+	<tr><td>11110</td><td>-2</td></tr>
+	<tr><td>11111</td><td>-1</td></tr>
+	</table></div><p><b>Decoding two's complement binary representations:</b> </p><div class="exc_toggle" ng-init="toggles['twos_decode'] = false" ng-click="exc_toggle('twos_decode')">What integer does the 8-bit
+	two's complement 10100101 represent?</div><div class="exc_toggleable" ng-if="toggles['twos_decode'] == true"><p>The place values for two's complement are the same
+	as for non-negatives--the powers of 2--with the exception that
+	the highest place value is negative.  So the place values and
+	corresponding digits in the given representation are:</p>
+	
+	<p><table>
+	  <tr><td>Place value</td><td>-128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+	  <tr><td>Digit</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+	</table></p>
+
+	<p>This means that the number represented is -128 + 32 + 4 + 1
+	= -91.</p></div><p><b>Representing a number using two's complement:</b> </p><div class="exc_toggle" ng-init="toggles['twos_encode_8bit'] = false" ng-click="exc_toggle('twos_encode_8bit')">Write the 8-bit
+	two's complement representation of the number -56.</div><div class="exc_toggleable" ng-if="toggles['twos_encode_8bit'] == true">
+	  <p>As with the non-negatives, we have the powers of 2 as our
+	  place values, and we have to build -56 out of them.  The
+	  difference is that the highest place-value--since we're
+	  looking at 8-bit representations, that's 128--is actually
+	  negative.  So the place values out of which we must build
+	  -56 are: -128, 64, 32, 16, 8, 4, 2, 1.  We can do this using
+	  the table as before: </p>
+	  
+	<p><table>
+	  <tr><td>What's left?</td><td>-56</td><td>72</td><td>8</td><td>8</td><td>8</td><td>0</td><td>0</td><td>0</td></tr>
+	  <tr><td>Place value</td><td>-128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+	  <tr><td>Place value &lt; What's left?</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+	  <tr><td>Digit</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+	</table></p>
+
+	<p>So the 8-bit two's complement representation of -56 is 11001000.</p>
+	</div><p><b>Representing a number using a different size two's
+	complement representation:</b> </p><div class="exc_toggle" ng-init="toggles['twos_encode_7bit'] = false" ng-click="exc_toggle('twos_encode_7bit')">Write the 7-bit
+	two's complement representation of the number -56.</div><div class="exc_toggleable" ng-if="toggles['twos_encode_7bit'] == true">
+	  <p>Now, our place-values are -64, 32, 16, 8, 4, 2, 1.
+	  Otherwise, we proceed as before:</p>
+	  
+	<p><table>
+	  <tr><td>What's left?</td><td>-56</td><td>8</td><td>8</td><td>8</td><td>0</td><td>0</td><td>0</td></tr>
+	  <tr><td>Place value</td><td>-64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+	  <tr><td>Place value &lt;= What's left?</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+	  <tr><td>Digit</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+	</table></p>
+
+	<p>So the 7-bit two's complement representation of -56 is 1001000.</p>
+	</div><div class="exc_toggle" ng-init="toggles['twos_encode_7bit'] = false" ng-click="exc_toggle('twos_encode_7bit')">Write the 16-bit
+	two's complement representation of the number -56.</div><div class="exc_toggleable" ng-if="toggles['twos_encode_7bit'] == true">
+	  <p>Now, our place-values are -65536, 32768, 16384, 8192,
+	  4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1.
+	  Using the same procedure as above (noting that we need
+	  -65536 as we are trying to represent a negative number and
+	  this is the only negative place value), we come up with an
+	  answer of: 1111111111001000</p>
+	  
+	</div></div></div><div class="section"><div id="sec_4_5"></div><div class="text"><div class="header">4.5: 
+	  Binary representation of real numbers</div><div class="summary"><b>Summary: </b><p>There are two schemes for representing fractions in
+    binary: Fixed point (where we simply replace some of the place
+    values with fractional place values) and floating point (which
+    is analogous to "scientific notation" for decimal
+    numbers).</p><br><br><b>Definitions: </b><a href="#def_fixed%20point">fixed point</a>, <a href="#def_floating%20point">floating point</a></div><p>To represent real numbers, we can take our cue from decimal
+      representations: What does 12.34 mean?  The piece before the
+      point--the 12--is treated as an ordinary decimal number with
+      the usual place values.  Then, the digits after the point are
+      given reciprocal place values: 1/10, 1/100, etc.  So
+      specifically, this means one 10, two 1s, three 1/10s, and four
+      1/100s.  </p><p>If we're instead talking about, say, 8-bit binary numbers,
+      we can declare that the point is always in a fixed place, say
+      right in the middle.  So the number 11010110 represents the
+      binary number 1101.0110, that is:
+
+      <table border="1px" cellpadding="2px">
+	<tr><td>How many...</td><td>8s?</td><td>4s?</td><td>2s?</td><td>1s?</td><td>1/2s?</td><td>1/4s?</td><td>1/8s?</td><td>1/16s?</td></tr>
+	<tr><td>Binary digits</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+
+      For an end result of 8 + 4 + 1 + 1/4 + 1/8 = 13.375</p><p><span id="def_fixed point" class="definition"></span>This scheme is called <b>fixed
+      point</b> because the point is at a predetermined and fixed
+      location for all numbers encoded in this scheme</p><p>Under this scheme, however, the largest number we can
+      represent is 11111111, or 15.9375.</p><p>Even if we extended this scheme to 16 bits, where we still
+      place the point in the middle, the highest number we can
+      represent then becomes 270.9375.  Compared with the largest
+      integer value we can store with 16 bits--65535--this is rather
+      small.  So another scheme was devised--floating
+      point--inspired by standard scientific notation.  To write a
+      number, say 532.9, in scientific notation, you start by
+      putting the point right after the first digit, so in this
+      example, 5.329.  That's not the actual number, but if we
+      multiply it by 10 enough times, the decimal point will move
+      back to where it was supposed to be: 5.329x10<sup>2</sup>, or
+      commonly, 5.329E2.  So rather than having to worry about where
+      the point goes, we have effectively two pieces of information
+      to keep track of: A single fixed point number (5.329), and the
+      exponent, 2.  If we wanted a smaller number like .005329, all
+      we have to do is change the exponent to, in this case, -3.</p><p><span id="def_floating point" class="definition"></span>In a <b>floating point</b> scheme,
+      we use 16 bits (though there are variants for larger numbers of
+      bits).  We use the first bit of these as a sign bit exactly as
+      in the sign bit scheme.  The next 5 will represent a
+      non-negative integer that will be called the exponent.  (And
+      because we're working in binary, this exponent will tell us the
+      power of 2 to multiply by, rather than a power of 10.)  The
+      remaining 10 bits will represent a fixed-point binary number,
+      called the "fraction", with the point just before the first
+      digit.  Then the formula is:
+
+      <div class="code"><pre>Number represented = (sign) * 2<sup>exponent - 15</sup> * (1+fraction)</pre></div></p><p>This is all explained best, perhaps, in an example: We will
+      represent the number </p><table>
+	<tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	<tr><td><pre>sign = -1</pre></td><td colspan="5"><pre>exponent = 12</pre></td><td colspan="10"><pre>fraction = .0011 = .1875</pre></td></tr>
+      </table><p>The first bit is 1, so the number is negative.  The next 5
+      bits, treated as a non-negative integer, represent the number
+      12, and the fixed-point number represented by the last 10 bits
+      is, in binary, .0011, (.1875 in decimal).  So the decimal real
+      number being represented by this binary string is:
+      
+      <div class="code"><pre>(-1) * (2<sup>12-15</sup>)(1 + .1875) = -.1484375</pre></div>
+
+      </p><p>This scheme being rather complicated means that the
+      procedure for adding or multiplying two such numbers is also
+      quite involved.  In practice, computers that deal with real
+      numbers often have a piece of dedicated hardware called a
+      floating point unit (FPU) with circuitry especially for
+      handling these operations.</p><p>It is rare to see 16-bit floating point numbers in the wild.
+      More common are 32-bit floating point numbers, which use (as the
+      name suggests) 32 bits instead of 16.  They follow a similar
+      formula:
+
+      <div class="code"><pre>32-bit floating point number = (sign) * 2<sup>exponent - 127</sup> * (1+fraction)</pre></div>
+      
+      and use different numbers of bits representing each of the
+      parts: The sign is still one bit, the exponent is now 8 bits, and
+      the fraction is now the remaining 23 bits.</p></div></div><div class="section"><div id="sec_4_5_1"></div><div class="text"><div class="header">4.5.1: 
+	  Worked examples</div><p><b>Decoding a 16-bit floating point representation:</b> </p><div class="exc_toggle" ng-init="toggles['float_decode'] = false" ng-click="exc_toggle('float_decode')">What real number does the word 0100001000000000
+	  represent?</div><div class="exc_toggleable" ng-if="toggles['float_decode'] == true">
+
+	  <p>Recall the scheme is: First bit is sign bit; next 5 bits
+	  are the exponent; last 10 bits are fixed-point fraction with
+	  the point before the first digit.  The represented number is
+	  then: </p>
+
+	  <div class="code"><pre>(sign) * 2<sup>(exponent-15)</sup> * (1 + fraction)</pre></div>
+
+	  <p>The sign bit is 0, so the answer is positive.  The next
+	  five bits represent the exponent in unsigned form.  So we
+	  can decode them like any non-negative binary representation:</p>
+	  
+	  <p><table>
+	    <tr><td>Place value</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+	    <tr><td>Digit</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	  </table></p>
+	
+	  <p>So the exponent is 16.  </p>
+	  
+	  <p>Finally, the base is the fixed-point number .1 with
+	  the point after the first digit, i.e: </p>
+	  
+	  <p><table>
+	    <tr><td>Place value</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td><td>1/32</td></tr>
+	    <tr><td>Digit</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	  </table></p>
+
+	  <p>So this represents 1/2 = .5.  Thus the answer
+	  is 1 * 2<sup>16-15</sup> * (1+.5) = 3</p>
+	  </div><p><b>Representing a number using floating point:</b> </p><div class="exc_toggle" ng-init="toggles['float_encode_easy'] = false" ng-click="exc_toggle('float_encode_easy')">How to represent
+	the number 7.625 in 16-bit floating point?</div><div class="exc_toggleable" ng-if="toggles['float_encode_easy'] == true">
+
+	  <p>Recall the scheme is: First bit is sign bit; next 5 bit
+	  are two's complement exponent; last 10 bits are fixed-point
+	  base with the point after the first digit.  The represented
+	  number is then: </p>
+
+	  <div class="code"><pre>7.625 = (sign) * 2<sup>(exponent-15)</sup> * (1+fraction)</pre></div>
+
+	  <p>The sign bit is 0, as the number is positive.  Now we
+	  need to figure out the exponent and the fraction.  Because
+	  the fraction is a fixed point number, it is a number between
+	  1 and 2.  So we are left with solving:
+	  
+	  <div class="code"><pre>7.625 = 2<sup>(exponent-15)</sup> * (1+fraction)</pre></div>
+	  
+	  But 1+fraction is between 1 and 2, so
+
+	  <div class="code"><pre>7.625 / 2<sup>(exponent-15)</sup></pre></div>
+
+	  must be between 1 and 2.  So we need to find an exponent
+	  that will make this true.  We quickly find that 7.625/4 will
+	  be between 1 and 2, so 2<sup>(exponent-15)</sup> must be 4,
+	  i.e., the exponent is 17.  Writing this in binary, we get
+	  the exponent is 10001.</p>
+
+	  <p>Finally, this means the 1+fraction must be 7.625/4 =
+	  1.90625, meaning the fraction must be .90625 represented
+	  using fixed-point with the point before the first digit.
+	  </p>
+
+	  <p>To represent a number in fixed point, we simply work our
+	  way down the place values just as we do for non-negative
+	  integers.  The place values are 1/2, 1/4, 1/8, 1/16, etc.
+	  So we go through these in order, taking off that much if we
+	  can (we will not review the meaning of this table
+	  here--revisit the examples for non-negative integers if this
+	  table makes no sense):</p>
+	  
+	  <table>
+	    <tr><td>What's left?</td><td>0.90625</td><td>0.40625</td><td>0.15625</td><td>0.03125</td><td>0.03125</td><td>0</td></tr>
+	    <tr><td>Place value</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td><td>1/32</td><td>1/64</td></tr>
+	    <tr><td>Place value in decimal</td><td>0.5</td><td>0.25</td><td>0.125</td><td>0.0625</td><td>0.03125</td><td>0.015625</td></tr>
+	    <tr><td>Place value &lt;= What's left?</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td></tr>
+	    <tr><td>Digit</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+	  </table>
+	  
+	  <p>So our fraction is 11101, our exponent is 10001, and our
+	  sign bit is 0.  Thus the representation is
+	  0100011110100000.</p>
+	  
+	</div><p><b>Representing a harder number using 16-bit floating point:</b> </p><div class="exc_toggle" ng-init="toggles['float_encode_hard'] = false" ng-click="exc_toggle('float_encode_hard')">How to represent
+	the number 1/3 in floating point?</div><div class="exc_toggleable" ng-if="toggles['float_encode_hard'] == true">
+
+	  <p>As before, the sign bit is 0.  1/3 is not between 1 and
+	  2, so we need to multiply it by 2 until it is: 2 * 1/3 is
+	  still not in the range, but 2*2*1/3 = 4/3 is.  So 1+fraction
+	  will have to be 4/3 and the exponent part will have to be
+	  1/4, i.e. 2<sup>-2</sup>.  That is, 2<sup>exponent -
+	  15</sup> must be 2<sup>-2</sup>, so exponent must be 13.  As
+	  a 5-bit non-negative integer, the binary representation of
+	  13 is 01101</p>
+
+	  <p>Now, 1+fraction is 4/3, so fraction is 1/3.  We need to
+	  number in fixed point.  We go through the same table as
+	  before:</p>
+	  
+	  <table>
+	    <tr><td>Place value</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/16</td><td>1/32</td><td>1/64</td><td>1/128</td><td>1/256</td><td>1/512</td><td>1/1024</td></tr>
+	    <tr><td>Place value in decimal</td><td>0.5</td><td>0.25</td><td>0.125</td><td>0.0625</td><td>0.03125</td><td>0.015625</td><td>0.0078125</td><td>.00390625</td><td>.001953125</td><td>.0009765625</td></tr>
+	    <tr><td>What's left?</td><td>.333...</td><td>.333...</td><td>.08333...</td><td>.08333...</td><td>.0208333...</td><td>.0208333...</td><td>.005208333...</td><td>.005208333...</td><td>.00130208333...</td><td>.00130208333...</td></tr>
+	    <tr><td>Place value &lt;= What's left?</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+	    <tr><td>Digit</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+	  </table>
+	  
+	  <p>But at this point we've got 10 digits already for the
+	  fraction, which is all we are allowed.  However, we didn't
+	  get what was left over all the way down to 0!  So the number
+	  we are representing isn't actually 1/3, but is simply as
+	  close as we can get to it using a 10-bit fraction part.  </p>
+	  
+	  <p>For this example, our fraction is 0010101010, our
+	  exponent is 01101, and our sign bit is 0.  Thus the binary
+	  representation for the 16-bit floating point number that is
+	  as close to 1/3 as we can get is 011010101010101.  But the
+	  actual value of this is only .3330078125, rather than
+	  0.3333333...  </p>
+
+	  <p>This might be a little unnerving, however it shouldn't
+	  come as too much of a surprise: There are only 16 bits, so
+	  there are only 2<sup>16</sup> = 65536 possible fractions we
+	  can represent.  However there are infinitely many fractions
+	  even just between 0 and 1--for example 1/2, 1/3, 2/3, 1/4,
+	  3/4, 1/5, 2/5, ...  Our scheme by definition cannot
+	  represent them all if each possible sequence of bits
+	  corresponds to one fraction.  1/3 is just the simplest one
+	  that cannot be represented exactly by this scheme, but any
+	  scheme that uses a fixed number of bits will necessarily
+	  have some manifestation of the same issue.</p>
+	</div></div></div><div class="section"><div id="sec_4_6"></div><div class="text"><div class="header">4.6: 
+	  Hexadecimal</div><div class="summary"><b>Summary: </b>A third representation beyond unary and binary is
+    hexadecimal.  It is even more compact than binary, but if you have
+    a hexadecimal representation it is easy to read off the binary
+    representation (unlike with a decimal representation).</div><p>Binary is more compact than unary, but large-ish numbers still
+      have many digits--the number we'd write as 99 becomes "1100011".
+      When looking at a lot of numbers (as we will do when looking up
+      the numbers that comprise, say, a simple image file), it is
+      convenient to have an even more compact representation, but one
+      from which we can still easily deduce the corresponding binary
+      representation (unlike, say, converting from decimal to binary,
+      which was a rather involved procedure).</p><p>For example, the number 8888, if represented in binary, would
+      be: 
+
+      <div class="code"><pre>10001010111000</pre></div>
+
+      It gets worse when we are dealing with a large number of bytes.
+      For example, in chapter 6 we will see a long sequence of bytes
+      that collectively represent a simple image.  If we write these
+      bytes in binary, then the sequence looks like:
+
+      <div class="code"><pre>01000010 01001101 00111010 00000101
+00000000 00000000 00000000 00000000
+00000000 00000000 10001010 00000000
+00000000 00000000 01111100 00000000
+00000000 00000000 00010100 00000000
+00000000 00000000 00010100 00000000
+00000000 00000000 00000001 00000000
+00011000 00000000 00000000 00000000
+00000000 00000000 10110000 00000100
+00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000
+11111111 00000000 00000000 11111111
+00000000 00000000 11111111 00000000
+00000000 00000000 00000000 00000000
+00000000 11111111 01000010 01000111
+01010010 01110011 10000000 11000010
+11110101 00101000 01100000 10111000
+00011110 00010101 00100000 10000101</pre></div>
+
+      In fact this is only about a quarter of the file, and it is
+      already quite long and unwieldy.  There is a further
+      representation that is both more compact than binary but is very
+      easily converted to binary, called <b>hexadecimal</b>.  The idea
+      is that we split every binary representation into groups of 4
+      bits, and then simply translate according to the following
+      table, which includes all 4-bit binary representations along
+      with the numbers they represent in decimal and the new
+      hexadecimal digit that corresponds to those 4-bits: </p><p><table>
+	<tr><td>Decimal</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+	<tr><td>Binary</td><td>0000</td><td>0001</td><td>0010</td><td>0011</td><td>0100</td><td>0101</td><td>0110</td><td>0111</td><td>1000</td><td>1001</td><td>1010</td><td>1011</td><td>1100</td><td>1101</td><td>1110</td><td>1111</td></tr>
+	<tr><td>Hexadecimal</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>a</td><td>b</td><td>c</td><td>d</td><td>e</td><td>f</td></tr>
+      </table></p><p>For example, instead of 10001010111000, we can write in
+      hexadecimal as 22b8 because: </p><table>
+	<tr><td>4-bit section</td><td>0010</td><td>0010</td><td> 1011 </td><td>1000 </td></tr>
+	<tr><td>Corresponding hexadecimal digit</td><td>2</td><td>    2</td><td>    b</td><td>    8</td></tr>
+      </table><p>One feature of this scheme is that because every byte is two
+      4-bit chunks, any byte can be represented neatly by two
+      hexadecimal digits.</p><p>Numbers written in hexadecimal can be visually similar to
+      numbers written in decimal if none of the hexadecimal digits
+      happen to be a-f.  For example, the number '33' might be the
+      decimal number thirty-three, or it might be the hexadecimal
+      representation for the number 51.  To alleviate this, numbers
+      written in hexadecimal are usually preceded by "0x".  So in
+      future, unless context removes this ambiguity, we will write 33
+      for the decimal number "thirty-three", and 0x33 for the
+      hexadecimal representation (which turns out to represent the
+      number "fifty-one").
+      </p><p>While the details do not much emphasis at this point,
+      hexadecimal can also be understood as another representation
+      system with 16 digits: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 , a, b, c, d,
+      e f, and whose place values are the powers of 16.  So 0xff
+      represents the number f*16<sup>1</sup> + f*16<sup>0</sup>, where
+      f is the digit representing the number 15.  So this is 15*16 +
+      15 = 255.  Of course, 0xff is also in binary 11111111, which we
+      already know represents the number 255.  So everything works out
+      in the end.</p></div></div><div class="section"><div id="sec_4_6_1"></div><div class="text"><div class="header">4.6.1: 
+	  Worked examples</div><p><b>Writing a binary number in hexadecimal:</b> </p><div class="exc_toggle" ng-init="toggles['bin_hex'] = false" ng-click="exc_toggle('bin_hex')">Write the binary number 1001101 in
+	  hexadecimal</div><div class="exc_toggleable" ng-if="toggles['bin_hex'] == true"><p>We would like to break this into 4-bit chunks,
+	  except it is 7 bits long, so this won't work evenly.
+	  However, just like in decimal we could redundantly write
+	  0008 as another way of writing the number 8, here we can
+	  tack on 0s to the beginning of the representation without
+	  changing its value.  So 01001101 represents the same value,
+	  but is conveniently 8 bits, so can be broken up.  </p>
+
+	  <p>We break this up as 0100 1101, which (consulting the
+	  above table) correspond to hex digits 4 and d respectively,
+	  so the hex representation is 0x4d.  </p>
+	  </div><p><b>Reading a hexadecimal representation in binary:</b> </p><div class="exc_toggle" ng-init="toggles['hex_bin'] = false" ng-click="exc_toggle('hex_bin')">Write the hexadecimal representation 0xf00d in
+	  binary</div><div class="exc_toggleable" ng-if="toggles['hex_bin'] == true"><p>Each digit represents a 4-bit chunk in binary.
+	  Consulting the table: 0xf = 1111, 0x0 = 0000, 0x0 = 0000,
+	  0xd = 1101, so 0xf00d = 1111000000001101.</p>
+	  </div><p><b>Looking at many hexadecimal numbers:</b> </p><div class="exc_toggle" ng-init="toggles['hex_list'] = false" ng-click="exc_toggle('hex_list')">Convert the above segment of the file into hex</div><div class="exc_toggleable" ng-if="toggles['hex_list'] == true"><p>We can play the game from the first exercise on
+	  all the bytes in the excerpt above</p>
+
+	  <div class="code"><pre>42 4d 3a 05
+00 00 00 00
+00 00 8a 00
+00 00 7c 00
+00 00 14 00
+00 00 14 00
+00 00 01 00
+18 00 00 00
+00 00 b0 04
+00 00 00 00
+00 00 00 00
+00 00 00 00
+00 00 00 00
+00 00 00 00
+ff 00 00 ff
+00 00 ff 00
+00 00 00 00
+00 ff 42 47
+52 73 80 c2
+f5 28 60 b8
+1e 15 20 85</pre></div>
+
+          This is at least a little more manageable.  
+	  </div></div></div><div class="section"><div id="sec_4_7"></div><div class="text"><div class="header">4.7: 
+	  8 bits--three different meanings?</div><p>Above we described several ways of interpreting sequences of
+      bits as binary numbers.  These interpretations were not inherent
+      to the bits themselves: The sequence 11000110 would be 198 as an
+      unsigned integer, -70 as an integer with sign bit, -58 as a
+      two's complement integer, 12.375 as a fixed-point number with
+      the point in the middle, and 1.546875 if considered as a
+      fixed-point number with the point after the first digit.  </p><p>When a computer stores this sequence, it doesn't
+      differentiate between these interpretations until it comes time
+      to, say, add two numbers.  For instance, if we wanted to add 2
+      to this number, then as an unsigned integer, we should get 200,
+      or 11001000.  Incidentally, if we add two to this as a two's
+      complement integer, we get the answer -56, which in two's
+      complement is also 11001000.  On the other hand, to add two to
+      the fixed-point number with the point in the middle, we get the
+      answer of 14.375, represented as 11100110, whereas we cannot
+      actually add 2 to the fixed-point number with the point after
+      the first digit, as this cannot represent any number larger than
+      11111111, or 1+127/128, or 1.9921875.  </p><p>The point is that the procedures for adding numbers vary
+      according to what representation you wish to use.  So if you're
+      telling the computer to add two numbers it has stored, you have
+      to know how the numbers are stored and tell it to use the
+      appropriate procedure for adding those two kinds of numbers.</p><p>To play around with the different possible interpretations of
+      the same sequence of bits, enter a sequence of bits into the box
+      at the top of this widget.  When you click the "[update]"
+      button, the various interpretations will be rendered when they
+      make sense (for example, if you enter a 13-bit number and
+      specify in the second row "8-bit two's complement integer",
+      interpreting a 13-bit representation as an 8-bit integer doesn't
+      make sense and an appropriate error will be displayed).</p><div id="binsim_super" ng-controller="BinSimController"><div class="binsim_input_div" ng-include="'/sim/bin/sim.html'"></div></div></div></div><div class="section"><div id="sec_4_8"></div><div class="text"><div class="header">4.8: 
+	  Integer operations on representations</div><div class="summary"><b>Summary: </b><p>We've been talking about ways to interpret sequences
+    of bits, but sequences of bits are just sequences of bits, and a
+    computer doesn't care how you the human are thinking about them.
+    The only time it actually matters how you interpret them is when
+    you go to add or otherwise operate on them.  </p>
+
+    <p>To add binary integers represented in unsigned or two's
+    complement, simply execute the grade-school "add each digit with
+    carrying" procedure except in binary.</p>
+
+    <p>To negate a two's complement integer, simply negate it and then
+    add 1 to the result.</p><br><br><b>Definitions: </b><a href="#def_concatenation">concatenation</a></div><p>When it comes time to talk about building computers, we will
+      want to have circuitry that performs arithmetic operations (as
+      these are one of the four things a computer actually does!)  And
+      to design such circuitry, it will be useful to have an idea of
+      how one might perform various arithmetic operations on binary
+      representations of numbers by hand.  In this section, we'll
+      stick to unsigned and two's complement integers.</p><p><b>Addition: </b>The procedure for adding numbers in binary
+      is actually the same as the procedure you likely learned in
+      grade school, where you add the digits in order from right to
+      left with carrying.  For example, 1+0 = 1, and 1+1 = 10.</p><p><b>Negation: </b> You get the two's complement integer
+      11101100.  How to quickly find the two's complement
+      representation of its negative?  Easy: First, flip all the bits
+      to their opposite values: 00010011, and then add 1 to that as in
+      the previous paragraph, for an answer of 00010100.  As a check,
+      the original representation 11101100 represented -20, and the
+      result of this procedure is indeed 20.  </p><p><b>Subtraction: </b>Now that we can negate and add, we can
+      compute x - y for two given two's complement representations by
+      simply negating y and then adding that to x.  </p><p><b>Concatenation: </b><span id="def_concatenation" class="definition"></span>If we have
+      two bytes stored somewhere, then each of these can only hold
+      values 0-255 (if being interpreted as unsigned integers).
+      However, despite the fact that they are stored separately, we
+      can think of these 8-bit quantities as together comprising one
+      big 16-bit quantity.  This is called <b>concatenation</b>, and
+      is denoted with a ":", as in "34:209" is the concatenation of
+      two bytes: 34, and 209.  We can always compute the concatenation
+      of two bytes X and Y by the formula
+
+      <div class="code"><pre>X:Y = X*256 + Y</pre></div>
+      </p></div></div><div class="section"><div id="sec_4_8_1"></div><div class="text"><div class="header">4.8.1: 
+	  Worked examples</div><p><b>Adding non-negative integers:</b> </p><div class="exc_toggle" ng-init="toggles['unsigned_add'] = false" ng-click="exc_toggle('unsigned_add')">Add the unsigned binary numbers
+	  10011011+11110001</div><div class="exc_toggleable" ng-if="toggles['unsigned_add'] == true">
+	    <p>We said that the same "add the digits with carrying"
+	    procedure as we learned in grade school applies here too.
+	    Let us then begin by remembering this procedure for adding
+	    decimal numbers: To add 987 + 155, we would line up the
+	    numbers:</p>
+
+	    <table><tr><td></td><td>9</td><td>8</td><td>7</td></tr>
+	    <tr><td>+</td><td>1</td><td>5</td><td>5</td></tr>
+	    </table>
+
+	    <p>Then we would add the right-most digits: 7+5 = 12, so we
+	    say that the answer is 2, but we carry the 1: </p>
+
+	    
+	    <table><tr><td></td><td>9</td><td>2<sup>+1</sup></td><td>7</td></tr>
+	    <tr><td>+</td><td>1</td><td>5</td><td>5</td></tr>
+	    <tr><td>=</td><td></td><td></td><td>2</td></tr>
+	    </table>
+
+	    <p>Then we add the next right-most digits, along with the
+	    carried 1: So we have 2+1+5 = 8.  This has no carry, so we
+	    can proceed normally:</p>
+	    
+	    <table><tr><td></td><td>9</td><td>2<sup>+1</sup></td><td>7</td></tr>
+	    <tr><td>+</td><td>1</td><td>5</td><td>5</td></tr>
+	    <tr><td>=</td><td></td><td>8</td><td>2</td></tr>
+	    </table>
+
+	    <p>Finally, we are left with 9+1, which is 10, or "0, and
+	    carry the 1":</p>
+	    	    
+	    <table><tr><td></td><td><sup>+1</sup></td><td>9</td><td>2<sup>+1</sup></td><td>7</td></tr>
+	    <tr><td>+</td><td></td><td>1</td><td>5</td><td>5</td></tr>
+	    <tr><td>=</td><td></td><td>0</td><td>8</td><td>2</td></tr>
+	    </table>
+
+	    <p>This final carrying created a fourth digit to add,
+	    which is just 1+0 = 1.</p>
+
+	    
+	    <table><tr><td></td><td><sup>+1</sup></td><td>9</td><td>2<sup>+1</sup></td><td>7</td></tr>
+	    <tr><td>+</td><td></td><td>1</td><td>5</td><td>5</td></tr>
+	    <tr><td>=</td><td>1</td><td>0</td><td>8</td><td>2</td></tr>
+	    </table>
+
+	    <p>So the answer is 1082.  </p>
+	    
+	    <p>Crucial to this procedure was our ability to quickly
+	    add single digits, e.g., 9+1 = 10, 7+5 = 12, and to
+	    recognize which of these involved carrying.  The way we
+	    learn how to do this is to more or less know by heart a
+	    giant table of how to add individual digits:</p>
+
+	    <table>
+	      <tr><td>+</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+	      <tr><td>0</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+	      <tr><td>1</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+	      <tr><td>2</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td></tr>
+	      <tr><td>3</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr>
+	      <tr><td>4</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+	      <tr><td>5</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td></tr>
+	      <tr><td>6</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+	      <tr><td>7</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr>
+	      <tr><td>8</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr>
+	      <tr><td>9</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td></tr>
+	    </table>
+
+	    <p>In binary, the procedure is exactly the same, except
+	    there are only two possible digits, so knowing how to add
+	    the individual digits is way easier: 0+0 = 0, 0+1 = 1, 1+0
+	    = 1, and 1+1 = 2, but remember that we are working in
+	    binary, so 2 is actually represented by 10.  When we're
+	    doing addition, this will be "0, and carry the 1".</p>
+
+	    <p>So let us do the given addition problem:
+	    10011011+11110001.  We set it up exactly as with the
+	    decimal problem:</p>
+
+	    
+	    <table>
+	      <tr><td></td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+	      <tr><td>+</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+	      <tr><td>=</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+	    </table>
+
+	    <p>Adding the right-most digits is 1+1 = 10, i.e., "0 and
+	    carry the 1":</p>
+	    
+	    <table>
+	      <tr><td></td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1<sup>+1</sup></td><td>1</td></tr>
+	      <tr><td>+</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+	      <tr><td>=</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td></tr>
+	    </table>
+
+	    <p>Then adding the next digits gives 1+1+0 = 10 = "0, carry
+	    the 1": </p>
+	    
+	    <table>
+	      <tr><td></td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0<sup>+1</sup></td><td>1<sup>+1</sup></td><td>1</td></tr>
+	      <tr><td>+</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+	      <tr><td>=</td><td></td><td></td><td></td><td></td><td></td><td></td><td>0</td><td>1</td></tr>
+	    </table>
+
+	    <p>Adding the next digits (with the carry) is 0+1+0 = 1 with
+	    no carry: </p>
+
+	    <table>
+	      <tr><td></td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0<sup>+1</sup></td><td>1<sup>+1</sup></td><td>1</td></tr>
+	      <tr><td>+</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+	      <tr><td>=</td><td></td><td></td><td></td><td></td><td></td><td>1</td><td>0</td><td>1</td></tr>
+	    </table>
+
+	    <p>We proceed like this all the way down and get:</p>
+
+	    
+	    <table>
+	      <tr><td></td><td>1<sup>+1</sup></td><td>0<sup>+1</sup></td><td>0<sup>+1</sup></td><td>1</td><td>1</td><td>0<sup>+1</sup></td><td>1<sup>+1</sup></td><td>1</td></tr>
+	      <tr><td>+</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+	      <tr><td>=</td><td>11</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+	    </table>
+
+	    <p>For a final answer of 110001101.</p>
+
+	    <p>If this procedure were happening inside a computer,
+	    i.e., with bytes, then this answer wouldn't actually fit in
+	    a memory space!  What the computer would do in this case
+	    is not store the highest bit in the memory, so the answer
+	    would be just 10001101, and then elsewhere it would record
+	    the most significant bit of the answer.  </p>
+
+	    <p>This is a fundamental fact about using
+	    computers--memories always have fixed width.  If the
+	    memories are bytes, then they can only store numbers
+	    0-255.  In this case, we are adding the numbers 155+241,
+	    whose answer is much larger than 255 so it doesn't fit in
+	    a byte.  So the computer would store the least significant
+	    8 bits of the answer: 10001101, or 141, and would store
+	    the most significant bit, which didn't fit, in a special
+	    location (the "status register", as we shall learn
+	    later).</p>
+	  </div><p><b>Adding integers:</b> </p><div class="exc_toggle" ng-init="toggles['signed_add'] = false" ng-click="exc_toggle('signed_add')">Add the 8-bit two's complement binary
+	  representations 00101011+11110001</div><div class="exc_toggleable" ng-if="toggles['signed_add'] == true">
+	    <p>We said that the addition procedures for two's
+	    complement and for unsigned binary representations are
+	    actually exactly the same, so we run through exactly the
+	    same procedure as above:</p>
+
+	    <table>
+	      <tr><td></td><td>0<sup>+1</sup></td><td>0<sup>+1</sup></td><td>1</td><td>0</td><td>1</td><td>0<sup>+1</sup></td><td>1<sup>+1</sup></td><td>1</td></tr>
+	      <tr><td>+</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+	      <tr><td>=</td><td>10</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+	    </table>
+
+	    <p>For a final answer of 100011100.</p>
+	    
+	    <p>To consider whether this makes sense, let us think
+	    about these binary representations in decimal: 00101011 is
+	    43, and 11110001 is -15.  The answer is 100011100, but
+	    remember that the only thing that gets stored is the last
+	    8 bits, or 00011100, which represent the number 28.  So in
+	    fact this is the correct answer for the problem 43+(-15).
+	    </p>
+	  </div><p><b>Negating integers:</b> </p><div class="exc_toggle" ng-init="toggles['neg'] = false" ng-click="exc_toggle('neg')">Compute the negative of the 8-bit two's complement
+	  representation 00111100</div><div class="exc_toggleable" ng-if="toggles['neg'] == true">
+	    <p>We said that the procedure for negating a two's
+	    complement representation was to first flip all the 0s to 1s and
+	    1s to 0s, and then to add 1 to the result.  When we flip
+	    all the bits, we get 11000011.  Then adding 1 to this is </p>
+
+	    <table>
+	      <tr><td></td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0<sup>+1</sup></td><td>1<sup>+1</sup></td><td>1</td></tr>
+	      <tr><td>+</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td></tr>
+	      <tr><td>=</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+	    </table>
+
+	    <p>For a final answer of 11000100.</p>
+	    
+	    <p>As a sanity check, 00111100 represents the number 60,
+	    and 11000100 represents (also as an 8-bit two's complement
+	    representation) -60, exactly as we'd have hoped.  </p>
+	  </div><p><b>Subtracting integers:</b> </p><div class="exc_toggle" ng-init="toggles['sub'] = false" ng-click="exc_toggle('sub')">Subtract the two binary
+	  representations 10011110 - 00000011</div><div class="exc_toggleable" ng-if="toggles['sub'] == true">
+	    <p>We know how to add signed representations and we know
+	    how to negate, so all we should have to do is negate
+	    00000011 and then add that to 10011110.  So off we go:
+	    </p>
+
+	    <p>We first flip all the bits: 11111100, and then we add
+	    1:</p>
+	    
+	    <table>
+	      <tr><td></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+	      <tr><td>+</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td></tr>
+	      <tr><td>=</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+	    </table>
+
+	    <p>Which conveniently happens to involve no carries for
+	    this particular example.  </p>
+
+	    <p>Next we simply perform the usual addition procedure on
+	    10011110 + 11111101: </p>
+
+	    <table>
+	      <tr><td> </td><td>1<sup>+1</sup></td><td>0<sup>+1</sup></td><td>0<sup>+1</sup></td><td>1<sup>+1</sup></td><td>1<sup>+1</sup></td><td>1</td><td>1</td><td>0</td></tr>
+	      <tr><td>+</td><td>1 </td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+	      <tr><td>=</td><td>11</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+	    </table>
+
+	    <p>So the answer should be the least significant 8 bits of
+	    this: 10011011.  As a sanity check, the original problem
+	    was 158 - 3 and the answer we've come out with is indeed
+	    155.  Huzzah!</p>
+	  </div><p><b>Concatenating integers:</b> </p><div class="exc_toggle" ng-init="toggles['concat'] = false" ng-click="exc_toggle('concat')">Compute 34:209</div><div class="exc_toggleable" ng-if="toggles['concat'] == true">
+	    <p>First, we write down the binary representations of
+	    these numbers: 34 is represented as 00100010, and 209 as
+	    11010001.  The concatenation of these is then formed by
+	    just placing them one after the other to form a 16-bit
+	    number: 0010001011010001.  This represents the number
+	    8913.</p>
+
+	    <p>As advertised, this is computed successfully by the
+	    formula 34*256 + 209, which is indeed 8913.</p>
+	  </div></div></div><div class="section"><div id="sec_4_9"></div><div class="text"><div class="header">4.9: 
+	  Boolean operations</div><div class="summary"><b>Summary: </b>We sometimes want to think of individual bits as
+    true/false indicators rather than as digits of a larger binary
+    number.  When we do this, we can perform logical operations like
+    "and" and "or" on individual bits.  These are called "boolean
+    operations".<br><br><b>Definitions: </b><a href="#def_boolean%20logic">boolean logic</a>, <a href="#def_truth%20table">truth table</a></div><p>There is a further way to think about sequences of bits,
+      namely by thinking about each individual bit separately, rather
+      than as some part of a larger number.  An individual bit on its
+      own can only either be 0 or 1, of course, so we can and often
+      will think of it as representing a truth value--0 being "false"
+      and 1 being "true".  Then a sequence of 8 bits can simply
+      describe the truth of 8 separate assertions; for example 11000100 means
+      that assertions 1, 2, and 6 are true and the rest are false.
+      </p><p><span id="def_boolean logic" class="definition"></span>This perspective is called
+      <b>boolean logic</b>, and it has its own set of operations that
+      we will now discuss.</p><p><b>AND: </b> For instance, if I have information about the
+      truth of two statements--statement A and statement B, I can
+      inquire about the combined statement "A is true and B is also
+      true".  If I have two bits, one for each of my statements, then
+      I can perform the AND operation to get the truth value of the
+      combined statement.  This operation is generally denoted by the
+      symbol "&amp;", and for two bits x and y, the value of x &amp; y
+      is "true" (i.e., 1) if both x and y are true (i.e., 1), and
+      "false" (0) otherwise.</p><p><span id="def_truth table" class="definition"></span>It is common to see such operations
+      described with a table like so, called a <b>truth table</b>:
+    
+
+    <table><tr><td>x</td><td>y</td><td>x &amp; y</td></tr>
+    <tr><td>0</td><td>0</td><td><b>0</b></td></tr>
+    <tr><td>0</td><td>1</td><td><b>0</b></td></tr>
+    <tr><td>1</td><td>0</td><td><b>0</b></td></tr>
+    <tr><td>1</td><td>1</td><td><b>1</b></td></tr>
+    </table>
+
+    So, for example, 0 &amp; 1 can be read off from the first column
+      and second row of this table as being 0.</p><p>There are four boolean logic operations that we wish to
+      describe here (though there are of course as many operations as
+      there are truth tables you can write down): "and", "or", "xor",
+      and "not".  We just discussed "and"</p><p><b>OR: </b> This operation is written with a vertical "pipe"
+      character: |, and corresponds to asking whether it's true that
+      either statement A is true or statement B is true.  This
+      combined statement is of course true provided at least one of
+      statement A or statement B is true.  This manifests as saying
+      that x | y is 1 if either x is 1 or y is 1, and 0 otherwise.
+      This gives the truth table:
+      
+
+      <table><tr><td>x</td><td>y</td><td>x | y</td></tr>
+      <tr><td>0</td><td>0</td><td><b>0</b></td></tr>
+      <tr><td>0</td><td>1</td><td><b>1</b></td></tr>
+      <tr><td>1</td><td>0</td><td><b>1</b></td></tr>
+      <tr><td>1</td><td>1</td><td><b>1</b></td></tr>
+      </table>
+      </p><p><b>XOR: </b> Closely related to OR, the XOR or "exclusive-or"
+      operation is written with a "caret" character: ^ (not to be
+      confuse with the same character's occasional use to denote
+      exponentiation), and corresponds to asking whether it's true
+      that either statement A is true or statement B is true, <i>but
+      not both</i>.  This combined statement is true provided exactly
+      one of statement A or statement B is true.  This manifests as
+      saying that x ^ y is 1 if x and y have opposite values, and 0
+      otherwise.  This gives the truth table:
+      
+
+      <table><tr><td>x</td><td>y</td><td>x ^ y</td></tr>
+      <tr><td>0</td><td>0</td><td><b>0</b></td></tr>
+      <tr><td>0</td><td>1</td><td><b>1</b></td></tr>
+      <tr><td>1</td><td>0</td><td><b>1</b></td></tr>
+      <tr><td>1</td><td>1</td><td><b>0</b></td></tr>
+      </table>
+      </p><p><b>NOT: </b>Unlike the previous operations, which operated on
+      two bits, the not operation operates on a single bit and simply
+      flips its value to be the opposite of what it was before.  NOT
+      of a bit called x is written ~x, and can be described with a
+      very simple "truth table" thus:
+      
+      <table><tr><td>x</td><td>~x</td></tr>
+      <tr><td>0</td><td><b>1</b></td></tr>
+      <tr><td>1</td><td><b>0</b></td></tr>
+      </table>
+      </p><p>Computers rarely work on single bits at a time, however.  So
+      in practice, we can extend these operations to acting on whole
+      bytes at a time instead of individual bits by saying that to
+      take two bytes x and y and compute x &amp; y, we simply compute
+      the "and" of the first bits and make that the first bit of the
+      answer.  Then compute the AND of the second bits and make that
+      the second bit of the answer, and so on.  </p><p>There are a few operations that act on sequences of bits
+      while still treating them as boolean values: The "shift left"
+      (written &gt;&gt; 1) and "shift right" (&lt;&lt; 1) operators simply
+      take all the bits and shift them one slot to the right or left
+      (respectively).  </p><p>So, for example, 11000110 &gt;&gt; 1 = 01100011 and 11000110
+      &lt;&lt; 1 = 10001100.</p></div></div><div class="section"><div id="sec_4_9_1"></div><div class="text"><div class="header">4.9.1: 
+	  Relation between boolean and arithmetic
+      operations</div><p>Despite being conceptually very different things, there are
+	some relations between boolean operations and arithmetic ones.
+	For example, an unsigned integer represented in binary is even
+	only if its last digit is 0, and odd otherwise.  Thus to test
+	whether a number is even or odd, we don't have to do the
+	rather complicated "%" operation we introduced in chapter 2,
+	but may simply "and" it with 00000001.  If the result is 1,
+	then the last digit was a 1 and the number was therefore odd,
+	and if the result is 0, then the original number was even.</p><p>There are a couple of tricks like this that are sometimes
+	used to optimize code.  We leave these here for you to think
+	about and test your understanding on:
+	<ul>
+	  <li>"shift left" on an unsigned binary number will multiply
+	  that number by 2.  </li>
+	  <li>For any sequence of bits x, x ^ x = 0 always. </li>
+	  <li>To negate an integer called x represented with a sign
+	  bit, we can do x = x ^ 10000000.</li>
+	</ul>
+	</p></div></div><div class="section"><div id="sec_4_9_2"></div><div class="text"><div class="header">4.9.2: 
+	  Worked examples</div><p><b>AND:</b> </p><div class="exc_toggle" ng-init="toggles['and_comp'] = false" ng-click="exc_toggle('and_comp')">Compute 01110101 &amp; 11000110.</div><div class="exc_toggleable" ng-if="toggles['and_comp'] == true">
+	  <p>The answer is 01000100, computed as follows:</p>
+      
+	  <p>
+	    <table>
+	      <tr><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+	      <tr><td>AND</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+	      <tr><td>=</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+	    </table>
+	  </p>
+	</div><p><b>OR:</b> </p><div class="exc_toggle" ng-init="toggles['or_comp'] = false" ng-click="exc_toggle('or_comp')">Compute 01110101 | 11000110.</div><div class="exc_toggleable" ng-if="toggles['or_comp'] == true">
+	  <p>The answer is 11110111, computed as follows:</p>
+      
+	  <p>
+	    <table>
+	      <tr><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+	      <tr><td>OR</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+	      <tr><td>=</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+	    </table>
+	  </p>
+	</div><p><b>XOR:</b> </p><div class="exc_toggle" ng-init="toggles['xor_comp'] = false" ng-click="exc_toggle('xor_comp')">Compute 01110101 | 11000110.</div><div class="exc_toggleable" ng-if="toggles['xor_comp'] == true">
+	  <p>The answer is 10110011, computed as follows:</p>
+      
+	  <p>
+	    <table>
+	      <tr><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+	      <tr><td>XOR</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+	      <tr><td>=</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+	    </table>
+	  </p>
+	  </div><p><b>NOT:</b> </p><div class="exc_toggle" ng-init="toggles['not_comp'] = false" ng-click="exc_toggle('not_comp')">Compute
+	~01110101.</div><div class="exc_toggleable" ng-if="toggles['not_comp'] == true">
+	
+	  <p>The answer is 10001010, computed by replacing every 0 with
+	  a 1 and every 1 with a 0.</p>
+	</div></div></div><div class="section"><div id="sec_4_10"></div><div class="text"><div class="header">4.10: 
+	  Exercises</div><div class="hwq"><div class="hwnum"><b>4.1: </b></div><div class="hwcontent">Convert the following numbers to binary(unsigned) and then hexadecimal:
+<ol>
+<li>12</li>
+<li>35</li>
+<li>67</li>
+<li>5</li>
+<li>129</li>
+</ol></div></div><div class="hwq"><div class="hwnum"><b>4.2: </b></div><div class="hwcontent">Convert the following unsigned binary numbers to decimal:
+<ol>
+<li>11111</li>
+<li>11011</li>
+<li>01</li>
+<li>1111011111</li>
+<li>10101010</li>
+<li>001101</li>
+</ol></div></div><div class="hwq"><div class="hwnum"><b>4.3: </b></div><div class="hwcontent">Convert these negative decimal numbers to binary(two’s complement):
+<ol>
+<li>-21</li>
+<li>-12</li>
+<li>-1</li>
+<li>-9</li>
+<li>-45</li>
+</ol>
+</div></div><div class="hwq"><div class="hwnum"><b>4.4: </b></div><div class="hwcontent">In this section we performed the operation y = x + 5 using unary representation (BBs). Intuitively, you may have assumed that we could create the “y” container with 5 BBs and then simply dump the contents of the “x” container into it as well. However, instead, we went through all the trouble of weighing out the same number of BBs. Why is all this necessary? What is wrong with dumping x’s contents into y?
+</div></div><div class="hwq"><div class="hwnum"><b>4.5: </b></div><div class="hwcontent"> As you have seen in the last few chapters, there are many ways to interpret the same sequence of zeros and ones. For example, the byte 11010111 has different values when represented as unsigned vs. signed. Fill in the representations for this byte 11010111
+<ol>
+<li>unsigned</li>
+<li>signed</li>
+<li>sign bit</li>
+<li>two's complement</li>
+</ol></div></div><div class="hwq"><div class="hwnum"><b>4.6: </b></div><div class="hwcontent">What is the role of the MSBs in both of the signed representations from this chapter?
+</div></div><div class="hwq"><div class="hwnum"><b>4.7: </b></div><div class="hwcontent">Convert the following hexadecimal number to its floating point value: 7D00 (Note: there is no direct way to do this; you must first translate the hexadecimal number into an intermediate binary number in order to do the floating point conversion.)
+</div></div><div class="hwq"><div class="hwnum"><b>4.8: </b></div><div class="hwcontent">What is the difference between a signed bit representation and a two’s complement representation in binary?
+</div></div><div class="hwq"><div class="hwnum"><b>4.9: </b></div><div class="hwcontent">What are advantages of floating point representation over fixed point representation?
+</div></div><div class="hwq"><div class="hwnum"><b>4.10: </b></div><div class="hwcontent">How are binary numbers translated into hexadecimal numbers?
+</div></div><div class="hwq"><div class="hwnum"><b>4.11: </b></div><div class="hwcontent">What are the hexadecimal numbers and what decimal numbers do they correspond to?
+</div></div><div class="hwq"><div class="hwnum"><b>4.12: </b></div><div class="hwcontent">(4.1.1) Why don’t we use Unary representation for storing information in computers?
+</div></div><div class="hwq"><div class="hwnum"><b>4.13: </b></div><div class="hwcontent">(4.1.1) What would be the Unary representation of the decimal number 7?
+</div></div><div class="hwq"><div class="hwnum"><b>4.14: </b></div><div class="hwcontent">(4.1.2) Define byte, word, and nibble.
+</div></div><div class="hwq"><div class="hwnum"><b>4.15: </b></div><div class="hwcontent">(4.1.2) What is the MSB in the binary number 1010? What’s the LSB?
+</div></div><div class="hwq"><div class="hwnum"><b>4.16: </b></div><div class="hwcontent">(4.1.2) How many non-negative integers can be represented by a nibble? Which is the largest of these integers? 
+</div></div><div class="hwq"><div class="hwnum"><b>4.17: </b></div><div class="hwcontent"> (4.1.2) Assuming non-negative integer binary representation, which decimal number does 10010 equal to?
+</div></div><div class="hwq"><div class="hwnum"><b>4.18: </b></div><div class="hwcontent">(4.1.3) Why is two’s complement preferred over sign-magnitude to denote negative integers?
+</div></div><div class="hwq"><div class="hwnum"><b>4.19: </b></div><div class="hwcontent">(4.1.3) What is the smallest (most negative) integer you can represent by a nibble, when using two’s complement representation? What if you use signed-magnitude representation? What about the largest integer in either case? How many integers in total in either case?
+</div></div><div class="hwq"><div class="hwnum"><b>4.20: </b></div><div class="hwcontent">How would you write the following in 2’s complement notation: +39, - 39?
+</div></div><div class="hwq"><div class="hwnum"><b>4.21: </b></div><div class="hwcontent">(4.1.4) How does fixed-point representation of real numbers vary from floating-point representation?
+</div></div><div class="hwq"><div class="hwnum"><b>4.22: </b></div><div class="hwcontent">(4.1.4) What decimal number does 101.101 represent? (Note this is a fixed point representation)
+</div></div><div class="hwq"><div class="hwnum"><b>4.23: </b></div><div class="hwcontent">(4.1.4) Assuming Floating point representation mentioned in the book, what decimal number do the following represent : 1,11000,0010000000   and    1,00110,0110000000    (The commas have been added just to make reading the various components of the representation easier)
+</div></div><div class="hwq"><div class="hwnum"><b>4.24: </b></div><div class="hwcontent">Assuming two’s complement notation, perform the following:
+<ol>
+<li>01000011 + 00100011</li>
+<li>11000011 + 00100011</li>
+<li>11000011 + 10100011</li>
+<li>01100011 + 01100011</li>
+<li>01000011 - 00100011</li>
+<li>11000011 - 00100011</li>
+<li>11000011 - 10100011</li>
+<li>00100011 - 11000011</li>
+</ol>
+<p>Which of the above would cause an overflow, assuming the memory width is 8 bits.</p>
+</div></div><div class="hwq"><div class="hwnum"><b>4.25: </b></div><div class="hwcontent">Convert the following numbers and perform the functions
+<ol>
+<li>3 + 4</li>
+<li>5 - 4</li>
+<li>9 - 2</li>
+<li>13 - 5</li>
+<li>4 - 14</li>
+<li>4 + 9</li>
+</ol></div></div><div class="hwq"><div class="hwnum"><b>4.26: </b></div><div class="hwcontent">The number 183 can be interpreted as a decimal or hexadecimal number, but not binary. Why is this? Convert the decimal number 183 to hexadecimal, and then convert hexadecimal number 183 to decimal.
+</div></div><div class="hwq"><div class="hwnum"><b>4.27: </b></div><div class="hwcontent">What is the sum 11010011 + 01001010 in unsigned binary? In two’s complement binary?
+</div></div><div class="hwq"><div class="hwnum"><b>4.28: </b></div><div class="hwcontent">How are two’s complement numbers negated? Which arithmetic operations are easily allowed with these numbers?
+</div></div><div class="hwq"><div class="hwnum"><b>4.29: </b></div><div class="hwcontent">Construct a truth table for a NAND gate
+</div></div><div class="hwq"><div class="hwnum"><b>4.30: </b></div><div class="hwcontent">Construct a truth table for a NOR gate
+</div></div><div class="hwq"><div class="hwnum"><b>4.31: </b></div><div class="hwcontent">This chapter introduces some ways to utilize the binary operations we learned to optimize code. The first trick is to left shift instead of multiplying by 2. This trick is related to the fact that every digit in the binary number represents a different power of 2, and you could make a similar conclusion about left-shifting decimal numbers. Write the binary and decimal values of each number below to see how binary and decimal are related to this left-shift trick:
+<p>00000001</p>
+<p>00000010</p>
+<p>00000100</p>
+<p>00001000</p>
+<p>00010000</p>
+<p>00100000</p>
+<p>01000000</p>
+<p>10000000</p>
+</div></div><div class="hwq"><div class="hwnum"><b>4.32: </b></div><div class="hwcontent">Now it should be obvious why/how the left-shift trick works. What effect does left shifting have on decimal numbers? How does this relate to the place values of each representation?
+</div></div><div class="hwq"><div class="hwnum"><b>4.33: </b></div><div class="hwcontent">Another trick from this section is that x^x = 0 always, for any sequence x. Using the XOR truth table from the previous section, perform this trick for the following sequences and explain why this is always true.
+<ol>
+<li>0</li>
+<li>1</li>
+<li>0000</li>
+<li>1111</li>
+<li>01010101</li>
+</ol></div></div><div class="hwq"><div class="hwnum"><b>4.34: </b></div><div class="hwcontent">The last trick from this section is that you can negate an integer called x represented with a sign bit, by changing its value to x ^ 10000000. How does this operation work when x’s sign bit is 0 as opposed to 1? To answer this, compute x ^ 10000000 for the following x values (and convert all signed binary values to decimal when you’re done):
+<ol>
+<li>x = 10101010</li>
+<li>x = 01010101</li>
+</ol></div></div><div class="hwq"><div class="hwnum"><b>4.35: </b></div><div class="hwcontent">What is 11010011 &amp; 01001010, using the boolean operator “and”?</div></div><div class="hwq"><div class="hwnum"><b>4.36: </b></div><div class="hwcontent">What is 01001101 | 01100101, using the boolean operator “or”?</div></div><div class="hwq"><div class="hwnum"><b>4.37: </b></div><div class="hwcontent">What is 10100111 ^ 01111001, using the boolean operator “xor”?</div></div><div class="hwq"><div class="hwnum"><b>4.38: </b></div><div class="hwcontent">What is ~10011110, using the boolean operator “not”? </div></div><div class="hwq"><div class="hwnum"><b>4.39: </b></div><div class="hwcontent">Write the truth tables for AND, OR, and XOR gates (two inputs), and the NOT gate (1 input).</div></div><div class="hwq"><div class="hwnum"><b>4.40: </b></div><div class="hwcontent">Which gate gives an output one only when exactly one of the two inputs is 1?</div></div><div class="hwq"><div class="hwnum"><b>4.41: </b></div><div class="hwcontent">What would the following result in? (When x appears, assume it is an 8-bit binary number)
+<ol>
+<li>10010001&gt;&gt;2</li>
+<li>10010001 | 01011001</li>
+<li>10010001 &amp; 01011001</li>
+<li>10010001 ^ 01011001</li>
+<li>~10010001</li>
+<li>x &amp; x</li>
+<li>x | x</li>
+<li>x &amp; ~x</li>
+<li>x | ~x</li>
+<li>x ^ x</li>
+<li>x ^ ~x</li>
+</ol></div></div></div></div></div></div></body></html>
