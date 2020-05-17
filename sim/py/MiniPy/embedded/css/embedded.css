@@ -1,0 +1,11 @@
+/* special styles for embedded simulators */
+
+.minipy-editor {
+	width: 100%;
+	height: 384px;
+	margin: 32px 0;
+	padding: 0;
+	position: relative;
+	display: inline-block;
+	font-family: "Roboto", "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+}

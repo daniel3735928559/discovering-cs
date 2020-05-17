@@ -1,19 +1,60 @@
+<!doctype html>
 <html>
-  <head>
-    <title>Python</title>
-    <link rel="stylesheet" type="text/css" href="/sim/py/sim.css" />
-    <link rel="stylesheet" href="/sim/cm/codemirror.css" />
-    <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
-    <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
-    <script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
-    <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
-    <script type="text/javascript" src="/sim/py/expr_ng.js"></script>
-    <script type="text/javascript" src="/sim/py/sim.js"></script>
-  </head>
-  <body ng-app="app">
-      <div style="width:100%;height:100%;" ng-controller="PySimController">
-	<div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {'big':''}">
-	</div>
-      </div>
-  </body>
+	<head>
+		<title>Learn Python</title>
+
+		<link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/codemirror.css">
+		<link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/theme/neat.css">
+
+		<link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/main.css">
+		<link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/fullpage/css/fullpage.css">
+	</head>
+	<body>
+		<div class="mp-controls">
+			<button class="mp-control-button" data-command="run"><i class="icon"></i>Run</button>
+			<button class="mp-control-button" data-command="validate"><i class="icon"></i>Check</button>
+			<button class="mp-control-button" data-command="step"><i class="icon"></i>Step</button>
+			<button class="mp-control-button mp-button-disabled" data-command="stop"><i class="icon"></i>Stop</button>
+			<button class="mp-control-button" data-command="reset"><i class="icon"></i>Reset</button>
+		</div>
+		<div class="mp-program-select">
+			<ul></ul>
+			<div class="mp-program-description"></div>
+		</div>
+		<div class="mp-debugger">
+			<div class="mp-editor mp-panel-bordered">
+				<div class="mp-panel-description"><i class="icon"></i>Python Mini</div>
+			</div>
+			<div class="mp-runtime">
+				<div class="mp-wrapper">
+					<div class="mp-scope mp-panel-bordered">
+						<div class="mp-panel-description">Scope</div>
+						<div class="mp-shadow-top"></div>
+						<div class="mp-shadow-bottom"></div>
+						<ul></ul>
+					</div>
+					<div class="mp-stdout mp-panel-bordered">
+						<div class="mp-panel-description">Output</div>
+						<div class="mp-shadow-top"></div>
+						<div class="mp-shadow-bottom"></div>
+						<ul></ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 3rd party libraries -->
+		<script src="/sim/py/MiniPy/libs/jQuery/jquery.min.js"></script>
+		<script src="/sim/py/MiniPy/libs/CodeMirror/codemirror.js"></script>
+		<script src="/sim/py/MiniPy/libs/CodeMirror/mode/python/python.js"></script>
+
+		<!-- the magic (ideally) -->
+		<script src="/sim/py/MiniPy/libs/minipy.js"></script>
+
+		<!-- page-specific scripts -->
+		<script src="/sim/py/MiniPy/js/banner.js"></script>
+		<script src="/sim/py/MiniPy/js/state.js"></script>
+		<script src="/sim/py/MiniPy/js/error.js"></script>
+		<script src="/sim/py/MiniPy/fullpage/js/fullpage.js"></script>
+	</body>
 </html>

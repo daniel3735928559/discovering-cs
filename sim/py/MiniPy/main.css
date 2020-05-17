@@ -1,0 +1,433 @@
+/* main simulator styles */
+
+.mp-controls {
+	width: 100%;
+	height: 64px;
+	background-color: #313337;
+	cursor: default;
+}
+
+.mp-controls .mp-control-button {
+	height: 40px;
+	margin: 12px 16px 12px 16px;
+	padding: 0 56px 0 8px;
+	background: none;
+	border-style: none;
+	font-size: 14px;
+	font-family: inherit;
+	color: rgba(255, 255, 255, 0.8);
+	cursor: pointer;
+}
+
+.mp-controls .mp-control-button[data-command="reset"] {
+	float: right;
+	padding-right: 16px;
+}
+
+.mp-controls .mp-control-button:hover {
+	color: white;
+}
+
+.mp-controls .mp-control-button:focus {
+	outline: none;
+}
+
+.mp-controls .mp-control-button.mp-button-disabled {
+	color: #78797b;
+	cursor: default;
+}
+
+.mp-controls .mp-control-button.mp-button-disabled:hover {
+	color: #78797b;
+	cursor: default;
+}
+
+.mp-controls .mp-control-button .icon {
+	width: 18px;
+	height: 18px;
+	margin: 0 8px 0 0;
+	float: left;
+	background-image: url("/sim/py/MiniPy/static/sprite.png");
+	background-size: 90px 72px;
+	background-repeat: no-repeat;
+}
+
+.mp-controls .mp-control-button[data-command="run"] .icon {
+	background-position: 0 0;
+}
+
+.mp-controls .mp-control-button[data-command="run"].mp-button-disabled .icon {
+	background-position: 0 -54px;
+}
+
+.mp-controls .mp-control-button[data-command="validate"] .icon {
+	background-position: -54px 0;
+}
+
+.mp-controls .mp-control-button[data-command="validate"].mp-button-disabled .icon {
+	background-position: -54px -54px;
+}
+
+.mp-controls .mp-control-button[data-command="step"] .icon {
+	background-position: -18px 0;
+}
+
+.mp-controls .mp-control-button[data-command="step"].mp-button-disabled .icon {
+	background-position: -18px -54px;
+}
+
+.mp-controls .mp-control-button[data-command="stop"] .icon {
+	background-position: -36px 0;
+}
+
+.mp-controls .mp-control-button[data-command="stop"].mp-button-disabled .icon {
+	background-position: -36px -54px;
+}
+
+.mp-controls .mp-control-button[data-command="reset"] .icon {
+	background-position: -72px -36px;
+}
+
+.mp-controls .mp-control-button[data-command="reset"].mp-button-disabled .icon {
+	background-position: -72px -54px;
+}
+
+.mp-debugger {
+	position: absolute;
+	top: 80px;
+	right: 8px;
+	left: 8px;
+	bottom: 16px;
+}
+
+.mp-debugger .mp-panel-bordered {
+	background-color: white;
+	border: 1px solid rgb(191, 191, 191);
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+.mp-debugger .mp-panel-description {
+	position: absolute;
+	top: 12px;
+	right: 16px;
+	font-size: 13px;
+	color: silver;
+	z-index: 100;
+}
+
+.mp-debugger .mp-editor {
+	width: 50%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: -8px;
+	font-size: 13px;
+	overflow: hidden;
+}
+
+.mp-debugger .mp-editor.locked .mp-panel-description {
+	width: 88px;
+	text-align: right;
+}
+
+.mp-debugger .mp-editor.locked .mp-panel-description .icon {
+	width: 16px;
+	height: 16px;
+	float: left;
+	background-image: url("/sim/py/MiniPy/static/sprite.png");
+	background-size: 80px 64px;
+	background-position: -64px 0;
+	background-repeat: no-repeat;
+}
+
+.mp-debugger .mp-editor .CodeMirror {
+	height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	font-family: "Source Code Pro", monospace;
+	font-size: 13px;
+	cursor: text;
+}
+
+.mp-debugger .mp-editor .CodeMirror .CodeMirror-selected {
+	background-color: rgba(49, 51, 55, 0.2);
+}
+
+.mp-debugger .mp-editor .CodeMirror .CodeMirror-lines {
+	padding: 12px 0;
+}
+
+.mp-debugger .mp-editor .CodeMirror .CodeMirror-lines .CodeMirror-line {
+	height: 20px;
+	padding-left: 8px;
+	line-height: 20px;
+}
+
+.mp-debugger .mp-editor .CodeMirror .CodeMirror-linenumber {
+	padding-right: 8px;
+	font-size: 10px;
+	line-height: 19px;
+}
+
+.mp-debugger .mp-editor .mp-active-line {
+	background-color: #e0e0e0;
+}
+
+.mp-debugger .mp-editor .mp-active-line-right {
+	border-radius: 0 4px 4px 0;
+}
+
+.mp-debugger .mp-editor .mp-active-line-left {
+	border-radius: 4px 0 0 4px;
+}
+
+.mp-debugger .mp-editor .mp-error-token {
+	background-color: #e74c3c;
+	color: white !important;
+	border-radius: 4px;
+}
+
+.mp-debugger .mp-editor .mp-banner {
+	height: 24px;
+	padding: 12px 24px 12px 64px;
+	display: inline-block;
+	position: absolute;
+	right: 16px;
+	bottom: 16px;
+	border-radius: 4px;
+	box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.4);
+	font-size: 16px;
+	line-height: 24px;
+	text-align: right;
+	color: white;
+	z-index: 1000;
+}
+
+.mp-debugger .mp-editor .mp-banner .icon {
+	width: 36px;
+	height: 36px;
+	position: absolute;
+	top: 6px;
+	left: 12px;
+	background-image: url("/sim/py/MiniPy/static/sprite.png");
+	background-size: 90px 72px;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-generic {
+	background-color: #313337;
+	padding-left: 24px;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-generic .icon {
+	display: none;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-ok {
+	background-color: #27ae60;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-ok .icon {
+	background-position: -36px -18px;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-warning {
+	background-color: #f1c40f;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-warning .icon {
+	background-position: 0 -18px;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-warning::before {
+	content: "Warning: ";
+	font-weight: bold;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-error {
+	background-color: #e74c3c;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-error .icon {
+	background-position: 0 -18px;
+}
+
+.mp-debugger .mp-editor .mp-banner.mp-banner-type-error::before {
+	content: "Error: ";
+	font-weight: bold;
+}
+
+.mp-debugger .mp-runtime {
+	height: 100%;
+	width: 50%;
+	position: absolute;
+	top: 0;
+	right: -8px;
+}
+
+.mp-debugger .mp-runtime .mp-wrapper {
+	position: absolute;
+	top: 0;
+	right: 8px;
+	bottom: 0;
+	left: 8px;
+}
+
+.mp-debugger .mp-runtime .mp-scope > ul, .mp-stdout > ul {
+	margin: 0;
+	padding: 44px 0 8px 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	list-style: none;
+	overflow-y: scroll;
+}
+
+.mp-debugger .mp-runtime ul li {
+	height: 24px;
+	margin: 0 8px;
+	padding: 0;
+	position: relative;
+	list-style: none;
+	font: 13px/24px "Source Code Pro", monospace;
+}
+
+.mp-debugger .mp-runtime ul li.mutating {
+	background-color: #e0e0e0;
+	border-radius: 4px;
+}
+
+.mp-debugger .mp-runtime ul li .value {
+	position: absolute;
+	top: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.mp-debugger .mp-runtime .mp-stdout ul li .value {
+	right: 70px;
+	left: 0;
+}
+
+.mp-debugger .mp-runtime .mp-scope ul li .value {
+	left: 70px;
+	right: 0;
+	text-align: right;
+}
+
+.mp-debugger .mp-runtime ul li .value span {
+	overflow: hidden;
+	white-space: nowrap;
+	padding-right: 8px;
+}
+
+.mp-debugger .mp-runtime ul li .value .number {
+	color: #33AA33;
+}
+
+.mp-debugger .mp-runtime ul li .value .string {
+	color: #AA2222;
+}
+
+.mp-debugger .mp-runtime ul li .value .string::before {
+	content: "\"";
+}
+
+.mp-debugger .mp-runtime ul li .value .string::after {
+	content: "\"";
+}
+
+.mp-debugger .mp-runtime ul li .value .boolean {
+	color: #007777;
+	text-transform: capitalize;
+}
+
+.mp-debugger .mp-runtime .mp-shadow-top {
+	width: 100%;
+	height: 44px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0) 0%, white 70%);
+	z-index: 50;
+}
+
+.mp-debugger .mp-runtime .mp-shadow-bottom {
+	width: 100%;
+	height: 20px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 70%);
+	z-index: 50;
+}
+
+.mp-debugger .mp-runtime .mp-scope {
+	width: 50%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: -8px;
+	bottom: 0;
+}
+
+.mp-debugger .mp-runtime .mp-scope li .identifier {
+	margin-left: 8px;
+	font-weight: bold;
+}
+
+.mp-debugger .mp-runtime .mp-scope li .value {
+	float: right;
+}
+
+.mp-debugger .mp-runtime .mp-scope li.scope {
+	height: auto;
+	margin: 8px 16px;
+	padding-top: 4px;
+	display: block;
+	border: 1px solid silver;
+	border-radius: 4px;
+}
+
+.mp-debugger .mp-runtime .mp-scope li.scope .function-declaration {
+	margin-left: 15px;
+	font-weight: bold;
+	color: gray;
+}
+
+.mp-debugger .mp-runtime .mp-scope li.scope > ul {
+	margin-bottom: 8px;
+	padding: 0;
+}
+
+.mp-debugger .mp-runtime .mp-scope li.scope > ul li {
+	/* ... */
+}
+
+.mp-debugger .mp-runtime .mp-stdout {
+	width: 50%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	right: -8px;
+	bottom: 0;
+}
+
+.mp-debugger .mp-runtime .mp-stdout li .value {
+	margin-left: 8px;
+}
+
+.mp-debugger .mp-runtime .mp-stdout li .origin {
+	margin-right: 8px;
+	float: right;
+	color: silver;
+}
+
+.mp-debugger .mp-runtime .mp-stdout li .origin::before {
+	content: "Line ";
+}

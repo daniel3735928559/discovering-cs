@@ -1,0 +1,26 @@
+<div class="minipy-editor" ng-controller="MiniPyEditorController">
+	<div class="mp-controls">
+		<button class="mp-control-button" data-command="run"><i class="icon"></i>Run</button>
+		<button class="mp-control-button" data-command="validate"><i class="icon"></i>Check</button>
+		<button class="mp-control-button" data-command="step"><i class="icon"></i>Step</button>
+		<button class="mp-control-button mp-button-disabled" data-command="stop"><i class="icon"></i>Stop</button>
+		<button class="mp-control-button" data-command="reset"><i class="icon"></i>Reset</button>
+	</div>
+	<div class="mp-debugger">
+		<div class="mp-editor mp-panel-bordered">
+			<textarea class="mp-textarea" style="visibility:hidden">{{program.trim()}}</textarea>
+		</div>
+		<div class="mp-runtime">
+			<div class="mp-wrapper">
+				<div class="mp-scope mp-panel-bordered">
+					<div class="mp-panel-description">Scope</div>
+					<ul></ul>
+				</div>
+				<div class="mp-stdout mp-panel-bordered">
+					<div class="mp-panel-description">Output</div>
+					<ul></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

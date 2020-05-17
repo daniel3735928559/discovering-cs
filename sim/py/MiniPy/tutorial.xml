@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quest>
+	<q type="python" id="Basics">
+		<program>
+x = 2
+y = 4
+		</program>
+		<text>
+			<p>First things first, let's learn how to use this thing. Observe the code in the editor to the right.</p>
+			<p>Press [run] to start running the program. While the program is running, the program cannot be modified. Press [step] to advance through the program. Note how the variables change as you do so.</p>
+			<p>The program will stop running either when you step through the last instruction or when you press [end], at which point you can modify the program again.</p>
+			<p>To make the step button take more steps at once, enter a higher number in the box next to it.</p>
+		</text>
+	</q>
+	<q type="python" id="Variables">
+		<program>
+x = 3 + 2
+y = 1 + x * -1
+hello = (x + 2 * y) / y
+x = x + 1
+y = y - x
+		</program>
+		<text>
+			<p>Variables are like the computer's internal memory (which we've exposed for you to see). Variables are how you store things. To create one, simply write a line like:</p>
+			<p><pre><i>name</i> = <i>value</i></pre></p>
+			<p>The name can be any combination of letters and underscores. The value can be any <b>expression</b>. That is, any number, variable name, or some combination of numbers and variables using the four arithmetic operations and parentheses.</p>
+		</text>
+	</q>
+	<q type="python" id="Strings">
+		<program>
+hello = "Hello!"
+x = "\"Meow!\", they \\ exclaimed in unison"
+		</program>
+		<text>
+			<p>Expressions do not have to be numbers. They can also be <b>strings</b>, which are the computer's way of storing text. The symbols comprising text (letters, numbers, punctuation, and anything else) are called <b>characters</b>. A string is any sequence of characters enclosed in double quotes, such as:</p>
+			<p><pre>"Hello World!"</pre></p>
+			<p>Obviously, the characters inside the string cannot include the double-quote character: ". To put a " into a string, precede it with a backslash like:</p>
+			<p><pre>\"</pre></p>
+			<p>This is called <b>escaping</b> the character. There are certain characters where escaping them (i.e. preceding them with a backslash) gives them different meaning. Normally, a " means "the end of the string". But if you escape it, now it means "put a double quote character actually into the string. Some other characters can be escaped as well. For instance, if you escape then character as in:</p>
+			<p><pre>\n</pre></p>
+			<p>you get a line-break inserted into your string.</p>
+			<p>So now how do you put a backslash character itself into a string? Escape it!</p>
+			<p><pre>\\</pre></p>
+			<p>Since expressions can be strings, we can store strings in variables just like we could store numbers.</p>
+		</text>
+	</q>
+	<q type="python" id="Output">
+		<program>
+print("Hello")
+x = -3
+print(x + 1)
+		</program>
+		<text>
+			<p>Output is how you would normally print text to the screen. In this simulation, output goes to the "Output" column.</p>
+			<p>To output something, use:</p>
+			<p><pre>print(<i>expression</i>)</pre></p>
+			<p>This allows us to output any string or number that we could have stored in a variable. It also allows us to output variables, as variables are also expessions. See if you can use your knowledge of escape characters to output the following:</p>
+			<p><pre>XO_<br />XX_<br />O_O</pre></p>
+			<p>and</p>
+			<p><pre>"The Assyrian came down \ like a wolf on the fold,<br />And his cohorts were gleaming \ in purple and gold;"</pre></p>
+			<p>and</p>
+			<p><pre>  00<br />   00<br />000000<br />   00<br />  00</pre></p>
+		</text>
+	</q>
+	<q type="python" id="Input">
+		<program>
+xyz = input_num()
+hello = input_string()
+print(2 * xyz)
+print(hello)
+		</program>
+		<text>
+			<p>Programs are boring if you cannot do anything with them. Depending on whether you want a number or a string, there are ways to ask for user input and place it in a specified variable. To get a number, do:</p>
+			<p><pre><i>variable name</i> = input_num()</pre></p>
+			<p>To get a string, do:</p>
+			<p><pre><i>variable name</i> = input_string()</pre></p>
+			<p>Try to use this to make a simple calculator program that asks for two numbers and then outputs the product.</p>
+		</text>
+	</q>
+	<q type="python" id="If">
+		<program>
+print("Guess the value of 4 * 5 - 2 - (4 + 37 * 4)")
+guess = input_num()
+if(guess != 4 * 5 - 2 - (4 + 37 * 4)): 
+	print("You LOSE!")
+print("You guessed:")
+print(guess)
+if (guess == 4 * 5 - 2 - (4 + 37 * 4)): 
+	print("VICTORY!!!")
+		</program>
+		<text>
+			<p>All our programs so far execute every line from start to finish, in order, no exceptions. Sometimes, we want to cordon off some lines and make them only execute under certain conditions.</p>
+			<p>To do this, first <b>indent</b> these lines--that is, put three additional spaces at the beginning of these lines. Then add an "if" line just before them that looks like:</p>
+			<p><pre>if (<i>expression comparison expression</i>):</pre></p>
+			<p>The two expressions are, of course, expressions as we're used to them, and the comparison is any of the following operators (with the given meanings):</p>
+			<p><pre>== (is equal to)</pre></p>
+			<p><pre>!= (is not equal to)</pre></p>
+			<p><pre>&lt;  (is less than)</pre></p>
+			<p><pre>&gt;  (is greater than)</pre></p>
+			<p><pre>&lt;= (is less than or equal to)</pre></p>
+			<p><pre>&gt;= (is greater than or equal to)</pre></p>
+			<p>The whole block including the "if" line and all its indented lines is called an <b>if statement</b>.</p>
+			<p>When the program gets to the "if" line, it will compare the two provided expressions appropriately. If the comparison holds true, then the indented lines following the if statement will execute. If the comparison does not hold true, then execution will proceed to the first line after the if statement that is not indented</p>
+		</text>
+	</q>
+	<q type="python" id="Nested If">
+		<program>
+niceness = input_num()
+print("Guess the value of 4 * 5 - 2 - (4 + 37 * 4)")
+guess = input_num()
+if (guess != 4 * 5 - 2 -(4+37*4)): 
+	if (niceness &lt; 5):
+		print("You LOSE!")
+	if (niceness > 5): 
+		print("Sorry!  Better luck next time!")
+if (guess == 4 * 5 - 2 - (4 + 37 * 4)): 
+	print("VICTORY!!!")
+		</program>
+		<text>
+			<p>Inside an if statement, it is possible to include further if statements. For example, if we want to make sure we have enough bananas we do:</p>
+			<p><pre>if(bananas > 6):<br />    print("YAY!")</pre></p>
+			<p>To make sure that we have both enough bananas and enough bongos, we want to first check the bananas. If they are sufficient, then in that case we want to also test the bongos. So we want the bongo-testing if statement inside the banana-testing one:</p>
+			<p><pre>if(bananas > 6):<br />    if(bongos > 5):<br />        print("YAY!")</pre></p>
+			<p>This is called a <b>nested if statement</b>. We can of course nest further if statements inside this one to our heart's content.</p>
+		</text>
+	</q>
+	<q type="python" id="Else">
+		<program>
+print("Guess the value of 4 * 5 - 2 - (4 + 37 * 4)")
+guess = input_num()
+
+if (guess > 4 * 5 - 2 - (4 + 37 * 4)):
+	print("Too big!")
+else:
+	if (guess &lt; 4 * 5 - 2 - (4 + 37 * 4)):
+		print("Too small!")
+	else:
+		print("VICTORY!!!")
+		</program>
+		<text>
+			<p>A problem in the previous program was:</p>
+			<p><pre>if(niceness > 5):<br />    print("You LOSE")<br />if(niceness > 5):<br />    print("Sorry!")</pre></p>
+			<p>But what happens if niceness is exactly 5? We accidentally missed this case.</p>
+			<p>What we really wanted was to say "If niceness is less than 5, be curt. Otherwise, be tactful". There is a programmatic way of saying "otherwise" called "else".</p>
+			<p>Immediately following the indented lines of an if statement, you may include the line:</p>
+			<p><pre>else:</pre></p>
+			<p>with the same level of indentation as the corresponding if statement, and followed by further indented lines that will be executed only if the comparison in the "if" line failed.  So an easier way of doing the above is:</p>
+			<p><pre>if(niceness > 5):<br />    print("You LOSE")<br />else:<br />    print("Sorry!")</pre></p>
+		</text>
+	</q>
+	<q type="python" id="While">
+		<program>
+print("Guess the value of 4 * 5 - 2 - (4 + 37 * 4)")
+guess = input_num()
+
+while(guess != 4 * 5 - 2 - (4 + 37 * 4)): 
+	if(guess > 4 * 5 - 2 - (4 + 37 * 4)): 
+		print("Too big!")
+	else:
+		print("Too small!")
+	guess = input_num()
+
+print("VICTORY!!!")
+		</program>
+		<text>
+			<p>Similar to an "if" line is the "while" line:</p>
+			<p><pre>while(<i>expression comparison expression</i>):</pre></p>
+			<p>It is also followed by one or more indented lines. An if statement will execute the indented lines once through if the comparison holds true and then will move on. A while statement will execute the indented lines if the comparison holds true, and then when the indented lines are finished it will return to the comparison and check it again.</p>
+			<p>If it still holds true, the indented lines will be run again. And if the comparison is still true after they are done, they will be run yet again, and so on until the comparison stops being true.</p>
+		</text>
+	</q>
+	<q type="python" id="Puzzle 1">
+		<text>
+			<p>Write a program to input three numbers and output their average. So if you input 1, 2, and 10, it should output 4.33333...</p>
+		</text>
+	</q>
+	<q type="python" id="Puzzle 2">
+		<text>
+			<p>Write a program to input a number and sum all the integers between 0 and that number, inclusive. Be careful as the input may be negative and/or a decimal.</p>
+			<p>For example, if you input -5.3, it should output -15, if you input 1, it should output 66, and if you input 0.3, it should output 0.</p>
+		</text>
+	</q>
+	<q type="python" id="Puzzle 3">
+		<text>
+			<p>Write a program to input a number and test whether that number is a square integer (i.e. is the product of an integer with itself).</p>
+			<p>For example, if you input 101, it should output "no", whereas if you input 81, it should output "yes".</p>
+		</text>
+	</q>
+	<q type="python" id="Puzzle 4">
+		<text>
+			<p>Write a program to input a number and output whether that number is prime.</p>
+			<p>For example, if you input 101, it should output "yes", whereas if you input 91, it should output "no".</p>
+		</text>
+	</q>
+	<q type="python" id="Puzzle 5">
+		<text>
+			<p>Write a program to input a number.  Then, input that number of further numbers and then output the average of all these numbers.</p>
+			<p>For example, if you first input 4, it should ask for 4 more inputs.  If these inputs are 0, 2, 3, and 4, then it should output 2.25.</p>
+		</text>
+	</q>
+</quest>

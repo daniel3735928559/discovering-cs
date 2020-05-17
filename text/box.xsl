@@ -149,15 +149,13 @@
   </xsl:template>
 
   <xsl:template match="icode">
-    <span class="icode"><xsl:apply-templates /></span>
+    <div class="icode"><xsl:apply-templates /></div>
   </xsl:template>
 
   <xsl:template match="python">
     <xsl:if test="$print!='yes'">
-      <xsl:variable name="prog" select="text()" />
-      <sim-py text="'{$prog}'" reset="yes" size="auto" simid="{count(preceding::python)}" template="/lib/spy/simpy.html"><xsl:apply-templates /></sim-py>
-      <!-- <div ng-include="'/sim/py/simpy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}"> -->
-      <!-- </div> -->
+      <div ng-include="'/sim/py/minipy/embedded/minipy.html'" ng-repeat="(simid,program) in {{'{count(preceding::python)}':'{text()}'}}">
+      </div>
     </xsl:if>
     <xsl:if test="$print='yes'">
       <div class="code"><pre><xsl:apply-templates /></pre></div>
@@ -178,8 +176,7 @@
       
   <xsl:template match="avrasm">
     <xsl:if test="$print!='yes'">
-      <xsl:variable name="prog" select="text()" />
-      <sim-avr text="'{$prog}'" size="auto" reset="yes" simid="{count(preceding::avrasm)}" template="/lib/jsavr/simavr.html"></sim-avr>
+      <div ng-include="'/sim/avr/simavr.html'" ng-repeat="program in ['{text()}']"></div>
     </xsl:if>
     <xsl:if test="$print='yes'">
       <div class="code"><pre><xsl:apply-templates /></pre></div>
@@ -219,7 +216,7 @@
   </xsl:template>
 
   <xsl:template match="def">
-    <span id="def_{@term}" class="definition"> </span>
+    <div id="def_{@term}" class="definition"> </div>
     <xsl:apply-templates select="*|text()" />
   </xsl:template>
 
@@ -273,32 +270,38 @@
       <head>
 	<title><xsl:value-of select="chapter/title" /></title>
 	<link rel="stylesheet" type="text/css" href="/text/box.css" />
-
+	<link rel="stylesheet" type="text/css" href="/sim/avr/sim.css" />
+	<link rel="stylesheet" type="text/css" href="/sim/bin/sim.css" />
+	<link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular.min.js"></script>
 	<script type="text/javascript" src="https://code.angularjs.org/1.4.0-rc.2/angular-cookies.js"></script>
 	<script type="text/javascript" src="/text/box.js"></script>
+	<script type="text/javascript" src="/sim/cm/codemirror.js"></script>
+	<!-- <script type="text/javascript" src="/sim/py/expr_ng.js"></script> -->
+	<!-- <script type="text/javascript" src="/sim/py/sim.js"></script> -->
+	<link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
+	<script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
+	<script type="text/javascript" src="/lib/spy/sim.js"></script>
 	
-	<xsl:if test="$print!='yes'">
-	  <link rel="stylesheet" href="/sim/cm/codemirror.css" />
-	  <link rel="stylesheet" href="/sim/cm/theme/paraiso-light.css" />
-	  <script type="text/javascript" src="/sim/cm/codemirror.js"></script>
-	  
-	  <xsl:if test="count(//python) > 0">
-	    <link rel="stylesheet" type="text/css" href="/lib/spy/sim.css" />
-	    <script type="text/javascript" src="/lib/spy/expr_ng.js"></script>
-	    <script type="text/javascript" src="/lib/spy/sim.js"></script>
-	  </xsl:if>
-	  
-	  <xsl:if test="count(//binsim) > 0">
-	    <link rel="stylesheet" type="text/css" href="/sim/bin/sim.css" />
-	    <script type="text/javascript" src="/sim/bin/sim.js"></script>
-	  </xsl:if>
-	  
-	  <xsl:if test="count(//avrasm) > 0">
-	    <link rel="stylesheet" type="text/css" href="/lib/jsavr/sim.css" />
-	    <script type="text/javascript" src="/lib/jsavr/sim.js"></script>
-	  </xsl:if>
-	</xsl:if>
+	<!-- <script type="text/javascript" src="/sim/avr/sim.js"></script> -->
+	<script type="text/javascript" src="/sim/bin/sim.js"></script>
+
+  <!-- MiniPy stylesheets -->
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/main.css" />
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/embedded/css/embedded.css" />
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/codemirror.css" /> <!-- v5.6 -->
+  <link rel="stylesheet" type="text/css" href="/sim/py/MiniPy/libs/CodeMirror/theme/neat.css" />
+
+  <!-- MiniPy javascript -->
+  <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/codemirror.js"></script> <!-- v5.6 -->
+  <script type="text/javascript" src="/sim/py/MiniPy/libs/CodeMirror/mode/python/python.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/libs/jQuery/jquery.min.js"></script> <!-- v2.1.4 -->
+  <script type="text/javascript" src="/sim/py/MiniPy/libs/minipy.js"></script>
+
+  <script type="text/javascript" src="/sim/py/MiniPy/embedded/js/miniPyController.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/js/banner.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/js/error.js"></script>
+  <script type="text/javascript" src="/sim/py/MiniPy/js/state.js"></script>
       </head>
       <body ng-app="app">	
 	<div id="super" ng-controller="BoxController">
@@ -350,6 +353,7 @@
 	    <a href="/text/info/copyright.xml"><div class="sidebar_link">Copyright</div></a>
 	    <a href="/text/info/links.xml"><div class="sidebar_link">Links</div></a>
 	    </div>
+	  </xsl:if>
 	  <div class="index_container" ng-if="display_index == true || display_definitions == true || display_login == true || display_pysim == true || display_avrsim == true || display_pyref == true || display_avrref == true || display_binary_expl == true" ng-click="hide_all()">
 	  </div>
 	  <div class="index"  ng-if="display_index == true">
@@ -363,7 +367,6 @@
 	    <xsl:call-template name="definitions" />
 	  </div>
 	  
-	  </xsl:if>
 	  <div class="super">
 	    <xsl:apply-templates select="@*|node()"/>
 	  </div>
